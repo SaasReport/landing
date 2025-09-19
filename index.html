@@ -49,93 +49,43 @@
         /* Enhanced grid background with animated dots */
         .grid-bg {
             background-image: 
-                linear-gradient(rgba(59, 130, 246, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px),
+                linear-gradient(180deg, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
             background-size: 50px 50px;
             position: relative;
         }
         .grid-bg::before {
-            content: '';
+            content: "";
             position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 40% 80%, rgba(236, 72, 153, 0.1) 0%, transparent 50%);
-            animation: pulse 4s ease-in-out infinite;
+                        radial-gradient(circle at 80% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+            animation: grid-shift 20s ease infinite;
         }
-        @keyframes pulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-        
-        /* Enhanced comparison glow with animated border */
-        .comparison-glow {
-            position: relative;
-            overflow: hidden;
-        }
-        .comparison-glow::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            background: linear-gradient(45deg, #667eea, #764ba2, #667eea, #764ba2);
-            border-radius: inherit;
-            opacity: 0;
-            transition: opacity 0.3s;
-            z-index: -1;
-            animation: border-rotate 3s linear infinite;
-        }
-        @keyframes border-rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .comparison-glow:hover::before {
-            opacity: 1;
+        @keyframes grid-shift {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 0.7; }
         }
         
-        /* Glass morphism effect */
-        .glass {
-            background: rgba(31, 41, 55, 0.4);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-        }
-        
-        /* Particle animation */
-        .particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            pointer-events: none;
-        }
+        /* Enhanced particle animation */
         .particle {
             position: absolute;
-            width: 4px;
-            height: 4px;
-            background: rgba(59, 130, 246, 0.5);
+            width: 2px;
+            height: 2px;
+            background: rgba(59, 130, 246, 0.6);
             border-radius: 50%;
-            animation: float-particle 20s infinite linear;
+            animation: float-particle 20s linear infinite;
         }
         @keyframes float-particle {
-            from {
-                transform: translateY(100vh) translateX(0);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            to {
-                transform: translateY(-100vh) translateX(100px);
-                opacity: 0;
-            }
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
         }
         
         /* Enhanced hover effects */
@@ -144,498 +94,732 @@
         }
         .hover-lift:hover {
             transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
         
-        /* Loading shimmer effect */
+        /* Enhanced shimmer effect */
         .shimmer {
-            background: linear-gradient(90deg, #1f2937 25%, #374151 50%, #1f2937 75%);
-            background-size: 200% 100%;
-            animation: shimmer 2s infinite;
-        }
-        @keyframes shimmer {
-            0% { background-position: -200% 0; }
-            100% { background-position: 200% 0; }
-        }
-        
-        /* Text glow effect */
-        .text-glow {
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
-        }
-        
-        /* Enhanced button effects */
-        .btn-magic {
             position: relative;
             overflow: hidden;
-            transition: all 0.3s ease;
         }
-        .btn-magic::before {
+        .shimmer::before {
             content: '';
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
         }
-        .btn-magic:hover::before {
-            left: 100%;
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        /* Enhanced pulse animation */
+        .pulse-glow {
+            animation: pulse-glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 20px rgba(59, 130, 246, 0.4); }
+            to { box-shadow: 0 0 40px rgba(59, 130, 246, 0.8); }
+        }
+        
+        /* Enhanced typing animation */
+        .typing-animation {
+            overflow: hidden;
+            border-right: 2px solid rgba(59, 130, 246, 0.8);
+            white-space: nowrap;
+            animation: typing 4s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: rgba(59, 130, 246, 0.8); }
+        }
+        
+        /* Enhanced scroll indicator */
+        .scroll-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transform-origin: left;
+            transform: scaleX(0);
+            z-index: 9999;
+        }
+        
+        /* Enhanced loading states */
+        .loading-skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
+        }
+        
+        /* Enhanced mobile responsiveness */
+        @media (max-width: 768px) {
+            .mobile-stack {
+                flex-direction: column;
+            }
+            .mobile-center {
+                text-align: center;
+            }
+            .mobile-full {
+                width: 100%;
+            }
+        }
+        
+        /* Enhanced accessibility */
+        .focus-visible:focus {
+            outline: 2px solid rgba(59, 130, 246, 0.8);
+            outline-offset: 2px;
+        }
+        
+        /* Enhanced dark mode support */
+        @media (prefers-color-scheme: dark) {
+            .auto-dark {
+                background-color: #1a1a1a;
+                color: #ffffff;
+            }
+        }
+        
+        /* Enhanced print styles */
+        @media print {
+            .no-print {
+                display: none;
+            }
+            .print-break {
+                page-break-before: always;
+            }
         }
     </style>
 </head>
-<body class="bg-gray-900 text-white">
-    <!-- Enhanced Navigation -->
-    <nav class="fixed w-full z-50 glass border-b border-gray-800">
+<body class="bg-black text-white overflow-x-hidden">
+    <!-- Scroll Progress Indicator -->
+    <div class="scroll-indicator"></div>
+    
+    <!-- Particle Background -->
+    <div id="particles" class="fixed inset-0 pointer-events-none z-0"></div>
+    
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md">
         <div class="container mx-auto px-6 py-4">
-            <div class="flex justify-between items-center">
-                <div class="text-2xl font-bold gradient-text hover:text-glow transition cursor-pointer">SaaSReport™</div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#features" class="hover:text-blue-400 transition relative group">
-                        Features
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
-                    </a>
-                    <a href="#pricing" class="hover:text-blue-400 transition relative group">
-                        Pricing
-                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-blue-400 transition-all duration-300 group-hover:w-full"></span>
-                    </a>
+            <div class="flex items-center justify-between">
+                <div class="text-2xl font-bold gradient-text">SaaSReport™</div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="hover:text-blue-400 transition">Features</a>
+                    <a href="#pricing" class="hover:text-blue-400 transition">Pricing</a>
+                    <button class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg font-semibold transition neon-glow">
+                        Install on Stripe
+                    </button>
                 </div>
-                <button class="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg transition btn-magic text-glow">
-                    Install on Stripe
-                    <i data-feather="external-link" class="w-4 h-4 inline ml-2"></i>
-                </button>
             </div>
         </div>
     </nav>
 
-    <!-- Enhanced Hero Section -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden grid-bg">
-        <!-- Particle background -->
-        <div class="particles" id="particles"></div>
-        
-        <div class="container mx-auto px-6 py-20 relative z-10">
-            <div class="max-w-6xl mx-auto">
-                <div class="text-center" data-aos="fade-up">
-                    <div class="mb-4 inline-block px-4 py-2 bg-blue-600/20 rounded-full border border-blue-500/30">
-                        <span class="text-blue-400 text-sm font-medium">🔥 500+ SaaS Founders Switched This Month</span>
-                    </div>
-                    <h1 class="text-5xl md:text-7xl font-bold mb-6 text-glow">
-                        Stop Losing 80+ Hours Monthly to Manual Reports
-                        <span class="gradient-text">Get Real-Time MRR, ARR & Churn Analysis in 2 Clicks</span>
-                    </h1>
-                    <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-3xl mx-auto leading-relaxed">
-                        ⚡ Limited Time: 500+ SaaS founders already eliminated manual reporting. 
-                        Get 99.9% accurate MRR calculations, AI-powered executive dashboards, and investor-ready reports 
-                        — all synced from Stripe in real-time. Save $50K+ annually while impressing investors.
-                    </p>
-                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                        <button class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-4 rounded-lg text-lg font-semibold transition neon-glow btn-magic hover-lift">
-                            ⚡ Install on Stripe - 2-Minute Setup
-                            <i data-feather="zap" class="w-5 h-5 inline ml-2"></i>
-                        </button>
-                        <button class="border border-blue-600 hover:bg-blue-600/20 hover:border-blue-400 px-8 py-4 rounded-lg text-lg font-semibold transition backdrop-blur-sm glass hover-lift">
-                            📊 See Sample Report - 30-Second Preview
-                            <i data-feather="eye" class="w-5 h-5 inline ml-2"></i>
-                        </button>
-                    </div>
+    <!-- Hero Section -->
+    <section class="min-h-screen flex items-center justify-center relative grid-bg">
+        <div class="container mx-auto px-6 text-center relative z-10">
+            <!-- Social Proof Badge -->
+            <div class="inline-flex items-center bg-orange-500/20 border border-orange-500/30 rounded-full px-4 py-2 mb-8 shimmer" data-aos="fade-down">
+                <svg xmlns="https://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2 text-orange-400">
+                    <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>
+                </svg>
+                <span class="text-sm font-medium text-orange-400">🔥 500+ SaaS Founders Switched This Month</span>
+            </div>
+
+            <!-- Main Headline -->
+            <h1 class="text-4xl md:text-7xl font-bold mb-6 leading-tight" data-aos="fade-up" data-aos-delay="100">
+                <span class="text-white">Stop Losing 80+ Hours Monthly to Manual Reports</span>
+                <br>
+                <span class="gradient-text">Get Real-Time MRR, ARR & Churn Analysis in 2 Clicks</span>
+            </h1>
+
+            <!-- Subheadline -->
+            <p class="text-xl md:text-2xl text-gray-300 mb-8 max-w-4xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+                <svg xmlns="https://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2 text-yellow-400">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+                Limited Time: 500+ SaaS founders already eliminated manual reporting. Get 99.9% accurate MRR calculations, AI-powered executive dashboards, and investor-ready reports — all synced from Stripe in real-time. Save $50K+ annually while impressing investors.
+            </p>
+
+            <!-- CTA Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16" data-aos="fade-up" data-aos-delay="300">
+                <button class="bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-lg font-semibold text-lg transition neon-glow pulse-glow hover-lift">
+                    <svg xmlns="https://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    </svg>
+                    Install on Stripe - 2-Minute Setup
+                </button>
+                <button class="border-2 border-blue-500 hover:bg-blue-500/20 px-8 py-4 rounded-lg font-semibold text-lg transition hover-lift">
+                    <svg xmlns="https://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    📊 See Sample Report - 30-Second Preview
+                </button>
+            </div>
+
+            <!-- Hero Visual/Stats -->
+            <div class="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="400">
+                <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 hover-lift shimmer">
+                    <div class="text-3xl font-bold text-green-400 mb-2">$2.4M</div>
+                    <div class="text-gray-300 mb-1">Annual Recurring Revenue</div>
+                    <div class="text-green-400 text-sm">↑ 23% YoY</div>
                 </div>
-                
-                <!-- Enhanced Hero Visual -->
-                <div class="mt-20 relative float-animation" data-aos="fade-up" data-aos-delay="200">
-                    <div class="glass rounded-2xl p-8 border border-gray-600 hover:border-blue-500 transition-all duration-500 hover-lift">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div class="bg-gradient-to-br from-blue-600 to-purple-600 p-6 rounded-xl hover:scale-105 transition-transform duration-300">
-                                <div class="text-4xl font-bold mb-2">$2.4M</div>
-                                <div class="text-sm opacity-80">Annual Recurring Revenue</div>
-                                <div class="mt-3 text-xs text-green-400">↑ 23% YoY</div>
-                            </div>
-                            <div class="bg-gradient-to-br from-purple-600 to-pink-600 p-6 rounded-xl hover:scale-105 transition-transform duration-300">
-                                <div class="text-4xl font-bold mb-2">$200K</div>
-                                <div class="text-sm opacity-80">Monthly Recurring Revenue</div>
-                                <div class="mt-3 text-xs text-green-400">↑ 15% MoM</div>
-                            </div>
-                            <div class="bg-gradient-to-br from-pink-600 to-red-600 p-6 rounded-xl hover:scale-105 transition-transform duration-300">
-                                <div class="text-4xl font-bold mb-2">2.3%</div>
-                                <div class="text-sm opacity-80">Monthly Churn Rate</div>
-                                <div class="mt-3 text-xs text-green-400">↓ 0.5% vs last month</div>
-                            </div>
-                        </div>
-                        <div class="mt-8 flex justify-center">
-                            <div class="flex items-center space-x-4 glass rounded-full px-6 py-3">
-                                <i data-feather="database" class="w-6 h-6 text-blue-400"></i>
-                                <div class="h-1 w-24 bg-gradient-to-r from-blue-400 to-purple-400 rounded-full"></div>
-                                <i data-feather="cpu" class="w-6 h-6 text-purple-400"></i>
-                                <div class="h-1 w-24 bg-gradient-to-r from-purple-400 to-pink-400 rounded-full"></div>
-                                <i data-feather="file-text" class="w-6 h-6 text-pink-400"></i>
-                            </div>
-                        </div>
-                    </div>
+                <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 hover-lift shimmer">
+                    <div class="text-3xl font-bold text-blue-400 mb-2">$200K</div>
+                    <div class="text-gray-300 mb-1">Monthly Recurring Revenue</div>
+                    <div class="text-blue-400 text-sm">↑ 15% MoM</div>
+                </div>
+                <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-6 hover-lift shimmer">
+                    <div class="text-3xl font-bold text-purple-400 mb-2">2.3%</div>
+                    <div class="text-gray-300 mb-1">Monthly Churn Rate</div>
+                    <div class="text-purple-400 text-sm">↓ 0.5% vs last month</div>
                 </div>
             </div>
         </div>
+        
+        <!-- Floating Animation Element -->
+        <div class="absolute top-1/2 right-10 transform -translate-y-1/2 float-animation opacity-20">
+            <div class="w-32 h-32 border-2 border-blue-500 rounded-full"></div>
+        </div>
+        
+        <!-- Bottom gradient line -->
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
     </section>
 
-    <!-- Enhanced Problem Section -->
-    <section class="py-20 bg-gray-800/30 relative overflow-hidden">
-        <div class="absolute inset-0">
-            <div class="absolute top-20 left-10 w-32 h-32 bg-red-500/10 rounded-full blur-3xl"></div>
-            <div class="absolute bottom-20 right-10 w-40 h-40 bg-blue-500/10 rounded-full blur-3xl"></div>
-        </div>
-        
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="max-w-6xl mx-auto grid md:grid-cols-2 gap-12 items-center">
-                <div data-aos="fade-right">
-                    <div class="inline-flex items-center px-4 py-2 bg-red-500/20 rounded-full border border-red-500/30 mb-6">
-                        <i data-feather="alert-triangle" class="w-4 h-4 text-red-400 mr-2"></i>
-                        <span class="text-red-400 text-sm font-medium">⚠️ Hidden Cost Alert: $50K+ Annually</span>
+    <!-- Problem Section -->
+    <section class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <!-- Alert Banner -->
+            <div class="bg-red-500/20 border border-red-500/30 rounded-xl p-6 mb-16 max-w-4xl mx-auto" data-aos="fade-up">
+                <div class="flex items-center justify-center mb-4">
+                    <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-red-400 mr-3">
+                        <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                        <path d="M12 9v4"/>
+                        <path d="m12 17 .01 0"/>
+                    </svg>
+                    <h2 class="text-2xl font-bold text-red-400">Hidden Cost Alert: $50K+ Annually</h2>
+                </div>
+            </div>
+
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-8" data-aos="fade-up">
+                    Manual Reporting Is Costing You <span class="text-red-400">$50K+</span> and <span class="text-red-400">500+ Hours</span> Annually
+                </h2>
+                
+                <p class="text-xl text-gray-300 text-center mb-16 max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+                    <svg xmlns="https://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2 text-blue-400">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                        <line x1="16" y1="2" x2="16" y2="6"/>
+                        <line x1="8" y1="2" x2="8" y2="6"/>
+                        <line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                    87% of SaaS founders still use spreadsheets for MRR calculations, losing 80+ hours monthly to manual reporting. The result? Error-prone reports that cost $50K+ annually in wasted time and missed investor opportunities. While competitors impress with real-time analytics, you're stuck explaining spreadsheet errors.
+                </p>
+
+                <!-- Problem Stats -->
+                <div class="grid md:grid-cols-3 gap-8 mb-16">
+                    <div class="text-center" data-aos="fade-up" data-aos-delay="200">
+                        <div class="text-5xl font-bold text-red-400 mb-4">500+</div>
+                        <div class="text-xl font-semibold mb-2">Hours/Year Lost</div>
+                        <div class="text-gray-400">To manual spreadsheet work</div>
                     </div>
-                    <h2 class="text-4xl font-bold mb-6 text-glow">
-                        Manual Reporting Is Costing You $50K+ and 500+ Hours Annually
-                    </h2>
-                    <p class="text-xl text-gray-300 mb-8 leading-relaxed">
-                        📊 87% of SaaS founders still use spreadsheets for MRR calculations, losing 80+ hours monthly to manual reporting. 
-                        The result? Error-prone reports that cost $50K+ annually in wasted time and missed investor opportunities. 
-                        While competitors impress with real-time analytics, you're stuck explaining spreadsheet errors.
-                    </p>
-                    <div class="flex space-x-6">
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-red-400">500+</div>
-                            <div class="text-sm text-gray-400">Hours/Year Lost</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-orange-400">87%</div>
-                            <div class="text-sm text-gray-400">Still Use Spreadsheets</div>
-                        </div>
-                        <div class="text-center">
-                            <div class="text-3xl font-bold text-yellow-400">$50K+</div>
-                            <div class="text-sm text-gray-400">Annual Hidden Cost</div>
-                        </div>
+                    <div class="text-center" data-aos="fade-up" data-aos-delay="300">
+                        <div class="text-5xl font-bold text-red-400 mb-4">87%</div>
+                        <div class="text-xl font-semibold mb-2">Still Use Spreadsheets</div>
+                        <div class="text-gray-400">For critical SaaS metrics</div>
+                    </div>
+                    <div class="text-center" data-aos="fade-up" data-aos-delay="400">
+                        <div class="text-5xl font-bold text-red-400 mb-4">$50K+</div>
+                        <div class="text-xl font-semibold mb-2">Annual Hidden Cost</div>
+                        <div class="text-gray-400">In wasted time and errors</div>
                     </div>
                 </div>
-                
-                <div class="relative" data-aos="fade-left">
-                    <div class="glass rounded-2xl p-8 border border-gray-600 hover:border-red-500 transition-all duration-500">
-                        <div class="space-y-6">
-                            <div class="flex items-center space-x-4 p-4 bg-red-500/10 rounded-lg border border-red-500/20">
-                                <div class="w-12 h-12 bg-red-500/20 rounded-full flex items-center justify-center">
-                                    <i data-feather="file-text" class="w-6 h-6 text-red-400"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-red-400">Manual MRR Calculations</h4>
-                                    <p class="text-sm text-gray-400">Error-prone Excel formulas</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-4 p-4 bg-orange-500/10 rounded-lg border border-orange-500/20">
-                                <div class="w-12 h-12 bg-orange-500/20 rounded-full flex items-center justify-center">
-                                    <i data-feather="bar-chart-2" class="w-6 h-6 text-orange-400"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-orange-400">Inconsistent ARR Metrics</h4>
-                                    <p class="text-sm text-gray-400">Different tools, different results</p>
-                                </div>
-                            </div>
-                            <div class="flex items-center space-x-4 p-4 bg-yellow-500/10 rounded-lg border border-yellow-500/20">
-                                <div class="w-12 h-12 bg-yellow-500/20 rounded-full flex items-center justify-center">
-                                    <i data-feather="clock" class="w-6 h-6 text-yellow-400"></i>
-                                </div>
-                                <div>
-                                    <h4 class="font-semibold text-yellow-400">80+ Hours Monthly</h4>
-                                    <p class="text-sm text-gray-400">Time better spent on growth</p>
-                                </div>
-                            </div>
+
+                <!-- Problem Points -->
+                <div class="grid md:grid-cols-3 gap-8">
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift" data-aos="fade-up" data-aos-delay="200">
+                        <div class="text-red-400 mb-4">
+                            <svg xmlns="https://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                                <line x1="16" y1="13" x2="8" y2="13"/>
+                                <line x1="16" y1="17" x2="8" y2="17"/>
+                                <polyline points="10,9 9,9 8,9"/>
+                            </svg>
                         </div>
+                        <h4 class="text-xl font-semibold mb-3">Manual MRR Calculations</h4>
+                        <p class="text-gray-400">Error-prone Excel formulas</p>
+                    </div>
+                    
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift" data-aos="fade-up" data-aos-delay="300">
+                        <div class="text-red-400 mb-4">
+                            <svg xmlns="https://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"/>
+                                <line x1="12" y1="20" x2="12" y2="4"/>
+                                <line x1="6" y1="20" x2="6" y2="14"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-3">Inconsistent ARR Metrics</h4>
+                        <p class="text-gray-400">Different tools, different results</p>
+                    </div>
+                    
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift" data-aos="fade-up" data-aos-delay="400">
+                        <div class="text-red-400 mb-4">
+                            <svg xmlns="https://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <polyline points="12,6 12,12 16,14"/>
+                            </svg>
+                        </div>
+                        <h4 class="text-xl font-semibold mb-3">80+ Hours Monthly</h4>
+                        <p class="text-gray-400">Time better spent on growth</p>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <!-- Bottom gradient line -->
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-red-500 to-transparent"></div>
     </section>
 
     <!-- Solution Section -->
-    <section class="py-20 grid-bg">
+    <section class="py-20 relative">
         <div class="container mx-auto px-6">
-            <div class="max-w-6xl mx-auto text-center mb-16" data-aos="fade-up">
-                <h2 class="text-4xl font-bold mb-6">The Solution: Instant Investor-Ready Reports</h2>
-                <p class="text-xl text-gray-300 max-w-3xl mx-auto">
-                    SaaSReport™ connects to Stripe, pulls your metrics, and produces branded, investor-ready reports — instantly.
-                </p>
-            </div>
-            
-            <div class="max-w-6xl mx-auto">
-                <div class="grid md:grid-cols-4 gap-8" data-aos="fade-up" data-aos-delay="200">
-                    <div class="text-center">
-                        <div class="bg-blue-600/20 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                            <i data-feather="zap" class="w-10 h-10 text-blue-400"></i>
-                        </div>
-                        <h3 class="font-semibold mb-2">Real-Time Sync</h3>
-                        <p class="text-sm text-gray-400">Webhook integration</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="bg-purple-600/20 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                            <i data-feather="activity" class="w-10 h-10 text-purple-400"></i>
-                        </div>
-                        <h3 class="font-semibold mb-2">SaaSReport™</h3>
-                        <p class="text-sm text-gray-400">Automated analytics</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="bg-pink-600/20 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                            <i data-feather="brain" class="w-10 h-10 text-pink-400"></i>
-                        </div>
-                        <h3 class="font-semibold mb-2">AI Predictions</h3>
-                        <p class="text-sm text-gray-400">Churn forecasting</p>
-                    </div>
-                    <div class="text-center">
-                        <div class="bg-green-600/20 rounded-full w-20 h-20 flex items-center justify-center mx-auto mb-4">
-                            <i data-feather="file-text" class="w-10 h-10 text-green-400"></i>
-                        </div>
-                        <h3 class="font-semibold mb-2">Board Reports</h3>
-                        <p class="text-sm text-gray-400">Executive presentations</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Enhanced Features Section -->
-    <section class="py-20 bg-gray-800/10 relative overflow-hidden">
-        <div class="absolute inset-0">
-            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
-        </div>
-        
-        <div class="container mx-auto px-6 relative z-10">
-            <div class="max-w-6xl mx-auto">
-                <h2 class="text-4xl font-bold text-center mb-16 text-glow" data-aos="fade-up">
-                    Everything You Need for Professional Reports
+            <div class="max-w-6xl mx-auto text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8" data-aos="fade-up">
+                    The Solution: <span class="gradient-text">Instant Investor-Ready Reports</span>
                 </h2>
                 
-                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div class="glass rounded-xl p-6 border border-gray-600 hover:border-blue-500 transition-all duration-500 hover-lift group" data-aos="fade-up" data-aos-delay="100">
-                        <div class="relative mb-6">
-                            <div class="absolute inset-0 bg-blue-500/20 rounded-full blur-xl group-hover:bg-blue-500/30 transition-colors"></div>
-                            <i data-feather="zap" class="w-12 h-12 text-blue-400 relative z-10"></i>
+                <p class="text-xl text-gray-300 mb-16 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+                    SaaSReport™ connects to Stripe, pulls your metrics, and produces branded, investor-ready reports — instantly.
+                </p>
+
+                <!-- Solution Flow -->
+                <div class="grid md:grid-cols-4 gap-8 mb-16">
+                    <div class="relative" data-aos="fade-up" data-aos-delay="200">
+                        <div class="bg-blue-600/20 border border-blue-500/30 rounded-xl p-8 hover-lift">
+                            <div class="text-blue-400 mb-4">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                                </svg>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">Real-Time Sync</h4>
+                            <p class="text-gray-400">Webhook integration</p>
                         </div>
-                        <h3 class="text-xl font-semibold mb-3 group-hover:text-blue-400 transition-colors">Real-Time Stripe Sync</h3>
-                        <p class="text-gray-400">Webhook integration for instant MRR updates and automated revenue recognition</p>
-                        <div class="mt-4 flex items-center text-blue-400 text-sm">
-                            <span>Learn more</span>
-                            <i data-feather="arrow-right" class="w-4 h-4 ml-2"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="glass rounded-xl p-6 border border-gray-600 hover:border-purple-500 transition-all duration-500 hover-lift group" data-aos="fade-up" data-aos-delay="200">
-                        <div class="relative mb-6">
-                            <div class="absolute inset-0 bg-purple-500/20 rounded-full blur-xl group-hover:bg-purple-500/30 transition-colors"></div>
-                            <i data-feather="activity" class="w-12 h-12 text-purple-400 relative z-10"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-3 group-hover:text-purple-400 transition-colors">Deterministic SaaS Metrics</h3>
-                        <p class="text-gray-400">Automated MRR calculations, ARR forecasting, and growth accounting with 99.9% accuracy</p>
-                        <div class="mt-4 flex items-center text-purple-400 text-sm">
-                            <span>99.9% accuracy</span>
-                            <i data-feather="check-circle" class="w-4 h-4 ml-2"></i>
+                        <!-- Arrow -->
+                        <div class="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
+                            <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-blue-400">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12,5 19,12 12,19"/>
+                            </svg>
                         </div>
                     </div>
                     
-                    <div class="glass rounded-xl p-6 border border-gray-600 hover:border-pink-500 transition-all duration-500 hover-lift group" data-aos="fade-up" data-aos-delay="300">
-                        <div class="relative mb-6">
-                            <div class="absolute inset-0 bg-pink-500/20 rounded-full blur-xl group-hover:bg-pink-500/30 transition-colors"></div>
-                            <i data-feather="brain" class="w-12 h-12 text-pink-400 relative z-10"></i>
+                    <div class="relative" data-aos="fade-up" data-aos-delay="300">
+                        <div class="bg-purple-600/20 border border-purple-500/30 rounded-xl p-8 hover-lift">
+                            <div class="text-purple-400 mb-4">
+                                <div class="text-2xl font-bold">SaaSReport™</div>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">SaaSReport™</h4>
+                            <p class="text-gray-400">Automated analytics</p>
                         </div>
-                        <h3 class="text-xl font-semibold mb-3 group-hover:text-pink-400 transition-colors">Predictive Analytics</h3>
-                        <p class="text-gray-400">AI-powered churn forecasting and revenue predictions with executive summaries</p>
-                        <div class="mt-4 flex items-center text-pink-400 text-sm">
-                            <span>AI-powered</span>
-                            <i data-feather="star" class="w-4 h-4 ml-2"></i>
-                        </div>
-                    </div>
-                    
-                    <div class="glass rounded-xl p-6 border border-gray-600 hover:border-green-500 transition-all duration-500 hover-lift group" data-aos="fade-up" data-aos-delay="400">
-                        <div class="relative mb-6">
-                            <div class="absolute inset-0 bg-green-500/20 rounded-full blur-xl group-hover:bg-green-500/30 transition-colors"></div>
-                            <i data-feather="image" class="w-12 h-12 text-green-400 relative z-10"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-3 group-hover:text-green-400 transition-colors">Executive Dashboards</h3>
-                        <p class="text-gray-400">Board-ready presentations with your branding, logos, and compliance footers</p>
-                        <div class="mt-4 flex items-center text-green-400 text-sm">
-                            <span>Fully branded</span>
-                            <i data-feather="layout" class="w-4 h-4 ml-2"></i>
+                        <!-- Arrow -->
+                        <div class="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
+                            <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-purple-400">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12,5 19,12 12,19"/>
+                            </svg>
                         </div>
                     </div>
                     
-                    <div class="glass rounded-xl p-6 border border-gray-600 hover:border-yellow-500 transition-all duration-500 hover-lift group" data-aos="fade-up" data-aos-delay="500">
-                        <div class="relative mb-6">
-                            <div class="absolute inset-0 bg-yellow-500/20 rounded-full blur-xl group-hover:bg-yellow-500/30 transition-colors"></div>
-                            <i data-feather="globe" class="w-12 h-12 text-yellow-400 relative z-10"></i>
+                    <div class="relative" data-aos="fade-up" data-aos-delay="400">
+                        <div class="bg-green-600/20 border border-green-500/30 rounded-xl p-8 hover-lift">
+                            <div class="text-green-400 mb-4">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M9 11H1l6-6 6 6"/>
+                                    <path d="M9 17l3 3 3-3"/>
+                                    <path d="M22 18.5V2l-3 3-3-3v16.5"/>
+                                </svg>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">AI Predictions</h4>
+                            <p class="text-gray-400">Churn forecasting</p>
                         </div>
-                        <h3 class="text-xl font-semibold mb-3 group-hover:text-yellow-400 transition-colors">Global Compliance</h3>
-                        <p class="text-gray-400">Multi-language reports for international investors with local compliance standards</p>
-                        <div class="mt-4 flex items-center text-yellow-400 text-sm">
-                            <span>Multi-language</span>
-                            <i data-feather="languages" class="w-4 h-4 ml-2"></i>
+                        <!-- Arrow -->
+                        <div class="hidden md:block absolute top-1/2 -right-4 transform -translate-y-1/2">
+                            <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                                <polyline points="12,5 19,12 12,19"/>
+                            </svg>
                         </div>
                     </div>
                     
-                    <div class="glass rounded-xl p-6 border border-gray-600 hover:border-red-500 transition-all duration-500 hover-lift group" data-aos="fade-up" data-aos-delay="600">
-                        <div class="relative mb-6">
-                            <div class="absolute inset-0 bg-red-500/20 rounded-full blur-xl group-hover:bg-red-500/30 transition-colors"></div>
-                            <i data-feather="shield" class="w-12 h-12 text-red-400 relative z-10"></i>
-                        </div>
-                        <h3 class="text-xl font-semibold mb-3 group-hover:text-red-400 transition-colors">SOC 2 Security</h3>
-                        <p class="text-gray-400">Enterprise-grade security with encrypted delivery and audit trails</p>
-                        <div class="mt-4 flex items-center text-red-400 text-sm">
-                            <span>Enterprise secure</span>
-                            <i data-feather="lock" class="w-4 h-4 ml-2"></i>
+                    <div data-aos="fade-up" data-aos-delay="500">
+                        <div class="bg-orange-600/20 border border-orange-500/30 rounded-xl p-8 hover-lift">
+                            <div class="text-orange-400 mb-4">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                            </div>
+                            <h4 class="text-xl font-semibold mb-2">Board Reports</h4>
+                            <p class="text-gray-400">Executive presentations</p>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <!-- Bottom gradient line -->
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-500 to-transparent"></div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 relative">
+        <div class="container mx-auto px-6">
+            <div class="max-w-6xl mx-auto">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-16" data-aos="fade-up">
+                    Everything You Need for <span class="gradient-text">Professional Reports</span>
+                </h2>
+
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Feature 1 -->
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift shimmer" data-aos="fade-up" data-aos-delay="100">
+                        <div class="text-blue-400 mb-6">
+                            <svg xmlns="https://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">Real-Time Stripe Sync</h3>
+                        <p class="text-gray-400 mb-4">Webhook integration for instant MRR updates and automated revenue recognition</p>
+                        <a href="#" class="text-blue-400 hover:text-blue-300 font-medium">Learn more →</a>
+                    </div>
+
+                    <!-- Feature 2 -->
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift shimmer" data-aos="fade-up" data-aos-delay="200">
+                        <div class="text-green-400 mb-6">
+                            <svg xmlns="https://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="18" y1="20" x2="18" y2="10"/>
+                                <line x1="12" y1="20" x2="12" y2="4"/>
+                                <line x1="6" y1="20" x2="6" y2="14"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">Deterministic SaaS Metrics</h3>
+                        <p class="text-gray-400 mb-4">Automated MRR calculations, ARR forecasting, and growth accounting with 99.9% accuracy</p>
+                        <div class="text-green-400 font-semibold">99.9% accuracy</div>
+                    </div>
+
+                    <!-- Feature 3 -->
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift shimmer" data-aos="fade-up" data-aos-delay="300">
+                        <div class="text-purple-400 mb-6">
+                            <svg xmlns="https://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 11H1l6-6 6 6"/>
+                                <path d="M9 17l3 3 3-3"/>
+                                <path d="M22 18.5V2l-3 3-3-3v16.5"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">Predictive Analytics</h3>
+                        <p class="text-gray-400 mb-4">AI-powered churn forecasting and revenue predictions with executive summaries</p>
+                        <div class="text-purple-400 font-semibold">AI-powered</div>
+                    </div>
+
+                    <!-- Feature 4 -->
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift shimmer" data-aos="fade-up" data-aos-delay="400">
+                        <div class="text-orange-400 mb-6">
+                            <svg xmlns="https://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="16" y1="2" x2="16" y2="6"/>
+                                <line x1="8" y1="2" x2="8" y2="6"/>
+                                <line x1="3" y1="10" x2="21" y2="10"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">Executive Dashboards</h3>
+                        <p class="text-gray-400 mb-4">Board-ready presentations with your branding, logos, and compliance footers</p>
+                        <div class="text-orange-400 font-semibold">Fully branded</div>
+                    </div>
+
+                    <!-- Feature 5 -->
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift shimmer" data-aos="fade-up" data-aos-delay="500">
+                        <div class="text-cyan-400 mb-6">
+                            <svg xmlns="https://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <circle cx="12" cy="12" r="10"/>
+                                <line x1="2" y1="12" x2="22" y2="12"/>
+                                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">Global Compliance</h3>
+                        <p class="text-gray-400 mb-4">Multi-language reports for international investors with local compliance standards</p>
+                        <div class="text-cyan-400 font-semibold">Multi-language</div>
+                    </div>
+
+                    <!-- Feature 6 -->
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift shimmer" data-aos="fade-up" data-aos-delay="600">
+                        <div class="text-red-400 mb-6">
+                            <svg xmlns="https://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                <circle cx="12" cy="16" r="1"/>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                            </svg>
+                        </div>
+                        <h3 class="text-2xl font-semibold mb-4">SOC 2 Security</h3>
+                        <p class="text-gray-400 mb-4">Enterprise-grade security with encrypted delivery and audit trails</p>
+                        <div class="text-red-400 font-semibold">Enterprise secure</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Bottom gradient line -->
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent"></div>
     </section>
 
     <!-- Comparison Section -->
-    <section class="py-20 grid-bg">
+    <section class="py-20 relative">
         <div class="container mx-auto px-6">
             <div class="max-w-6xl mx-auto">
-                <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">Why SaaSReport Beats Traditional Tools</h2>
-                
-                <div class="overflow-x-auto" data-aos="fade-up" data-aos-delay="200">
-                    <table class="w-full bg-gray-800/50 backdrop-blur-lg rounded-xl overflow-hidden">
-                        <thead>
-                            <tr class="border-b border-gray-700">
-                                <th class="text-left p-6">Feature</th>
-                                <th class="text-center p-6">Spreadsheets</th>
-                                <th class="text-center p-6">BI Tools</th>
-                                <th class="text-center p-6 bg-gradient-to-r from-blue-600/20 to-purple-600/20 comparison-glow">SaaSReport</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="border-b border-gray-700">
-                                <td class="p-6 font-semibold">Setup Time</td>
-                                <td class="text-center p-6 text-gray-400">Manual</td>
-                                <td class="text-center p-6 text-gray-400">Weeks</td>
-                                <td class="text-center p-6 text-green-400 font-semibold">2-click Stripe install</td>
-                            </tr>
-                            <tr class="border-b border-gray-700">
-                                <td class="p-6 font-semibold">Accuracy</td>
-                                <td class="text-center p-6 text-gray-400">Error-prone</td>
-                                <td class="text-center p-6 text-gray-400">Needs modeling</td>
-                                <td class="text-center p-6 text-green-400 font-semibold">Stripe-synced</td>
-                            </tr>
-                            <tr class="border-b border-gray-700">
-                                <td class="p-6 font-semibold">AI Narratives</td>
-                                <td class="text-center p-6 text-gray-400">None</td>
-                                <td class="text-center p-6 text-gray-400">None</td>
-                                <td class="text-center p-6 text-green-400 font-semibold">AI-powered</td>
-                            </tr>
-                            <tr class="border-b border-gray-700">
-                                <td class="p-6 font-semibold">Branding</td>
-                                <td class="text-center p-6 text-gray-400">Manual</td>
-                                <td class="text-center p-6 text-gray-400">Limited</td>
-                                <td class="text-center p-6 text-green-400 font-semibold">Logo + Colors ready</td>
-                            </tr>
-                            <tr>
-                                <td class="p-6 font-semibold">Cost</td>
-                                <td class="text-center p-6 text-gray-400">Time sink</td>
-                                <td class="text-center p-6 text-gray-400">$$$</td>
-                                <td class="text-center p-6 text-green-400 font-semibold">From $499/mo</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-16" data-aos="fade-up">
+                    Why <span class="gradient-text">SaaSReport</span> Beats Traditional Tools
+                </h2>
+
+                <!-- Comparison Table -->
+                <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl overflow-hidden" data-aos="fade-up" data-aos-delay="200">
+                    <div class="overflow-x-auto">
+                        <table class="w-full">
+                            <thead class="bg-gray-800/50">
+                                <tr>
+                                    <th class="text-left p-6 font-semibold">Feature</th>
+                                    <th class="text-center p-6 font-semibold text-red-400">Spreadsheets</th>
+                                    <th class="text-center p-6 font-semibold text-yellow-400">BI Tools</th>
+                                    <th class="text-center p-6 font-semibold text-green-400">SaaSReport</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-700">
+                                <tr>
+                                    <td class="p-6 font-medium">Setup Time</td>
+                                    <td class="p-6 text-center text-red-400">Manual</td>
+                                    <td class="p-6 text-center text-yellow-400">Weeks</td>
+                                    <td class="p-6 text-center text-green-400 font-semibold">2-click Stripe install</td>
+                                </tr>
+                                <tr class="bg-gray-800/25">
+                                    <td class="p-6 font-medium">Accuracy</td>
+                                    <td class="p-6 text-center text-red-400">Error-prone</td>
+                                    <td class="p-6 text-center text-yellow-400">Needs modeling</td>
+                                    <td class="p-6 text-center text-green-400 font-semibold">Stripe-synced</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-6 font-medium">AI Narratives</td>
+                                    <td class="p-6 text-center text-red-400">None</td>
+                                    <td class="p-6 text-center text-yellow-400">None</td>
+                                    <td class="p-6 text-center text-green-400 font-semibold">AI-powered</td>
+                                </tr>
+                                <tr class="bg-gray-800/25">
+                                    <td class="p-6 font-medium">Branding</td>
+                                    <td class="p-6 text-center text-red-400">Manual</td>
+                                    <td class="p-6 text-center text-yellow-400">Limited</td>
+                                    <td class="p-6 text-center text-green-400 font-semibold">Logo + Colors ready</td>
+                                </tr>
+                                <tr>
+                                    <td class="p-6 font-medium">Cost</td>
+                                    <td class="p-6 text-center text-red-400">Time sink</td>
+                                    <td class="p-6 text-center text-yellow-400">$$$</td>
+                                    <td class="p-6 text-center text-green-400 font-semibold">From $499/mo</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+        
+        <!-- Bottom gradient line -->
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-500 to-transparent"></div>
     </section>
 
     <!-- Benefits Section -->
-    <section class="py-20 bg-gray-800/30">
+    <section class="py-20 relative">
         <div class="container mx-auto px-6">
             <div class="max-w-6xl mx-auto">
-                <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">ROI Proven Across 500+ SaaS Companies</h2>
-                
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-16" data-aos="fade-up">
+                    ROI Proven Across <span class="gradient-text">500+ SaaS Companies</span>
+                </h2>
+
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="text-center" data-aos="fade-up" data-aos-delay="100">
-                        <div class="bg-gradient-to-br from-blue-600 to-purple-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
-                            <i data-feather="user" class="w-12 h-12 text-white"></i>
-                        </div>
-                        <h3 class="text-2xl font-semibold mb-4">For Founders</h3>
-                        <ul class="space-y-2 text-gray-300">
-                            <li>🚀 Save 80+ hours monthly</li>
-                            <li>💰 Impress investors with clarity</li>
-                            <li>📈 Focus on growth, not reports</li>
-                            <li>⚡ Close funding 3x faster</li>
+                    <!-- For Founders -->
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift" data-aos="fade-up" data-aos-delay="100">
+                        <h3 class="text-2xl font-semibold mb-6 text-blue-400">For Founders</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                                </svg>
+                                <span>🚀 Save 80+ hours monthly</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                                    <line x1="12" y1="1" x2="12" y2="23"/>
+                                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                                </svg>
+                                <span>💰 Impress investors with clarity</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                                    <line x1="18" y1="20" x2="18" y2="10"/>
+                                    <line x1="12" y1="20" x2="12" y2="4"/>
+                                    <line x1="6" y1="20" x2="6" y2="14"/>
+                                </svg>
+                                <span>📈 Focus on growth, not reports</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                                </svg>
+                                <span>⚡ Close funding 3x faster</span>
+                            </li>
                         </ul>
                     </div>
-                    
-                    <div class="text-center" data-aos="fade-up" data-aos-delay="200">
-                        <div class="bg-gradient-to-br from-purple-600 to-pink-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
-                            <i data-feather="briefcase" class="w-12 h-12 text-white"></i>
-                        </div>
-                        <h3 class="text-2xl font-semibold mb-4">For CFOs</h3>
-                        <ul class="space-y-2 text-gray-300">
-                            <li>📊 Always-accurate SaaS metrics</li>
-                            <li>✅ Compliance-ready disclaimers</li>
-                            <li>🔍 Audit-ready documentation</li>
-                            <li>⚖️ Reduce compliance risk by 90%</li>
+
+                    <!-- For CFOs -->
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift" data-aos="fade-up" data-aos-delay="200">
+                        <h3 class="text-2xl font-semibold mb-6 text-green-400">For CFOs</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                <span>📊 Always-accurate SaaS metrics</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                                    <polyline points="20 6 9 17 4 12"/>
+                                </svg>
+                                <span>✅ Compliance-ready disclaimers</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="M21 21l-4.35-4.35"/>
+                                </svg>
+                                <span>🔍 Audit-ready documentation</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                                    <path d="M9 12l2 2 4-4"/>
+                                    <path d="M21 12c.552 0 1-.448 1-1V5c0-.552-.448-1-1-1H3c-.552 0-1 .448-1 1v6c0 .552.448 1 1 1h18z"/>
+                                </svg>
+                                <span>⚖️ Reduce compliance risk by 90%</span>
+                            </li>
                         </ul>
                     </div>
-                    
-                    <div class="text-center" data-aos="fade-up" data-aos-delay="300">
-                        <div class="bg-gradient-to-br from-pink-600 to-red-600 rounded-full w-24 h-24 flex items-center justify-center mx-auto mb-6">
-                            <i data-feather="trending-up" class="w-12 h-12 text-white"></i>
-                        </div>
-                        <h3 class="text-2xl font-semibold mb-4">For Investors</h3>
-                        <ul class="space-y-2 text-gray-300">
-                            <li>📈 Consistent, comparable reports</li>
-                            <li>🔍 Clear risk/insight narratives</li>
-                            <li>📊 Standardized metrics across portfolio</li>
-                            <li>⚡ 5x faster due diligence</li>
+
+                    <!-- For Investors -->
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift" data-aos="fade-up" data-aos-delay="300">
+                        <h3 class="text-2xl font-semibold mb-6 text-purple-400">For Investors</h3>
+                        <ul class="space-y-4">
+                            <li class="flex items-center">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                                    <line x1="18" y1="20" x2="18" y2="10"/>
+                                    <line x1="12" y1="20" x2="12" y2="4"/>
+                                    <line x1="6" y1="20" x2="6" y2="14"/>
+                                </svg>
+                                <span>📈 Consistent, comparable reports</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="M21 21l-4.35-4.35"/>
+                                </svg>
+                                <span>🔍 Clear risk/insight narratives</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                    <line x1="16" y1="2" x2="16" y2="6"/>
+                                    <line x1="8" y1="2" x2="8" y2="6"/>
+                                    <line x1="3" y1="10" x2="21" y2="10"/>
+                                </svg>
+                                <span>📊 Standardized metrics across portfolio</span>
+                            </li>
+                            <li class="flex items-center">
+                                <svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="text-green-400 mr-3 flex-shrink-0">
+                                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                                </svg>
+                                <span>⚡ 5x faster due diligence</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <!-- Bottom gradient line -->
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
     </section>
 
-    <!-- Interactive Demo Section -->
-    <section id="demo" class="py-20 grid-bg">
+    <!-- Social Proof Section -->
+    <section class="py-20 relative">
         <div class="container mx-auto px-6">
             <div class="max-w-6xl mx-auto">
-                <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">See What 500+ SaaS Founders Are Raving About</h2>
-                
-                <div class="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 border border-gray-700" data-aos="fade-up" data-aos-delay="200">
-                    <div class="grid md:grid-cols-2 gap-8">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-16" data-aos="fade-up">
+                    See What <span class="gradient-text">500+ SaaS Founders</span> Are Raving About
+                </h2>
+
+                <!-- Sample Report Preview -->
+                <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 mb-16 hover-lift" data-aos="fade-up" data-aos-delay="200">
+                    <div class="grid md:grid-cols-2 gap-8 items-center">
                         <div>
-                            <h3 class="text-2xl font-semibold mb-4">Executive Summary</h3>
-                            <div class="bg-gray-900/50 rounded-lg p-6 mb-6">
-                                <p class="text-gray-300 italic">
-                                    "Q3 2024 showed strong momentum with MRR growing 15% to $200K. 
-                                    Net revenue retention improved to 110%, driven by expansion revenue..."
-                                </p>
-                            </div>
+                            <h3 class="text-2xl font-semibold mb-4 text-blue-400">Executive Summary</h3>
+                            <p class="text-gray-300 mb-6 italic">
+                                "Q3 2024 showed strong momentum with MRR growing 15% to $200K. Net revenue retention improved to 110%, driven by expansion revenue..."
+                            </p>
                             
-                            <h3 class="text-2xl font-semibold mb-4">Key Metrics</h3>
-                            <div class="space-y-3">
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-400">MRR Growth</span>
-                                    <span class="text-green-400 font-semibold">+15%</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-400">Net Retention</span>
-                                    <span class="text-green-400 font-semibold">110%</span>
-                                </div>
-                                <div class="flex justify-between items-center">
-                                    <span class="text-gray-400">CAC Payback</span>
-                                    <span class="text-blue-400 font-semibold">12 months</span>
+                            <div class="space-y-4">
+                                <h4 class="text-lg font-semibold text-green-400">Key Metrics</h4>
+                                <div class="grid grid-cols-3 gap-4 text-center">
+                                    <div>
+                                        <div class="text-2xl font-bold text-green-400">+15%</div>
+                                        <div class="text-sm text-gray-400">MRR Growth</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-2xl font-bold text-blue-400">110%</div>
+                                        <div class="text-sm text-gray-400">Net Retention</div>
+                                    </div>
+                                    <div>
+                                        <div class="text-2xl font-bold text-purple-400">12</div>
+                                        <div class="text-sm text-gray-400">CAC Payback</div>
+                                        <div class="text-xs text-gray-500">months</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
                         <div>
-                            <div class="bg-gray-900/50 rounded-lg p-6">
-                                <h3 class="text-xl font-semibold mb-4">Revenue Trends</h3>
-                                <div class="h-48 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-lg flex items-end justify-around p-4">
-                                    <div class="bg-blue-500 w-12 h-24 rounded"></div>
-                                    <div class="bg-blue-500 w-12 h-32 rounded"></div>
-                                    <div class="bg-purple-500 w-12 h-40 rounded"></div>
-                                    <div class="bg-purple-500 w-12 h-44 rounded"></div>
+                            <h4 class="text-lg font-semibold mb-4 text-purple-400">Revenue Trends</h4>
+                            <div class="bg-gray-800/50 rounded-lg p-4 h-48 flex items-center justify-center">
+                                <div class="text-gray-400 text-center">
+                                    <svg xmlns="https://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="mx-auto mb-2">
+                                        <line x1="18" y1="20" x2="18" y2="10"/>
+                                        <line x1="12" y1="20" x2="12" y2="4"/>
+                                        <line x1="6" y1="20" x2="6" y2="14"/>
+                                    </svg>
+                                    <p>Interactive Chart Preview</p>
                                 </div>
                             </div>
                         </div>
@@ -643,136 +827,191 @@
                 </div>
             </div>
         </div>
+        
+        <!-- Bottom gradient line -->
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-yellow-500 to-transparent"></div>
     </section>
 
     <!-- Pricing Section -->
-    <section class="py-20 bg-gray-800/30">
+    <section id="pricing" class="py-20 relative">
         <div class="container mx-auto px-6">
             <div class="max-w-6xl mx-auto">
-                <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">ROI-Backed Pricing • 10x Return Guaranteed</h2>
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-8" data-aos="fade-up">
+                    <span class="gradient-text">ROI-Backed Pricing</span> • 10x Return Guaranteed
+                </h2>
                 
-                <div class="flex justify-center mb-12" data-aos="fade-up" data-aos-delay="100">
-                    <div class="bg-gray-800 rounded-lg p-1 flex">
-                        <button class="px-6 py-2 rounded-md bg-blue-600">Monthly</button>
-                        <button class="px-6 py-2 rounded-md text-gray-400">Annual (-20%)</button>
+                <!-- Billing Toggle -->
+                <div class="flex items-center justify-center mb-16" data-aos="fade-up" data-aos-delay="100">
+                    <span class="mr-3">Monthly</span>
+                    <div class="relative">
+                        <input type="checkbox" id="billing-toggle" class="sr-only">
+                        <div class="w-12 h-6 bg-gray-600 rounded-full shadow-inner"></div>
+                        <div class="absolute w-4 h-4 bg-white rounded-full shadow top-1 left-1 transition"></div>
                     </div>
+                    <span class="ml-3">Annual <span class="text-green-400">(-20%)</span></span>
                 </div>
-                
+
                 <div class="grid md:grid-cols-3 gap-8">
-                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-xl p-8 border border-gray-700 hover:border-blue-500 transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
-                        <h3 class="text-2xl font-bold mb-4">Starter</h3>
+                    <!-- Starter Plan -->
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift" data-aos="fade-up" data-aos-delay="200">
+                        <h3 class="text-2xl font-semibold mb-2">Starter</h3>
                         <div class="text-4xl font-bold mb-2">$499<span class="text-lg text-gray-400">/mo</span></div>
                         <p class="text-gray-400 mb-6">Perfect for growing startups</p>
-                        <div class="text-xs text-green-400 mb-4">💰 Save $50K+ annually • 10x ROI</div>
+                        
+                        <div class="bg-green-500/20 border border-green-500/30 rounded-lg p-3 mb-6">
+                            <p class="text-green-400 font-semibold text-sm">💰 Save $50K+ annually • 10x ROI</p>
+                        </div>
+                        
                         <ul class="space-y-3 mb-8">
-                            <li class="flex items-center"><i data-feather="check" class="w-5 h-5 text-green-400 mr-2"></i>200 automated reports/month</li>
-                            <li class="flex items-center"><i data-feather="check" class="w-5 h-5 text-green-400 mr-2"></i>99.9% accurate MRR calculations</li>
-                            <li class="flex items-center"><i data-feather="check" class="w-5 h-5 text-green-400 mr-2"></i>AI executive summaries</li>
-                            <li class="flex items-center"><i data-feather="check" class="w-5 h-5 text-green-400 mr-2"></i>Executive dashboard</li>
+                            <li class="flex items-center"><svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check w-5 h-5 text-green-400 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>200 automated reports/month</li>
+                            <li class="flex items-center"><svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check w-5 h-5 text-green-400 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>99.9% accurate MRR calculations</li>
+                            <li class="flex items-center"><svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check w-5 h-5 text-green-400 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>AI executive summaries</li>
+                            <li class="flex items-center"><svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check w-5 h-5 text-green-400 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>Executive dashboard</li>
                         </ul>
-                        <button class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold transition">Start Free Trial</button>
+                        
+                        <button class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold transition">
+                            Start Free Trial
+                        </button>
                     </div>
-                    
-                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-xl p-8 border border-purple-500 relative overflow-hidden neon-glow" data-aos="fade-up" data-aos-delay="300">
-                        <div class="absolute top-0 right-0 bg-gradient-to-r from-purple-600 to-pink-600 text-xs px-4 py-1 rounded-bl-lg">MOST POPULAR • 78% CHOOSE THIS</div>
-                        <h3 class="text-2xl font-bold mb-4">Team</h3>
+
+                    <!-- Team Plan (Most Popular) -->
+                    <div class="bg-gray-900/50 backdrop-blur-sm border-2 border-blue-500 rounded-xl p-8 hover-lift relative" data-aos="fade-up" data-aos-delay="300">
+                        <div class="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                            <span class="bg-blue-500 text-white px-4 py-1 rounded-full text-sm font-semibold">MOST POPULAR • 78% CHOOSE THIS</span>
+                        </div>
+                        
+                        <h3 class="text-2xl font-semibold mb-2">Team</h3>
                         <div class="text-4xl font-bold mb-2">$1,999<span class="text-lg text-gray-400">/mo</span></div>
                         <p class="text-gray-400 mb-6">For scaling companies</p>
-                        <div class="text-xs text-green-400 mb-4">💰 Save $200K+ annually • 100x ROI</div>
+                        
+                        <div class="bg-green-500/20 border border-green-500/30 rounded-lg p-3 mb-6">
+                            <p class="text-green-400 font-semibold text-sm">💰 Save $200K+ annually • 100x ROI</p>
+                        </div>
+                        
                         <ul class="space-y-3 mb-8">
-                            <li class="flex items-center"><i data-feather="check" class="w-5 h-5 text-green-400 mr-2"></i>1,000 automated reports/month</li>
-                            <li class="flex items-center"><i data-feather="check" class="w-5 h-5 text-green-400 mr-2"></i>Predictive churn analysis (99% accuracy)</li>
-                            <li class="flex items-center"><i data-feather="check" class="w-5 h-5 text-green-400 mr-2"></i>Multi-language compliance</li>
-                            <li class="flex items-center"><i data-feather="check" class="w-5 h-5 text-green-400 mr-2"></i>Priority support (1-hour response)</li>
+                            <li class="flex items-center"><svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check w-5 h-5 text-green-400 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>1,000 automated reports/month</li>
+                            <li class="flex items-center"><svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check w-5 h-5 text-green-400 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>Predictive churn analysis (99% accuracy)</li>
+                            <li class="flex items-center"><svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check w-5 h-5 text-green-400 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>Multi-language compliance</li>
+                            <li class="flex items-center"><svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check w-5 h-5 text-green-400 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>Priority support (1-hour response)</li>
                         </ul>
-                        <button class="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 py-3 rounded-lg font-semibold transition">Start Free Trial</button>
+                        
+                        <button class="w-full bg-blue-600 hover:bg-blue-700 py-3 rounded-lg font-semibold transition neon-glow">
+                            Start Free Trial
+                        </button>
                     </div>
-                    
-                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-xl p-8 border border-gray-700 hover:border-green-500 transition-all duration-300" data-aos="fade-up" data-aos-delay="400">
-                        <h3 class="text-2xl font-bold mb-4">Enterprise</h3>
+
+                    <!-- Enterprise Plan -->
+                    <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 hover-lift" data-aos="fade-up" data-aos-delay="400">
+                        <h3 class="text-2xl font-semibold mb-2">Enterprise</h3>
                         <div class="text-4xl font-bold mb-2">$5,999<span class="text-lg text-gray-400">/mo</span></div>
                         <p class="text-gray-400 mb-6">For large organizations</p>
-                        <div class="text-xs text-green-400 mb-4">💰 Save $500K+ annually • Custom ROI</div>
+                        
+                        <div class="bg-green-500/20 border border-green-500/30 rounded-lg p-3 mb-6">
+                            <p class="text-green-400 font-semibold text-sm">💰 Save $500K+ annually • Custom ROI</p>
+                        </div>
+                        
                         <ul class="space-y-3 mb-8">
-                            <li class="flex items-center"><i data-feather="check" class="w-5 h-5 text-green-400 mr-2"></i>5,000 automated reports/month</li>
-                            <li class="flex items-center"><i data-feather="check" class="w-5 h-5 text-green-400 mr-2"></i>White-glove onboarding (24 hours)</li>
-                            <li class="flex items-center"><i data-feather="check" class="w-5 h-5 text-green-400 mr-2"></i>Custom revenue recognition</li>
-                            <li class="flex items-center"><i data-feather="check" class="w-5 h-5 text-green-400 mr-2"></i>Dedicated CSM + SLA</li>
+                            <li class="flex items-center"><svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check w-5 h-5 text-green-400 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>5,000 automated reports/month</li>
+                            <li class="flex items-center"><svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check w-5 h-5 text-green-400 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>White-glove onboarding (24 hours)</li>
+                            <li class="flex items-center"><svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check w-5 h-5 text-green-400 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>Custom revenue recognition</li>
+                            <li class="flex items-center"><svg xmlns="https://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check w-5 h-5 text-green-400 mr-2"><polyline points="20 6 9 17 4 12"></polyline></svg>Dedicated CSM + SLA</li>
                         </ul>
-                        <button class="w-full bg-green-600 hover:bg-green-700 py-3 rounded-lg font-semibold transition">Book Enterprise Demo</button>
+                        
+                        <button class="w-full border-2 border-blue-500 hover:bg-blue-500/20 py-3 rounded-lg font-semibold transition">
+                            Book Enterprise Demo
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <!-- Bottom gradient line -->
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-green-500 to-transparent"></div>
     </section>
 
     <!-- Testimonials Section -->
-    <section class="py-20 grid-bg">
+    <section class="py-20 relative">
         <div class="container mx-auto px-6">
             <div class="max-w-6xl mx-auto">
-                <h2 class="text-4xl font-bold text-center mb-16" data-aos="fade-up">Trusted by 500+ SaaS Companies Worldwide</h2>
-                
-                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mb-16" data-aos="fade-up" data-aos-delay="200">
-                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-lg p-6 text-center border border-gray-700 hover:border-blue-500 transition-all duration-300 hover-lift">
-                        <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-500 rounded-lg mx-auto mb-4"></div>
-                        <p class="text-sm text-gray-400">TechFlow</p>
-                    </div>
-                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-lg p-6 text-center border border-gray-700 hover:border-purple-500 transition-all duration-300 hover-lift">
-                        <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-lg mx-auto mb-4"></div>
-                        <p class="text-sm text-gray-400">DataSync</p>
-                    </div>
-                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-lg p-6 text-center border border-gray-700 hover:border-pink-500 transition-all duration-300 hover-lift">
-                        <div class="w-16 h-16 bg-gradient-to-br from-pink-500 to-red-500 rounded-lg mx-auto mb-4"></div>
-                        <p class="text-sm text-gray-400">CloudBase</p>
-                    </div>
-                    <div class="bg-gray-800/50 backdrop-blur-lg rounded-lg p-6 text-center border border-gray-700 hover:border-green-500 transition-all duration-300 hover-lift">
-                        <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-blue-500 rounded-lg mx-auto mb-4"></div>
-                        <p class="text-sm text-gray-400">SaaSCorp</p>
-                    </div>
-                </div>
-                
-                <div class="bg-gray-800/50 backdrop-blur-lg rounded-xl p-8 border border-gray-700 max-w-3xl mx-auto" data-aos="fade-up" data-aos-delay="300">
-                    <div class="text-center mb-6">
-                        <i data-feather="quote" class="w-12 h-12 text-blue-400 mx-auto mb-4"></i>
-                        <p class="text-xl italic text-gray-300">
-                            "SaaSReport™ eliminated 80+ hours of monthly manual reporting and helped us close our Series A 
-                            3x faster. Our MRR calculations are now 99.9% accurate and investor-ready. The predictive 
-                            churn analysis predicted our Q4 performance within 2% accuracy."
-                        </p>
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-16" data-aos="fade-up">
+                    Trusted by <span class="gradient-text">500+ SaaS Companies</span> Worldwide
+                </h2>
+
+                <!-- Company Logos -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16 opacity-60" data-aos="fade-up" data-aos-delay="200">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-gray-400">TechFlow</div>
                     </div>
                     <div class="text-center">
-                        <p class="font-semibold">Sarah Chen</p>
-                        <p class="text-sm text-gray-400">CFO, TechFlow Analytics • $50M Valuation</p>
+                        <div class="text-2xl font-bold text-gray-400">DataSync</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-gray-400">CloudBase</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-gray-400">SaaSCorp</div>
+                    </div>
+                </div>
+
+                <!-- Featured Testimonial -->
+                <div class="bg-gray-900/50 backdrop-blur-sm border border-gray-700 rounded-xl p-8 max-w-4xl mx-auto hover-lift" data-aos="fade-up" data-aos-delay="300">
+                    <div class="text-center">
+                        <div class="text-6xl text-blue-400 mb-4">"</div>
+                        <p class="text-xl text-gray-300 mb-8 italic leading-relaxed">
+                            SaaSReport™ eliminated 80+ hours of monthly manual reporting and helped us close our Series A 3x faster. Our MRR calculations are now 99.9% accurate and investor-ready. The predictive churn analysis predicted our Q4 performance within 2% accuracy.
+                        </p>
+                        <div class="flex items-center justify-center">
+                            <div class="text-center">
+                                <div class="font-semibold text-lg">Sarah Chen</div>
+                                <div class="text-gray-400">CFO, TechFlow Analytics • $50M Valuation</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+        
+        <!-- Bottom gradient line -->
+        <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-purple-500 to-transparent"></div>
     </section>
 
     <!-- Final CTA Section -->
-    <section class="py-20 relative overflow-hidden bg-gradient-to-b from-gray-900 to-black">
-        <div class="absolute inset-0 grid-bg opacity-30"></div>
-        <div class="container mx-auto px-6 relative z-10">
+    <section class="py-20 relative">
+        <div class="container mx-auto px-6">
             <div class="max-w-4xl mx-auto text-center">
-                <h2 class="text-5xl font-bold mb-6" data-aos="fade-up">
-                    Stop Losing 500+ Hours Annually to Manual Reports.
-                    <span class="gradient-text">Join 500+ SaaS Founders Saving $50K+ with Real-Time Analytics.</span>
+                <h2 class="text-4xl md:text-6xl font-bold mb-8" data-aos="fade-up">
+                    Stop Losing <span class="text-red-400">500+ Hours</span> Annually to Manual Reports. Join <span class="gradient-text">500+ SaaS Founders</span> Saving <span class="text-green-400">$50K+</span> with Real-Time Analytics.
                 </h2>
-                <p class="text-xl text-gray-300 mb-8" data-aos="fade-up" data-aos-delay="100">
-                    ⚡ Limited Time: Get 99.9% accurate MRR calculations, predictive churn analysis, and investor-ready reports. 
-                    Save 80+ hours monthly while impressing investors. 2-minute Stripe setup.
+                
+                <p class="text-xl text-gray-300 mb-12 leading-relaxed" data-aos="fade-up" data-aos-delay="100">
+                    <svg xmlns="https://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2 text-yellow-400">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    </svg>
+                    Limited Time: Get 99.9% accurate MRR calculations, predictive churn analysis, and investor-ready reports. Save 80+ hours monthly while impressing investors. 2-minute Stripe setup.
                 </p>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center" data-aos="fade-up" data-aos-delay="200">
-                    <button class="bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-lg text-lg font-semibold transition neon-glow">
-                        ⚡ Install on Stripe - 2-Minute Setup
+
+                <!-- Final CTA Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center" data-aos="fade-up" data-aos-delay="200">
+                    <button class="bg-blue-600 hover:bg-blue-700 px-8 py-4 rounded-lg font-semibold text-lg transition neon-glow pulse-glow hover-lift">
+                        <svg xmlns="https://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                        Install on Stripe - 2-Minute Setup
                     </button>
-                    <button class="border border-blue-600 hover:bg-blue-600/20 px-8 py-4 rounded-lg text-lg font-semibold transition">
+                    <button class="border-2 border-blue-500 hover:bg-blue-500/20 px-8 py-4 rounded-lg font-semibold text-lg transition hover-lift">
+                        <svg xmlns="https://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="inline mr-2">
+                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                            <line x1="16" y1="2" x2="16" y2="6"/>
+                            <line x1="8" y1="2" x2="8" y2="6"/>
+                            <line x1="3" y1="10" x2="21" y2="10"/>
+                        </svg>
                         📊 See Sample Report - 30-Second Preview
                     </button>
                 </div>
             </div>
         </div>
         
+        <!-- Bottom gradient line -->
         <div class="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-blue-500 to-transparent"></div>
     </section>
 
@@ -808,7 +1047,7 @@
                 </div>
             </div>
             <div class="mt-8 pt-8 border-t border-gray-800 text-center text-sm text-gray-400">
-                <p>&copy; 2025 SaaSReport™. All rights reserved. </p>
+                <p>© 2025 SaaSReport™. All rights reserved. </p>
             </div>
         </div>
     </footer>
@@ -889,5 +1128,7 @@
             });
         });
     </script>
+
+
 </body>
 </html>
