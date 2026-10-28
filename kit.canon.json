@@ -51,6 +51,13 @@
       "outputs": [
         "content/generated/widgets.generated.json"
       ]
+    },
+    {
+      "name": "the API Worker's bundled registries and sample data (scripts/api-data.mjs)",
+      "command": "node scripts/api-data.mjs --check",
+      "outputs": [
+        "workers/api/src/data.generated.js"
+      ]
     }
   ],
   "diagrams": "docs/diagrams",
@@ -100,28 +107,45 @@
         {
           "cron": "41 5 * * *",
           "reason": "the daily staleness verifier (docs/FRESHNESS.md): staleness is measured against the live remote head, so a weekly run would leave a stale branch, vendor or deploy undetected for up to six days"
+        },
+        {
+          "cron": "41 7 * * *",
+          "reason": "the daily drift check of the kit's production template (docs/RELEASE.md): every Worker must serve main's commit, and a weekly run would leave a drift undetected for up to six days"
+        },
+        {
+          "cron": "7 */2 * * *",
+          "reason": "the independent watcher of the API health (docs/RESILIENCE.md): it runs on GitHub outside the Cloudflare account, and stale_after_min is derived from this two-hour gap"
+        },
+        {
+          "cron": "17 6 * * *",
+          "reason": "the daily canary through the second alert route (docs/RESILIENCE.md): a route that is not exercised every day is not proven"
         }
       ]
     }
   },
   "notApplicable": {
-    "contracts": {
-      "predicate": "no-http-surface"
-    },
-    "sdk": {
-      "predicate": "no-openapi-contract"
-    },
     "digits": {
       "predicate": "no-persian-site"
     },
     "persian": {
       "predicate": "no-persian-content"
-    },
-    "resilience": {
-      "predicate": "no-deployed-workers"
-    },
-    "release": {
-      "predicate": "no-deployed-workers"
     }
+  },
+  "contracts": [
+    {
+      "name": "api",
+      "type": "openapi",
+      "contract": "contracts/api.openapi.json",
+      "sources": [
+        "workers/api/src/worker.js"
+      ],
+      "routes": "(?<![\\w.])/v1(?:/[A-Za-z0-9._{}-]+)*/?(?![\\w/])"
+    }
+  ],
+  "resilience": {
+    "file": "resilience.json"
+  },
+  "release": {
+    "file": "release.json"
   }
 }

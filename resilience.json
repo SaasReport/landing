@@ -1,0 +1,35 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/resilience.schema.json",
+  "project": "saasreport",
+  "routes": [
+    {
+      "id": "watcher-run",
+      "channel": "github"
+    },
+    {
+      "id": "owner-telegram",
+      "channel": "telegram"
+    }
+  ],
+  "monitors": [
+    {
+      "id": "api-health",
+      "kind": "watcher",
+      "watches": [
+        {
+          "wrangler": "workers/api/wrangler.toml"
+        }
+      ],
+      "root": "github",
+      "routes": [
+        "watcher-run",
+        "owner-telegram"
+      ],
+      "stale_after_min": 360,
+      "watcher": {
+        "workflow": ".github/workflows/watch.yml",
+        "url_env": "API_HEALTH_URL"
+      }
+    }
+  ]
+}
