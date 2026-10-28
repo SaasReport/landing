@@ -30,7 +30,7 @@ test("the page survives Cloudflare's Rocket Loader and email obfuscation, which 
   const { execFileSync } = await import("node:child_process");
   execFileSync("node", ["scripts/build.mjs"]);
   const html = readFileSync("dist/index.html", "utf8");
-  assert.match(html, /<script type="module" src="app\.js" data-cfasync="false">/, "Rocket Loader must skip the module script");
+  assert.match(html, /<script data-cfasync="false"[^>]*\ssrc="app\.js"/, "Rocket Loader must skip the module script, and Cloudflare needs data-cfasync before src");
   const off = html.indexOf("<!--email_off-->"), on = html.indexOf("<!--/email_off-->");
   assert.ok(off !== -1 && on > off, "email obfuscation must be off around the page");
   for (const m of html.matchAll(/mailto:/g)) assert.ok(m.index > off && m.index < on, "every mailto sits inside the email_off block");

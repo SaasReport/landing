@@ -63,7 +63,7 @@ const html = `<!doctype html>
 </main>
 <footer><p>${esc(content.legal)}</p><p>© ${year} ${esc(holder)} ${esc(content.footer.rights)} <a href="mailto:${esc(content.contact.mailto)}">${esc(content.contact.mailto)}</a></p></footer>
 <!--/email_off--><script type="application/json" id="data">${JSON.stringify({ reg, sample, labels: { reportType: "Report" } }).replace(/</g, "\\u003c")}</script>
-<script type="module" src="app.js" data-cfasync="false"></script></body></html>`;
+<script data-cfasync="false" type="module" src="app.js"></script></body></html>`;
 
 rmSync("dist", { recursive: true, force: true });
 mkdirSync("dist", { recursive: true });
