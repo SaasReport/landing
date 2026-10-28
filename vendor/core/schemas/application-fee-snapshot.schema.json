@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/application-fee-snapshot.schema.json",
+  "title": "saasreport.application-fee-snapshot.v1",
+  "description": "A Stripe application fee reduced to what the metric engine reads. Ingestion maps it; the engine never sees a raw payload.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "currency", "amount", "created"],
+  "properties": {
+    "id": { "type": "string", "minLength": 1 },
+    "currency": { "type": "string", "pattern": "^[a-z]{3}$" },
+    "amount": { "type": "integer", "minimum": 0 },
+    "amount_refunded": { "type": "integer", "minimum": 0, "description": "defaults to 0; never above amount" },
+    "created": { "type": "integer", "minimum": 0, "description": "epoch seconds" }
+  }
+}

@@ -1,0 +1,301 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/company.schema.json",
+  "title": "saasreport.company.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "registry",
+    "version",
+    "company",
+    "contacts",
+    "terms",
+    "data",
+    "ai",
+    "site",
+    "subprocessors",
+    "senders"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "registry": {
+      "const": "saasreport.company"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "note": {
+      "type": "string"
+    },
+    "company": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "legal_name",
+        "trading_name",
+        "registration_number",
+        "country_of_incorporation",
+        "governing_law",
+        "courts",
+        "copyright_holder"
+      ],
+      "properties": {
+        "legal_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "trading_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "registration_number": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "country_of_incorporation": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "governing_law": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "courts": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "copyright_holder": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "contacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "legal_email",
+        "privacy_email",
+        "security_email",
+        "support_email"
+      ],
+      "properties": {
+        "legal_email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+        },
+        "privacy_email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+        },
+        "security_email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+        },
+        "support_email": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+        }
+      }
+    },
+    "terms": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "liability_cap",
+        "notice_period_days",
+        "pricing_url"
+      ],
+      "properties": {
+        "liability_cap": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "notice_period_days": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "pricing_url": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^https://"
+        }
+      }
+    },
+    "data": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "report_retention_days",
+        "derived_data_retention_days_after_uninstall",
+        "breach_notice_hours",
+        "hosting_regions",
+        "transfer_mechanism"
+      ],
+      "properties": {
+        "report_retention_days": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "derived_data_retention_days_after_uninstall": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "breach_notice_hours": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 1
+        },
+        "hosting_regions": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "transfer_mechanism": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      }
+    },
+    "ai": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider_name",
+        "provider_location"
+      ],
+      "properties": {
+        "provider_name": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "provider_location": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      }
+    },
+    "site": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "uses_analytics"
+      ],
+      "properties": {
+        "uses_analytics": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        }
+      }
+    },
+    "subprocessors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "purpose",
+          "location"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "purpose": {
+            "type": "string",
+            "minLength": 1
+          },
+          "location": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "senders": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reports",
+        "system",
+        "reply_to"
+      ],
+      "properties": {
+        "reports": {
+          "type": "string",
+          "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+        },
+        "system": {
+          "type": "string",
+          "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+        },
+        "reply_to": {
+          "type": "string",
+          "pattern": "^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$"
+        }
+      }
+    }
+  }
+}

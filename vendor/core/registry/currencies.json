@@ -1,0 +1,11 @@
+{
+  "$schema": "../schemas/currencies.schema.json",
+  "registry": "saasreport.currencies",
+  "version": "1.0.0",
+  "source": "https://docs.stripe.com/currencies",
+  "note": "Minor-unit exponent per currency, used only to format amounts in headlines. Stripe amounts are integers in the currency's minor unit. Verified on 2026-10-28 from the Stripe page: ISK and UGX are sent as two-decimal values (the last two digits are always 00) although they have no fractional unit; HUF and TWD are charged as two-decimal. NOT machine-verified: the page lists the zero-decimal currencies as links, so the zero_decimal list below is from ISO 4217 and prior knowledge and must be confirmed against a test-mode charge before launch. three_decimal is the ISO 4217 exponent; how Stripe represents those amounts must also be confirmed.",
+  "default_exponent": 2,
+  "zero_decimal": ["bif", "clp", "djf", "gnf", "jpy", "kmf", "krw", "mga", "pyg", "rwf", "vnd", "vuv", "xaf", "xof", "xpf"],
+  "three_decimal": ["bhd", "jod", "kwd", "omr", "tnd"],
+  "two_decimal_by_stripe_convention": ["isk", "ugx"]
+}

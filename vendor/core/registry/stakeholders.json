@@ -1,0 +1,221 @@
+{
+  "$schema": "../schemas/stakeholders.schema.json",
+  "registry": "saasreport.stakeholders",
+  "version": "2.0.0",
+  "stakeholders": [
+    {
+      "id": "ceo_founder",
+      "name": "CEO / Founder",
+      "decision_questions": [
+        "Is recurring revenue growing, and is the growth healthy?",
+        "Where is revenue leaking?"
+      ],
+      "priority_metrics": [
+        "mrr",
+        "net_new_mrr",
+        "nrr",
+        "churned_mrr",
+        "arr",
+        "refund_rate_bp"
+      ],
+      "not_in_stripe": [
+        "profit",
+        "cash in the bank",
+        "burn and runway"
+      ]
+    },
+    {
+      "id": "cfo",
+      "name": "CFO / Finance lead",
+      "decision_questions": [
+        "What is the recurring revenue base and how did it move this period?",
+        "How much of it is retained?",
+        "How much leaks through refunds and disputes?"
+      ],
+      "priority_metrics": [
+        "mrr",
+        "arr",
+        "net_new_mrr",
+        "grr",
+        "net_volume",
+        "refund_amount",
+        "dispute_amount",
+        "churned_mrr",
+        "contraction_mrr"
+      ],
+      "not_in_stripe": [
+        "costs and expenses",
+        "profit and loss",
+        "cash balance outside Stripe"
+      ]
+    },
+    {
+      "id": "board",
+      "name": "Board",
+      "decision_questions": [
+        "Is the business on track?",
+        "What changed since the last meeting?"
+      ],
+      "priority_metrics": [
+        "arr",
+        "net_new_mrr",
+        "nrr",
+        "grr",
+        "logo_churn_rate",
+        "dispute_rate_bp"
+      ],
+      "not_in_stripe": [
+        "burn and runway",
+        "headcount",
+        "pipeline"
+      ]
+    },
+    {
+      "id": "investors",
+      "name": "Investors",
+      "decision_questions": [
+        "How efficient and durable is the revenue growth?"
+      ],
+      "priority_metrics": [
+        "arr",
+        "nrr",
+        "grr",
+        "net_new_mrr",
+        "new_mrr",
+        "expansion_mrr"
+      ],
+      "not_in_stripe": [
+        "customer acquisition cost",
+        "burn multiple",
+        "benchmarks against other companies"
+      ]
+    },
+    {
+      "id": "sales",
+      "name": "Sales",
+      "decision_questions": [
+        "How much new and expansion revenue did we add?",
+        "How big is a typical deal?"
+      ],
+      "priority_metrics": [
+        "new_mrr",
+        "expansion_mrr",
+        "new_customers",
+        "net_new_mrr",
+        "average_order_value",
+        "arpa"
+      ],
+      "not_in_stripe": [
+        "pipeline",
+        "quota attainment",
+        "win rate",
+        "sales cycle length"
+      ]
+    },
+    {
+      "id": "marketing",
+      "name": "Marketing",
+      "decision_questions": [
+        "How many new paying customers arrived, and how much revenue do they bring?"
+      ],
+      "priority_metrics": [
+        "new_customers",
+        "new_mrr",
+        "arpa",
+        "average_order_value",
+        "gross_volume"
+      ],
+      "not_in_stripe": [
+        "marketing spend",
+        "channel attribution",
+        "customer acquisition cost",
+        "leads and funnel stages"
+      ]
+    },
+    {
+      "id": "customer_success",
+      "name": "Customer success",
+      "decision_questions": [
+        "Which parts of the base are shrinking or leaving?",
+        "Are payment failures putting customers at risk?"
+      ],
+      "priority_metrics": [
+        "logo_churn_rate",
+        "churned_mrr",
+        "contraction_mrr",
+        "grr",
+        "nrr",
+        "payment_failure_rate_bp"
+      ],
+      "not_in_stripe": [
+        "product usage",
+        "health scores",
+        "support satisfaction"
+      ]
+    },
+    {
+      "id": "refunds_returns",
+      "name": "Refunds and returns",
+      "decision_questions": [
+        "How much are we refunding, and why?",
+        "Is the refund rate rising?"
+      ],
+      "priority_metrics": [
+        "refund_amount",
+        "refund_rate_bp",
+        "refund_count",
+        "refund_count_requested_by_customer",
+        "refund_count_duplicate",
+        "refund_count_fraudulent",
+        "dispute_count"
+      ],
+      "not_in_stripe": [
+        "returned goods and inventory",
+        "product-level return reasons",
+        "shipping"
+      ]
+    },
+    {
+      "id": "tech_support",
+      "name": "Tech support",
+      "decision_questions": [
+        "How many payments are failing, and is it getting worse?",
+        "How many disputes need a response?"
+      ],
+      "priority_metrics": [
+        "payment_failure_rate_bp",
+        "failed_payments",
+        "dispute_count",
+        "dispute_rate_bp",
+        "refund_count_duplicate"
+      ],
+      "not_in_stripe": [
+        "tickets and response times",
+        "error logs",
+        "product incidents"
+      ]
+    },
+    {
+      "id": "marketplace_operator",
+      "name": "Marketplace / platform operator",
+      "decision_questions": [
+        "What does the platform earn on the volume that flows through it?",
+        "Is the take rate holding?",
+        "Are disputes and refunds on the platform's payments under control?"
+      ],
+      "priority_metrics": [
+        "platform_fees",
+        "take_rate_bp",
+        "gross_volume",
+        "dispute_rate_bp",
+        "refund_rate_bp",
+        "payment_failure_rate_bp"
+      ],
+      "not_in_stripe": [
+        "seller-side revenue of connected accounts (not readable from the platform's install)",
+        "listing quality and supply health",
+        "buyer and seller acquisition cost"
+      ]
+    }
+  ]
+}

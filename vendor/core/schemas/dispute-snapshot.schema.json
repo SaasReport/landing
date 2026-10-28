@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/dispute-snapshot.schema.json",
+  "title": "saasreport.dispute-snapshot.v1",
+  "description": "A Stripe dispute reduced to what the metric engine reads.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "currency",
+    "amount",
+    "status",
+    "created"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "charge": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[a-z]{3}$"
+    },
+    "amount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "reason": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "status": {
+      "enum": [
+        "warning_needs_response",
+        "warning_under_review",
+        "warning_closed",
+        "needs_response",
+        "under_review",
+        "won",
+        "lost"
+      ]
+    },
+    "created": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

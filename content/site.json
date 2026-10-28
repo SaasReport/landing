@@ -1,0 +1,67 @@
+{
+  "$schema": "../schemas/site.schema.json",
+  "title": "SaasReport: Stripe reports for every stakeholder",
+  "description": "Install once and every person who asks about your Stripe numbers gets the report built for them, on a schedule, with findings that show their working.",
+  "status": "SaasReport is in development and is not yet listed in the Stripe App Marketplace. Every figure on this page comes from the engine running on made-up sample data, and says so.",
+  "contact": { "label": "Talk to us", "mailto": "info@saasreport.ai", "subject": "SaasReport" },
+  "hero": {
+    "headline": "The right Stripe report for each person who asks.",
+    "sub": "Your finance lead, your board, your support desk and your investors all ask different questions of the same data. SaasReport builds each of them their own report, on a schedule, from Stripe alone.",
+    "secondary": "Try the sample report"
+  },
+  "problem": {
+    "title": "One dashboard cannot answer every question",
+    "points": [
+      { "title": "Everyone asks something different", "text": "The founder wants growth and leaks, finance wants the revenue base, support wants failed payments and refunds. A single view serves none of them well." },
+      { "title": "Reports are assembled by hand", "text": "Someone exports, pastes into a sheet, builds charts and writes the commentary, again every week, month and quarter." },
+      { "title": "Numbers drift between people", "text": "When each report is built separately, two people can quote different figures for the same month and nobody can say which is right." }
+    ]
+  },
+  "solution": {
+    "title": "Install once. Each stakeholder gets their own report.",
+    "steps": [
+      { "title": "Connect Stripe", "text": "Install the app. It asks to read; it never changes anything in your account." },
+      { "title": "Reports run on a cadence", "text": "Daily, weekly, monthly, quarterly and annual reports are built for the last complete period." },
+      { "title": "Figures are computed, not written", "text": "Every number comes from a published rule over your Stripe data. The same input gives the same figure every time." },
+      { "title": "Findings show their working", "text": "A finding is a published rule applied to those figures. It states the numbers that triggered it and a suggested next step. No model decides a number." },
+      { "title": "People see what their Stripe role allows", "text": "Access follows the person's Stripe role. A role that cannot see refunds in Stripe cannot see the refunds report." }
+    ]
+  },
+  "sectors": {
+    "title": "Who it is for",
+    "note": "Each card says what exists in the engine today. Nothing here is a claim about customers.",
+    "items": [
+      { "id": "saas", "name": "Subscription software", "text": "Recurring revenue and how it moved: new, expanded, contracted and churned, retention, payment failures, refunds and disputes.", "status": "In the engine" },
+      { "id": "payments", "name": "Merchants without subscriptions", "text": "Payment volume, failures, refunds by reason and disputes, for the people who handle them.", "status": "In the engine" },
+      { "id": "marketplaces", "name": "Marketplaces and platforms", "text": "The operator sees platform fees and take rate from the platform account. Stripe does not let an app installed by a platform read its merchants' accounts, so each merchant installs SaasReport on its own account to get its own reports. A platform can recommend it; it cannot pull merchant data through its install.", "status": "Operator report in the engine; merchant referral not built" }
+    ]
+  },
+  "tryit": {
+    "title": "Pick a stakeholder and see the report",
+    "note": "Sample data. A made-up account, a made-up month and the month before it. The figures, changes and findings are produced by the same engine that will run on real accounts.",
+    "currency": "Currency in the sample account"
+  },
+  "access": {
+    "title": "Who sees what",
+    "text": "Choose Stripe roles. A person's access is the union of what their Stripe roles can see. A role not listed, or a user whose roles cannot be verified, sees nothing.",
+    "none": "No report: none of these roles can see the data behind any report."
+  },
+  "roi": {
+    "title": "What your reporting costs you today",
+    "note": "This is arithmetic on your own inputs. It makes no claim about how much time SaasReport saves you; the last slider is your own assumption.",
+    "fields": {
+      "people": "People who ask for reports",
+      "perMonth": "Reports each person gets per month",
+      "hours": "Hours to build one report by hand",
+      "rate": "Loaded cost of an hour",
+      "share": "Share of the building time you assume would be removed"
+    },
+    "result": { "hours": "Hours a month spent building reports", "cost": "Monthly cost of that time", "year": "Yearly cost of that time", "freed": "Hours a month freed under your assumption" }
+  },
+  "commitments": {
+    "title": "What we commit to, and where each stands",
+    "note": "Each line is a commitment in the registry with its status. Planned means it is a design commitment that is not yet built or proven."
+  },
+  "legal": "Terms, privacy, data processing, acceptable use, cookies, subprocessors and disclaimer are in draft and are not published until a lawyer has approved them and the company details are filled in.",
+  "footer": { "rights": "All rights reserved." }
+}

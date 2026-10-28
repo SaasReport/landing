@@ -1,0 +1,80 @@
+{
+  "$schema": "../schemas/legal.schema.json",
+  "registry": "saasreport.legal",
+  "version": "1.0.0",
+  "note": "DRAFTS for review by qualified counsel; not legal advice. Nothing here is published until every fact it needs is supplied, every commitment it cites is implemented, counsel has approved it, and an effective date is set.",
+  "documents": [
+    {
+      "id": "terms-of-service",
+      "title": "Terms of Service",
+      "file": "legal/terms-of-service.md",
+      "audience": "customer",
+      "status": "draft",
+      "effective_date": null
+    },
+    {
+      "id": "privacy-policy",
+      "title": "Privacy Policy",
+      "file": "legal/privacy-policy.md",
+      "audience": "everyone",
+      "status": "draft",
+      "effective_date": null
+    },
+    {
+      "id": "data-processing-addendum",
+      "title": "Data Processing Addendum",
+      "file": "legal/data-processing-addendum.md",
+      "audience": "customer",
+      "status": "draft",
+      "effective_date": null
+    },
+    {
+      "id": "acceptable-use-policy",
+      "title": "Acceptable Use Policy",
+      "file": "legal/acceptable-use-policy.md",
+      "audience": "customer",
+      "status": "draft",
+      "effective_date": null
+    },
+    {
+      "id": "cookie-notice",
+      "title": "Cookie Notice",
+      "file": "legal/cookie-notice.md",
+      "audience": "website visitor",
+      "status": "draft",
+      "effective_date": null
+    },
+    {
+      "id": "subprocessors",
+      "title": "Subprocessors",
+      "file": "legal/subprocessors.md",
+      "audience": "customer",
+      "status": "draft",
+      "effective_date": null
+    },
+    {
+      "id": "email-footer",
+      "title": "Email legal footer",
+      "file": "legal/email-footer.md",
+      "audience": "report recipient",
+      "status": "draft",
+      "effective_date": null
+    },
+    {
+      "id": "report-disclaimer",
+      "title": "Report disclaimer",
+      "file": "legal/report-disclaimer.md",
+      "audience": "report recipient",
+      "status": "draft",
+      "effective_date": null
+    },
+    {
+      "id": "copyright-notice",
+      "title": "Copyright and trademark notice",
+      "file": "legal/copyright-notice.md",
+      "audience": "everyone",
+      "status": "draft",
+      "effective_date": null
+    }
+  ]
+}

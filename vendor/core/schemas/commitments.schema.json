@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/commitments.schema.json",
+  "title": "saasreport.commitments.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "registry",
+    "version",
+    "commitments"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "registry": {
+      "const": "saasreport.commitments"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "note": {
+      "type": "string"
+    },
+    "commitments": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "statement",
+          "status",
+          "evidence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "planned",
+              "implemented"
+            ]
+          },
+          "evidence": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1
+          }
+        },
+        "if": {
+          "properties": {
+            "status": {
+              "const": "implemented"
+            }
+          }
+        },
+        "then": {
+          "properties": {
+            "evidence": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

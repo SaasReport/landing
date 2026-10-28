@@ -1,0 +1,13 @@
+{
+  "$schema": "../schemas/cadences.schema.json",
+  "registry": "saasreport.cadences",
+  "version": "1.0.0",
+  "timezone": "UTC",
+  "cadences": [
+    { "id": "day", "name": "Daily", "rule": "The previous complete UTC day." },
+    { "id": "week", "name": "Weekly", "rule": "The previous complete ISO week, Monday 00:00 UTC to the next Monday." },
+    { "id": "month", "name": "Monthly", "rule": "The previous complete calendar month in UTC." },
+    { "id": "quarter", "name": "Quarterly", "rule": "The previous complete calendar quarter in UTC (Jan-Mar, Apr-Jun, Jul-Sep, Oct-Dec)." },
+    { "id": "year", "name": "Annual", "rule": "The previous complete calendar year in UTC." }
+  ]
+}

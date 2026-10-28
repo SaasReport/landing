@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/charge-snapshot.schema.json",
+  "title": "saasreport.charge-snapshot.v1",
+  "description": "A Stripe charge reduced to what the metric engine reads. Ingestion maps it; the engine never sees a raw payload.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "currency",
+    "amount",
+    "status",
+    "created"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "customer": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[a-z]{3}$"
+    },
+    "amount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "status": {
+      "enum": [
+        "succeeded",
+        "failed",
+        "pending"
+      ]
+    },
+    "created": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "epoch seconds"
+    },
+    "failure_code": {
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}
