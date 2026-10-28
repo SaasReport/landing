@@ -23,7 +23,7 @@ function payments(subs, window, failEvery, refundEvery, feePct) {
     const failed = (k + 1) % failEvery === 0;
     charges.push({ id: `ch_${id}`, customer: s.customer, currency: s.currency, amount, status: failed ? "failed" : "succeeded", created, failure_code: failed ? "card_declined" : null });
     if (failed) return;
-    application_fees.push({ id: `fee_${id}`, currency: s.currency, amount: Math.trunc((amount * feePct) / 100), created });
+    application_fees.push({ id: `fee_${id}`, charge: `ch_${id}`, currency: s.currency, amount: Math.trunc((amount * feePct) / 100), created });
     if ((k + 1) % refundEvery === 0) refunds.push({ id: `re_${id}`, charge: `ch_${id}`, currency: s.currency, amount, status: "succeeded", reason: ["requested_by_customer", "duplicate", "fraudulent"][(k + 1) % 3], created: created + 7200 });
     if ((k + 1) % 15 === 0) disputes.push({ id: `dp_${id}`, charge: `ch_${id}`, currency: s.currency, amount, reason: "fraudulent", status: "needs_response", created: created + 14400 });
   });

@@ -34,6 +34,7 @@ export function assertPaymentInputs({ window, charges = [], refunds = [], disput
     seen.add(f.id);
     if (typeof f.currency !== "string" || !/^[a-z]{3}$/.test(f.currency)) bad("currency must be a lower-case ISO 4217 code");
     if (!isCount(f.amount)) bad("amount must be a non-negative integer (minor units)");
+    if (f.charge != null && (typeof f.charge !== "string" || !f.charge)) bad("charge must be a non-empty string when given");
     if (f.amount_refunded != null && (!isCount(f.amount_refunded) || f.amount_refunded > f.amount)) bad("amount_refunded must be an integer from 0 to amount");
     if (!isCount(f.created)) bad("created must be integer epoch seconds");
   }
@@ -45,7 +46,7 @@ export function paymentsByCurrency(input) {
   const { window, charges = [], refunds = [], disputes = [], application_fees = [] } = input;
   const inWindow = (r) => r.created >= window.from && r.created < window.to;
   const out = {};
-  const slot = (c) => (out[c] ??= { gross_volume: 0, successful_payments: 0, failed_payments: 0, refund_amount: 0, refund_count: 0, refund_reasons: { requested_by_customer: 0, duplicate: 0, fraudulent: 0 }, dispute_count: 0, dispute_amount: 0, platform_fees: 0 });
+  const slot = (c) => (out[c] ??= { gross_volume: 0, successful_payments: 0, failed_payments: 0, refund_amount: 0, refund_count: 0, refund_reasons: { requested_by_customer: 0, duplicate: 0, fraudulent: 0 }, dispute_count: 0, dispute_amount: 0, platform_fees: 0, fee_charge_volume: 0, fees_unmatched: 0 });
   for (const c of charges.filter(inWindow)) {
     if (c.status === "succeeded") { slot(c.currency).gross_volume += c.amount; slot(c.currency).successful_payments += 1; }
     else if (c.status === "failed") slot(c.currency).failed_payments += 1;
@@ -57,7 +58,13 @@ export function paymentsByCurrency(input) {
     if (r.reason in s.refund_reasons) s.refund_reasons[r.reason] += 1;
   }
   for (const d of disputes.filter(inWindow)) { const s = slot(d.currency); s.dispute_count += 1; s.dispute_amount += d.amount; }
-  for (const f of application_fees.filter(inWindow)) slot(f.currency).platform_fees += f.amount - (f.amount_refunded ?? 0);
+  // A fee counts toward the take rate only when the charge that earned it is a visible, succeeded charge of the period; otherwise coverage is incomplete.
+  const visible = new Map(charges.filter((c) => inWindow(c) && c.status === "succeeded").map((c) => [c.id, c]));
+  for (const f of application_fees.filter(inWindow)) {
+    const s = slot(f.currency); s.platform_fees += f.amount - (f.amount_refunded ?? 0);
+    const c = f.charge == null ? null : visible.get(f.charge);
+    if (c && c.currency === f.currency) s.fee_charge_volume += c.amount; else s.fees_unmatched += 1;
+  }
   return Object.fromEntries(Object.keys(out).sort().map((c) => [c, out[c]]));
 }
 
@@ -65,6 +72,6 @@ export const rates = {
   failure: (s) => ratioBp(s.failed_payments, s.failed_payments + s.successful_payments),
   refund: (s) => ratioBp(s.refund_amount, s.gross_volume),
   dispute: (s) => ratioBp(s.dispute_count, s.successful_payments),
-  take: (s) => ratioBp(s.platform_fees, s.gross_volume),
+  take: (s) => (s.fees_unmatched > 0 ? null : ratioBp(s.platform_fees, s.fee_charge_volume)),
   aov: (s) => (s.successful_payments === 0 ? null : roundDiv(s.gross_volume, s.successful_payments)),
 };

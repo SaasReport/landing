@@ -372,8 +372,8 @@
         "charge"
       ],
       "rules": [
-        "Net platform fees divided by gross payment volume of the same period, in basis points, rounded half away from zero.",
-        "Undefined (null) when the platform account sees no succeeded charges, which is the case when it uses direct charges: then the charges live on the connected accounts and are not visible to the platform's install."
+        "Net platform fees divided by the volume of the succeeded charges that earned them, in basis points, rounded half away from zero.",
+        "Undefined (null) unless every fee of the period matches a visible succeeded charge of the same period and currency. With direct charges the charges live on the connected accounts and are not visible to the platform's install, so the rate is undefined rather than wrong."
       ]
     }
   ]

@@ -7,12 +7,12 @@ import { createRequire } from "node:module";
 const { chromium } = createRequire(import.meta.url)("playwright");
 
 const types = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css" };
-const server = createServer((q, r) => { try { const p = q.url === "/" ? "/index.html" : q.url.split("?")[0]; r.writeHead(200, { "content-type": types[extname(p)] ?? "application/octet-stream" }); r.end(readFileSync(join("dist", p))); } catch { r.writeHead(404); r.end(); } });
+const server = createServer((q, r) => { let body, p; try { p = q.url === "/" ? "/index.html" : q.url.split("?")[0]; body = readFileSync(join("dist", p)); } catch { r.writeHead(404); r.end(); return; } r.writeHead(200, { "content-type": types[extname(p)] ?? "application/octet-stream" }); r.end(body); });
 await new Promise((ok) => server.listen(0, ok));
 const url = `http://127.0.0.1:${server.address().port}/`;
 const outDir = process.argv[2] ?? "qa"; mkdirSync(outDir, { recursive: true });
 const fails = [];
-const browser = await chromium.launch();
+const browser = await chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 for (const [name, w, h] of [["phone", 390, 844], ["desktop", 1280, 800]]) {
   const page = await browser.newPage({ viewport: { width: w, height: h } });
   page.on("console", (m) => m.type() === "error" && fails.push(`${name}: console error: ${m.text()}`));

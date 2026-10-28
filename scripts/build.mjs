@@ -33,7 +33,7 @@ const field = (id, label, min, value, max) => `<label class="field"><span>${esc(
 const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(content.title)}</title><meta name="description" content="${esc(content.description)}">
-<link rel="stylesheet" href="styles.css"></head><body>
+<link rel="icon" href="data:,"><link rel="stylesheet" href="styles.css"></head><body>
 <p class="status" role="note">${esc(content.status)}</p>
 <header class="top"><a class="brand" href="#top">SaasReport™</a><nav aria-label="Sections"><a href="#try">Try it</a><a href="#problem">Problem</a><a href="#who">Who</a><a href="#roi">ROI</a><a class="btn" href="${mail}">${esc(content.contact.label)}</a></nav></header>
 <main id="top">
