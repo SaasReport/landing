@@ -1,0 +1,7 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sdk-config.schema.json",
+  "generator": "forge",
+  "targets": [
+    { "name": "saasreport-admin", "contract": "contracts/admin.openapi.json", "out": "sdk/admin" }
+  ]
+}

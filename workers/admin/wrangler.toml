@@ -1,0 +1,44 @@
+# admin.saasreport.ai: the SaasReport admin Worker (docs/ADMIN.md). Hand-written because the kit generates wrangler.toml for the comms
+# Workers only (a kit change is proposed in the pull request: a generator for a project Worker from admin.config.json).
+# Names follow the naming registry; `admin` as a component and as a host sub wait for SaasReport/core claude/naming-admin.
+# The two D1 ids are public identifiers of resources the owner provisioned. Secrets are set on the Worker by the deploy path
+# (scripts/admin-secrets.mjs, .github/workflows/admin-deploy.yml), never in this file:
+#   ACCESS_TEAM_DOMAIN, ACCESS_AUD, ADMIN_ALLOWED_EMAILS (required), GITHUB_READ_TOKEN (optional, read-only)
+name = "saasreport-admin-production"
+main = "src/index.js"
+compatibility_date = "2026-09-01"
+workers_dev = false
+preview_urls = false
+# The hostname exists in DNS (proxied placeholder); the route sends it to this Worker, and the Access application in front of it is owner-only.
+routes = [{ pattern = "admin.saasreport.ai/*", zone_name = "saasreport.ai" }]
+
+# The generated interface (kit site build --config workers/admin/ui/site.config.js). The Worker runs first, so Access is verified before any asset.
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+run_worker_first = true
+
+# The admin's own database: the append-only audit log, the lead state, the idempotency records.
+[[d1_databases]]
+binding = "DB"
+database_name = "saasreport-admin-production"
+database_id = "7dc2fb14-ada2-45d8-b66b-a0118255d2df"
+migrations_dir = "migrations"
+
+# The comms engine's database (comms_form_deliveries, comms_dispatch, comms_suppression, comms_inbound, leads). Shared with the engine and the
+# site Worker, which already bind it; the admin writes only comms_suppression (a removal). Its migrations belong to the engine.
+[[d1_databases]]
+binding = "ENGINE_DB"
+database_name = "saasreport-comms-engine-production"
+database_id = "f55e76c2-c243-4248-90e4-aee62548371c"
+# the engine's tables are the comms package's migrations (IF NOT EXISTS, safe to re-apply); the production workflow applies them before the Worker
+migrations_dir = "../../vendor/kit/packages/comms/migrations"
+
+# The comms engine: retries go through its idempotent POST /v1/comms/submit, suppressions through POST /v1/comms/suppress.
+[[services]]
+binding = "COMMS"
+service = "saasreport-comms-engine"
+
+
+[observability]
+enabled = true

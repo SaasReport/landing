@@ -1,0 +1,4132 @@
+{
+  "asOf": "2026-10-28",
+  "exports": {
+    "workbench": {
+      "en": {
+        "asOf": "2026-10-28",
+        "byo": {
+          "enabled": false,
+          "maxDatasetBytes": 1048576,
+          "maxResponseBytes": 1048576,
+          "maxRows": 5000,
+          "timeoutMs": 8000
+        },
+        "commands": [
+          {
+            "aliases": [
+              "health",
+              "builds"
+            ],
+            "args": [],
+            "id": "workers",
+            "opens": "workers",
+            "source": "admin.workers",
+            "summary": "Health and commit of every Worker",
+            "verb": "WORKERS"
+          },
+          {
+            "aliases": [
+              "pipeline"
+            ],
+            "args": [],
+            "id": "funnel",
+            "opens": "funnel",
+            "source": "admin.funnel",
+            "summary": "Leads by status",
+            "verb": "FUNNEL"
+          },
+          {
+            "aliases": [
+              "summary"
+            ],
+            "args": [],
+            "id": "deliveries-summary",
+            "opens": "deliveries-summary",
+            "source": "admin.deliveries-summary",
+            "summary": "Delivery counts over the last day",
+            "verb": "DSUM"
+          },
+          {
+            "aliases": [
+              "lead"
+            ],
+            "args": [
+              {
+                "enum": [
+                  "new",
+                  "contacted",
+                  "qualified",
+                  "won",
+                  "lost"
+                ],
+                "hint": "new, contacted, qualified, won or lost",
+                "name": "status",
+                "type": "enum"
+              },
+              {
+                "hint": "a form id",
+                "name": "form",
+                "type": "string"
+              },
+              {
+                "hint": "part of a name or company",
+                "name": "q",
+                "type": "string"
+              }
+            ],
+            "example": "LEADS new",
+            "id": "leads",
+            "opens": "leads",
+            "source": "admin.leads",
+            "summary": "Leads, filtered by status, form or name",
+            "verb": "LEADS"
+          },
+          {
+            "aliases": [
+              "deliveries",
+              "ledger"
+            ],
+            "args": [
+              {
+                "enum": [
+                  "all",
+                  "failed",
+                  "pending"
+                ],
+                "hint": "all, failed or pending",
+                "name": "state",
+                "type": "enum"
+              },
+              {
+                "hint": "a form id",
+                "name": "form_id",
+                "type": "string"
+              }
+            ],
+            "example": "DELIV failed",
+            "id": "deliveries",
+            "opens": "deliveries",
+            "source": "admin.deliveries",
+            "summary": "The form delivery ledger",
+            "verb": "DELIV"
+          },
+          {
+            "aliases": [
+              "failures"
+            ],
+            "args": [
+              {
+                "hint": "hours to look back",
+                "max": 720,
+                "min": 1,
+                "name": "window_hours",
+                "type": "integer"
+              }
+            ],
+            "example": "ALERTS 24",
+            "id": "alerts",
+            "opens": "alerts",
+            "source": "admin.alerts",
+            "summary": "Owner-alert failures",
+            "verb": "ALERTS"
+          },
+          {
+            "aliases": [
+              "inbound",
+              "mail"
+            ],
+            "args": [
+              {
+                "enum": [
+                  "received",
+                  "forwarded",
+                  "partial",
+                  "failed",
+                  "rejected",
+                  "dropped"
+                ],
+                "hint": "received, forwarded, partial, failed, rejected or dropped",
+                "name": "status",
+                "type": "enum"
+              }
+            ],
+            "example": "INBOX failed",
+            "id": "inbound",
+            "opens": "inbound",
+            "source": "admin.inbound",
+            "summary": "Inbound messages",
+            "verb": "INBOX"
+          },
+          {
+            "aliases": [
+              "autoreply"
+            ],
+            "args": [
+              {
+                "hint": "hours to look back",
+                "max": 720,
+                "min": 1,
+                "name": "window_hours",
+                "type": "integer"
+              }
+            ],
+            "example": "REPLY 168",
+            "id": "autoreply",
+            "opens": "autoreply",
+            "source": "admin.autoreply",
+            "summary": "Autoreply statistics",
+            "verb": "REPLY"
+          },
+          {
+            "aliases": [
+              "receipts"
+            ],
+            "args": [
+              {
+                "hint": "hours to look back",
+                "max": 720,
+                "min": 1,
+                "name": "window_hours",
+                "type": "integer"
+              }
+            ],
+            "example": "RECEIPT 24",
+            "id": "receipts",
+            "opens": "receipts",
+            "source": "admin.receipts",
+            "summary": "Form receipts by status",
+            "verb": "RECEIPT"
+          },
+          {
+            "aliases": [
+              "suppressions"
+            ],
+            "args": [
+              {
+                "enum": [
+                  "hard-bounce",
+                  "complaint",
+                  "unsubscribe.marketing",
+                  "unsubscribe.operational",
+                  "dsar-erasure"
+                ],
+                "hint": "hard-bounce, complaint, unsubscribe.marketing, unsubscribe.operational or dsar-erasure",
+                "name": "reason",
+                "type": "enum"
+              }
+            ],
+            "example": "SUPP complaint",
+            "id": "suppressions",
+            "opens": "suppressions",
+            "source": "admin.suppressions",
+            "summary": "The suppression list",
+            "verb": "SUPP"
+          },
+          {
+            "aliases": [
+              "stakeholders"
+            ],
+            "args": [],
+            "id": "stakeholders",
+            "opens": "stakeholders",
+            "source": "admin.stakeholders",
+            "summary": "Stakeholders",
+            "verb": "STAKE"
+          },
+          {
+            "aliases": [
+              "metrics"
+            ],
+            "args": [],
+            "id": "metrics",
+            "opens": "metrics",
+            "source": "admin.metrics",
+            "summary": "Metrics",
+            "verb": "METRIC"
+          },
+          {
+            "aliases": [
+              "reports"
+            ],
+            "args": [],
+            "id": "report-types",
+            "opens": "report-types",
+            "source": "admin.report-types",
+            "summary": "Report types",
+            "verb": "REPORT"
+          },
+          {
+            "aliases": [
+              "findings",
+              "rules"
+            ],
+            "args": [],
+            "id": "findings",
+            "opens": "findings",
+            "source": "admin.findings",
+            "summary": "Findings rules and their evidence",
+            "verb": "FIND"
+          },
+          {
+            "aliases": [
+              "commitments",
+              "promises"
+            ],
+            "args": [],
+            "id": "commitments",
+            "opens": "commitments",
+            "source": "admin.commitments",
+            "summary": "Commitments and their status",
+            "verb": "COMMIT"
+          },
+          {
+            "aliases": [
+              "documents",
+              "blockers"
+            ],
+            "args": [],
+            "id": "legal",
+            "opens": "legal",
+            "source": "admin.legal",
+            "summary": "Legal documents and their publish blockers",
+            "verb": "LEGAL"
+          },
+          {
+            "aliases": [
+              "provisioning",
+              "config"
+            ],
+            "args": [],
+            "id": "provisioning-config",
+            "opens": "provisioning-config",
+            "source": "admin.provisioning-config",
+            "summary": "Configuration present or missing",
+            "verb": "PROV"
+          },
+          {
+            "aliases": [
+              "bindings"
+            ],
+            "args": [],
+            "id": "provisioning-bindings",
+            "opens": "provisioning-bindings",
+            "source": "admin.provisioning-bindings",
+            "summary": "Bindings present or missing",
+            "verb": "BIND"
+          },
+          {
+            "aliases": [
+              "planned",
+              "naming"
+            ],
+            "args": [],
+            "id": "provisioning-planned",
+            "opens": "provisioning-planned",
+            "source": "admin.provisioning-planned",
+            "summary": "Planned resource names",
+            "verb": "PLAN"
+          },
+          {
+            "aliases": [
+              "log",
+              "actions"
+            ],
+            "args": [
+              {
+                "hint": "an operation id, such as updateLead",
+                "name": "action",
+                "type": "string"
+              },
+              {
+                "hint": "a lead, delivery or recipient",
+                "name": "target_id",
+                "type": "string"
+              }
+            ],
+            "example": "AUDIT updateLead",
+            "id": "audit",
+            "opens": "audit",
+            "source": "admin.audit",
+            "summary": "The audit log",
+            "verb": "AUDIT"
+          },
+          {
+            "aliases": [
+              "people",
+              "principals"
+            ],
+            "args": [],
+            "id": "users",
+            "opens": "users",
+            "source": "admin.users",
+            "summary": "Users and their roles",
+            "verb": "USERS"
+          },
+          {
+            "aliases": [
+              "rbac",
+              "permissions"
+            ],
+            "args": [],
+            "id": "roles",
+            "opens": "roles",
+            "source": "admin.roles",
+            "summary": "Roles and permissions",
+            "verb": "ROLES"
+          },
+          {
+            "aliases": [
+              "invitations"
+            ],
+            "args": [
+              {
+                "enum": [
+                  "pending",
+                  "revoked",
+                  "accepted",
+                  "expired"
+                ],
+                "hint": "pending, revoked, accepted or expired",
+                "name": "state",
+                "type": "enum"
+              }
+            ],
+            "example": "INVITE pending",
+            "id": "invitations",
+            "opens": "invitations",
+            "source": "admin.invitations",
+            "summary": "Invitations",
+            "verb": "INVITE"
+          },
+          {
+            "aliases": [
+              "finance",
+              "cost"
+            ],
+            "args": [],
+            "id": "finops",
+            "opens": "finops",
+            "source": "admin.finops",
+            "summary": "Revenue, plans and cloud cost",
+            "verb": "FINOPS"
+          },
+          {
+            "aliases": [
+              "business"
+            ],
+            "args": [],
+            "id": "bizops",
+            "opens": "bizops",
+            "source": "admin.bizops",
+            "summary": "Leads, commitments and legal documents",
+            "verb": "BIZOPS"
+          },
+          {
+            "aliases": [
+              "platformops"
+            ],
+            "args": [],
+            "id": "platformops",
+            "opens": "platformops",
+            "source": "admin.platformops",
+            "summary": "Workers, deliveries and mail",
+            "verb": "PLATFORM"
+          },
+          {
+            "aliases": [
+              "saas"
+            ],
+            "args": [],
+            "id": "saasops",
+            "opens": "saasops",
+            "source": "admin.saasops",
+            "summary": "Report types, stakeholders, metrics and tenants",
+            "verb": "SAASOPS"
+          },
+          {
+            "aliases": [
+              "infraops",
+              "infrastructure"
+            ],
+            "args": [],
+            "id": "infraops",
+            "opens": "infraops",
+            "source": "admin.infraops",
+            "summary": "Bindings, planned resources, release and backups",
+            "verb": "INFRA"
+          },
+          {
+            "aliases": [
+              "sources"
+            ],
+            "args": [],
+            "example": "SRC",
+            "id": "src",
+            "opens": "sources",
+            "source": "admin.local",
+            "summary": "Where each pane's data comes from",
+            "verb": "SRC"
+          },
+          {
+            "aliases": [
+              "commands"
+            ],
+            "args": [],
+            "example": "HELP",
+            "id": "help",
+            "opens": "help",
+            "source": "admin.local",
+            "summary": "Commands and keys",
+            "verb": "HELP"
+          }
+        ],
+        "defaultLayout": "finops-bizops",
+        "id": "admin",
+        "intro": "Type a command, or open a tab. Every pane reads the admin API and says so; changes (lead status, retries, suppressions) are made through the API, and every one is written to the audit log.",
+        "layouts": [
+          {
+            "groups": [
+              [
+                {
+                  "pane": "users"
+                },
+                {
+                  "pane": "roles"
+                }
+              ],
+              [
+                {
+                  "pane": "invitations"
+                },
+                {
+                  "pane": "audit"
+                }
+              ]
+            ],
+            "id": "users",
+            "title": "User management"
+          },
+          {
+            "groups": [
+              [
+                {
+                  "pane": "finops"
+                }
+              ],
+              [
+                {
+                  "pane": "bizops"
+                },
+                {
+                  "pane": "funnel"
+                }
+              ]
+            ],
+            "id": "finops-bizops",
+            "title": "FinOps and BizOps"
+          },
+          {
+            "groups": [
+              [
+                {
+                  "pane": "platformops"
+                },
+                {
+                  "pane": "saasops"
+                }
+              ],
+              [
+                {
+                  "pane": "infraops"
+                },
+                {
+                  "pane": "workers"
+                }
+              ]
+            ],
+            "id": "platform-saas-infra",
+            "title": "Platform, SaaS and Infra"
+          },
+          {
+            "groups": [
+              [
+                {
+                  "pane": "leads"
+                },
+                {
+                  "pane": "funnel"
+                }
+              ],
+              [
+                {
+                  "pane": "deliveries"
+                },
+                {
+                  "pane": "deliveries-summary"
+                },
+                {
+                  "pane": "alerts"
+                }
+              ]
+            ],
+            "id": "inbox",
+            "title": "Leads and deliveries"
+          },
+          {
+            "groups": [
+              [
+                {
+                  "pane": "inbound"
+                },
+                {
+                  "pane": "autoreply"
+                }
+              ],
+              [
+                {
+                  "pane": "suppressions"
+                },
+                {
+                  "pane": "receipts"
+                }
+              ]
+            ],
+            "id": "mail",
+            "title": "Mail"
+          },
+          {
+            "groups": [
+              [
+                {
+                  "pane": "stakeholders"
+                },
+                {
+                  "pane": "metrics"
+                },
+                {
+                  "pane": "report-types"
+                }
+              ],
+              [
+                {
+                  "pane": "findings"
+                },
+                {
+                  "pane": "commitments"
+                },
+                {
+                  "pane": "legal"
+                }
+              ]
+            ],
+            "id": "registries",
+            "title": "Registries"
+          },
+          {
+            "groups": [
+              [
+                {
+                  "pane": "workers"
+                },
+                {
+                  "pane": "audit"
+                }
+              ],
+              [
+                {
+                  "pane": "provisioning-config"
+                },
+                {
+                  "pane": "provisioning-bindings"
+                },
+                {
+                  "pane": "provisioning-planned"
+                }
+              ]
+            ],
+            "id": "operations",
+            "title": "Operations"
+          }
+        ],
+        "locale": {
+          "code": "en",
+          "digits": "latn",
+          "dir": "ltr",
+          "intl": "en",
+          "tz": "UTC"
+        },
+        "panes": [
+          {
+            "columns": [
+              {
+                "key": "id",
+                "label": "Worker"
+              },
+              {
+                "key": "via",
+                "label": "Reached by"
+              },
+              {
+                "key": "reachable",
+                "label": "Reachable",
+                "type": "bool"
+              },
+              {
+                "key": "commit",
+                "label": "Commit"
+              },
+              {
+                "key": "matches_main",
+                "label": "Is main's head",
+                "type": "bool"
+              },
+              {
+                "key": "error",
+                "label": "Error"
+              }
+            ],
+            "empty": "No Worker answered.",
+            "id": "workers",
+            "kind": "table",
+            "source": "admin.workers",
+            "summary": "Every Worker's /api/build: the commit it serves, and whether it is main's head.",
+            "title": "Workers"
+          },
+          {
+            "columns": [
+              {
+                "key": "key",
+                "label": "Status"
+              },
+              {
+                "key": "value",
+                "label": "Leads",
+                "type": "number"
+              }
+            ],
+            "empty": "No leads yet.",
+            "id": "funnel",
+            "kind": "table",
+            "source": "admin.funnel",
+            "summary": "Leads by status.",
+            "title": "Lead funnel"
+          },
+          {
+            "columns": [
+              {
+                "key": "key",
+                "label": "Count"
+              },
+              {
+                "key": "value",
+                "label": "Value"
+              }
+            ],
+            "empty": "The delivery ledger is not available.",
+            "id": "deliveries-summary",
+            "kind": "table",
+            "source": "admin.deliveries-summary",
+            "summary": "The counts the monitor reads over the last day.",
+            "title": "Delivery summary"
+          },
+          {
+            "columns": [
+              {
+                "key": "created_at",
+                "label": "Received",
+                "type": "date"
+              },
+              {
+                "key": "name",
+                "label": "Name"
+              },
+              {
+                "key": "company",
+                "label": "Company"
+              },
+              {
+                "key": "form",
+                "label": "Form"
+              },
+              {
+                "key": "status",
+                "label": "Status"
+              },
+              {
+                "key": "comms_status",
+                "label": "Autoreply"
+              },
+              {
+                "key": "id",
+                "label": "Reference"
+              }
+            ],
+            "empty": "No lead matches.",
+            "id": "leads",
+            "kind": "table",
+            "source": "admin.leads",
+            "summary": "Newest first. Open a lead, set its status or export the list through the API (getLead, updateLead, exportLeads).",
+            "title": "Leads"
+          },
+          {
+            "columns": [
+              {
+                "key": "created_at",
+                "label": "Received",
+                "type": "date"
+              },
+              {
+                "key": "reference",
+                "label": "Reference"
+              },
+              {
+                "key": "form_id",
+                "label": "Form"
+              },
+              {
+                "key": "receipt.status",
+                "label": "Receipt"
+              },
+              {
+                "key": "owner.status",
+                "label": "Owner"
+              },
+              {
+                "key": "owner.error",
+                "label": "Owner error"
+              }
+            ],
+            "empty": "No delivery matches.",
+            "id": "deliveries",
+            "kind": "table",
+            "source": "admin.deliveries",
+            "summary": "The receipt and the owner's notification of every submission. A failed one is retried through the comms engine (retryDelivery).",
+            "title": "Form deliveries"
+          },
+          {
+            "columns": [
+              {
+                "key": "at",
+                "label": "When",
+                "type": "date"
+              },
+              {
+                "key": "kind",
+                "label": "Kind"
+              },
+              {
+                "key": "id",
+                "label": "Reference"
+              },
+              {
+                "key": "form_id",
+                "label": "Form"
+              },
+              {
+                "key": "status",
+                "label": "Status"
+              },
+              {
+                "key": "error",
+                "label": "Error"
+              }
+            ],
+            "empty": "No owner alert has failed in the window.",
+            "id": "alerts",
+            "kind": "table",
+            "source": "admin.alerts",
+            "summary": "Owner notifications that failed or are still pending, and failed operator dispatches.",
+            "title": "Owner-alert failures"
+          },
+          {
+            "columns": [
+              {
+                "key": "received_at",
+                "label": "Received",
+                "type": "date"
+              },
+              {
+                "key": "recipient",
+                "label": "Mailbox"
+              },
+              {
+                "key": "status",
+                "label": "Status"
+              },
+              {
+                "key": "forwards",
+                "label": "Forwards"
+              },
+              {
+                "key": "autoreply.state",
+                "label": "Autoreply"
+              },
+              {
+                "key": "sender_hash",
+                "label": "Sender (hash)"
+              }
+            ],
+            "empty": "No inbound message, or the inbound table is not deployed yet.",
+            "id": "inbound",
+            "kind": "table",
+            "source": "admin.inbound",
+            "summary": "Sender as the hash the table stores, the receiving mailbox, the forward per destination and the autoreply state.",
+            "title": "Inbound mail"
+          },
+          {
+            "columns": [
+              {
+                "key": "key",
+                "label": "State"
+              },
+              {
+                "key": "value",
+                "label": "Messages",
+                "type": "number"
+              }
+            ],
+            "empty": "No autoreply in the window, or the inbound table is not deployed yet.",
+            "id": "autoreply",
+            "kind": "table",
+            "source": "admin.autoreply",
+            "summary": "Inbound autoreplies by state over the window.",
+            "title": "Autoreplies"
+          },
+          {
+            "columns": [
+              {
+                "key": "key",
+                "label": "Status"
+              },
+              {
+                "key": "value",
+                "label": "Receipts",
+                "type": "number"
+              }
+            ],
+            "empty": "No receipt in the window.",
+            "id": "receipts",
+            "kind": "table",
+            "source": "admin.receipts",
+            "summary": "Receipts sent to submitters by status over the window.",
+            "title": "Form receipts"
+          },
+          {
+            "columns": [
+              {
+                "key": "created_at",
+                "label": "Since",
+                "type": "date"
+              },
+              {
+                "key": "reason",
+                "label": "Reason"
+              },
+              {
+                "key": "scope",
+                "label": "Scope"
+              },
+              {
+                "key": "recipient_hash",
+                "label": "Recipient (hash)"
+              },
+              {
+                "key": "actor_id",
+                "label": "By"
+              }
+            ],
+            "empty": "The suppression list is empty.",
+            "id": "suppressions",
+            "kind": "table",
+            "source": "admin.suppressions",
+            "summary": "Recipients the engine will not write to, as hashes. Add and remove through the API (addSuppression, removeSuppression).",
+            "title": "Suppressions"
+          },
+          {
+            "columns": [
+              {
+                "key": "id",
+                "label": "Id"
+              },
+              {
+                "key": "name",
+                "label": "Name"
+              },
+              {
+                "key": "priority_metrics",
+                "label": "Priority metrics"
+              },
+              {
+                "key": "not_in_stripe",
+                "label": "Not in Stripe"
+              }
+            ],
+            "empty": "Empty.",
+            "id": "stakeholders",
+            "kind": "table",
+            "source": "admin.stakeholders",
+            "summary": "The stakeholder registry of the core repository.",
+            "title": "Stakeholders"
+          },
+          {
+            "columns": [
+              {
+                "key": "id",
+                "label": "Id"
+              },
+              {
+                "key": "name",
+                "label": "Name"
+              },
+              {
+                "key": "unit",
+                "label": "Unit"
+              },
+              {
+                "key": "computation",
+                "label": "Computation"
+              },
+              {
+                "key": "inputs",
+                "label": "Inputs"
+              }
+            ],
+            "empty": "Empty.",
+            "id": "metrics",
+            "kind": "table",
+            "source": "admin.metrics",
+            "summary": "The metric registry.",
+            "title": "Metrics"
+          },
+          {
+            "columns": [
+              {
+                "key": "id",
+                "label": "Id"
+              },
+              {
+                "key": "name",
+                "label": "Name"
+              },
+              {
+                "key": "cadences",
+                "label": "Cadences"
+              },
+              {
+                "key": "stakeholders",
+                "label": "Readers"
+              }
+            ],
+            "empty": "Empty.",
+            "id": "report-types",
+            "kind": "table",
+            "source": "admin.report-types",
+            "summary": "The report types and who reads them.",
+            "title": "Report types"
+          },
+          {
+            "columns": [
+              {
+                "key": "id",
+                "label": "Rule"
+              },
+              {
+                "key": "severity",
+                "label": "Severity"
+              },
+              {
+                "key": "metric",
+                "label": "Metric"
+              },
+              {
+                "key": "evidence",
+                "label": "Evidence"
+              },
+              {
+                "key": "stakeholders",
+                "label": "Readers"
+              }
+            ],
+            "empty": "Empty.",
+            "id": "findings",
+            "kind": "table",
+            "source": "admin.findings",
+            "summary": "Each rule with the metrics that are its evidence.",
+            "title": "Findings rules"
+          },
+          {
+            "columns": [
+              {
+                "key": "id",
+                "label": "Id"
+              },
+              {
+                "key": "status",
+                "label": "Status"
+              },
+              {
+                "key": "statement",
+                "label": "Statement"
+              },
+              {
+                "key": "evidence",
+                "label": "Evidence"
+              }
+            ],
+            "empty": "Empty.",
+            "id": "commitments",
+            "kind": "table",
+            "source": "admin.commitments",
+            "summary": "What the company promises, and whether it is implemented.",
+            "title": "Commitments"
+          },
+          {
+            "columns": [
+              {
+                "key": "id",
+                "label": "Id"
+              },
+              {
+                "key": "title",
+                "label": "Title"
+              },
+              {
+                "key": "status",
+                "label": "Status"
+              },
+              {
+                "key": "effective_date",
+                "label": "Effective"
+              },
+              {
+                "key": "blockers",
+                "label": "Blocked by"
+              },
+              {
+                "key": "text_checked",
+                "label": "Text checked",
+                "type": "bool"
+              }
+            ],
+            "empty": "Empty.",
+            "id": "legal",
+            "kind": "table",
+            "source": "admin.legal",
+            "summary": "Each document with what blocks its publication.",
+            "title": "Legal documents"
+          },
+          {
+            "columns": [
+              {
+                "key": "name",
+                "label": "Name"
+              },
+              {
+                "key": "kind",
+                "label": "Kind"
+              },
+              {
+                "key": "required",
+                "label": "Required",
+                "type": "bool"
+              },
+              {
+                "key": "present",
+                "label": "Present",
+                "type": "bool"
+              }
+            ],
+            "empty": "Empty.",
+            "id": "provisioning-config",
+            "kind": "table",
+            "source": "admin.provisioning-config",
+            "summary": "Names the Worker reads, and whether each is set. Values are never shown.",
+            "title": "Configuration"
+          },
+          {
+            "columns": [
+              {
+                "key": "name",
+                "label": "Binding"
+              },
+              {
+                "key": "kind",
+                "label": "Kind"
+              },
+              {
+                "key": "required",
+                "label": "Required",
+                "type": "bool"
+              },
+              {
+                "key": "present",
+                "label": "Present",
+                "type": "bool"
+              }
+            ],
+            "empty": "Empty.",
+            "id": "provisioning-bindings",
+            "kind": "table",
+            "source": "admin.provisioning-bindings",
+            "summary": "Databases, services and assets the Worker needs.",
+            "title": "Bindings"
+          },
+          {
+            "columns": [
+              {
+                "key": "kind",
+                "label": "Kind"
+              },
+              {
+                "key": "name",
+                "label": "Name"
+              },
+              {
+                "key": "registry_valid",
+                "label": "In the registry",
+                "type": "bool"
+              },
+              {
+                "key": "problem",
+                "label": "Why not"
+              }
+            ],
+            "empty": "Empty.",
+            "id": "provisioning-planned",
+            "kind": "table",
+            "source": "admin.provisioning-planned",
+            "summary": "The names this Worker will have, against the naming registry.",
+            "title": "Planned resources"
+          },
+          {
+            "columns": [
+              {
+                "key": "seq",
+                "label": "No.",
+                "type": "number"
+              },
+              {
+                "key": "at",
+                "label": "When",
+                "type": "date"
+              },
+              {
+                "key": "action",
+                "label": "Action"
+              },
+              {
+                "key": "outcome",
+                "label": "Outcome"
+              },
+              {
+                "key": "target_kind",
+                "label": "Target"
+              },
+              {
+                "key": "target_id",
+                "label": "Id"
+              },
+              {
+                "key": "actor_hash",
+                "label": "By (hash)"
+              }
+            ],
+            "empty": "No action has been taken yet.",
+            "id": "audit",
+            "kind": "table",
+            "source": "admin.audit",
+            "summary": "Every admin action, newest first. Append-only; the actor is a hash of the Access email.",
+            "title": "Audit log"
+          },
+          {
+            "columns": [
+              {
+                "key": "id",
+                "label": "User (hash)"
+              },
+              {
+                "key": "role",
+                "label": "Role"
+              },
+              {
+                "key": "status",
+                "label": "Status"
+              },
+              {
+                "key": "source",
+                "label": "Source"
+              },
+              {
+                "key": "created_at",
+                "label": "Since",
+                "type": "date"
+              }
+            ],
+            "empty": "No user.",
+            "id": "users",
+            "kind": "table",
+            "source": "admin.users",
+            "summary": "Who can use the admin, as hashes. Access itself is the Cloudflare Access policy and the allowlist secret.",
+            "title": "Users"
+          },
+          {
+            "columns": [
+              {
+                "key": "id",
+                "label": "Role"
+              },
+              {
+                "key": "title",
+                "label": "Title"
+              },
+              {
+                "key": "permissions",
+                "label": "Permissions"
+              },
+              {
+                "key": "assignable",
+                "label": "Assignable",
+                "type": "bool"
+              }
+            ],
+            "empty": "No role.",
+            "id": "roles",
+            "kind": "table",
+            "source": "admin.roles",
+            "summary": "The permissions each role holds; every API operation names the permission it needs.",
+            "title": "Roles (RBAC)"
+          },
+          {
+            "columns": [
+              {
+                "key": "created_at",
+                "label": "Created",
+                "type": "date"
+              },
+              {
+                "key": "invitee_hash",
+                "label": "Invitee (hash)"
+              },
+              {
+                "key": "role",
+                "label": "Role"
+              },
+              {
+                "key": "state",
+                "label": "State"
+              },
+              {
+                "key": "expires_at",
+                "label": "Expires",
+                "type": "date"
+              }
+            ],
+            "empty": "No invitation has been recorded.",
+            "id": "invitations",
+            "kind": "table",
+            "source": "admin.invitations",
+            "summary": "Recorded invitations (hashes). They grant nothing until the lead widens the Access policy. Create and revoke through the API.",
+            "title": "Invitations"
+          },
+          {
+            "columns": [
+              {
+                "key": "title",
+                "label": "Section"
+              },
+              {
+                "key": "state",
+                "label": "State"
+              },
+              {
+                "key": "summary",
+                "label": "What it shows, or why nothing"
+              },
+              {
+                "key": "source",
+                "label": "Source"
+              }
+            ],
+            "empty": "No section.",
+            "id": "finops",
+            "kind": "table",
+            "source": "admin.finops",
+            "summary": "Revenue, plans and cloud cost",
+            "title": "FinOps"
+          },
+          {
+            "columns": [
+              {
+                "key": "title",
+                "label": "Section"
+              },
+              {
+                "key": "state",
+                "label": "State"
+              },
+              {
+                "key": "summary",
+                "label": "What it shows, or why nothing"
+              },
+              {
+                "key": "source",
+                "label": "Source"
+              }
+            ],
+            "empty": "No section.",
+            "id": "bizops",
+            "kind": "table",
+            "source": "admin.bizops",
+            "summary": "Leads, commitments and legal documents",
+            "title": "BizOps"
+          },
+          {
+            "columns": [
+              {
+                "key": "title",
+                "label": "Section"
+              },
+              {
+                "key": "state",
+                "label": "State"
+              },
+              {
+                "key": "summary",
+                "label": "What it shows, or why nothing"
+              },
+              {
+                "key": "source",
+                "label": "Source"
+              }
+            ],
+            "empty": "No section.",
+            "id": "platformops",
+            "kind": "table",
+            "source": "admin.platformops",
+            "summary": "Workers, deliveries and mail",
+            "title": "PlatformOps"
+          },
+          {
+            "columns": [
+              {
+                "key": "title",
+                "label": "Section"
+              },
+              {
+                "key": "state",
+                "label": "State"
+              },
+              {
+                "key": "summary",
+                "label": "What it shows, or why nothing"
+              },
+              {
+                "key": "source",
+                "label": "Source"
+              }
+            ],
+            "empty": "No section.",
+            "id": "saasops",
+            "kind": "table",
+            "source": "admin.saasops",
+            "summary": "Report types, stakeholders, metrics and tenants",
+            "title": "SaaSOps"
+          },
+          {
+            "columns": [
+              {
+                "key": "title",
+                "label": "Section"
+              },
+              {
+                "key": "state",
+                "label": "State"
+              },
+              {
+                "key": "summary",
+                "label": "What it shows, or why nothing"
+              },
+              {
+                "key": "source",
+                "label": "Source"
+              }
+            ],
+            "empty": "No section.",
+            "id": "infraops",
+            "kind": "table",
+            "source": "admin.infraops",
+            "summary": "Bindings, planned resources, release and backups",
+            "title": "InfraOps"
+          },
+          {
+            "id": "sources",
+            "kind": "sources",
+            "source": "admin.local",
+            "title": "Sources"
+          },
+          {
+            "id": "help",
+            "kind": "help",
+            "source": "admin.local",
+            "title": "Help"
+          }
+        ],
+        "schema": "kit.workbench.v1",
+        "sources": [
+          {
+            "adapter": {
+              "type": "local"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "mock"
+            },
+            "id": "admin.local",
+            "kind": "sandbox-mock",
+            "licence": {
+              "line": "Computed in your browser from the definition of this page.",
+              "redistribution": "not-applicable"
+            },
+            "name": "Computed in the browser",
+            "origin": "computed",
+            "provenance": {
+              "adapter": "local",
+              "adapterVersion": "1"
+            },
+            "reach": {
+              "fromBrowser": "not-applicable",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/workers",
+              "type": "http-json",
+              "url": "/api/overview"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "commit": {
+                    "anyOf": [
+                      {
+                        "pattern": "^[0-9a-f]{40}$",
+                        "type": "string"
+                      },
+                      {
+                        "const": "unreachable"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "error": {
+                    "maxLength": 120,
+                    "type": "string"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "matches_main": {
+                    "type": [
+                      "boolean",
+                      "null"
+                    ]
+                  },
+                  "reachable": {
+                    "type": "boolean"
+                  },
+                  "services": {
+                    "type": "object"
+                  },
+                  "via": {
+                    "enum": [
+                      "binding",
+                      "url",
+                      "self"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "via",
+                  "reachable",
+                  "commit",
+                  "matches_main"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.workers",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Workers",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/overview (getOverview)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "keyed": true,
+              "rows": "/leads/by_status",
+              "type": "http-json",
+              "url": "/api/overview"
+            },
+            "contract": {
+              "items": {
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "minimum": 0,
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "key",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.funnel",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Lead funnel",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/overview (getOverview)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "keyed": true,
+              "rows": "/deliveries",
+              "type": "http-json",
+              "url": "/api/overview"
+            },
+            "contract": {
+              "items": {
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": [
+                      "string",
+                      "number",
+                      "boolean",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "key",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.deliveries-summary",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Delivery summary",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/overview (getOverview)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "query": {
+                "form": "$form",
+                "q": "$q",
+                "status": "$status"
+              },
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/leads"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "comms_status": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "company": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "created_at": {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "email_hash": {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "form": {
+                    "type": "string"
+                  },
+                  "id": {
+                    "pattern": "^[A-Za-z0-9._-]{1,64}$",
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "state_updated_at": {
+                    "format": "date-time",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "status": {
+                    "enum": [
+                      "new",
+                      "contacted",
+                      "qualified",
+                      "won",
+                      "lost"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "form",
+                  "name",
+                  "company",
+                  "email_hash",
+                  "created_at",
+                  "comms_status",
+                  "status",
+                  "state_updated_at"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.leads",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Leads",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/leads (listLeads)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "query": {
+                "form_id": "$form_id",
+                "state": "$state"
+              },
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/deliveries"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "created_at": {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "form_id": {
+                    "pattern": "^[a-z0-9][a-z0-9-]{0,63}$",
+                    "type": "string"
+                  },
+                  "ledger_url": {
+                    "format": "uri",
+                    "type": "string"
+                  },
+                  "owner": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "dispatch_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "error": {
+                        "maxLength": 300,
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "status": {
+                        "enum": [
+                          "pending",
+                          "sent",
+                          "suppressed",
+                          "failed"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "status"
+                    ],
+                    "type": "object"
+                  },
+                  "receipt": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "dispatch_id": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "error": {
+                        "maxLength": 300,
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "status": {
+                        "enum": [
+                          "pending",
+                          "sent",
+                          "suppressed",
+                          "failed"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "status"
+                    ],
+                    "type": "object"
+                  },
+                  "reference": {
+                    "pattern": "^[A-Z][A-Z0-9]{0,3}-[A-HJ-NP-Z2-9]{16}$",
+                    "type": "string"
+                  },
+                  "site": {
+                    "format": "uri",
+                    "pattern": "^https://",
+                    "type": "string"
+                  },
+                  "test": {
+                    "type": "boolean"
+                  },
+                  "updated_at": {
+                    "format": "date-time",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "required": [
+                  "reference",
+                  "form_id",
+                  "site",
+                  "test",
+                  "created_at",
+                  "receipt",
+                  "owner",
+                  "ledger_url"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.deliveries",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Form deliveries",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/deliveries (listDeliveries)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "query": {
+                "window_hours": "$window_hours"
+              },
+              "rows": "/failures",
+              "type": "http-json",
+              "url": "/api/alerts"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "at": {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "error": {
+                    "maxLength": 300,
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "form_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "kind": {
+                    "enum": [
+                      "form_owner_notification",
+                      "ops_dispatch"
+                    ]
+                  },
+                  "status": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "id",
+                  "at",
+                  "status",
+                  "error"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.alerts",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Owner-alert failures",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/alerts (listOwnerAlertFailures)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "query": {
+                "status": "$status"
+              },
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/inbound"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "autoreply": {
+                    "additionalProperties": false,
+                    "properties": {
+                      "reason": {
+                        "maxLength": 200,
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "state": {
+                        "enum": [
+                          "sent",
+                          "suppressed",
+                          "skipped",
+                          "failed",
+                          "not_applicable"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "state"
+                    ],
+                    "type": "object"
+                  },
+                  "forwards": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "destination": {
+                          "maxLength": 120,
+                          "type": "string"
+                        },
+                        "error": {
+                          "maxLength": 300,
+                          "type": [
+                            "string",
+                            "null"
+                          ]
+                        },
+                        "status": {
+                          "enum": [
+                            "sent",
+                            "failed",
+                            "skipped",
+                            "pending"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "destination",
+                        "status"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "received_at": {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "recipient": {
+                    "type": "string"
+                  },
+                  "sender_hash": {
+                    "type": "string"
+                  },
+                  "status": {
+                    "enum": [
+                      "received",
+                      "forwarded",
+                      "partial",
+                      "failed",
+                      "rejected",
+                      "dropped"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "received_at",
+                  "sender_hash",
+                  "recipient",
+                  "status",
+                  "forwards",
+                  "autoreply"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.inbound",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Inbound mail",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/inbound (listInbound)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "keyed": true,
+              "query": {
+                "window_hours": "$window_hours"
+              },
+              "rows": "/inbound/by_state",
+              "type": "http-json",
+              "url": "/api/autoreply/stats"
+            },
+            "contract": {
+              "items": {
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "minimum": 0,
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "key",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.autoreply",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Autoreplies",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/autoreply/stats (getAutoreplyStats)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "keyed": true,
+              "query": {
+                "window_hours": "$window_hours"
+              },
+              "rows": "/form_receipts/by_status",
+              "type": "http-json",
+              "url": "/api/autoreply/stats"
+            },
+            "contract": {
+              "items": {
+                "properties": {
+                  "key": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "minimum": 0,
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "key",
+                  "value"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.receipts",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Form receipts",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/autoreply/stats (getAutoreplyStats)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "query": {
+                "reason": "$reason"
+              },
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/suppressions"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "actor_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "created_at": {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "reason": {
+                    "enum": [
+                      "hard-bounce",
+                      "complaint",
+                      "unsubscribe.marketing",
+                      "unsubscribe.operational",
+                      "dsar-erasure"
+                    ]
+                  },
+                  "recipient_hash": {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "scope": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "recipient_hash",
+                  "reason",
+                  "scope",
+                  "actor_id",
+                  "created_at"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.suppressions",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Suppressions",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/suppressions (listSuppressions)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/registries/stakeholders"
+            },
+            "contract": {
+              "items": {
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.stakeholders",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Stakeholders",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/registries/stakeholders (getRegistry)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/registries/metrics"
+            },
+            "contract": {
+              "items": {
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.metrics",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Metrics",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/registries/metrics (getRegistry)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/registries/report-types"
+            },
+            "contract": {
+              "items": {
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.report-types",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Report types",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/registries/report-types (getRegistry)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/registries/findings"
+            },
+            "contract": {
+              "items": {
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.findings",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Findings rules",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/registries/findings (getRegistry)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/registries/commitments"
+            },
+            "contract": {
+              "items": {
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.commitments",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Commitments",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/registries/commitments (getRegistry)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/registries/legal"
+            },
+            "contract": {
+              "items": {
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.legal",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Legal documents",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/registries/legal (getRegistry)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/config",
+              "type": "http-json",
+              "url": "/api/provisioning"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "secret",
+                      "var"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "present": {
+                    "type": "boolean"
+                  },
+                  "required": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "name",
+                  "kind",
+                  "required",
+                  "present"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.provisioning-config",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Configuration",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/provisioning (getProvisioning)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/bindings",
+              "type": "http-json",
+              "url": "/api/provisioning"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "d1",
+                      "service",
+                      "assets"
+                    ]
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "present": {
+                    "type": "boolean"
+                  },
+                  "required": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "name",
+                  "kind",
+                  "required",
+                  "present"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.provisioning-bindings",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Bindings",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/provisioning (getProvisioning)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/planned",
+              "type": "http-json",
+              "url": "/api/provisioning"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "kind": {
+                    "type": "string"
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "problem": {
+                    "type": "string"
+                  },
+                  "registry_valid": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "kind",
+                  "name",
+                  "registry_valid"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.provisioning-planned",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Planned resources",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/provisioning (getProvisioning)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "query": {
+                "action": "$action",
+                "target_id": "$target_id"
+              },
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/audit"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "action": {
+                    "maxLength": 64,
+                    "type": "string"
+                  },
+                  "actor_hash": {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "at": {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "detail": {
+                    "type": "object"
+                  },
+                  "id": {
+                    "type": "string"
+                  },
+                  "idempotency_key": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "outcome": {
+                    "enum": [
+                      "done",
+                      "attempted",
+                      "failed",
+                      "denied"
+                    ]
+                  },
+                  "request_id": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "seq": {
+                    "minimum": 1,
+                    "type": "integer"
+                  },
+                  "target_id": {
+                    "maxLength": 200,
+                    "type": "string"
+                  },
+                  "target_kind": {
+                    "maxLength": 40,
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "seq",
+                  "id",
+                  "at",
+                  "actor_hash",
+                  "action",
+                  "outcome",
+                  "target_kind",
+                  "target_id",
+                  "detail"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.audit",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Audit log",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/audit (listAudit)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/users"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "created_at": {
+                    "format": "date-time",
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "id": {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "enum": [
+                      "allowlist",
+                      "registry"
+                    ]
+                  },
+                  "status": {
+                    "enum": [
+                      "active",
+                      "suspended"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "role",
+                  "status",
+                  "source"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.users",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Users",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/users (listUsers)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/roles",
+              "type": "http-json",
+              "url": "/api/roles"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "assignable": {
+                    "type": "boolean"
+                  },
+                  "id": {
+                    "pattern": "^[a-z][a-z-]*$",
+                    "type": "string"
+                  },
+                  "permissions": {
+                    "items": {
+                      "enum": [
+                        "read",
+                        "export",
+                        "operate",
+                        "admin"
+                      ]
+                    },
+                    "type": "array"
+                  },
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "title",
+                  "permissions",
+                  "assignable"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.roles",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Roles (RBAC)",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/roles (listRoles)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "query": {
+                "state": "$state"
+              },
+              "rows": "/items",
+              "type": "http-json",
+              "url": "/api/invitations"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "created_at": {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "created_by": {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "expires_at": {
+                    "format": "date-time",
+                    "type": "string"
+                  },
+                  "id": {
+                    "pattern": "^inv_[0-9a-f-]{36}$",
+                    "type": "string"
+                  },
+                  "invitee_hash": {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  },
+                  "role": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "enum": [
+                      "pending",
+                      "revoked",
+                      "accepted",
+                      "expired"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "invitee_hash",
+                  "role",
+                  "state",
+                  "created_at",
+                  "expires_at"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.invitations",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "Invitations",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/invitations (listInvitations)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/sections",
+              "type": "http-json",
+              "url": "/api/areas/finops"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "metrics": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": [
+                            "number",
+                            "string",
+                            "boolean",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "key",
+                        "label",
+                        "value"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "reason": {
+                    "maxLength": 300,
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "enum": [
+                      "available",
+                      "empty",
+                      "not_connected"
+                    ]
+                  },
+                  "summary": {
+                    "maxLength": 300,
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "title",
+                  "state",
+                  "summary",
+                  "metrics"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.finops",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "FinOps",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/areas/finops (getFinOps)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/sections",
+              "type": "http-json",
+              "url": "/api/areas/bizops"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "metrics": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": [
+                            "number",
+                            "string",
+                            "boolean",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "key",
+                        "label",
+                        "value"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "reason": {
+                    "maxLength": 300,
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "enum": [
+                      "available",
+                      "empty",
+                      "not_connected"
+                    ]
+                  },
+                  "summary": {
+                    "maxLength": 300,
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "title",
+                  "state",
+                  "summary",
+                  "metrics"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.bizops",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "BizOps",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/areas/bizops (getBizOps)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/sections",
+              "type": "http-json",
+              "url": "/api/areas/platformops"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "metrics": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": [
+                            "number",
+                            "string",
+                            "boolean",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "key",
+                        "label",
+                        "value"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "reason": {
+                    "maxLength": 300,
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "enum": [
+                      "available",
+                      "empty",
+                      "not_connected"
+                    ]
+                  },
+                  "summary": {
+                    "maxLength": 300,
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "title",
+                  "state",
+                  "summary",
+                  "metrics"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.platformops",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "PlatformOps",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/areas/platformops (getPlatformOps)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/sections",
+              "type": "http-json",
+              "url": "/api/areas/saasops"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "metrics": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": [
+                            "number",
+                            "string",
+                            "boolean",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "key",
+                        "label",
+                        "value"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "reason": {
+                    "maxLength": 300,
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "enum": [
+                      "available",
+                      "empty",
+                      "not_connected"
+                    ]
+                  },
+                  "summary": {
+                    "maxLength": 300,
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "title",
+                  "state",
+                  "summary",
+                  "metrics"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.saasops",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "SaaSOps",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/areas/saasops (getSaaSOps)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          },
+          {
+            "adapter": {
+              "rows": "/sections",
+              "type": "http-json",
+              "url": "/api/areas/infraops"
+            },
+            "contract": {
+              "items": {
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "metrics": {
+                    "items": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "key": {
+                          "type": "string"
+                        },
+                        "label": {
+                          "type": "string"
+                        },
+                        "value": {
+                          "type": [
+                            "number",
+                            "string",
+                            "boolean",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "key",
+                        "label",
+                        "value"
+                      ],
+                      "type": "object"
+                    },
+                    "type": "array"
+                  },
+                  "reason": {
+                    "maxLength": 300,
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "enum": [
+                      "available",
+                      "empty",
+                      "not_connected"
+                    ]
+                  },
+                  "summary": {
+                    "maxLength": 300,
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "id",
+                  "title",
+                  "state",
+                  "summary",
+                  "metrics"
+                ],
+                "type": "object"
+              },
+              "type": "array"
+            },
+            "enabled": true,
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "live"
+            },
+            "homepage": "https://saasreport.ai",
+            "id": "admin.infraops",
+            "kind": "public-feed",
+            "licence": {
+              "line": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+              "redistribution": "not-allowed"
+            },
+            "name": "InfraOps",
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "/api/areas/infraops (getInfraOps)"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-28"
+            }
+          }
+        ],
+        "title": "SaasReport admin",
+        "watchlist": {
+          "max": 20
+        }
+      }
+    }
+  },
+  "generator": "kit widgets build",
+  "inputs": {
+    "engine": "@saasreport/widgets 0.2.0",
+    "sources": {
+      "contract": "dc2b6c3317651d04"
+    },
+    "spec": "ce6cb1d202e3b326"
+  },
+  "labels": {
+    "en": {
+      "engine": "Computed",
+      "live": "Live: read from the admin API now",
+      "sample": "Sample"
+    }
+  },
+  "locales": [
+    {
+      "code": "en",
+      "digits": "latn",
+      "dir": "ltr",
+      "intl": "en"
+    }
+  ],
+  "notice": "Generated by `kit widgets build` from widgets.spec.json and its sources. Do not edit: change the spec or a source and rebuild; `kit widgets check` fails when this file is stale.",
+  "page": {
+    "en": {
+      "audiences": [
+        {
+          "id": "owner",
+          "label": "The owner"
+        }
+      ],
+      "intro": "The admin workbench.",
+      "path": "/examples/",
+      "scenarios": [
+        {
+          "id": "admin-workbench",
+          "summary": "Leads, deliveries, mail, suppressions, registries and operations from one command line.",
+          "title": "SaasReport admin"
+        }
+      ],
+      "title": "Admin",
+      "useCases": [
+        {
+          "id": "operate",
+          "label": "Operate the product"
+        }
+      ]
+    }
+  },
+  "project": "saasreport",
+  "schema": "kit.widgets-generated.v1",
+  "widgets": [
+    {
+      "application": {
+        "href": "/workbench/",
+        "surface": "Admin workbench"
+      },
+      "archetype": "workbench",
+      "architecture": {
+        "components": [
+          "Admin API contract",
+          "Pane declarations",
+          "Workbench definition",
+          "Admin Worker"
+        ],
+        "diagram": "docs/diagrams/admin-architecture.mmd",
+        "flow": "Contract and pane declarations, workbench definition, pane, admin API.",
+        "url": "https://github.com/SaasReport/landing/blob/main/docs/diagrams/admin-architecture.png"
+      },
+      "audiences": [
+        "owner"
+      ],
+      "data": {
+        "commands": [
+          {
+            "id": "workers",
+            "summary": "Health and commit of every Worker",
+            "verb": "WORKERS"
+          },
+          {
+            "id": "funnel",
+            "summary": "Leads by status",
+            "verb": "FUNNEL"
+          },
+          {
+            "id": "deliveries-summary",
+            "summary": "Delivery counts over the last day",
+            "verb": "DSUM"
+          },
+          {
+            "id": "leads",
+            "summary": "Leads, filtered by status, form or name",
+            "verb": "LEADS"
+          },
+          {
+            "id": "deliveries",
+            "summary": "The form delivery ledger",
+            "verb": "DELIV"
+          },
+          {
+            "id": "alerts",
+            "summary": "Owner-alert failures",
+            "verb": "ALERTS"
+          },
+          {
+            "id": "inbound",
+            "summary": "Inbound messages",
+            "verb": "INBOX"
+          },
+          {
+            "id": "autoreply",
+            "summary": "Autoreply statistics",
+            "verb": "REPLY"
+          },
+          {
+            "id": "receipts",
+            "summary": "Form receipts by status",
+            "verb": "RECEIPT"
+          },
+          {
+            "id": "suppressions",
+            "summary": "The suppression list",
+            "verb": "SUPP"
+          },
+          {
+            "id": "stakeholders",
+            "summary": "Stakeholders",
+            "verb": "STAKE"
+          },
+          {
+            "id": "metrics",
+            "summary": "Metrics",
+            "verb": "METRIC"
+          },
+          {
+            "id": "report-types",
+            "summary": "Report types",
+            "verb": "REPORT"
+          },
+          {
+            "id": "findings",
+            "summary": "Findings rules and their evidence",
+            "verb": "FIND"
+          },
+          {
+            "id": "commitments",
+            "summary": "Commitments and their status",
+            "verb": "COMMIT"
+          },
+          {
+            "id": "legal",
+            "summary": "Legal documents and their publish blockers",
+            "verb": "LEGAL"
+          },
+          {
+            "id": "provisioning-config",
+            "summary": "Configuration present or missing",
+            "verb": "PROV"
+          },
+          {
+            "id": "provisioning-bindings",
+            "summary": "Bindings present or missing",
+            "verb": "BIND"
+          },
+          {
+            "id": "provisioning-planned",
+            "summary": "Planned resource names",
+            "verb": "PLAN"
+          },
+          {
+            "id": "audit",
+            "summary": "The audit log",
+            "verb": "AUDIT"
+          },
+          {
+            "id": "users",
+            "summary": "Users and their roles",
+            "verb": "USERS"
+          },
+          {
+            "id": "roles",
+            "summary": "Roles and permissions",
+            "verb": "ROLES"
+          },
+          {
+            "id": "invitations",
+            "summary": "Invitations",
+            "verb": "INVITE"
+          },
+          {
+            "id": "finops",
+            "summary": "Revenue, plans and cloud cost",
+            "verb": "FINOPS"
+          },
+          {
+            "id": "bizops",
+            "summary": "Leads, commitments and legal documents",
+            "verb": "BIZOPS"
+          },
+          {
+            "id": "platformops",
+            "summary": "Workers, deliveries and mail",
+            "verb": "PLATFORM"
+          },
+          {
+            "id": "saasops",
+            "summary": "Report types, stakeholders, metrics and tenants",
+            "verb": "SAASOPS"
+          },
+          {
+            "id": "infraops",
+            "summary": "Bindings, planned resources, release and backups",
+            "verb": "INFRA"
+          },
+          {
+            "id": "src",
+            "summary": "Where each pane's data comes from",
+            "verb": "SRC"
+          },
+          {
+            "id": "help",
+            "summary": "Commands and keys",
+            "verb": "HELP"
+          }
+        ],
+        "id": "admin",
+        "intro": "Type a command, or open a tab. Every pane reads the admin API and says so; changes (lead status, retries, suppressions) are made through the API, and every one is written to the audit log.",
+        "panes": [
+          {
+            "id": "workers",
+            "kind": "table",
+            "source": "admin.workers",
+            "title": "Workers"
+          },
+          {
+            "id": "funnel",
+            "kind": "table",
+            "source": "admin.funnel",
+            "title": "Lead funnel"
+          },
+          {
+            "id": "deliveries-summary",
+            "kind": "table",
+            "source": "admin.deliveries-summary",
+            "title": "Delivery summary"
+          },
+          {
+            "id": "leads",
+            "kind": "table",
+            "source": "admin.leads",
+            "title": "Leads"
+          },
+          {
+            "id": "deliveries",
+            "kind": "table",
+            "source": "admin.deliveries",
+            "title": "Form deliveries"
+          },
+          {
+            "id": "alerts",
+            "kind": "table",
+            "source": "admin.alerts",
+            "title": "Owner-alert failures"
+          },
+          {
+            "id": "inbound",
+            "kind": "table",
+            "source": "admin.inbound",
+            "title": "Inbound mail"
+          },
+          {
+            "id": "autoreply",
+            "kind": "table",
+            "source": "admin.autoreply",
+            "title": "Autoreplies"
+          },
+          {
+            "id": "receipts",
+            "kind": "table",
+            "source": "admin.receipts",
+            "title": "Form receipts"
+          },
+          {
+            "id": "suppressions",
+            "kind": "table",
+            "source": "admin.suppressions",
+            "title": "Suppressions"
+          },
+          {
+            "id": "stakeholders",
+            "kind": "table",
+            "source": "admin.stakeholders",
+            "title": "Stakeholders"
+          },
+          {
+            "id": "metrics",
+            "kind": "table",
+            "source": "admin.metrics",
+            "title": "Metrics"
+          },
+          {
+            "id": "report-types",
+            "kind": "table",
+            "source": "admin.report-types",
+            "title": "Report types"
+          },
+          {
+            "id": "findings",
+            "kind": "table",
+            "source": "admin.findings",
+            "title": "Findings rules"
+          },
+          {
+            "id": "commitments",
+            "kind": "table",
+            "source": "admin.commitments",
+            "title": "Commitments"
+          },
+          {
+            "id": "legal",
+            "kind": "table",
+            "source": "admin.legal",
+            "title": "Legal documents"
+          },
+          {
+            "id": "provisioning-config",
+            "kind": "table",
+            "source": "admin.provisioning-config",
+            "title": "Configuration"
+          },
+          {
+            "id": "provisioning-bindings",
+            "kind": "table",
+            "source": "admin.provisioning-bindings",
+            "title": "Bindings"
+          },
+          {
+            "id": "provisioning-planned",
+            "kind": "table",
+            "source": "admin.provisioning-planned",
+            "title": "Planned resources"
+          },
+          {
+            "id": "audit",
+            "kind": "table",
+            "source": "admin.audit",
+            "title": "Audit log"
+          },
+          {
+            "id": "users",
+            "kind": "table",
+            "source": "admin.users",
+            "title": "Users"
+          },
+          {
+            "id": "roles",
+            "kind": "table",
+            "source": "admin.roles",
+            "title": "Roles (RBAC)"
+          },
+          {
+            "id": "invitations",
+            "kind": "table",
+            "source": "admin.invitations",
+            "title": "Invitations"
+          },
+          {
+            "id": "finops",
+            "kind": "table",
+            "source": "admin.finops",
+            "title": "FinOps"
+          },
+          {
+            "id": "bizops",
+            "kind": "table",
+            "source": "admin.bizops",
+            "title": "BizOps"
+          },
+          {
+            "id": "platformops",
+            "kind": "table",
+            "source": "admin.platformops",
+            "title": "PlatformOps"
+          },
+          {
+            "id": "saasops",
+            "kind": "table",
+            "source": "admin.saasops",
+            "title": "SaaSOps"
+          },
+          {
+            "id": "infraops",
+            "kind": "table",
+            "source": "admin.infraops",
+            "title": "InfraOps"
+          },
+          {
+            "id": "sources",
+            "kind": "sources",
+            "source": "admin.local",
+            "title": "Sources"
+          },
+          {
+            "id": "help",
+            "kind": "help",
+            "source": "admin.local",
+            "title": "Help"
+          }
+        ],
+        "sources": [
+          {
+            "enabled": true,
+            "id": "admin.local",
+            "kind": "sandbox-mock",
+            "name": "Computed in the browser",
+            "origin": "computed"
+          },
+          {
+            "enabled": true,
+            "id": "admin.workers",
+            "kind": "public-feed",
+            "name": "Workers"
+          },
+          {
+            "enabled": true,
+            "id": "admin.funnel",
+            "kind": "public-feed",
+            "name": "Lead funnel"
+          },
+          {
+            "enabled": true,
+            "id": "admin.deliveries-summary",
+            "kind": "public-feed",
+            "name": "Delivery summary"
+          },
+          {
+            "enabled": true,
+            "id": "admin.leads",
+            "kind": "public-feed",
+            "name": "Leads"
+          },
+          {
+            "enabled": true,
+            "id": "admin.deliveries",
+            "kind": "public-feed",
+            "name": "Form deliveries"
+          },
+          {
+            "enabled": true,
+            "id": "admin.alerts",
+            "kind": "public-feed",
+            "name": "Owner-alert failures"
+          },
+          {
+            "enabled": true,
+            "id": "admin.inbound",
+            "kind": "public-feed",
+            "name": "Inbound mail"
+          },
+          {
+            "enabled": true,
+            "id": "admin.autoreply",
+            "kind": "public-feed",
+            "name": "Autoreplies"
+          },
+          {
+            "enabled": true,
+            "id": "admin.receipts",
+            "kind": "public-feed",
+            "name": "Form receipts"
+          },
+          {
+            "enabled": true,
+            "id": "admin.suppressions",
+            "kind": "public-feed",
+            "name": "Suppressions"
+          },
+          {
+            "enabled": true,
+            "id": "admin.stakeholders",
+            "kind": "public-feed",
+            "name": "Stakeholders"
+          },
+          {
+            "enabled": true,
+            "id": "admin.metrics",
+            "kind": "public-feed",
+            "name": "Metrics"
+          },
+          {
+            "enabled": true,
+            "id": "admin.report-types",
+            "kind": "public-feed",
+            "name": "Report types"
+          },
+          {
+            "enabled": true,
+            "id": "admin.findings",
+            "kind": "public-feed",
+            "name": "Findings rules"
+          },
+          {
+            "enabled": true,
+            "id": "admin.commitments",
+            "kind": "public-feed",
+            "name": "Commitments"
+          },
+          {
+            "enabled": true,
+            "id": "admin.legal",
+            "kind": "public-feed",
+            "name": "Legal documents"
+          },
+          {
+            "enabled": true,
+            "id": "admin.provisioning-config",
+            "kind": "public-feed",
+            "name": "Configuration"
+          },
+          {
+            "enabled": true,
+            "id": "admin.provisioning-bindings",
+            "kind": "public-feed",
+            "name": "Bindings"
+          },
+          {
+            "enabled": true,
+            "id": "admin.provisioning-planned",
+            "kind": "public-feed",
+            "name": "Planned resources"
+          },
+          {
+            "enabled": true,
+            "id": "admin.audit",
+            "kind": "public-feed",
+            "name": "Audit log"
+          },
+          {
+            "enabled": true,
+            "id": "admin.users",
+            "kind": "public-feed",
+            "name": "Users"
+          },
+          {
+            "enabled": true,
+            "id": "admin.roles",
+            "kind": "public-feed",
+            "name": "Roles (RBAC)"
+          },
+          {
+            "enabled": true,
+            "id": "admin.invitations",
+            "kind": "public-feed",
+            "name": "Invitations"
+          },
+          {
+            "enabled": true,
+            "id": "admin.finops",
+            "kind": "public-feed",
+            "name": "FinOps"
+          },
+          {
+            "enabled": true,
+            "id": "admin.bizops",
+            "kind": "public-feed",
+            "name": "BizOps"
+          },
+          {
+            "enabled": true,
+            "id": "admin.platformops",
+            "kind": "public-feed",
+            "name": "PlatformOps"
+          },
+          {
+            "enabled": true,
+            "id": "admin.saasops",
+            "kind": "public-feed",
+            "name": "SaaSOps"
+          },
+          {
+            "enabled": true,
+            "id": "admin.infraops",
+            "kind": "public-feed",
+            "name": "InfraOps"
+          }
+        ],
+        "title": "SaasReport admin"
+      },
+      "honesty": "live",
+      "id": "admin-workbench",
+      "locale": "en",
+      "scenario": "admin-workbench",
+      "summary": "Leads, deliveries, mail, suppressions, registries and operations from one command line.",
+      "title": "SaasReport admin",
+      "trace": [
+        "spec#/scenarios/0",
+        "spec#/scenarios/0/widgets/0"
+      ],
+      "usage": {
+        "surfaces": [
+          {
+            "how": "A launcher card with the panes and a link.",
+            "path": "/examples/",
+            "placement": "page"
+          },
+          {
+            "how": "The admin page itself, served by the admin Worker behind Cloudflare Access.",
+            "path": "/workbench/",
+            "placement": "app"
+          }
+        ]
+      },
+      "useCase": "operate",
+      "utility": {
+        "does": "Run a command and read a pane.",
+        "learns": "What state the leads, mail and Workers are in."
+      }
+    }
+  ]
+}

@@ -7,3 +7,4 @@ qa
 .claude/guard.addr
 .claude/guard.daemon.json
 .claude/guard.evidence.jsonl
+.admin-qa/

@@ -1,0 +1,33 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Inter, Arial, sans-serif","fontSize":"15px","textColor":"#0B0B0B","stateLabelColor":"#0B0B0B","transitionLabelColor":"#0B0B0B","background":"#F7F9FC","primaryColor":"#FFFFFF","primaryTextColor":"#0B0B0B","primaryBorderColor":"#0B0B0B","lineColor":"#4D5B70","secondaryColor":"#EDF1F6","tertiaryColor":"#F7F9FC","clusterBkg":"#EDF1F6","clusterBorder":"#B9C6D8","edgeLabelBackground":"#F7F9FC","titleColor":"#0B0B0B","actorBkg":"#0B0B0B","actorBorder":"#0B0B0B","actorTextColor":"#FFFFFF","actorLineColor":"#B9C6D8","signalColor":"#0B0B0B","signalTextColor":"#0B0B0B","labelBoxBkgColor":"#F7F9FC","labelBoxBorderColor":"#B9C6D8","noteBkgColor":"#EEF3F9","noteBorderColor":"#6F9BD8","sequenceNumberColor":"#FFFFFF","stateBkg":"#FFFFFF","stateBorder":"#0B0B0B","transitionColor":"#4D5B70","specialStateColor":"#12396B"}}}%%
+%% kit:diagram {"id":"saasreport.admin.architecture","title":"How the admin is built and what it reaches","project":"saasreport","kind":"architecture","summary":"The owner reaches admin.saasreport.ai through Cloudflare Access; the admin Worker verifies the token again, then reads and writes through the comms engine, its two databases and the registries.","lineage":{"derives_from":[],"supersedes":[],"version":"1"},"relates_to":[{"id":"saasreport.admin.request","relation":"sibling"},{"id":"saasreport.landing.architecture","relation":"sibling"}],"depicts":[{"kind":"file","ref":"the admin API contract","path":"contracts/admin.openapi.json"},{"kind":"file","ref":"the admin Worker","path":"workers/admin/src/index.js"},{"kind":"doc","ref":"the admin description","path":"docs/ADMIN.md"}],"reviewed":"2026-10-28"}
+flowchart TB
+  owner("Owner's browser the generated workbench")
+  access("Cloudflare Access email policy for the owner")
+  worker("Admin Worker verifies the Access token on every request")
+  subgraph reach["What the Worker reaches"]
+    direction TB
+    comms("Comms engine service binding COMMS: submit, suppress")
+    edb[("Engine D1 deliveries, suppressions, inbound, leads")]
+    adb[("Admin D1 audit log, lead state, invitations, idempotency")]
+    reg("Registries snapshot core registries at build time")
+    peers("Other Workers GET /api/build")
+  end
+  subgraph build["Built by the kit"]
+    direction TB
+    contract("Admin API contract contracts/admin.openapi.json")
+    panes("Pane declarations workers/admin/ui/panes.json")
+    ui("Workbench interface kit widgets build, kit site build")
+    contract --> ui
+    panes --> ui
+  end
+  owner --> access --> worker
+  worker --> comms
+  worker --> edb
+  worker --> adb
+  worker --> reg
+  worker --> peers
+  comms --> edb
+  ui -->|assets| worker
+  contract -.->|every route| worker
+  class worker,access accent
+  classDef accent fill:#12396B,stroke:#12396B,color:#FFFFFF,stroke-width:2px

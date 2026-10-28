@@ -12,14 +12,33 @@ Solid arrows: derives from (parent to derived). Dotted: supersedes. Relationship
 
 Source: [`lineage.mmd`](lineage.mmd)
 
-## Index (4)
+## Index (7)
 
 | id | title | kind | derives from | relates to | depicts | source |
 | --- | --- | --- | --- | --- | --- | --- |
+| `saasreport.admin.architecture` v1 | How the admin is built and what it reaches | architecture | none | sibling `saasreport.admin.request`<br>sibling `saasreport.landing.architecture` | file: [the admin API contract](../../contracts/admin.openapi.json)<br>file: [the admin Worker](../../workers/admin/src/index.js)<br>doc: [the admin description](../ADMIN.md) | [admin-architecture.mmd](admin-architecture.mmd) |
+| `saasreport.admin.architecture.overview` v1 | The admin in the architecture document | architecture | none | sibling `saasreport.admin.architecture` | file: [the admin Worker](../../workers/admin/src/index.js) | [ARCHITECTURE.md #2](../ARCHITECTURE.md) |
+| `saasreport.admin.request` v1 | What happens to an admin request | flow | none | sibling `saasreport.admin.architecture` | file: [the Access verification](../../workers/admin/src/access.js)<br>file: [the request pipeline](../../workers/admin/src/index.js) | [admin-request.mmd](admin-request.mmd) |
 | `saasreport.diagrams.lineage` v1 | Diagram lineage (generated) | other | none | none | doc: [the diagram headers]() | [lineage.mmd](lineage.mmd) |
 | `saasreport.landing.architecture` v1 | How the landing is built | architecture | none | sibling `saasreport.landing.widgets` | file: [the content generator](../../scripts/generate.mjs)<br>file: [the site project](../../site.config.js)<br>doc: [the architecture description](../ARCHITECTURE.md) | [landing-architecture.mmd](landing-architecture.mmd) |
 | `saasreport.landing.architecture.overview` v1 | How the landing is built, in the architecture document | architecture | none | none | file: [the content generator](../../scripts/generate.mjs) | [ARCHITECTURE.md #1](../ARCHITECTURE.md) |
 | `saasreport.landing.widgets` v1 | Where each widget's numbers come from | flow | none | sibling `saasreport.landing.architecture` | file: [the widget spec](../../widgets.spec.json)<br>file: [the engine adapter](../../vendor/core/adapters/widgets-engine.mjs) | [landing-widgets.mmd](landing-widgets.mmd) |
+
+## saasreport.admin.architecture
+
+How the admin is built and what it reaches. The owner reaches admin.saasreport.ai through Cloudflare Access; the admin Worker verifies the token again, then reads and writes through the comms engine, its two databases and the registries.
+
+![How the admin is built and what it reaches](admin-architecture.png)
+
+Source: [`admin-architecture.mmd`](admin-architecture.mmd)
+
+## saasreport.admin.request
+
+What happens to an admin request. The order of the checks: Access token, configuration, key set, claims, allowlist, route, origin, body, idempotency, audit, effect.
+
+![What happens to an admin request](admin-request.png)
+
+Source: [`admin-request.mmd`](admin-request.mmd)
 
 ## saasreport.diagrams.lineage
 

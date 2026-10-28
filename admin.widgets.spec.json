@@ -1,0 +1,97 @@
+{
+  "$schema": "./vendor/kit/packages/widgets/schemas/widgets-spec.schema.json",
+  "project": {
+    "key": "saasreport",
+    "name": "SaasReport",
+    "url": "https://saasreport.ai",
+    "repo": "https://github.com/SaasReport/landing"
+  },
+  "locales": [
+    {
+      "code": "en",
+      "dir": "ltr"
+    }
+  ],
+  "tone": {
+    "register": "formal-plain",
+    "notes": [
+      "Short sentences, concrete nouns, no hype, no claim a file does not prove.",
+      "Every figure is computed by the engine on sample data and labelled as sample."
+    ]
+  },
+  "theme": {
+    "tokens": "tokens.json"
+  },
+  "honesty": {
+    "default": "live",
+    "labels": {
+      "live": "Live: read from the admin API now",
+      "engine": "Computed",
+      "sample": "Sample"
+    }
+  },
+  "sources": {
+    "contract": {
+      "kind": "openapi",
+      "path": "contracts/admin.openapi.json",
+      "describes": "the admin API contract: every pane reads one of its operations"
+    }
+  },
+  "vocabulary": {
+    "owned": [
+      "SaasReport"
+    ],
+    "forbidden": [
+      "revolutionize",
+      "revolutionise",
+      "seamless",
+      "empower",
+      "unlock",
+      "game-changing",
+      "cutting-edge",
+      "best-in-class",
+      "supercharge",
+      "leverage"
+    ]
+  },
+  "audiences": [
+    {
+      "id": "owner",
+      "label": "The owner"
+    }
+  ],
+  "useCases": [
+    {
+      "id": "operate",
+      "label": "Operate the product",
+      "audiences": [
+        "owner"
+      ],
+      "sources": [
+        "contract"
+      ]
+    }
+  ],
+  "includes": [
+    "workers/admin/ui/generated/scenarios.json"
+  ],
+  "scenarios": [],
+  "archetypes": [
+    "workbench"
+  ],
+  "build": {
+    "asOf": "2026-10-28",
+    "out": "workers/admin/ui/generated/widgets.generated.json",
+    "page": {
+      "path": "/examples/",
+      "title": "Admin",
+      "intro": "The admin workbench."
+    },
+    "exports": [
+      {
+        "as": "workbench",
+        "widget": "admin-workbench"
+      }
+    ]
+  }
+}
