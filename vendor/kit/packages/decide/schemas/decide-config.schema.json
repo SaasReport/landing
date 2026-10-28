@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/decide/schemas/decide-config.schema.json",
+  "title": "kit.decide-config.v1",
+  "description": "decide.config.json: which typed-decision backend answers, where it is, and the confidence below which a decision escalates to the big model (packages/decide, docs/DECIDE.md). Nothing about models, endpoints or thresholds lives in code.",
+  "type": "object",
+  "required": ["$schema", "backend", "threshold", "backends"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "backend": { "type": "string", "description": "The key in backends used when the caller names none." },
+    "threshold": { "$ref": "#/$defs/probability", "description": "Default: a question whose most likely option has a lower probability returns choice \"escalate\"." },
+    "timeoutMs": { "type": "integer", "minimum": 1, "description": "Per request; a timeout escalates every question of the request." },
+    "backends": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+      "additionalProperties": { "$ref": "#/$defs/backend" }
+    }
+  },
+  "$defs": {
+    "probability": { "type": "number", "minimum": 0, "maximum": 1 },
+    "backend": {
+      "type": "object",
+      "required": ["type", "tier"],
+      "additionalProperties": false,
+      "properties": {
+        "type": { "enum": ["systemone", "fake"], "description": "systemone: POST {url}/v1/systemone (TypeSafe System One API: a local kev server, a Bev server, or a hosted Jev). fake: answers from the fake table (tests, CI)." },
+        "tier": { "enum": ["local-cpu", "self-hosted", "gpu", "hosted", "test"], "description": "Where it runs, for docs and routing; not used to pick a backend." },
+        "description": { "type": "string" },
+        "url": { "type": "string", "format": "uri", "description": "Base URL of the System One server." },
+        "urlEnv": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$", "description": "Environment variable holding the base URL (used when url is absent)." },
+        "apiKeyEnv": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$", "description": "Environment variable holding a bearer key; the key is sent, never logged." },
+        "model": { "type": "string", "description": "The model alias the server expects in the request body." },
+        "threshold": { "$ref": "#/$defs/probability", "description": "Overrides the default threshold for this backend." },
+        "serve": { "type": "string", "description": "How to start this backend locally (documentation for people and agents; the client never runs it)." },
+        "fake": {
+          "type": "object",
+          "description": "fake only: question id -> option -> probability (missing questions get a uniform distribution).",
+          "additionalProperties": { "type": "object", "additionalProperties": { "$ref": "#/$defs/probability" } }
+        }
+      },
+      "allOf": [
+        { "if": { "properties": { "type": { "const": "systemone" } } }, "then": { "anyOf": [{ "required": ["url"] }, { "required": ["urlEnv"] }] } }
+      ]
+    }
+  }
+}

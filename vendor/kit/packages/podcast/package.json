@@ -1,0 +1,31 @@
+{
+  "name": "@saasreport/podcast",
+  "version": "0.1.0",
+  "description": "Two-host podcast episodes on Cloudflare: scripts from content items, multi-speaker TTS (Gemini, Piper, Gradio), MP3 assembly with ID3 tags, and a durable Workflow that publishes to R2 + D1.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": { "workerd": "./src/worker.js", "worker": "./src/worker.js", "default": "./src/index.js" },
+    "./workflow": "./src/workflow.js",
+    "./audio": "./src/audio/index.js",
+    "./providers": "./src/providers/index.js",
+    "./episodes": "./src/episodes.js",
+    "./article": "./src/article.js",
+    "./strings": "./src/strings.js",
+    "./persian": "./src/persian.js",
+    "./package.json": "./package.json"
+  },
+  "files": ["src", "README.md"],
+  "dependencies": {
+    "@saasreport/format": "*",
+    "@breezystack/lamejs": "^1.2.7",
+    "@saasreport/core": "*",
+    "@saasreport/fa-lint": "*",
+    "@saasreport/speech": "*",
+    "@saasreport/uploads": "*"
+  },
+  "scripts": { "test": "node --test test/*.test.mjs" },
+  "engines": { "node": ">=20.17.0" },
+  "license": "Apache-2.0",
+  "private": true
+}

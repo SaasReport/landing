@@ -1,0 +1,28 @@
+{
+  "name": "@saasreport/forge",
+  "version": "0.2.0",
+  "description": "Schema-first OpenAPI code generation, native to the kit: Forge's resolver, plugin host and command tree (ported from Cloudflare Forge, Apache-2.0, origin in ORIGIN.json) and Docker-free targets: a JavaScript client with TypeScript declarations, a Node CLI and a typed Python client. No dependencies.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json",
+    "./ORIGIN.json": "./ORIGIN.json"
+  },
+  "files": [
+    "src",
+    "scripts",
+    "ORIGIN.json",
+    "NOTICE",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "upstream-sync": "node scripts/upstream-sync.mjs"
+  },
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "license": "Apache-2.0",
+  "private": true
+}

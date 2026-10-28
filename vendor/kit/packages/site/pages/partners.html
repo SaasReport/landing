@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="{{locale.lang}}" dir="{{locale.dir}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="{{colorHex.accent}}">
+<title>{{c.meta.title}}</title>
+<meta name="description" content="{{c.meta.description|attr}}">
+<link rel="canonical" href="{{page.url}}"><meta name="robots" content="index, follow, max-image-preview:large">{{page.alternates}}
+<meta property="og:type" content="website"><meta property="og:locale" content="{{locale.og}}">{{page.ogAlternates}}<meta property="og:site_name" content="{{name|attr}}"><meta property="og:title" content="{{c.meta.ogTitle|attr}}"><meta property="og:description" content="{{c.meta.ogDescription|attr}}"><meta property="og:url" content="{{page.url}}"><meta property="og:image" content="{{page.ogImage}}">
+{{page.ld}}
+{{chrome.icons}}
+{{chrome.preload}}
+<link rel="stylesheet" href="{{a.styles.css}}">
+<link rel="stylesheet" href="{{a.notify.css}}">
+<link rel="stylesheet" href="{{a.content.css}}">
+<link rel="stylesheet" href="{{a.terminal.css}}">
+<link rel="stylesheet" href="{{a.pages.css}}">
+</head>
+<body class="tpage">
+{{chrome.bar}}
+<main>
+  <section class="hero-t wrap">
+    <p class="eyebrow">{{c.hero.eyebrow}}</p>
+    <h1>{{c.hero.title}}</h1>
+    <p>{{c.hero.lead}}</p>
+  </section>
+  <section class="section" style="padding-top:20px">
+    <div class="wrap">
+      <header class="sec-head"><h2>{{c.types.title}}</h2></header>
+      <div class="ptypes">
+{{#each c.types.items}}        <article class="ptype" id="{{.id}}">
+          <span class="pill idle">{{.pill}}</span>
+          <h3>{{.title}}</h3>
+          <p>{{.text}}</p>
+          <dl><div><dt>{{c.types.bring}}</dt><dd>{{.bring}}</dd></div><div><dt>{{c.types.provide}}</dt><dd>{{.provide}}</dd></div></dl>
+          <button type="button" class="btn btn--ghost btn--sm" data-ptype="{{.title|attr}}">{{c.types.apply}}</button>
+        </article>
+{{/each}}      </div>
+    </div>
+  </section>
+  <section class="section section--paper">
+    <div class="wrap">
+      <header class="sec-head"><h2>{{c.steps.title}}</h2></header>
+      <ol class="psteps">
+{{#each c.steps.items}}        <li><b>{{.title}}</b>{{.text}}</li>
+{{/each}}      </ol>
+      <p class="tx-note" style="margin-top:22px">{{c.steps.note}}</p>
+    </div>
+  </section>
+  <section class="section" id="apply">
+    <div class="wrap">
+      <div class="pform">
+        <div><p class="eyebrow">{{c.form.eyebrow}}</p><h2>{{c.form.title}}</h2><p>{{c.form.lead}}</p></div>
+        <form class="cform" data-cform="partner" novalidate>
+          <label><span>{{c.form.name}}</span><input name="name" required maxlength="120" autocomplete="name"></label>
+          <label><span>{{c.form.email}}</span><input name="email" type="email" required maxlength="200" autocomplete="email" dir="ltr"></label>
+          <label><span>{{c.form.company}}</span><input name="company" required maxlength="160" autocomplete="organization"></label>
+          <label><span>{{c.form.role}}</span><input name="role" maxlength="200" autocomplete="organization-title"></label>
+          <label><span>{{c.form.type}}</span><select name="partner_type" required><option value="">{{c.form.choose}}</option>{{#each c.types.items}}<option>{{.title}}</option>{{/each}}</select></label>
+          <label><span>{{c.form.website}}</span><input name="website_url" maxlength="200" dir="ltr" inputmode="url" placeholder="https://"></label>
+          <label><span>{{c.form.notes}}</span><textarea name="notes" maxlength="1500"></textarea></label>
+          <input name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
+          <label class="cform__ok"><input type="checkbox" name="consent" required><span>{{c.form.consent}}</span></label>
+          <button class="btn btn--primary" type="submit">{{c.form.submit}}</button>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+{{chrome.footer}}
+<script src="{{a.notify.js}}" defer></script>
+<script src="{{a.content-client.js}}" defer></script>
+<script src="{{a.partners.js}}" defer></script>
+<script src="{{a.totop.js}}" defer></script>
+</body>
+</html>

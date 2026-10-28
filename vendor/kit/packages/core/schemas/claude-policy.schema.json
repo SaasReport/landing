@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/claude-policy.schema.json",
+  "title": "kit.claude-policy.v1",
+  "description": "claude.policy.json: the token-cost standard for Claude Code (docs/COST.md). Two files have this shape. The kit's defaults (packages/core/registry/claude.policy.json) are complete and have no `extends`. A project's own claude.policy.json (repository root, optional) has `extends: \"kit\"` and states only the values it overrides, always within the bounds written here (a ceiling a default may be tightened to, never lifted over). `kit claude sync` generates .claude/settings.json (cost keys) and the standard agents from the merged result; `kit check claude` (inside kit check canon) fails on drift. Raise a limit for one task with a CLI flag or /model, never by editing a default. The Claude Code facts behind each key are listed in docs/COST.md.",
+  "type": "object",
+  "required": ["$schema"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "description": "The $id of this schema (or a path to it)." },
+    "extends": { "const": "kit", "description": "Present in a project's override file: every value not stated comes from the kit's defaults. Absent in the kit's own defaults, which must be complete." },
+    "model": { "enum": ["sonnet", "haiku"], "description": "settings.json `model`: the main session's default. Opus is chosen for one task with `claude --model opus` or /model; switching mid-session breaks the prompt cache (docs: prompt-caching)." },
+    "effort": { "enum": ["low", "medium", "high"], "description": "settings.json `effortLevel`: the default effort. xhigh and max are raised per task (`claude --effort xhigh`); in project settings the key applies to every model." },
+    "claudeMd": {
+      "type": "object", "additionalProperties": false,
+      "properties": { "maxLines": { "type": "integer", "minimum": 20, "maximum": 200, "description": "Longest allowed CLAUDE.md, in lines. Longer files consume more context every session; move reference material into path-scoped rules or skills. 200 is the docs' ceiling and cannot be raised." } }
+    },
+    "subagents": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "model": { "enum": ["sonnet", "haiku"], "description": "env CLAUDE_CODE_SUBAGENT_MODEL: the model of every subagent that no definition or Agent call assigns one." },
+        "searchModel": { "enum": ["haiku", "sonnet"], "description": "The model of search and exploration agents (agent `model: search`)." },
+        "maxConcurrent": { "type": "integer", "minimum": 1, "maximum": 8, "description": "env CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS (Claude Code's own default is 20)." },
+        "promptCacheTtl": { "enum": ["5m", "1h"], "description": "env CLAUDE_CODE_SUBAGENT_PROMPT_CACHE_TTL: 1-hour cache writes are billed higher; short-lived subagents rarely reuse them." }
+      }
+    },
+    "agents": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "maxTurnsCeiling": { "type": "integer", "minimum": 1, "maximum": 50, "description": "No project agent may declare a larger maxTurns. Every project agent must declare `model` and `maxTurns` (not configurable)." },
+        "allowedModels": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["haiku", "sonnet", "opus", "inherit"] }, "description": "Models a project agent's `model` may name. Adding opus is a reviewed decision of the project; the default list excludes it." },
+        "standard": {
+          "type": "object",
+          "description": "The standard agents `kit claude sync` writes to .claude/agents/<name>.md, by name. A project may override single fields of one, or add its own (all required fields then).",
+          "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+          "additionalProperties": { "$ref": "#/$defs/agent" }
+        }
+      }
+    },
+    "loops": {
+      "type": "object", "additionalProperties": false,
+      "description": "Budgets of every scripted agent loop (a \"ralph\" loop: a script that runs `claude -p` repeatedly).",
+      "properties": {
+        "maxIterations": { "type": "integer", "minimum": 1, "maximum": 50, "description": "Most iterations a loop may declare." },
+        "wallClockMinutes": { "type": "integer", "minimum": 1, "maximum": 120, "description": "Longest wall-clock time a loop may declare." },
+        "paths": { "type": "array", "minItems": 1, "items": { "type": "string" }, "description": "Directories or globs scanned for loop scripts." }
+      }
+    },
+    "managed": {
+      "type": "object", "additionalProperties": false,
+      "description": "Owner-only: what the claude.ai admin console holds (no repository can set it). Kit defaults only; a project cannot override it.",
+      "properties": {
+        "maxEffortLevel": { "enum": ["low", "medium", "high", "xhigh"], "description": "Managed `maxEffortLevel`: the organisation-wide cap (`max` sets no cap, so it is never listed)." },
+        "spendLimitsUsd": {
+          "type": "object", "additionalProperties": false,
+          "description": "Proposed monthly spend limits, set by hand in the admin console and the Console workspace (no JSON exists for them); the owner confirms the numbers.",
+          "properties": {
+            "member": { "type": "integer", "minimum": 1 },
+            "organization": { "type": "integer", "minimum": 1 },
+            "workspace": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "required": ["extends"] },
+      "then": { "not": { "required": ["managed"] } }
+    }
+  ],
+  "$defs": {
+    "agentEffort": { "enum": ["low", "medium", "high", "xhigh", "max"], "description": "Effort levels an agent's frontmatter `effort` may carry (what the Claude Code docs allow; the settings default `effort` is bounded lower). `kit check claude` reads this list." },
+    "agent": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "description": { "type": "string", "minLength": 10, "maxLength": 300, "description": "When Claude should delegate to it (kept short: all descriptions load every session)." },
+        "model": { "enum": ["search", "subagent"], "description": "A role, resolved from subagents.searchModel or subagents.model." },
+        "maxTurns": { "type": "integer", "minimum": 1, "maximum": 50 },
+        "effort": { "$ref": "#/$defs/agentEffort" },
+        "tools": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_*]*$" }, "description": "Allowed tools; omitted = every tool a subagent has." },
+        "omitClaudeMd": { "type": "boolean", "description": "Launch without the CLAUDE.md files (agents that take all they need from the delegation prompt)." },
+        "prompt": { "type": "string", "minLength": 10, "description": "The agent's system prompt (the file body)." }
+      }
+    },
+    "complete": {
+      "description": "The merged policy: every value present, every agent whole.",
+      "allOf": [
+        { "$ref": "#" },
+        {
+          "required": ["model", "effort", "claudeMd", "subagents", "agents", "loops"],
+          "properties": {
+            "claudeMd": { "required": ["maxLines"] },
+            "subagents": { "required": ["model", "searchModel", "maxConcurrent", "promptCacheTtl"] },
+            "agents": {
+              "required": ["maxTurnsCeiling", "allowedModels", "standard"],
+              "properties": { "standard": { "minProperties": 1, "additionalProperties": { "required": ["description", "model", "maxTurns", "prompt"] } } }
+            },
+            "loops": { "required": ["maxIterations", "wallClockMinutes", "paths"] }
+          }
+        }
+      ]
+    }
+  }
+}

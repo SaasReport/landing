@@ -1,0 +1,42 @@
+{
+  "name": "@saasreport/site",
+  "version": "0.2.0",
+  "description": "The kit's site theme: a landing page, inner pages (terminal, lab, academy, partners, status, brand, sectors, directory), product surfaces (content pages from blocks, an OpenAPI reference, auth-gated app shells, a status board), demo engines and page scripts generated from design tokens, locale packs (fa, en, ar), content, strings and data; one version per locale.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./locales/*": "./src/locales/*.js",
+    "./theme/*": "./theme/*",
+    "./assets/*": "./assets/*",
+    "./pages/*": "./pages/*",
+    "./tools/*": "./tools/*",
+    "./schema/*": "./schema/*",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@saasreport/format": "*",
+    "@saasreport/calendar": ">=1.1.0",
+    "@saasreport/core": "*",
+    "@saasreport/comms": "*",
+    "@saasreport/workbench": "*"
+  },
+  "files": [
+    "src",
+    "schema",
+    "theme",
+    "assets",
+    "pages",
+    "tools",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "license": "Apache-2.0",
+  "sideEffects": false
+}

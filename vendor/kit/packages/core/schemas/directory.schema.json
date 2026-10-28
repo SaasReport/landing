@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/directory.schema.json",
+  "title": "kit.directory.v1",
+  "description": "directory/directory.json, the machine-readable actor directory a site publishes (taxonomy + entries). Public data: it carries data, never CSS. A category's colour is published twice, as the resolved value (`color`, #RRGGBB, as before) and as the project's colour role it comes from (`colorRole`: optional, additive within v1, so a directory.json published before it still validates; the kit's generator always writes it); a consumer that paints with its own palette reads the role. Fields beyond those named (the name keys of the project's language, head and meta fields of the content pack) are allowed.",
+  "type": "object",
+  "required": ["schema", "url", "corrections", "count", "taxonomy", "entries"],
+  "properties": {
+    "schema": { "const": "kit.directory.v1" },
+    "url": { "type": "string", "format": "uri" },
+    "corrections": { "type": "string", "format": "uri" },
+    "updated": { "type": ["string", "null"], "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+    "count": { "type": "integer", "minimum": 0 },
+    "taxonomy": {
+      "type": "object",
+      "required": ["tiers", "categories", "tags", "sectors"],
+      "properties": {
+        "tiers": { "type": "array", "items": { "type": "object", "required": ["key", "order"], "properties": { "key": { "type": "string" }, "order": { "type": "integer", "minimum": 1 } } } },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["key", "tier", "color"],
+            "properties": {
+              "key": { "type": "string" },
+              "tier": { "type": "string" },
+              "color": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$", "description": "The category's colour as a resolved value (never a CSS expression)." },
+              "colorRole": { "enum": ["chart1", "chart2", "chart3", "chart4", "chart5", "chart6", "accent", "ok", "warn", "err"], "description": "The project's colour role the value comes from; the roles a directory category may use (CATEGORY_ROLES of the site generator, held equal by a test)." }
+            }
+          }
+        },
+        "tags": { "type": "array", "items": { "type": "object", "required": ["key"], "properties": { "key": { "type": "string" } } } },
+        "sectors": { "type": "array", "items": { "type": "object", "required": ["slug", "url"], "properties": { "slug": { "type": "string" }, "url": { "type": "string", "format": "uri" } } } }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "url", "category", "tier", "tags", "sectors", "site", "source"],
+        "properties": {
+          "id": { "type": "string" }, "url": { "type": "string", "format": "uri" }, "category": { "type": "string" }, "tier": { "type": "string" },
+          "tags": { "type": "array", "items": { "type": "string" } }, "sectors": { "type": "array", "items": { "type": "string" } },
+          "site": { "type": "string" },
+          "source": { "type": "object", "required": ["title", "url", "checked"], "properties": { "title": { "type": "string" }, "url": { "type": "string" }, "checked": { "type": "string" } } }
+        }
+      }
+    }
+  }
+}

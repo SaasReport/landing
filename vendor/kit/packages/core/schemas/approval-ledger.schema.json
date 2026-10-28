@@ -1,0 +1,327 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/approval-ledger.schema.json",
+  "title": "kit.approval-ledger.v1",
+  "description": "The one approval ledger of the kit (docs/CONCEPTS.md section 5, docs/PERSIAN.md section 6): the append-only, hash-chained, signed record of human sign-offs used for the Shariah concept series (subject id) and for Persian native review, fa-review.json (subject file). The ledger's id, project and kind come from the kit project registry, never from the project's own config, and are inside every signed body, so a signature made for one ledger is worthless in another. Entries are never rewritten or re-sorted: each carries `seq`, the sha256 `prev` of the entry before it (the first: the genesis of the git commit the chain is anchored at), a UTC timestamp inside the signed body (not in the future) and, unless it is a baseline, an Ed25519 signature by the approver's own key. Roster changes are roster-add / roster-remove entries that take effect when a strict majority of the current roster has signed the same one (a one-member roster changes only through the owner-signed trust record), and roster-rotate entries (a member replaces their own key, signed with the old one; earlier entries stay verifiable). A withdrawal by any member holds a subject until the same member or a strict majority of the roster lifts it. Verified by kit check (shariah-review, fa-review, canon) and, from the public keys alone, by the run time. Written by kit shariah / kit persian and the signing page, never by hand.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "id",
+    "project",
+    "kind",
+    "subject",
+    "anchor",
+    "entries"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "kind": {
+      "enum": [
+        "shariah",
+        "persian",
+        "uploads"
+      ],
+      "description": "shariah, persian (approval kinds: approved, rejected, withdrawn) or uploads (upload decisions: release, hold, unhold, rescan, delete). Each kind declares its actions; the verifier and checkAppend refuse an action the kind does not have, and one the owner-signed record does not grant the member."
+    },
+    "subject": {
+      "enum": [
+        "id",
+        "file"
+      ],
+      "description": "What an entry approves: a concept id (shariah) or a source file (persian)."
+    },
+    "anchor": {
+      "type": "object",
+      "required": [
+        "commit",
+        "genesis",
+        "baselineThrough"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "commit": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$",
+          "description": "The git commit the chain starts from; it must be an ancestor of HEAD (the check uses merge-base --is-ancestor) and, once registered, the registry's anchor."
+        },
+        "genesis": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "sha256 of \"kit.approval-ledger.v1:anchor:<commit>\": the `prev` of the first entry."
+        },
+        "baselineThrough": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "How many leading entries may be unsigned baselines (copy live before the gate). Recorded once, when the ledger is created."
+        },
+        "migratedFrom": {
+          "type": "object",
+          "required": [
+            "sha256",
+            "entries"
+          ],
+          "additionalProperties": false,
+          "description": "Set by kit persian migrate: the sha256 of the old-format ledger file this one replaced and how many entries it carried. The history check and the verifier accept the format change only when the owner-signed trust record names exactly this migration (once, persian ledgers only).",
+          "properties": {
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "entries": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "seq",
+          "sha256",
+          "status",
+          "at",
+          "prev"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "seq": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "file": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$",
+            "description": "The content hash the approver read (concepts: the reviewed fields; persian: the Persian segments of the file)."
+          },
+          "status": {
+            "enum": [
+              "approved",
+              "rejected",
+              "withdrawn",
+              "baseline",
+              "roster-add",
+              "roster-remove",
+              "roster-rotate",
+              "release",
+              "hold",
+              "unhold",
+              "rescan",
+              "delete"
+            ]
+          },
+          "by": {
+            "type": "string",
+            "minLength": 2,
+            "description": "A name of the roster; required unless a baseline."
+          },
+          "at": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,3})?Z$",
+            "description": "UTC, ending in Z, inside the signed body; refused when more than five minutes in the future."
+          },
+          "prev": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "sig": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9+/]{85}[AQgw]==$",
+            "description": "Ed25519 signature, the one canonical base64 spelling of 64 bytes, over the signed body (see @saasreport/core/ledger)."
+          },
+          "attests": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "definition-accurate",
+                "sources-read",
+                "positions-fair",
+                "not-a-fatwa"
+              ]
+            }
+          },
+          "statement": {
+            "type": "string",
+            "minLength": 10,
+            "maxLength": 600,
+            "description": "The approver's own words."
+          },
+          "segments": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Persian: how many Persian segments the hash covers."
+          },
+          "note": {
+            "type": "string",
+            "maxLength": 400
+          },
+          "member": {
+            "type": "object",
+            "required": [
+              "name",
+              "publicKey"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "name": {
+                "type": "string",
+                "minLength": 2
+              },
+              "publicKey": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9+/]{42}[AEIMQUYcgkosw048]=$"
+              },
+              "actions": {
+                "type": "array",
+                "minItems": 1,
+                "uniqueItems": true,
+                "items": {
+                  "type": "string"
+                },
+                "description": "roster-add: the actions the new member may sign, limited to what its signers hold."
+              }
+            },
+            "description": "For roster-add and roster-remove."
+          },
+          "expires": {
+            "type": "string",
+            "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,3})?Z$",
+            "description": "roster-add / roster-remove only: when this proposal lapses (at most 14 days after `at`). A proposal takes effect only when a majority has signed it before then; a stale one can never be completed later."
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "baseline"
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "not": {
+                "required": [
+                  "sig"
+                ]
+              }
+            },
+            "else": {
+              "required": [
+                "by",
+                "sig"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "roster-add",
+                    "roster-remove",
+                    "roster-rotate"
+                  ]
+                }
+              },
+              "required": [
+                "status"
+              ]
+            },
+            "then": {
+              "required": [
+                "member"
+              ]
+            }
+          }
+        ],
+        "oneOf": [
+          {
+            "required": [
+              "id"
+            ],
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "file"
+                  ]
+                },
+                {
+                  "required": [
+                    "member"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "file"
+            ],
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "id"
+                  ]
+                },
+                {
+                  "required": [
+                    "member"
+                  ]
+                }
+              ]
+            }
+          },
+          {
+            "required": [
+              "member"
+            ],
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "id"
+                  ]
+                },
+                {
+                  "required": [
+                    "file"
+                  ]
+                }
+              ]
+            }
+          }
+        ]
+      }
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*:(shariah|persian|uploads)$",
+      "description": "<project>:<kind>; must equal the registry's."
+    },
+    "project": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+$",
+      "description": "A key of the kit project registry (packages/core/registry/projects.json)."
+    }
+  }
+}

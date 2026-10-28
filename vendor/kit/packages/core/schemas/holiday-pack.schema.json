@@ -1,0 +1,204 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/holiday-pack.schema.json",
+  "title": "kit.holiday-pack.v1",
+  "description": "One market's holiday pack (@saasreport/calendar/markets holidayPack(id)): data version, verification status, time zone, sources, coverage and every holiday rule with its source and checked date. The calendar data a site publishes and the agent plugins reproduce.",
+  "type": "object",
+  "required": [
+    "id",
+    "dataVersion",
+    "status",
+    "checked",
+    "timeZone",
+    "sources",
+    "coverage",
+    "holidays"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z]{2,8}(:[a-z][a-z0-9-]*)?$",
+      "description": "Market id, optionally with a profile (ir:market)."
+    },
+    "pack": {
+      "type": "string"
+    },
+    "dataVersion": {
+      "type": "string",
+      "pattern": "^[a-z]{2,8}-\\d{4}\\.\\d{2}\\.\\d{2}$"
+    },
+    "status": {
+      "enum": [
+        "verified",
+        "partial",
+        "unverified"
+      ]
+    },
+    "checked": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "format": "date"
+    },
+    "timeZone": {
+      "type": "string",
+      "pattern": "^[A-Za-z_]+(/[A-Za-z_+-]+)*$"
+    },
+    "hijri": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "title",
+          "url"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "anyOf": [
+              {
+                "type": "string",
+                "format": "uri"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "sourceUrls": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "format": "uri"
+      }
+    },
+    "coverage": {
+      "type": "object",
+      "required": [
+        "from",
+        "to"
+      ],
+      "properties": {
+        "from": {
+          "type": "integer"
+        },
+        "to": {
+          "type": "integer"
+        },
+        "basis": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "official": {
+      "type": "array"
+    },
+    "holidays": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "kind",
+          "title",
+          "predicted"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "title": {
+            "type": "object",
+            "minProperties": 1,
+            "propertyNames": {
+              "pattern": "^[a-z]{2}$"
+            },
+            "additionalProperties": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "predicted": {
+            "type": "boolean"
+          },
+          "source": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "minLength": 1,
+            "description": "A URL, or the provenance of built-in data."
+          },
+          "checked": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "date"
+          },
+          "since": {
+            "type": "string",
+            "format": "date"
+          },
+          "until": {
+            "type": "string",
+            "format": "date"
+          },
+          "max_age_days": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 400,
+            "description": "A checked day is read again within this many days, or the fact is treated as unverified; 365: the facts change by year."
+          }
+        }
+      }
+    },
+    "max_age_days": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 400,
+      "description": "A checked day is read again within this many days, or the fact is treated as unverified; 365: the facts change by year."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "status": {
+            "enum": [
+              "verified",
+              "partial"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "sources": {
+            "minItems": 1
+          }
+        }
+      }
+    }
+  ],
+  "$comment": "Gap recorded in docs/audits/2026-10-01-hardcoding.md: the built-in Iranian packs (ir, ir:*) are 'verified' but carry no source URL or checked date."
+}

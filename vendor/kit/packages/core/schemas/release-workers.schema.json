@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/release-workers.schema.json",
+  "title": "kit.release-workers.v1",
+  "description": "The answer of `kit release workers --json` (docs/RELEASE.md): the project and every Worker release.json deploys, in deploy order, with the name its wrangler config resolves to (the one reader). The central deployer reads Worker names from here, never from its own copy.",
+  "type": "object",
+  "required": ["project", "workers"],
+  "additionalProperties": false,
+  "properties": {
+    "project": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "workers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "wrangler"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "minLength": 1, "description": "The Worker's name as Cloudflare knows it (wrangler's name, or <name>-<env>)." },
+          "wrangler": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$" }
+        }
+      }
+    }
+  }
+}

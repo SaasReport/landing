@@ -1,0 +1,44 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/staleness-obligations.schema.json",
+  "obligations": [
+    {
+      "id": "machine-scheduler",
+      "boundary": "Branch or worktree vs origin main, scratch age",
+      "owed": "A scheduled run on the machine or codespace where worktrees live: a runner clone has no stale branches, so the daily workflow cannot judge them.",
+      "source": "scratch/worktrees.json (kit.worktrees.v1) and the mtime of every entry of scratch/",
+      "threshold": "staleness.json#/local/scratch_max_age_days",
+      "class": "branch-behind-main",
+      "verifier": "kit check staleness --local on the machine",
+      "command": "kit check staleness --local --alert"
+    },
+    {
+      "id": "comms-ingress",
+      "boundary": "Alert to OPS_NOTIFY_TO (email)",
+      "owed": "Authenticated ingress for the comms engine so a GitHub runner can send the owner's email: POST /v1/comms/dispatch with a signed bearer, an OpenAPI contract and tests; today the engine is reachable only over a service binding.",
+      "source": "packages/comms (the engine's dispatch route) and the OPS_NOTIFY_TO secret of the engine",
+      "threshold": null,
+      "class": "staleness-unverified",
+      "verifier": "a contract test of the route and kit comms secrets",
+      "command": "POST /v1/comms/dispatch"
+    },
+    {
+      "id": "codespace-run",
+      "boundary": "Codespace toolchain",
+      "owed": "Run kit check staleness inside each codespace, and generate the codespace definition (codespaces.json) from registry/toolchain.json instead of keeping a second copy.",
+      "source": "registry/toolchain.json against node, npm, git and docker --version inside the codespace",
+      "threshold": null,
+      "class": "toolchain-drift",
+      "verifier": "kit check staleness (where codespace)",
+      "command": "kit check staleness --json"
+    },
+    {
+      "id": "github-secrets-compare",
+      "boundary": "GitHub environments, secrets and tokens vs registry",
+      "owed": "Compare the secret and environment names the GitHub API lists with the registry that declares them; today only the age of the registry's verified day is checked.",
+      "source": "GET /repos/{owner}/{repo}/environments and /actions/secrets (names only) against github-orgs.json",
+      "threshold": "github-orgs.json#/max_age_days",
+      "class": "registry-fact-stale",
+      "verifier": "kit check staleness"
+    }
+  ]
+}

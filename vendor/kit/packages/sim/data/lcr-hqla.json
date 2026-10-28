@@ -1,0 +1,71 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-factor-table.schema.json",
+  "schema": "kit.sim-factor-table.v1",
+  "id": "lcr-hqla",
+  "version": "2023-01-01",
+  "profile": "baseline",
+  "standard": {
+    "body": "BCBS",
+    "title": "Liquidity Coverage Ratio (Basel Framework LCR20, LCR30, LCR40; BCBS d238, 2013, revised d295 context)",
+    "url": "https://www.bis.org/basel_framework/chapter/LCR/40.htm",
+    "versionPublished": "2019-12-15"
+  },
+  "factors": [
+    {
+      "id": "level1-haircut",
+      "label": "Level 1 assets haircut",
+      "value": 0,
+      "unit": "bp",
+      "ref": "LCR30.40",
+      "min": 0
+    },
+    {
+      "id": "level2a-haircut",
+      "label": "Level 2A assets haircut",
+      "value": 1500,
+      "unit": "bp",
+      "ref": "LCR30.43",
+      "min": 1500
+    },
+    {
+      "id": "level2b-rmbs-haircut",
+      "label": "Level 2B residential mortgage-backed securities haircut",
+      "value": 2500,
+      "unit": "bp",
+      "ref": "LCR30.45(1)",
+      "min": 2500
+    },
+    {
+      "id": "level2b-other-haircut",
+      "label": "Level 2B corporate debt and common equity haircut",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "LCR30.45(2), LCR30.45(3)",
+      "min": 5000
+    },
+    {
+      "id": "level2-cap",
+      "label": "Level 2 assets as a maximum share of the stock after haircuts",
+      "value": 4000,
+      "unit": "bp",
+      "ref": "LCR30.31, LCR30.35",
+      "max": 4000
+    },
+    {
+      "id": "level2b-cap",
+      "label": "Level 2B assets as a maximum share of the stock after haircuts",
+      "value": 1500,
+      "unit": "bp",
+      "ref": "LCR30.33, LCR30.36",
+      "max": 1500
+    },
+    {
+      "id": "minimum-ratio",
+      "label": "minimum LCR",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR20.5 (100%)",
+      "min": 10000
+    }
+  ]
+}

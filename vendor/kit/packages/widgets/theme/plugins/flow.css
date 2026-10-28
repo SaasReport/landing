@@ -1,0 +1,40 @@
+/* ---------- flow: money movement along a path (plugin styles, from the project's tokens) ---------- */
+.kw-flow{container:kwflow/inline-size;display:grid;gap:14px;position:relative}
+.kw-flow__amount{margin:0;display:flex;align-items:baseline;gap:10px;color:var(--kw-muted);font-size:14px}
+.kw-flow__amount b{font-size:26px;color:var(--kw-ink);letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.kw-flow__stage{position:relative}
+.kw-flow__track{list-style:none;margin:0;padding:0;display:grid;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr);gap:0;position:relative}
+.kw-flow__track::before{content:"";position:absolute;inset-inline:0;inset-block-start:15px;height:2px;background:var(--kw-line);z-index:0;margin-inline:calc(100% / var(--kw-hops,5) / 2)}
+.kw-flow__hop{position:relative;display:grid;justify-items:center;align-content:start;gap:8px;text-align:center;padding-inline:4px}
+.kw-flow__node{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--kw-surface);border:2px solid var(--kw-line);z-index:1;transition:border-color var(--kw-motion),background var(--kw-motion),box-shadow var(--kw-motion)}
+.kw-flow__node i{width:10px;height:10px;border-radius:50%;background:var(--kw-line);transition:background var(--kw-motion)}
+.kw-flow__hop[data-state=done] .kw-flow__node{border-color:var(--kw-t,var(--kw-accent))}
+.kw-flow__hop[data-state=done] .kw-flow__node i{background:var(--kw-t,var(--kw-accent))}
+.kw-flow__hop[data-state=now] .kw-flow__node{border-color:var(--kw-accent);box-shadow:0 0 0 5px color-mix(in srgb,var(--kw-accent) {{wash.accentDeep}}%,transparent)}
+.kw-flow__hop[data-state=now] .kw-flow__node i{background:var(--kw-accent)}
+.kw-flow__hop[data-state=todo]{color:var(--kw-muted)}
+.kw-flow__what{display:grid;gap:2px;font-size:13px;min-width:0}
+.kw-flow__what b{font-size:14px}
+.kw-flow__what small{color:var(--kw-muted);font-size:12.5px}
+.kw-flow__out{margin:0;color:var(--kw-muted);font-size:12.5px}
+.kw-flow__token{position:absolute;inset-inline-start:0;inset-block-start:0;z-index:2;padding:4px 11px;border-radius:999px;background:var(--kw-accent);color:var(--kw-on-accent);font-weight:700;font-size:13px;white-space:nowrap;font-variant-numeric:tabular-nums;box-shadow:0 8px 18px -8px color-mix(in srgb,var(--kw-accent) 70%,transparent);pointer-events:none;will-change:transform}
+.kw-flow__token.is-dot{width:14px;height:14px;padding:0}
+.kw-flow__token[hidden]{display:none}
+.kw-flow__statuses{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.kw-flow__status{padding:4px 12px;border-radius:999px;border:1px solid var(--kw-line);font-size:13px;color:var(--kw-muted);transition:background var(--kw-motion),color var(--kw-motion),border-color var(--kw-motion)}
+.kw-flow__status[data-state=done]{color:var(--kw-ink)}
+.kw-flow__status[data-state=now]{background:var(--kw-ink);color:var(--kw-surface);border-color:var(--kw-ink)}
+.kw-flow__status[data-state=todo]{border-style:dashed}
+.kw-flow__metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:0}
+.kw-flow__metrics>div{padding:10px 12px;border-radius:var(--kw-rb);background:var(--kw-surface);border:1px solid var(--kw-line)}
+.kw-flow__metrics dt{font-size:12px;color:var(--kw-muted)}
+.kw-flow__metrics dd{margin:2px 0 0;font-size:18px;font-weight:700;font-variant-numeric:tabular-nums}
+.kw-flow__call{display:grid;gap:10px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.kw-flow__call h5{margin:0 0 6px;font-size:13px}
+.kw-flow__call [hidden]{display:none}
+@container kwflow (max-width:519px){
+  .kw-flow__track{grid-auto-flow:row;gap:12px}
+  .kw-flow__track::before{inset-inline-start:15px;inset-inline-end:auto;inset-block:15px;width:2px;height:auto;margin-inline:0}
+  .kw-flow__hop{grid-template-columns:32px 1fr;justify-items:start;text-align:start;gap:12px;padding-inline:0;align-items:start}
+}
+@media (prefers-reduced-motion:reduce){.kw-flow *,.kw-flow{transition:none!important;animation:none!important}}

@@ -1,0 +1,371 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-run.schema.json",
+  "title": "kit.sim-run.v1",
+  "description": "The record of one engine run: the scenario's hash, the seed, the engine and its version, the outputs, every assumption and simplification the run made, and the validation status (validated, or refused with the reasons). Replaying the scenario on the same engine version yields the same record.",
+  "type": "object",
+  "required": [
+    "schema",
+    "scenarioId",
+    "engine",
+    "engineVersion",
+    "inputsHash",
+    "seed",
+    "asOf",
+    "outputs",
+    "assumptions",
+    "validation"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "kit.sim-run.v1"
+    },
+    "scenarioId": {
+      "type": "string",
+      "minLength": 1
+    },
+    "engine": {
+      "type": "string",
+      "minLength": 1
+    },
+    "engineVersion": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "inputsHash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA-256 of the canonical JSON of the scenario."
+    },
+    "seed": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4294967295
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "outputs": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "description": "The engine's outputs (an object); null exactly when the run was refused."
+    },
+    "assumptions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "status",
+        "checks",
+        "problems"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "enum": [
+            "validated",
+            "refused"
+          ]
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "What was checked and passed."
+        },
+        "problems": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "code",
+              "message"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "code": {
+                "type": "string"
+              },
+              "path": {
+                "type": "string"
+              },
+              "message": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "validation"
+        ],
+        "properties": {
+          "validation": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "validated"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "outputs": {
+            "type": "object"
+          },
+          "validation": {
+            "properties": {
+              "problems": {
+                "maxItems": 0
+              }
+            }
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "outputs": {
+            "type": "null"
+          },
+          "validation": {
+            "properties": {
+              "problems": {
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "engine",
+          "validation"
+        ],
+        "properties": {
+          "engine": {
+            "const": "curve"
+          },
+          "validation": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "validated"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "outputs": {
+            "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-outputs.schema.json#/$defs/curve"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "engine",
+          "validation"
+        ],
+        "properties": {
+          "engine": {
+            "const": "price-risk"
+          },
+          "validation": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "validated"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "outputs": {
+            "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-outputs.schema.json#/$defs/priceRisk"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "engine",
+          "validation"
+        ],
+        "properties": {
+          "engine": {
+            "const": "irrbb"
+          },
+          "validation": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "validated"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "outputs": {
+            "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-outputs.schema.json#/$defs/irrbb"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "engine",
+          "validation"
+        ],
+        "properties": {
+          "engine": {
+            "const": "saccr"
+          },
+          "validation": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "validated"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "outputs": {
+            "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-outputs.schema.json#/$defs/saccr"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "engine",
+          "validation"
+        ],
+        "properties": {
+          "engine": {
+            "const": "sma"
+          },
+          "validation": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "validated"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "outputs": {
+            "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-outputs.schema.json#/$defs/sma"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "engine",
+          "validation"
+        ],
+        "properties": {
+          "engine": {
+            "const": "lcr"
+          },
+          "validation": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "validated"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "outputs": {
+            "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-outputs.schema.json#/$defs/lcr"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "required": [
+          "engine",
+          "validation"
+        ],
+        "properties": {
+          "engine": {
+            "const": "nsfr"
+          },
+          "validation": {
+            "required": [
+              "status"
+            ],
+            "properties": {
+              "status": {
+                "const": "validated"
+              }
+            }
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "outputs": {
+            "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-outputs.schema.json#/$defs/nsfr"
+          }
+        }
+      }
+    }
+  ]
+}

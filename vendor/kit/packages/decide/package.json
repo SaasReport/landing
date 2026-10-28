@@ -1,0 +1,37 @@
+{
+  "name": "@saasreport/decide",
+  "version": "0.1.0",
+  "description": "Typed decisions on a small local model (System One API: kev, Bev, Jev): one state, questions with fixed options, calibrated probabilities, and \"escalate\" below a confidence threshold so the big model only reads what needs it. No dependencies.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./backends": "./src/backends.js",
+    "./eval": "./src/eval.js",
+    "./gates/*": "./gates/*",
+    "./schemas/*": "./schemas/*",
+    "./contracts/*": "./contracts/*",
+    "./decide.config.json": "./decide.config.json",
+    "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "@saasreport/core": "*"
+  },
+  "files": [
+    "src",
+    "schemas",
+    "contracts",
+    "gates",
+    "decide.config.json",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "license": "Apache-2.0",
+  "private": true,
+  "sideEffects": false
+}

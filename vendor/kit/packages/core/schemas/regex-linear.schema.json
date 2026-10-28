@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/regex-linear.schema.json",
+  "title": "kit.regex-linear.v1",
+  "description": "The reviewed list of regular expressions that may stay in code outside packages/uploads/src because they are linear or never see attacker bytes (packages/uploads/test/regex-linear.json, read by the ReDoS gate). One entry per regex: the file, the pattern as the parser reads it, optionally the enclosing function (`in`), and the reason it is safe. The gate fails on an entry whose regex is gone.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "entries"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema": {
+      "const": "kit.regex-linear.v1"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "file",
+          "pattern",
+          "why"
+        ],
+        "properties": {
+          "file": {
+            "type": "string",
+            "pattern": "^packages/[a-z0-9/._-]+\\.js$"
+          },
+          "pattern": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 300
+          },
+          "why": {
+            "type": "string",
+            "minLength": 20,
+            "maxLength": 300
+          },
+          "in": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "description": "Optional: the enclosing function the regex is in. When present the entry covers only that function, not the whole file."
+          }
+        }
+      }
+    }
+  }
+}

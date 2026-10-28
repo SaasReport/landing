@@ -1,0 +1,56 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/decide/schemas/decide-gate.schema.json",
+  "id": "notification-triage",
+  "description": "Triage of a GitHub or agent notification before the orchestrating session spends reasoning on it. State: { event: <kind>, data: <the event's JSON payload> }, never the harness's injected instructions. The session reads the PR or thinks only when kind is ci_failed, conflict or review_comment, needs_action is yes, or anything escalates (thresholds 0.5: the small model's probabilities are compressed, see docs/DECIDE.md); ci_passed and merged are handled by their scripted next step (merge when approved; report).",
+  "questions": [
+    {
+      "id": "kind",
+      "instructions": "What happened to the pull request in this event?",
+      "options": {
+        "ci_passed": "check_suite.completed: CI finished and no check suite is running or failed",
+        "ci_failed": "check_run.completed with conclusion failure: a CI check failed",
+        "merged": "pull_request.closed with outcome merged: the pull request was merged",
+        "conflict": "the pull request cannot merge: mergeable false, merge conflict, dirty",
+        "review_comment": "a person wrote a review or a comment on the pull request",
+        "subscription_noise": "bookkeeping only: subscription created, ready for review, draft state; nothing happened to code or CI"
+      },
+      "threshold": 0.5
+    },
+    {
+      "id": "needs_action",
+      "type": "noul",
+      "instructions": "Must the agent do work on the pull request now?",
+      "options": {
+        "yes": "a check failed, there is a merge conflict, or a person wrote a review comment",
+        "no": "CI passed, the pull request was merged, or the event is bookkeeping"
+      },
+      "threshold": 0.5
+    },
+    {
+      "id": "owner_attention",
+      "type": "noul",
+      "instructions": "Should the owner hear about this event?",
+      "options": {
+        "yes": "the pull request was merged, or a person wrote a review comment",
+        "no": "CI result, merge conflict or bookkeeping that the agent handles alone"
+      },
+      "threshold": 0.5
+    }
+  ],
+  "readWhen": [
+    {
+      "question": "kind",
+      "in": [
+        "ci_failed",
+        "conflict",
+        "review_comment"
+      ]
+    },
+    {
+      "question": "needs_action",
+      "in": [
+        "yes"
+      ]
+    }
+  ]
+}

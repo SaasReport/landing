@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/work-order.schema.json",
+  "title": "kit.work-order.v1",
+  "description": "What a piece of work is before any code exists (docs/CONSTITUTION.md §10, zero post-facto). An agent or person starts work only from an approved work order, writes only inside its declared paths, proves each must-fail test failing on `base` before the change, and pushes only when every gate it names passes. A review checks the work against its order; a finding the gates did not catch is a missing gate, added to the finding-class registry before the fix.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["v", "id", "repo", "base", "goal", "contracts", "invariants", "paths", "gates", "must_fail", "depends_on", "approved_by"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "v": { "const": 1 },
+    "id": { "type": "string", "pattern": "^wo-[0-9]{4}-[a-z0-9]+(-[a-z0-9]+)*$", "description": "wo-<number>-<slug>; the number is unique in the repository." },
+    "repo": { "type": "string", "pattern": "^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$" },
+    "base": { "type": "string", "pattern": "^[0-9a-f]{7,40}$", "description": "The commit the work starts from; must-fail tests are proven failing here." },
+    "goal": { "type": "string", "minLength": 20, "description": "One outcome, stated so a reader can tell whether it was reached." },
+    "contracts": {
+      "type": "array",
+      "description": "The schemas and API contracts this work creates or must satisfy, as repository paths. Written before the code.",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "invariants": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Properties that hold before and after the change; each is proven by a test named in must_fail or by a gate.",
+      "items": { "type": "string", "minLength": 10 }
+    },
+    "paths": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Globs of the files this work may change. A commit outside them is refused (finding class agent-self-scope).",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "gates": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Finding-class ids (finding-classes.json) and canon checks this work must pass before any push.",
+      "items": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+      "uniqueItems": true
+    },
+    "must_fail": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Tests written first: each fails on `base` and passes after the change.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["test", "proves"],
+        "properties": {
+          "test": { "type": "string", "minLength": 1, "description": "Test file and title." },
+          "proves": { "type": "string", "minLength": 10 }
+        }
+      }
+    },
+    "depends_on": {
+      "type": "array",
+      "description": "Work orders or PRs that must be merged first (owner/repo#n or wo-id). Empty when none.",
+      "items": { "type": "string", "pattern": "^([A-Za-z0-9-]+/[A-Za-z0-9._-]+#[0-9]+|wo-[0-9]{4}-[a-z0-9-]+)$" }
+    },
+    "approved_by": {
+      "type": "array",
+      "description": "Handles that approved the order before work began. An agent never approves its own order.",
+      "items": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,38}$" }
+    },
+    "owner_steps": {
+      "type": "array",
+      "description": "Steps only the owner can take (secrets, settings, approvals); listed, never done by the worker.",
+      "items": { "type": "string", "minLength": 5 }
+    }
+  }
+}

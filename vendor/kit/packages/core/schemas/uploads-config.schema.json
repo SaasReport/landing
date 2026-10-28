@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/uploads-config.schema.json",
+  "title": "kit.uploads-config.v1",
+  "description": "A project's uploads.config.json: the project (a key of the project registry), the two R2 buckets (quarantine and released) with their binding names, and one UploadPolicy per form. Bucket names carry the project's own prefix (the naming constitution; checked against the registry by loadUploadsConfig) and binding names come from here, never from code. A handler that reads a file without an entry here is a canon finding.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "project", "storage", "forms"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schema": { "const": "kit.uploads-config.v1" },
+    "project": { "type": "string", "pattern": "^[a-z][a-z0-9]*$", "description": "A key of packages/core/registry/projects.json." },
+    "storage": {
+      "type": "object", "additionalProperties": false, "required": ["quarantine", "released"],
+      "properties": {
+        "quarantine": { "$ref": "#/$defs/bucket" },
+        "released": { "$ref": "#/$defs/bucket" },
+        "records": { "type": "object", "additionalProperties": false, "required": ["binding"],
+          "properties": { "binding": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,39}$", "description": "The D1 binding that holds the UploadRecords." }, "table": { "type": "string", "pattern": "^[a-z][a-z0-9_]{1,39}$", "default": "upload_records" } } }
+      }
+    },
+    "forms": {
+      "type": "object", "minProperties": 1,
+      "propertyNames": { "pattern": "^[a-z0-9][a-z0-9-]{0,39}$" },
+      "additionalProperties": { "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/upload-policy.schema.json" }
+    }
+  },
+  "$defs": {
+    "bucket": {
+      "type": "object", "additionalProperties": false, "required": ["binding", "bucket"],
+      "properties": {
+        "binding": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]{1,39}$", "description": "The Worker binding name (wrangler.toml r2_buckets.binding)." },
+        "bucket": { "type": "string", "pattern": "^[a-z][a-z0-9]*-[a-z0-9-]{1,60}$", "description": "The bucket name, <project prefix>-uploads-quarantine and <project prefix>-uploads. Never public." }
+      }
+    }
+  }
+}

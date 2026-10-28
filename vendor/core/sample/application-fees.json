@@ -1,0 +1,258 @@
+[
+  {
+    "id": "fee_001",
+    "currency": "usd",
+    "amount": 2240,
+    "amount_refunded": 0,
+    "created": 1785762060,
+    "charge": "ch_006"
+  },
+  {
+    "id": "fee_002",
+    "currency": "usd",
+    "amount": 1240,
+    "amount_refunded": 0,
+    "created": 1785945660,
+    "charge": "ch_009"
+  },
+  {
+    "id": "fee_003",
+    "currency": "usd",
+    "amount": 1990,
+    "amount_refunded": 0,
+    "created": 1786010460,
+    "charge": "ch_012"
+  },
+  {
+    "id": "fee_004",
+    "currency": "usd",
+    "amount": 990,
+    "amount_refunded": 0,
+    "created": 1786194060,
+    "charge": "ch_015"
+  },
+  {
+    "id": "fee_005",
+    "currency": "usd",
+    "amount": 1740,
+    "amount_refunded": 0,
+    "created": 1786377660,
+    "charge": "ch_018"
+  },
+  {
+    "id": "fee_006",
+    "currency": "usd",
+    "amount": 2490,
+    "amount_refunded": 0,
+    "created": 1786442460,
+    "charge": "ch_021"
+  },
+  {
+    "id": "fee_007",
+    "currency": "usd",
+    "amount": 1490,
+    "amount_refunded": 0,
+    "created": 1786626060,
+    "charge": "ch_024"
+  },
+  {
+    "id": "fee_008",
+    "currency": "usd",
+    "amount": 2240,
+    "amount_refunded": 0,
+    "created": 1786809660,
+    "charge": "ch_027"
+  },
+  {
+    "id": "fee_009",
+    "currency": "usd",
+    "amount": 1240,
+    "amount_refunded": 0,
+    "created": 1786874460,
+    "charge": "ch_030"
+  },
+  {
+    "id": "fee_010",
+    "currency": "usd",
+    "amount": 1990,
+    "amount_refunded": 0,
+    "created": 1787058060,
+    "charge": "ch_033"
+  },
+  {
+    "id": "fee_011",
+    "currency": "usd",
+    "amount": 990,
+    "amount_refunded": 0,
+    "created": 1787155260,
+    "charge": "ch_036"
+  },
+  {
+    "id": "fee_012",
+    "currency": "usd",
+    "amount": 1740,
+    "amount_refunded": 0,
+    "created": 1787306460,
+    "charge": "ch_039"
+  },
+  {
+    "id": "fee_013",
+    "currency": "usd",
+    "amount": 2490,
+    "amount_refunded": 0,
+    "created": 1787490060,
+    "charge": "ch_042"
+  },
+  {
+    "id": "fee_014",
+    "currency": "usd",
+    "amount": 1490,
+    "amount_refunded": 0,
+    "created": 1787587260,
+    "charge": "ch_045"
+  },
+  {
+    "id": "fee_015",
+    "currency": "usd",
+    "amount": 2240,
+    "amount_refunded": 0,
+    "created": 1787738460,
+    "charge": "ch_048"
+  },
+  {
+    "id": "fee_016",
+    "currency": "usd",
+    "amount": 1341,
+    "amount_refunded": 0,
+    "created": 1788595260,
+    "charge": "ch_060"
+  },
+  {
+    "id": "fee_017",
+    "currency": "usd",
+    "amount": 2016,
+    "amount_refunded": 0,
+    "created": 1788692460,
+    "charge": "ch_063"
+  },
+  {
+    "id": "fee_018",
+    "currency": "usd",
+    "amount": 1116,
+    "amount_refunded": 0,
+    "created": 1788789660,
+    "charge": "ch_066"
+  },
+  {
+    "id": "fee_019",
+    "currency": "usd",
+    "amount": 1791,
+    "amount_refunded": 0,
+    "created": 1788940860,
+    "charge": "ch_069"
+  },
+  {
+    "id": "fee_020",
+    "currency": "usd",
+    "amount": 891,
+    "amount_refunded": 0,
+    "created": 1789038060,
+    "charge": "ch_072"
+  },
+  {
+    "id": "fee_021",
+    "currency": "usd",
+    "amount": 1566,
+    "amount_refunded": 0,
+    "created": 1789135260,
+    "charge": "ch_075"
+  },
+  {
+    "id": "fee_022",
+    "currency": "usd",
+    "amount": 2241,
+    "amount_refunded": 0,
+    "created": 1789286460,
+    "charge": "ch_078"
+  },
+  {
+    "id": "fee_023",
+    "currency": "usd",
+    "amount": 1341,
+    "amount_refunded": 0,
+    "created": 1789383660,
+    "charge": "ch_081"
+  },
+  {
+    "id": "fee_024",
+    "currency": "usd",
+    "amount": 2016,
+    "amount_refunded": 0,
+    "created": 1789480860,
+    "charge": "ch_084"
+  },
+  {
+    "id": "fee_025",
+    "currency": "usd",
+    "amount": 1116,
+    "amount_refunded": 0,
+    "created": 1789632060,
+    "charge": "ch_087"
+  },
+  {
+    "id": "fee_026",
+    "currency": "usd",
+    "amount": 1791,
+    "amount_refunded": 0,
+    "created": 1789729260,
+    "charge": "ch_090"
+  },
+  {
+    "id": "fee_027",
+    "currency": "usd",
+    "amount": 891,
+    "amount_refunded": 0,
+    "created": 1789826460,
+    "charge": "ch_093"
+  },
+  {
+    "id": "fee_028",
+    "currency": "usd",
+    "amount": 1566,
+    "amount_refunded": 0,
+    "created": 1789977660,
+    "charge": "ch_096"
+  },
+  {
+    "id": "fee_029",
+    "currency": "usd",
+    "amount": 2241,
+    "amount_refunded": 0,
+    "created": 1790074860,
+    "charge": "ch_099"
+  },
+  {
+    "id": "fee_030",
+    "currency": "usd",
+    "amount": 1341,
+    "amount_refunded": 0,
+    "created": 1790172060,
+    "charge": "ch_102"
+  },
+  {
+    "id": "fee_031",
+    "currency": "usd",
+    "amount": 2016,
+    "amount_refunded": 0,
+    "created": 1790323260,
+    "charge": "ch_105"
+  },
+  {
+    "id": "fee_032",
+    "currency": "usd",
+    "amount": 1116,
+    "amount_refunded": 0,
+    "created": 1790420460,
+    "charge": "ch_108"
+  }
+]

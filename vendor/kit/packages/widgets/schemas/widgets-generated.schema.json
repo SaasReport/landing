@@ -1,0 +1,246 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/widgets/schemas/widgets-generated.schema.json",
+  "title": "kit.widgets-generated.v1",
+  "description": "widgets.generated.json: the concrete widget instances `kit widgets build` derives from a project's widgets.spec.json and its sources. Generated, never hand-edited: `kit widgets check` regenerates it and fails when it differs (stale), when a widget has no scenario, or when a text is not traceable to the spec or its sources.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "generator",
+    "project",
+    "asOf",
+    "inputs",
+    "locales",
+    "widgets",
+    "labels"
+  ],
+  "properties": {
+    "schema": {
+      "const": "kit.widgets-generated.v1"
+    },
+    "generator": {
+      "type": "string",
+      "pattern": "^kit widgets build"
+    },
+    "notice": {
+      "type": "string"
+    },
+    "project": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*$"
+    },
+    "asOf": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "spec",
+        "sources",
+        "engine"
+      ],
+      "properties": {
+        "spec": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{16}$"
+        },
+        "sources": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{16}$"
+          }
+        },
+        "engine": {
+          "type": "string"
+        }
+      }
+    },
+    "locales": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "dir",
+          "digits",
+          "intl"
+        ],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "dir": {
+            "enum": [
+              "rtl",
+              "ltr"
+            ]
+          },
+          "digits": {
+            "enum": [
+              "latn",
+              "arab",
+              "arabext"
+            ]
+          },
+          "intl": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "calls": {
+      "description": "Every engine call made while building, with its result (what engine-derived texts trace to).",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source",
+          "call",
+          "args",
+          "result"
+        ],
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "call": {
+            "type": "string"
+          },
+          "args": {
+            "type": "object"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "result": {}
+        }
+      }
+    },
+    "page": {
+      "type": "object"
+    },
+    "exports": {
+      "type": "object"
+    },
+    "widgets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "archetype",
+          "scenario",
+          "useCase",
+          "audiences",
+          "locale",
+          "honesty",
+          "title",
+          "data",
+          "trace",
+          "usage",
+          "application",
+          "architecture",
+          "utility"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "archetype": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "scenario": {
+            "type": "string"
+          },
+          "useCase": {
+            "type": "string"
+          },
+          "audiences": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "locale": {
+            "type": "string"
+          },
+          "honesty": {
+            "enum": [
+              "live",
+              "engine",
+              "sample"
+            ]
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "summary": {
+            "type": "string"
+          },
+          "data": {
+            "type": "object"
+          },
+          "trace": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^(spec|[a-z][a-z0-9-]*)#/"
+            }
+          },
+          "usage": {
+            "type": "object",
+            "required": [
+              "surfaces"
+            ]
+          },
+          "application": {
+            "type": "object",
+            "required": [
+              "surface"
+            ]
+          },
+          "architecture": {
+            "type": "object",
+            "required": [
+              "components",
+              "flow",
+              "diagram"
+            ]
+          },
+          "utility": {
+            "type": "object",
+            "required": [
+              "learns",
+              "does"
+            ]
+          }
+        }
+      }
+    },
+    "labels": {
+      "description": "The honesty labels per locale.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "live",
+          "engine",
+          "sample"
+        ]
+      }
+    }
+  }
+}

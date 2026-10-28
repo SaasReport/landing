@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/site/schema/terminal-notify.schema.json",
+  "title": "kit.terminal-notify.v1",
+  "description": "The project's own notification scenarios for the terminal's notify view. Every scenario is the project's content (event names, recipients, copy, actions); the kit only renders them. {date+N} in a body is replaced by the date N days from today in the locale's format.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["scenarios"],
+  "properties": {
+    "channels": {
+      "description": "The delivery channels shown, in order, with their labels. Keys are the routes the view knows how to animate.",
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["key", "label"],
+        "properties": {
+          "key": { "enum": ["push", "sms", "email", "msg", "inapp", "hook"] },
+          "label": { "type": "string", "minLength": 1, "maxLength": 40 }
+        }
+      }
+    },
+    "scenarios": {
+      "type": "array", "minItems": 1, "maxItems": 12,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["key", "chip", "event", "tone", "recipient", "icon", "title", "body", "rules", "channels"],
+        "properties": {
+          "key": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+          "chip": { "type": "string", "minLength": 1, "maxLength": 40 },
+          "event": { "type": "string", "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$" },
+          "tone": { "enum": ["ok", "warn", "err", "info", "brand"] },
+          "recipient": { "type": "string", "minLength": 1 },
+          "icon": { "type": "string", "minLength": 1, "maxLength": 4 },
+          "title": { "type": "string", "minLength": 1 },
+          "body": { "type": "string", "minLength": 1 },
+          "rules": { "type": "array", "minItems": 1, "maxItems": 6, "items": { "type": "string", "minLength": 1 } },
+          "channels": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["push", "sms", "email", "msg", "inapp", "hook"] } },
+          "fail": { "enum": ["push"] },
+          "actions": {
+            "type": "array", "maxItems": 2,
+            "items": {
+              "type": "object", "additionalProperties": false, "required": ["label", "done", "tone", "title", "text"],
+              "properties": {
+                "label": { "type": "string", "minLength": 1 },
+                "done": { "type": "string", "minLength": 1 },
+                "tone": { "enum": ["ok", "warn", "err", "info", "brand"] },
+                "title": { "type": "string", "minLength": 1 },
+                "text": { "type": "string", "minLength": 1 }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

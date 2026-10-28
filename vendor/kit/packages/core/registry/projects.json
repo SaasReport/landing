@@ -1,0 +1,8 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/projects.schema.json",
+  "projects": [
+    { "key": "saasreport", "owner": { "github": "007dude" }, "name": "SaasReport", "domain": "saasreport.ai", "prefix": "saasreport-", "short": null, "shortPolicy": "none",
+      "aliases": ["SaasReport", "SaaSReport"], "github": ["SaasReport/core", "SaasReport/kit", "SaasReport/landing"], "capabilityEngine": true }
+  ],
+  "legacy": []
+}

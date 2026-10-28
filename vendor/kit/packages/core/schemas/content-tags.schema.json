@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/content-tags.schema.json",
+  "title": "kit.content-tags.v1",
+  "description": "A project's content-tag vocabulary (tags.config.json): the ONE place a topic tag is defined. Every podcast series, episode item and blog post names its tags by id from this file and from no other source; a series' tags are inherited by its episodes unless an episode names its own. A tag carries a label per locale, a group, a colour ROLE (a tone of the project's tokens: chart1 to chart6, accent, ok, warn, err; never a literal colour: the text on it is the derived on-<role>, proven AA by the colour canon) and a description. Cross-file rules (every assigned tag is declared, every series and post has tags, every label covers the project's locales) are checked by `kit check tags`.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "locales", "groups", "tags"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schema": { "const": "kit.content-tags.v1" },
+    "locales": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/locale" }, "description": "The locales every label and description covers; the first is the fallback." },
+    "groups": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/group" } },
+    "tags": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/tag" } }
+  },
+  "$defs": {
+    "locale": { "type": "string", "pattern": "^[a-z]{2,3}(-[A-Za-z0-9]{2,8})*$" },
+    "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$", "maxLength": 48 },
+    "text": { "type": "object", "minProperties": 1, "propertyNames": { "$ref": "#/$defs/locale" }, "additionalProperties": { "type": "string", "minLength": 1, "maxLength": 300 } },
+    "group": {
+      "type": "object", "additionalProperties": false, "required": ["id", "label"],
+      "properties": { "id": { "$ref": "#/$defs/id" }, "label": { "$ref": "#/$defs/text" } }
+    },
+    "tag": {
+      "type": "object", "additionalProperties": false, "required": ["id", "label", "group", "colour", "description"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "label": { "$ref": "#/$defs/text" },
+        "group": { "$ref": "#/$defs/id", "description": "A group id of this file." },
+        "colour": { "enum": ["chart1", "chart2", "chart3", "chart4", "chart5", "chart6", "accent", "ok", "warn", "err"], "description": "A tone role of the project's tokens (the fills that have a derived on-<role> text colour); never a hex or rgb value." },
+        "description": { "$ref": "#/$defs/text" }
+      }
+    }
+  }
+}

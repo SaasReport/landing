@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/governance.schema.json",
+  "title": "kit.governance.v1",
+  "description": "governance.json at a repository root: the ONE declared source of the review requirements of the generated default-branch ruleset (.github/rulesets/default-branch.json, `kit agent-guard sync`; `sync --check` and `github verify` compare against it). Absent, the kit's defaults hold (the registry's separation.requiredApprovals approvals, code-owner review and last-push approval). A solo-owner project, whose author cannot approve their own pull request, declares 0 approvals with the independent-review marker and the merge gate in their place (docs/RELEASE.md): `required` 0, `code_owner_review` false, `last_push_approval` false, `independent_review_marker` true. A ruleset can never carry fewer requirements than this file states, and this file can never declare no human approval AND no independent review.",
+  "type": "object",
+  "required": ["$schema", "approvals"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "approvals": {
+      "type": "object",
+      "required": ["required", "code_owner_review", "last_push_approval", "independent_review_marker"],
+      "additionalProperties": false,
+      "properties": {
+        "required": { "type": "integer", "minimum": 0, "maximum": 6, "description": "required_approving_review_count of the ruleset's pull_request rule (the author never counts)." },
+        "code_owner_review": { "type": "boolean", "description": "require_code_owner_review: a CODEOWNERS owner must approve. Needs at least one approval (unsatisfiable by a solo owner)." },
+        "last_push_approval": { "type": "boolean", "description": "require_last_push_approval: the most recent push must be approved by someone other than its pusher. Needs at least one approval." },
+        "independent_review_marker": { "type": "boolean", "description": "An independent review of the head commit is recorded as a marker the merge gate reads before a merge (the push gate refuses a branch without a clean independent review). Required when no human approval is." }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "required": { "const": 0 } }, "required": ["required"] },
+          "then": { "properties": { "code_owner_review": { "const": false }, "last_push_approval": { "const": false }, "independent_review_marker": { "const": true } } }
+        }
+      ]
+    }
+  }
+}

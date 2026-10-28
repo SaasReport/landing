@@ -1,0 +1,419 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/podcast-config.schema.json",
+  "title": "kit.podcast-config.v1",
+  "description": "A project's podcast.config.json: the one file that says how its episodes sound and when they are made. Language, schedule (the cron the Worker runs), the target length, the TTS voices and style, the pacing the engine enforces on the audio (pauses capped, silence trimmed, levels matched), the provenance policy (every episode must come from the pipeline; manual generation is off) and the covers and brand assets stored in the project's repository. kit.config.js reads it; kit check canon validates it; the project's tests check its covers exist.",
+  "type": "object",
+  "required": [
+    "language",
+    "schedule",
+    "target",
+    "tts",
+    "pacing",
+    "provenance",
+    "manual",
+    "assets",
+    "catchup"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "language": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "BCP-47 language of every episode (en-GB, en-US, fa, ar). en-GB means British accent AND British spelling: tts.languageCode must be en-GB and `kit check podcast` fails on American spellings in the spoken scripts."
+    },
+    "schedule": {
+      "type": "object",
+      "required": [
+        "cron",
+        "timezone",
+        "at"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "cron": {
+          "type": "string",
+          "pattern": "^\\S+ \\S+ \\S+ \\S+ \\S+$",
+          "description": "The Worker's [triggers] cron (UTC); it must equal wrangler.toml."
+        },
+        "timezone": {
+          "type": "string",
+          "minLength": 3
+        },
+        "at": {
+          "type": "string",
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$",
+          "description": "The same moment in the site's timezone (the series' at)."
+        },
+        "graceMinutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2880,
+          "description": "How long after a series' cadence (daily, weekly, monthly: from kit.config.js series[].every) its newest feed item may be before the feed is behind schedule. `kit check staleness` (class podcast-behind-schedule) judges the live feed against cadence + this; a project that declares none is reported unreadable there, never fresh."
+        }
+      }
+    },
+    "target": {
+      "type": "object",
+      "required": [
+        "seconds",
+        "minSeconds",
+        "maxSeconds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "seconds": {
+          "type": "integer",
+          "minimum": 30,
+          "maximum": 180
+        },
+        "minSeconds": {
+          "type": "integer",
+          "minimum": 20,
+          "maximum": 180
+        },
+        "maxSeconds": {
+          "type": "integer",
+          "minimum": 30,
+          "maximum": 600
+        }
+      }
+    },
+    "tts": {
+      "type": "object",
+      "required": [
+        "provider",
+        "voices",
+        "speakers",
+        "style"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "enum": [
+            "gemini"
+          ],
+          "description": "Only providers whose audio the engine can pace (decode, trim, cap pauses, level, re-encode): Gemini. Piper and Gradio return finished MP3 and are refused here, so a project that says it enforces pacing cannot silently skip it."
+        },
+        "model": {
+          "type": "string"
+        },
+        "voices": {
+          "type": "object",
+          "minProperties": 2,
+          "maxProperties": 2,
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 2
+          }
+        },
+        "speakers": {
+          "type": "object",
+          "minProperties": 2,
+          "maxProperties": 2,
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 2
+          }
+        },
+        "style": {
+          "type": "string",
+          "minLength": 80,
+          "maxLength": 1500,
+          "description": "The spoken-style direction sent with the script (tone, rhythm, pauses)."
+        },
+        "direction": {
+          "type": "string",
+          "maxLength": 300,
+          "description": "Delivery cue that leads the first line (models that take no separate style prompt), e.g. [Warm, friendly and brisk, like two colleagues chatting.]"
+        },
+        "temperature": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 2
+        },
+        "languageCode": {
+          "enum": [
+            "ar-EG",
+            "bn-BD",
+            "de-DE",
+            "en-GB",
+            "en-IN",
+            "en-US",
+            "es-US",
+            "fr-FR",
+            "hi-IN",
+            "id-ID",
+            "it-IT",
+            "ja-JP",
+            "ko-KR",
+            "mr-IN",
+            "nl-NL",
+            "pl-PL",
+            "pt-BR",
+            "ro-RO",
+            "ru-RU",
+            "ta-IN",
+            "te-IN",
+            "th-TH",
+            "tr-TR",
+            "uk-UA",
+            "vi-VN"
+          ],
+          "description": "Gemini speechConfig.languageCode: Gemini's documented TTS language list plus en-GB, which the API accepts and which gives the British accent (verified with renders on 2026-10-06). Omit it for a language the list lacks (Persian: fa-IR is not supported); the voice then follows the text."
+        }
+      }
+    },
+    "pacing": {
+      "type": "object",
+      "required": [
+        "thresholdDb",
+        "maxPauseMs",
+        "turnGapMs",
+        "startMs",
+        "endMs",
+        "normalizeDb"
+      ],
+      "additionalProperties": false,
+      "description": "What the engine does to every rendered chunk (audio/pace.js): frames quieter than thresholdDb are silence; any silence inside the episode is cut to at most maxPauseMs (the guard is 600 ms); chunk joins get turnGapMs; the file starts after startMs and ends with endMs; voiced level is matched to normalizeDb.",
+      "properties": {
+        "thresholdDb": {
+          "type": "number",
+          "minimum": -60,
+          "maximum": -30
+        },
+        "maxPauseMs": {
+          "type": "integer",
+          "minimum": 120,
+          "maximum": 550
+        },
+        "turnGapMs": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 400
+        },
+        "startMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        },
+        "endMs": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2000
+        },
+        "normalizeDb": {
+          "type": "number",
+          "minimum": -30,
+          "maximum": -12
+        },
+        "maxGainDb": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 12
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "required",
+        "origins"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "const": true,
+          "description": "Every episode row carries a pipeline provenance record; the database refuses a row without one."
+        },
+        "origins": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "cron",
+              "cron-retry",
+              "catchup",
+              "legacy"
+            ]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "description": "The origins the monitor accepts on production."
+        },
+        "legacyBefore": {
+          "type": "string",
+          "format": "date",
+          "description": "Episodes published before this day may carry origin legacy (they predate the record)."
+        }
+      }
+    },
+    "manual": {
+      "const": false,
+      "description": "Owner rule: episodes are never added by hand. The admin generate route answers 403 unless this is true, and the schema only allows false."
+    },
+    "assets": {
+      "type": "object",
+      "required": [
+        "dir",
+        "covers"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "dir": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9/_-]*$",
+          "description": "Repository folder that holds this project's podcast covers and brand assets."
+        },
+        "covers": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "required": [
+              "file",
+              "size",
+              "alt"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "file": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9/_.-]*\\.(png|jpg)$",
+                "description": "Relative to assets.dir; square, 1400 to 3000 px (what podcast directories require)."
+              },
+              "size": {
+                "type": "integer",
+                "minimum": 1400,
+                "maximum": 3000
+              },
+              "alt": {
+                "type": "string",
+                "minLength": 5
+              }
+            }
+          }
+        }
+      }
+    },
+    "spelling": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "exceptions": {
+          "type": [
+            "string",
+            "array"
+          ],
+          "description": "Preferably the path of the project's one exceptions file (kit.spelling-exceptions.v1, e.g. spelling.exceptions.json), shared with kit check spelling; kit.config.js passes its entries as tts.spelling.exceptions. Or the entries themselves.",
+          "if": {
+            "type": "string"
+          },
+          "then": {
+            "pattern": "\\.json$"
+          },
+          "else": {
+            "maxItems": 60,
+            "items": {
+              "type": "object",
+              "required": [
+                "phrase",
+                "reason"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "phrase": {
+                  "type": "string",
+                  "minLength": 4
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 12
+                },
+                "kind": {
+                  "enum": [
+                    "name",
+                    "title",
+                    "protocol",
+                    "term",
+                    "file"
+                  ]
+                },
+                "until": {
+                  "type": "string",
+                  "format": "date"
+                }
+              }
+            }
+          }
+        },
+        "variant": {
+          "enum": [
+            "en-GB"
+          ]
+        }
+      },
+      "description": "British English for generated scripts: variant en-GB makes episodeFromItem rewrite American spellings to British (@saasreport/core/spelling); exceptions are phrases left as their owners spell them (an RFC title, an API status value, a file name), each with its reason: preferably the path of the project's spelling.exceptions.json, the one list kit check spelling reads too. kit.config.js passes this object as tts.spelling, with the file's entries in place of its path.",
+      "required": [
+        "variant"
+      ]
+    },
+    "catchup": {
+      "type": "object",
+      "required": [
+        "enabled",
+        "windowDays"
+      ],
+      "additionalProperties": false,
+      "description": "Sanctioned, automated catch-up: the scheduled run fills a past day (within windowDays) that has no episode, with origin catchup. Never a human endpoint. enabled requires \"catchup\" in provenance.origins.",
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "windowDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 31
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "language": {
+            "const": "en-GB"
+          }
+        },
+        "required": [
+          "language"
+        ]
+      },
+      "then": {
+        "properties": {
+          "tts": {
+            "required": [
+              "languageCode"
+            ],
+            "properties": {
+              "languageCode": {
+                "const": "en-GB"
+              }
+            }
+          },
+          "spelling": {
+            "required": [
+              "variant"
+            ]
+          }
+        },
+        "required": [
+          "spelling"
+        ]
+      }
+    }
+  ]
+}

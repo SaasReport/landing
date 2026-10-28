@@ -1,0 +1,54 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/decide/schemas/decide-config.schema.json",
+  "backend": "selfhosted",
+  "threshold": 0.8,
+  "timeoutMs": 60000,
+  "backends": {
+    "selfhosted": {
+      "type": "systemone",
+      "tier": "self-hosted",
+      "description": "The default: Kev-4B (ONNX q4, CPU) in a Cloudflare Container on the project's own account, behind a bearer key. Each project deploys its own Worker (workers/saasreport-decide) and sets KIT_DECIDE_URL and KIT_DECIDE_KEY. Scales to zero after 15 minutes idle; the first request after that waits about a minute for the model to load. No URL, unreachable or no key: every question escalates to the big model.",
+      "urlEnv": "KIT_DECIDE_URL",
+      "apiKeyEnv": "KIT_DECIDE_KEY",
+      "model": "kev-onnx",
+      "serve": "in the project that owns the Worker (npm run deploy:decide), then wrangler secret put DECIDE_API_KEY"
+    },
+    "kev-local": {
+      "type": "systemone",
+      "tier": "local-cpu",
+      "description": "Kev-0.8B (LoRA + pointer head on a 0.8B base, about 1.8 GB) on this machine's CPU through the kev server (transformers + peft, fp32). English only.",
+      "url": "http://127.0.0.1:8008",
+      "model": "kev-latest",
+      "serve": "git clone https://github.com/jaredpalmer/kev && cd kev && uv sync --extra serve && uv run --extra serve python -m kev.serve --run jaredpalmer/kev-0.8b --port 8008"
+    },
+    "kev-4b": {
+      "type": "systemone",
+      "tier": "gpu",
+      "description": "Kev-4B (or Kev-9B) on a GPU box or Apple Silicon: more accurate out of domain; same API.",
+      "urlEnv": "KIT_DECIDE_KEV_URL",
+      "apiKeyEnv": "KIT_DECIDE_KEV_KEY",
+      "model": "kev-latest",
+      "serve": "python -m kev.serve --run jaredpalmer/kev-4b --port 8008 (set KEV_API_KEY to require a bearer key)"
+    },
+    "bev": {
+      "type": "systemone",
+      "tier": "self-hosted",
+      "description": "Bev: one-token ternary scoring on a 27B ternary model (7.2 GB file, 7.3 GiB RAM on CPU, 16 GB RAM recommended). English and Persian.",
+      "urlEnv": "KIT_DECIDE_BEV_URL",
+      "model": "default",
+      "serve": "git clone --branch v0.1.2 https://github.com/Reza2kn/Bev && cd Bev && bash scripts/install.sh && bash scripts/start-services.sh (API on 127.0.0.1:18781)"
+    },
+    "jev": {
+      "type": "systemone",
+      "tier": "hosted",
+      "description": "A System One endpoint serving Jev (hosted), or a self-hosted multimodal Jev-Omni (Gemma 4 12B Q4_K_M, about 7 GB, 12 GiB RAM on CPU, 1.9 s per decision on CPU, 0.2 s on GPU) behind a System One adapter.",
+      "urlEnv": "KIT_DECIDE_JEV_URL",
+      "apiKeyEnv": "KIT_DECIDE_JEV_KEY"
+    },
+    "fake": {
+      "type": "fake",
+      "tier": "test",
+      "description": "No model: uniform probabilities, so every question escalates at any threshold above 1/options. CI and dry runs."
+    }
+  }
+}

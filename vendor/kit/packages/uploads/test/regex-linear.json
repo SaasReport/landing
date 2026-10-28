@@ -1,0 +1,97 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/regex-linear.schema.json",
+  "schema": "kit.regex-linear.v1",
+  "entries": [
+    {
+      "file": "packages/cloudflare/src/webhooks.js",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,40}$",
+      "why": "an endpoint id: anchored, one bounded class, cannot backtrack"
+    },
+    {
+      "file": "packages/cloudflare/src/csp.js",
+      "pattern": "<script\\b([^>]*)>",
+      "why": "scans the site's own rendered HTML to add a nonce, never a request body"
+    },
+    {
+      "file": "packages/cloudflare/src/csp.js",
+      "pattern": "\\snonce\\s*=",
+      "why": "the same: operator-rendered HTML"
+    },
+    {
+      "file": "packages/cloudflare/src/csp.js",
+      "pattern": "'nonce-([A-Za-z0-9+/=_-]+)'",
+      "why": "the operator's own Content-Security-Policy header"
+    },
+    {
+      "file": "packages/cloudflare/src/csp.js",
+      "pattern": "RegExp",
+      "why": "builds a pattern from the operator's own configured report path, never from a request",
+      "in": "check"
+    },
+    {
+      "file": "packages/core/src/safe-fetch.js",
+      "pattern": "^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$",
+      "why": "an IPv4 literal: anchored, four bounded groups; the URL is capped at 2048 characters first"
+    },
+    {
+      "file": "packages/core/src/safe-fetch.js",
+      "pattern": "^[0-9a-f:.]+$",
+      "why": "anchored single class on a host of at most 2048 characters"
+    },
+    {
+      "file": "packages/core/src/safe-fetch.js",
+      "pattern": "^[0-9a-f]{1,4}$",
+      "why": "an IPv6 group: anchored, bounded"
+    },
+    {
+      "file": "packages/core/src/safe-fetch.js",
+      "pattern": "^[0-9.]+$",
+      "why": "anchored single class (host, at most 2048 characters)"
+    },
+    {
+      "file": "packages/core/src/safe-fetch.js",
+      "pattern": "^[0-9a-fx.]+$",
+      "why": "anchored single class (host, at most 2048 characters)"
+    },
+    {
+      "file": "packages/comms/workers/comms-engine/compiler.js",
+      "pattern": "\\$\\{([a-zA-Z0-9_]+)\\}",
+      "why": "the operator's template placeholders; parameter values are substituted, never matched"
+    },
+    {
+      "file": "packages/comms/workers/comms-engine/engine.js",
+      "pattern": "^[0-9a-f]{64}$",
+      "why": "a hex digest: anchored, one class, fixed length"
+    },
+    {
+      "file": "packages/podcast/src/providers/gradio.js",
+      "pattern": "event: (\\w+)\\ndata: (.*)",
+      "why": "the TTS server's reply, capped at 1 MiB by the bounded reader; (.*) stops at the line end, no nesting"
+    },
+    {
+      "file": "packages/channels/src/webhooks.js",
+      "pattern": "^[A-Za-z0-9._-]{1,64}$",
+      "why": "a header token: anchored, bounded"
+    },
+    {
+      "file": "packages/channels/src/webhooks.js",
+      "pattern": "\\s+",
+      "why": "one class, no overlap with its neighbours"
+    },
+    {
+      "file": "packages/channels/src/webhooks.js",
+      "pattern": "^\\d{1,12}$",
+      "why": "a timestamp: anchored, bounded"
+    },
+    {
+      "file": "packages/channels/src/webhooks.js",
+      "pattern": "^[a-z0-9][a-z0-9._-]*$",
+      "why": "an operator-configured event name: anchored, one class"
+    },
+    {
+      "file": "packages/channels/src/adapters.js",
+      "pattern": "\\/+$",
+      "why": "trailing slashes of the operator's own base URL"
+    }
+  ]
+}

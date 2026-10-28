@@ -1,0 +1,48 @@
+{
+  "name": "@saasreport/cli",
+  "version": "0.1.0",
+  "description": "The kit command line: init a site from the starter template, check the content pack, plan a year of publishing, preview episode scripts, publish episodes and run migrations and deploys through wrangler.",
+  "type": "module",
+  "main": "./src/index.js",
+  "bin": {
+    "kit": "./bin/kit.js"
+  },
+  "exports": {
+    ".": "./src/index.js",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "bin",
+    "src",
+    "templates",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "prepack": "node -e \"require('node:fs').cpSync('../../templates', 'templates', { recursive: true })\"",
+    "e2e": "node scripts/e2e-local.mjs"
+  },
+  "dependencies": {
+    "@saasreport/calendar": "*",
+    "@saasreport/cloudflare": "*",
+    "@saasreport/core": "*",
+    "@saasreport/fa-lint": "*",
+    "@saasreport/format": "*",
+    "@saasreport/plugins": "*",
+    "@saasreport/podcast": "*",
+    "@saasreport/site": "*",
+    "@saasreport/speech": "*",
+    "@vscode/tree-sitter-wasm": "0.3.1",
+    "jsonc-parser": "3.3.1",
+    "marked": "18.1.0",
+    "postcss": "8.5.29",
+    "smol-toml": "1.9.0",
+    "web-tree-sitter": "0.27.0",
+    "yaml": "2.9.1"
+  },
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "license": "Apache-2.0",
+  "private": true
+}

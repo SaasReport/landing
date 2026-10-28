@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/kit-head-registry.schema.json",
+  "title": "kit.kit-head-registry.v1",
+  "description": "packages/core/registry/kit-head.json: where the kit's main head (kit.kit-head.v1) is published and read. url is null until the public object exists; a site's vendor check then fails closed in CI.",
+  "type": "object",
+  "required": [
+    "bucket",
+    "key",
+    "url",
+    "recent",
+    "archive_key"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$comment": {
+      "type": "string"
+    },
+    "bucket": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "The kit owner's bucket (its name carries the owner project's prefix, checked against the project registry by the naming rules)"
+    },
+    "key": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]*\\.json$"
+    },
+    "url": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "string",
+          "pattern": "^https://[^\\s/]+/[a-z0-9][a-z0-9._-]*\\.json$"
+        }
+      ]
+    },
+    "recent": {
+      "type": "integer",
+      "minimum": 50,
+      "maximum": 1000
+    },
+    "archive_key": {
+      "type": "string",
+      "const": "kit-{sha}.tar.gz",
+      "description": "The key of the published archive of a head, {sha} replaced by the commit: published beside the head object, named by it (kit.kit-head.v1 archive)."
+    }
+  }
+}

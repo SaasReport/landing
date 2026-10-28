@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-factor-table.schema.json",
+  "title": "kit.sim-factor-table.v1",
+  "description": "A reference table of a published standard as data for @saasreport/sim (haircuts, run-off and inflow rates, ASF and RSF factors, SA-CCR supervisory factors, SMA coefficients). Every row carries the standard's paragraph; min and max are the standard's own bounds, inside which a jurisdiction profile may override a row.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "schema",
+    "id",
+    "version",
+    "profile",
+    "standard",
+    "factors"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema": {
+      "const": "kit.sim-factor-table.v1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9.-]{1,63}$"
+    },
+    "version": {
+      "type": "string",
+      "format": "date",
+      "description": "The published version of the standard's text the table was read from."
+    },
+    "profile": {
+      "const": "baseline",
+      "description": "The tables are the baseline standard; a jurisdiction profile (kit.sim-profile.v1) only overrides rows of them, inside each row's bounds."
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$",
+      "description": "Tables holding amounts: the currency of the amounts."
+    },
+    "standard": {
+      "type": "object",
+      "required": [
+        "body",
+        "title",
+        "url",
+        "versionPublished"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "body": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "versionPublished": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "factors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "value",
+          "unit",
+          "ref"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9.-]{0,63}$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "value": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "unit": {
+            "enum": [
+              "bp",
+              "count",
+              "currency-major"
+            ],
+            "description": "bp: basis points (10000 = 100%); count: a number of days, years or items; currency-major: whole currency units."
+          },
+          "ref": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The standard's paragraph or table."
+          },
+          "min": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "max": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    }
+  }
+}

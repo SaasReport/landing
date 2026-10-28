@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/widgets/schemas/vocabularies.schema.json",
+  "title": "kit.vocabularies.v1",
+  "description": "The registry of project vocabularies (packages/widgets/registry/vocabularies.json): for each project, the names, domains and words that only that project's widgets may use. `kit widgets check` fails when another project's term appears in a project's spec or generated widgets. A project adds its own words in widgets.spec.json (vocabulary.owned) and, once reviewed, here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "projects"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema": {
+      "const": "kit.vocabularies.v1"
+    },
+    "projects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "key",
+          "terms"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*$"
+          },
+          "terms": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 2
+            }
+          },
+          "shared": {
+            "description": "Projects allowed to use these terms too (a family that shares a word).",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "$comment": {
+      "type": "string"
+    }
+  }
+}

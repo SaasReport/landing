@@ -1,0 +1,47 @@
+[
+  {
+    "id": "dp_01",
+    "charge": "ch_013",
+    "currency": "usd",
+    "amount": 12400,
+    "reason": "fraudulent",
+    "status": "lost",
+    "created": 1786363200
+  },
+  {
+    "id": "dp_02",
+    "charge": "ch_030",
+    "currency": "usd",
+    "amount": 9900,
+    "reason": "product_not_received",
+    "status": "won",
+    "created": 1787832000
+  },
+  {
+    "id": "dp_03",
+    "charge": "ch_062",
+    "currency": "usd",
+    "amount": 14900,
+    "reason": "fraudulent",
+    "status": "needs_response",
+    "created": 1788782400
+  },
+  {
+    "id": "dp_04",
+    "charge": "ch_072",
+    "currency": "usd",
+    "amount": 17400,
+    "reason": "fraudulent",
+    "status": "under_review",
+    "created": 1789819200
+  },
+  {
+    "id": "dp_05",
+    "charge": "ch_085",
+    "currency": "usd",
+    "amount": 9900,
+    "reason": "general",
+    "status": "needs_response",
+    "created": 1790596800
+  }
+]

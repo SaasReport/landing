@@ -1,0 +1,18 @@
+{
+  "name": "@saasreport/fa-lint",
+  "version": "0.1.0",
+  "description": "The mechanical Persian check: a JSON-Schema-validated rule pack (typography, ZWNJ, ی/ک, digits, bidi, and every owner correction of wording and word order, each with must-fail and must-pass examples), a normalizer (parts from Virastar, MIT) and the engine behind `kit check persian` and the podcast gate before TTS. No dependencies; runs in Workers, Node ≥ 20 and browsers.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./normalize": "./src/normalize.js",
+    "./extract": "./src/extract.js",
+    "./rules/*": "./rules/*",
+    "./package.json": "./package.json"
+  },
+  "files": ["src", "rules", "README.md", "NOTICE"],
+  "engines": { "node": ">=20.17.0" },
+  "license": "Apache-2.0",
+  "sideEffects": false
+}

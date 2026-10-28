@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/diagram-theme.schema.json",
+  "title": "kit.diagram-theme.v1",
+  "description": "The JSON of a Mermaid %%{init: …}%% line (line 1 of every docs/diagrams/*.mmd): the brand theme of the diagram (docs/DIAGRAMS.md). Colours are hex values; the font family names the brand font first.",
+  "type": "object",
+  "required": ["theme", "themeVariables"],
+  "properties": {
+    "theme": { "const": "base" },
+    "themeVariables": {
+      "type": "object",
+      "required": ["fontFamily", "primaryColor", "primaryTextColor", "lineColor", "background"],
+      "properties": {
+        "fontFamily": { "type": "string", "minLength": 1 },
+        "fontSize": { "type": "string", "pattern": "^\\d+px$" }
+      },
+      "patternProperties": { "(Color|Bkg|Border|background)$": { "type": "string", "format": "hex-color" } }
+    },
+    "flowchart": { "type": "object" },
+    "sequence": { "type": "object" }
+  }
+}

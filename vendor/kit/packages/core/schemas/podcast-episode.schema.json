@@ -1,0 +1,110 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/podcast-episode.schema.json",
+  "title": "kit.podcast-episode.v1",
+  "description": "An episode spec: what episodeFromItem builds from a content item and what the cron queues for rendering. Nothing is rendered or inserted that does not validate. Episodes come from series items by the pipeline, never from hand-written specs.",
+  "type": "object",
+  "required": [
+    "slug",
+    "kind",
+    "series",
+    "title",
+    "summary",
+    "source_type",
+    "source_ref"
+  ],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^([a-z]{2}/)?[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 93
+    },
+    "kind": {
+      "enum": [
+        "topic",
+        "term",
+        "report",
+        "article",
+        "post",
+        "manual"
+      ]
+    },
+    "series": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+    },
+    "show": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "number": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "minimum": 1
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 200
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 600
+    },
+    "lines": {
+      "type": [
+        "array",
+        "null"
+      ],
+      "minItems": 2,
+      "maxItems": 60,
+      "description": "null only for an article episode whose script the workflow drafts later (admin route).",
+      "items": {
+        "type": "object",
+        "required": [
+          "speaker",
+          "text"
+        ],
+        "properties": {
+          "speaker": {
+            "type": "string",
+            "minLength": 1
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1200
+          }
+        }
+      }
+    },
+    "source_type": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "maxSeconds": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "estimatedMs": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "my-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "check": "kit check",
+    "plan": "kit plan",
+    "dev": "wrangler dev",
+    "migrate": "kit migrate",
+    "deploy": "kit deploy"
+  },
+  "dependencies": {
+    "@saasreport/cloudflare": "^0.1.0",
+    "@saasreport/core": "^0.1.0"
+  },
+  "devDependencies": {
+    "@saasreport/cli": "^0.1.0",
+    "wrangler": "^4.40.0"
+  },
+  "engines": { "node": ">=20" }
+}

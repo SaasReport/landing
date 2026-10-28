@@ -1,0 +1,253 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-irrbb-params.schema.json",
+  "schema": "kit.sim-irrbb-params.v1",
+  "id": "irrbb-basel-baseline",
+  "version": "2019-12-15",
+  "standard": {
+    "body": "BCBS",
+    "title": "Interest rate risk in the banking book (Basel Framework SRP31; BCBS d368, April 2016)",
+    "url": "https://www.bis.org/basel_framework/chapter/SRP/31.htm",
+    "versionPublished": "2019-12-15"
+  },
+  "profile": "baseline",
+  "shapingDecayYears": {
+    "value": 4,
+    "ref": "SRP31.91(2) and footnote 8"
+  },
+  "rotation": {
+    "steepener": {
+      "shortCoefficient": -0.65,
+      "longCoefficient": 0.9
+    },
+    "flattener": {
+      "shortCoefficient": 0.8,
+      "longCoefficient": -0.6
+    },
+    "ref": "SRP31.92 (worked examples)"
+  },
+  "buckets": {
+    "ref": "SRP31.96 Table 3",
+    "items": [
+      {
+        "id": "overnight",
+        "upperYears": 0.0028,
+        "midpointYears": 0.0028
+      },
+      {
+        "id": "up-to-1m",
+        "upperYears": 0.08333333333333333,
+        "midpointYears": 0.0417
+      },
+      {
+        "id": "1m-3m",
+        "upperYears": 0.25,
+        "midpointYears": 0.1667
+      },
+      {
+        "id": "3m-6m",
+        "upperYears": 0.5,
+        "midpointYears": 0.375
+      },
+      {
+        "id": "6m-9m",
+        "upperYears": 0.75,
+        "midpointYears": 0.625
+      },
+      {
+        "id": "9m-1y",
+        "upperYears": 1,
+        "midpointYears": 0.875
+      },
+      {
+        "id": "1y-1.5y",
+        "upperYears": 1.5,
+        "midpointYears": 1.25
+      },
+      {
+        "id": "1.5y-2y",
+        "upperYears": 2,
+        "midpointYears": 1.75
+      },
+      {
+        "id": "2y-3y",
+        "upperYears": 3,
+        "midpointYears": 2.5
+      },
+      {
+        "id": "3y-4y",
+        "upperYears": 4,
+        "midpointYears": 3.5
+      },
+      {
+        "id": "4y-5y",
+        "upperYears": 5,
+        "midpointYears": 4.5
+      },
+      {
+        "id": "5y-6y",
+        "upperYears": 6,
+        "midpointYears": 5.5
+      },
+      {
+        "id": "6y-7y",
+        "upperYears": 7,
+        "midpointYears": 6.5
+      },
+      {
+        "id": "7y-8y",
+        "upperYears": 8,
+        "midpointYears": 7.5
+      },
+      {
+        "id": "8y-9y",
+        "upperYears": 9,
+        "midpointYears": 8.5
+      },
+      {
+        "id": "9y-10y",
+        "upperYears": 10,
+        "midpointYears": 9.5
+      },
+      {
+        "id": "10y-15y",
+        "upperYears": 15,
+        "midpointYears": 12.5
+      },
+      {
+        "id": "15y-20y",
+        "upperYears": 20,
+        "midpointYears": 17.5
+      },
+      {
+        "id": "over-20y",
+        "upperYears": null,
+        "midpointYears": 25
+      }
+    ]
+  },
+  "shocksBp": {
+    "ref": "SRP31.90 Table 2",
+    "currencies": {
+      "ARS": {
+        "parallel": 400,
+        "short": 500,
+        "long": 300
+      },
+      "AUD": {
+        "parallel": 300,
+        "short": 450,
+        "long": 200
+      },
+      "BRL": {
+        "parallel": 400,
+        "short": 500,
+        "long": 300
+      },
+      "CAD": {
+        "parallel": 200,
+        "short": 300,
+        "long": 150
+      },
+      "CHF": {
+        "parallel": 100,
+        "short": 150,
+        "long": 100
+      },
+      "CNY": {
+        "parallel": 250,
+        "short": 300,
+        "long": 150
+      },
+      "EUR": {
+        "parallel": 200,
+        "short": 250,
+        "long": 100
+      },
+      "GBP": {
+        "parallel": 250,
+        "short": 300,
+        "long": 150
+      },
+      "HKD": {
+        "parallel": 200,
+        "short": 250,
+        "long": 100
+      },
+      "IDR": {
+        "parallel": 400,
+        "short": 500,
+        "long": 300
+      },
+      "INR": {
+        "parallel": 400,
+        "short": 500,
+        "long": 300
+      },
+      "JPY": {
+        "parallel": 100,
+        "short": 100,
+        "long": 100
+      },
+      "KRW": {
+        "parallel": 300,
+        "short": 400,
+        "long": 200
+      },
+      "MXN": {
+        "parallel": 400,
+        "short": 500,
+        "long": 300
+      },
+      "RUB": {
+        "parallel": 400,
+        "short": 500,
+        "long": 300
+      },
+      "SAR": {
+        "parallel": 200,
+        "short": 300,
+        "long": 150
+      },
+      "SEK": {
+        "parallel": 200,
+        "short": 300,
+        "long": 150
+      },
+      "SGD": {
+        "parallel": 150,
+        "short": 200,
+        "long": 100
+      },
+      "TRY": {
+        "parallel": 400,
+        "short": 500,
+        "long": 300
+      },
+      "USD": {
+        "parallel": 200,
+        "short": 300,
+        "long": 150
+      },
+      "ZAR": {
+        "parallel": 400,
+        "short": 500,
+        "long": 300
+      }
+    }
+  },
+  "nii": {
+    "horizonYears": 1,
+    "scenarios": [
+      "parallel-up",
+      "parallel-down"
+    ],
+    "ref": "SRP31.90 (two prescribed scenarios for NII). The 12-month horizon and the constant balance sheet are this engine's stated simplification, not a prescribed parameter"
+  },
+  "outlier": {
+    "tier1ShareBp": 1500,
+    "ref": "SRP31.82"
+  },
+  "floor": {
+    "ref": "SRP31.93: national supervisors may set floors on post-shock rates, not greater than zero. No default floor is applied."
+  }
+}

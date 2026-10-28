@@ -1,0 +1,7 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Inter, Arial, sans-serif","fontSize":"15px","textColor":"#0B0B0B","stateLabelColor":"#0B0B0B","transitionLabelColor":"#0B0B0B","background":"#F7F9FC","primaryColor":"#FFFFFF","primaryTextColor":"#0B0B0B","primaryBorderColor":"#0B0B0B","lineColor":"#4D5B70","secondaryColor":"#EDF1F6","tertiaryColor":"#F7F9FC","clusterBkg":"#EDF1F6","clusterBorder":"#B9C6D8","edgeLabelBackground":"#F7F9FC","titleColor":"#0B0B0B","actorBkg":"#0B0B0B","actorBorder":"#0B0B0B","actorTextColor":"#FFFFFF","actorLineColor":"#B9C6D8","signalColor":"#0B0B0B","signalTextColor":"#0B0B0B","labelBoxBkgColor":"#F7F9FC","labelBoxBorderColor":"#B9C6D8","noteBkgColor":"#EEF3F9","noteBorderColor":"#6F9BD8","sequenceNumberColor":"#FFFFFF","stateBkg":"#FFFFFF","stateBorder":"#0B0B0B","transitionColor":"#4D5B70","specialStateColor":"#12396B"}}}%%
+classDef accent fill:#12396B,stroke:#12396B,color:#FFFFFF,stroke-width:2px
+classDef muted fill:#FFFFFF,stroke:#B9C6D8,color:#4D5B70,stroke-dasharray:4 3
+%% kit:theme {"project":"saasreport"}
+%% SaasReport: the diagram theme, derived from the brand tokens in docs/diagrams/brand.config.js by kit diagrams derive. Do not edit by hand.
+%% accent #12396B (node fill, text #FFFFFF), tint #EEF3F9 (notes), ink #0B0B0B, rail #B9C6D8 / #4D5B70, background #F7F9FC, sink #EDF1F6.
+%% font: "Inter" docs/diagrams/fonts/Inter-400.woff2

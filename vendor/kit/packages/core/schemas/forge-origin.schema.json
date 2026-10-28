@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/forge-origin.schema.json",
+  "title": "kit.forge-origin.v1",
+  "description": "ORIGIN.json of @saasreport/forge (packages/forge): the upstream the port started from (repository, path, the origin commit) and every upstream file at that commit with its sha256, either ported (to which file of the package) or not (and why). packages/forge/scripts/upstream-sync.mjs reads it to report what upstream changed since the origin; it never applies anything. Moving the origin is a reviewed change to this file and the ported files together.",
+  "type": "object",
+  "required": ["$schema", "name", "license", "copyright", "origin", "ported", "not_ported"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "name": { "type": "string", "description": "The upstream package name." },
+    "license": { "const": "Apache-2.0", "description": "The upstream licence (NOTICE carries the attribution)." },
+    "copyright": { "type": "string", "minLength": 1 },
+    "origin": {
+      "type": "object",
+      "required": ["repository", "path", "commit", "date"],
+      "additionalProperties": false,
+      "properties": {
+        "repository": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$", "description": "owner/name on GitHub." },
+        "path": { "type": "string", "description": "The package directory inside the repository." },
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "date": { "type": "string", "format": "date-time" }
+      }
+    },
+    "ported": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["upstream", "sha256", "port"],
+        "additionalProperties": false,
+        "properties": {
+          "upstream": { "type": "string", "description": "Path relative to origin.path." },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "The upstream file at the origin commit." },
+          "port": { "type": "string", "description": "The file of packages/forge it was ported to." }
+        }
+      }
+    },
+    "not_ported": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["upstream", "sha256", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "upstream": { "type": "string" },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "reason": { "type": "string", "minLength": 20 }
+        }
+      }
+    }
+  }
+}

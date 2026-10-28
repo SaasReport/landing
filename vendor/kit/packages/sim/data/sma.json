@@ -1,0 +1,124 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-factor-table.schema.json",
+  "schema": "kit.sim-factor-table.v1",
+  "id": "sma",
+  "version": "2023-01-01",
+  "profile": "baseline",
+  "standard": {
+    "body": "BCBS",
+    "title": "Operational risk, standardised approach (Basel Framework OPE25 and OPE10; BCBS d424, December 2017)",
+    "url": "https://www.bis.org/basel_framework/chapter/OPE/25.htm",
+    "versionPublished": "2020-03-27"
+  },
+  "currency": "EUR",
+  "factors": [
+    {
+      "id": "bucket1-coefficient",
+      "label": "marginal coefficient, BI up to the first threshold",
+      "value": 1200,
+      "unit": "bp",
+      "ref": "OPE25.7 Table 1",
+      "min": 1200,
+      "max": 1200
+    },
+    {
+      "id": "bucket2-coefficient",
+      "label": "marginal coefficient, BI between the thresholds",
+      "value": 1500,
+      "unit": "bp",
+      "ref": "OPE25.7 Table 1",
+      "min": 1500,
+      "max": 1500
+    },
+    {
+      "id": "bucket3-coefficient",
+      "label": "marginal coefficient, BI above the second threshold",
+      "value": 1800,
+      "unit": "bp",
+      "ref": "OPE25.7 Table 1",
+      "min": 1800,
+      "max": 1800
+    },
+    {
+      "id": "threshold1",
+      "label": "first BI threshold",
+      "value": 1000000000,
+      "unit": "currency-major",
+      "ref": "OPE25.7 Table 1 (EUR 1bn)",
+      "min": 1000000000,
+      "max": 1000000000
+    },
+    {
+      "id": "threshold2",
+      "label": "second BI threshold",
+      "value": 30000000000,
+      "unit": "currency-major",
+      "ref": "OPE25.7 Table 1 (EUR 30bn)",
+      "min": 30000000000,
+      "max": 30000000000
+    },
+    {
+      "id": "ildc-cap",
+      "label": "cap of the net interest item as a share of average interest earning assets",
+      "value": 225,
+      "unit": "bp",
+      "ref": "OPE10 (ILDC definition: 2.25%)",
+      "min": 225,
+      "max": 225
+    },
+    {
+      "id": "loss-component-multiplier",
+      "label": "LC = 15 x average annual losses",
+      "value": 15,
+      "unit": "count",
+      "ref": "OPE25.8",
+      "min": 15,
+      "max": 15
+    },
+    {
+      "id": "ilm-exponent",
+      "label": "exponent of LC/BIC in the ILM",
+      "value": 8000,
+      "unit": "bp",
+      "ref": "OPE25.8 (0.8)",
+      "min": 8000,
+      "max": 8000
+    },
+    {
+      "id": "loss-years-full",
+      "label": "years of loss data for the full loss component",
+      "value": 10,
+      "unit": "count",
+      "ref": "OPE25.10",
+      "min": 10,
+      "max": 10
+    },
+    {
+      "id": "loss-years-min",
+      "label": "minimum years of loss data (transition)",
+      "value": 5,
+      "unit": "count",
+      "ref": "OPE25.10",
+      "min": 5,
+      "max": 5
+    },
+    {
+      "id": "loss-threshold",
+      "label": "minimum loss event included",
+      "value": 20000,
+      "unit": "currency-major",
+      "ref": "OPE25.18 (EUR 20,000; national discretion up to EUR 100,000 for buckets 2 and 3)",
+      "min": 20000,
+      "max": 100000
+    },
+    {
+      "id": "rwa-multiplier",
+      "label": "RWA = 12.5 x capital requirement",
+      "value": 125000,
+      "unit": "bp",
+      "ref": "OPE25.2",
+      "min": 125000,
+      "max": 125000
+    }
+  ]
+}

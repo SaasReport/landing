@@ -1,0 +1,605 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Agent credential broker (@saasreport/broker)",
+    "version": "1.0.0",
+    "description": "Agents hold no GitHub credential. A registered agent (kit agent id, its own Ed25519 key) signs a fresh, single-use request; the broker answers with an installation token scoped to one repository and the action's permissions, or merges a pull request itself after green checks on the exact head and a signed review by a different agent. Every authenticated allow and deny is a hash-chained kit.broker-evidence.v1 record. docs/BROKER.md."
+  },
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "paths": {
+    "/broker/v1/health": {
+      "get": {
+        "operationId": "brokerHealth",
+        "summary": "Ready: config valid, key present, store bound (500 otherwise). Publishes the project only.",
+        "tags": [
+          "ops"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ready",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "project"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "ok": {
+                      "const": true
+                    },
+                    "project": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/broker/v1/token": {
+      "post": {
+        "operationId": "brokerToken",
+        "summary": "A downscoped installation token for one repository and one action",
+        "tags": [
+          "broker"
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "A signed request (kit.broker-request.v1), at most 8192 bytes, with Content-Length.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/broker-request.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Issued (and recorded before it was returned)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "token",
+                    "expiresAt",
+                    "permissions",
+                    "evidence"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": true
+                    },
+                    "token": {
+                      "type": "string"
+                    },
+                    "expiresAt": {
+                      "type": "string"
+                    },
+                    "permissions": {
+                      "type": "object",
+                      "additionalProperties": {
+                        "enum": [
+                          "read",
+                          "write"
+                        ]
+                      }
+                    },
+                    "evidence": {
+                      "type": "integer",
+                      "minimum": 1
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/broker/v1/merge": {
+      "post": {
+        "operationId": "brokerMerge",
+        "summary": "The broker merges a pull request pinned to its reviewed head",
+        "tags": [
+          "broker"
+        ],
+        "requestBody": {
+          "required": true,
+          "description": "A signed request (kit.broker-request.v1), at most 8192 bytes, with Content-Length.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/broker-request.schema.json"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Merged",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "merged",
+                    "evidence"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": true
+                    },
+                    "merged": {
+                      "const": true
+                    },
+                    "sha": {
+                      "type": "string",
+                      "description": "The merge commit when it is known (GitHub's reply, or the merged pull request read back); when it is not, warning is merged_unverified."
+                    },
+                    "evidence": {
+                      "type": "integer",
+                      "minimum": 1
+                    },
+                    "warning": {
+                      "enum": [
+                        "merged_wrong_base",
+                        "merged_unverified"
+                      ],
+                      "description": "The merge happened, but not into the reviewed base (merged_wrong_base), or the merged pull request, its base or its merge commit could not be confirmed afterwards (merged_unverified). Recorded as evidence; act on it."
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "Refused (reason code, never prose)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Refused or failed (reason code). merged_evidence_failed: the merge may have happened but its record could not be written; check the pull request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "502": {
+            "description": "Upstream failure. merge_outcome_unknown: GitHub's merge reply was lost or unclear and the pull request was still unmerged or unreadable after polling; recorded once as an allow with that reason, never as a deny. Check the pull request.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "error"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "error": {
+                      "type": "string",
+                      "pattern": "^[a-z_]+$"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

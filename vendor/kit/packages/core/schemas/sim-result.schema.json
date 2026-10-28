@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-result.schema.json",
+  "title": "kit.sim-result.v1",
+  "description": "What a workbench pane receives from a simulation: the run plus a provenance block whose field names align with the workbench SourceEnvelope (source.kind, asOf, licence, provenance.adapter, adapterVersion, asOfBasis, seed, rawHash), so the pane can show the SYNTHETIC, YOURS or COMPUTED badge. The badge is derived from source.kind, never stored.",
+  "type": "object",
+  "required": [
+    "schema",
+    "run",
+    "source",
+    "asOf",
+    "licence",
+    "provenance",
+    "data"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "kit.sim-result.v1"
+    },
+    "run": {
+      "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-run.schema.json"
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{1,63}$"
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "kind": {
+          "enum": [
+            "sandbox-mock",
+            "customer-dataset",
+            "computed"
+          ]
+        },
+        "origin": {
+          "enum": [
+            "generated",
+            "computed"
+          ],
+          "description": "sandbox-mock: generated from the seed, or computed from the given inputs."
+        }
+      }
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "licence": {
+      "type": "object",
+      "required": [
+        "line",
+        "redistribution"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "line": {
+          "type": "string",
+          "minLength": 1
+        },
+        "redistribution": {
+          "enum": [
+            "allowed",
+            "attribution-required",
+            "cache-only",
+            "display-only",
+            "not-allowed",
+            "unverified",
+            "not-applicable"
+          ]
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "adapter",
+        "adapterVersion",
+        "asOfBasis",
+        "seed",
+        "rawHash"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "adapter": {
+          "type": "string",
+          "minLength": 1
+        },
+        "adapterVersion": {
+          "type": "string",
+          "minLength": 1
+        },
+        "asOfBasis": {
+          "enum": [
+            "source",
+            "fetch-time",
+            "build",
+            "seed"
+          ]
+        },
+        "seed": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4294967295
+        },
+        "rawHash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "data": {
+      "type": "object",
+      "description": "The run's outputs, the pane's payload."
+    }
+  }
+}

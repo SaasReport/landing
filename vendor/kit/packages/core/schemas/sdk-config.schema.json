@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sdk-config.schema.json",
+  "title": "kit.sdk-config.v1",
+  "description": "kit.sdk.json at a repository root: the SDKs `kit sdk generate` writes with @saasreport/forge (the kit's native Forge) from the repository's OpenAPI 3.1 contracts, and what `kit check sdk` enforces (docs/SDK.md). Every OpenAPI contract the repository declares (kit.canon.json contracts of type openapi, and `contracts`) has exactly one target. Paths are relative to the repository root.",
+  "type": "object",
+  "required": ["$schema", "generator", "targets"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string", "description": "The $id of this schema (or a path to it)." },
+    "generator": { "const": "forge", "description": "@saasreport/forge, the kit's native Forge (ported from Cloudflare Forge, Apache-2.0): the one and compulsory SDK generator." },
+    "project": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "The project key in the kit's registry, for a repository without kit.canon.json (kit.canon.json project wins)." },
+    "targets": {
+      "type": "array",
+      "description": "One generated SDK per OpenAPI contract.",
+      "items": {
+        "type": "object",
+        "required": ["name", "contract", "out"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "The SDK's name: the project's own prefix (registry key, prefix or short prefix), optionally followed by -<part>. The package is <name>-sdk." },
+          "contract": { "type": "string", "pattern": "\\.(json|ya?ml)$", "description": "The OpenAPI 3.1 contract (JSON or YAML)." },
+          "out": { "type": "string", "pattern": "^sdk(/[A-Za-z0-9_-][A-Za-z0-9._-]*)+$", "description": "Directory of the generated SDK: a subdirectory of sdk/ (no . or .. segments), not overlapping the contract or another target. Replaced on every generate, and only when it holds nothing but the files its forge.manifest.json lists." },
+          "cli": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "The CLI's command name (default: name); the project's own prefix." },
+          "languages": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": { "enum": ["javascript", "python"] },
+            "description": "The native targets to generate (default: all). javascript: index.mjs, index.d.ts, cli.mjs, package.json; python: python/<name>_sdk/__init__.py (typed client, Python 3.11+, standard library only), py.typed, python/pyproject.toml."
+          }
+        }
+      }
+    },
+    "contracts": { "type": "array", "items": { "type": "string" }, "description": "More OpenAPI documents (files or globs) that must each have a target, beyond kit.canon.json's openapi contracts." },
+    "scan": { "type": "array", "items": { "type": "string" }, "description": "Code scanned for hand-written clients (fetch() on a contract path, copies of generated files). Default: kit.canon.json hardcoding.paths, else src." },
+    "exclude": { "type": "array", "items": { "type": "string" }, "description": "Globs left out of the scan (tests are always out of it by default)." },
+    "allow": {
+      "type": "array",
+      "description": "Reviewed hand-written clients, one instance each (a file and the contract path it calls), with the reviewer's reason. An entry that matches nothing is stale and fails; there is no wildcard and no expiry.",
+      "items": {
+        "type": "object",
+        "required": ["file", "path", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "file": { "type": "string" },
+          "path": { "type": "string", "pattern": "^/", "description": "The contract path it calls, template form (/api/forms/{})." },
+          "reason": { "type": "string", "minLength": 20 }
+        }
+      }
+    }
+  }
+}

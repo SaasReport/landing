@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/trust-pin.schema.json",
+  "title": "kit.trust-pin.v1",
+  "description": "The out-of-repository trust pin (KIT_TRUST_PIN, a broker binding): per project the lowest trust record seq the owner accepts and the verifier and witness the owner requires. It sits next to KIT_OWNER, never in the repository, so a repository record can only add requirements. Missing, empty, null or malformed means nothing is trusted (fail closed).",
+  "type": "object",
+  "minProperties": 1,
+  "propertyNames": {
+    "pattern": "^[a-z0-9][a-z0-9-]*$"
+  },
+  "additionalProperties": {
+    "type": "object",
+    "required": [
+      "minSeq"
+    ],
+    "additionalProperties": false,
+    "properties": {
+      "minSeq": {
+        "type": "integer",
+        "minimum": 1,
+        "description": "The lowest trust record seq accepted: a newer record deleted or replaced by an older one is refused."
+      },
+      "verifier": {
+        "type": "object",
+        "required": [
+          "url",
+          "publicKey",
+          "required"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string",
+            "pattern": "^https://"
+          },
+          "publicKey": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9+/]{43}=$"
+          },
+          "required": {
+            "type": "boolean"
+          }
+        }
+      },
+      "witness": {
+        "type": "object",
+        "required": [
+          "url",
+          "publicKey"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "url": {
+            "type": "string",
+            "pattern": "^https://"
+          },
+          "publicKey": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9+/]{43}=$"
+          }
+        }
+      }
+    }
+  }
+}

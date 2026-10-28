@@ -1,0 +1,641 @@
+{
+  "meta": {
+    "title": "SaasReport: stop building the Monday report",
+    "description": "SaasReport builds each reader's Stripe report, in the order that reader cares about, and sends it on a schedule. Be one of the first companies we build it for.",
+    "ogImageAlt": "SaasReport: stop building the Monday report"
+  },
+  "nav": {
+    "links": [
+      {
+        "label": "People",
+        "href": "#people"
+      },
+      {
+        "label": "How it works",
+        "href": "#how"
+      },
+      {
+        "label": "Cost",
+        "href": "#cost"
+      },
+      {
+        "label": "Who it is for",
+        "href": "#sectors"
+      },
+      {
+        "label": "Trust",
+        "href": "#trust"
+      },
+      {
+        "label": "Questions",
+        "href": "#faq"
+      }
+    ],
+    "cta": [
+      {
+        "label": "Early access",
+        "modal": "early"
+      }
+    ],
+    "drawer": {
+      "links": [
+        {
+          "label": "People",
+          "href": "#people"
+        },
+        {
+          "label": "How it works",
+          "href": "#how"
+        },
+        {
+          "label": "Cost",
+          "href": "#cost"
+        },
+        {
+          "label": "Who it is for",
+          "href": "#sectors"
+        },
+        {
+          "label": "Trust",
+          "href": "#trust"
+        },
+        {
+          "label": "Questions",
+          "href": "#faq"
+        }
+      ],
+      "action": {
+        "label": "Ask for early access",
+        "modal": "early"
+      }
+    }
+  },
+  "sections": [
+    {
+      "type": "hero",
+      "id": "top",
+      "eyebrow": "Stripe reports, one for each reader",
+      "title": "Stop building the Monday report.",
+      "lead": "Monday, 9am. The board wants one page. Support wants the failed payments. Your CFO wants retention. Today someone builds all three by hand. SaasReport builds each one from your Stripe data, in the order that reader cares about, and sends it on a schedule.",
+      "strip": {
+        "label": "How it is designed",
+        "items": [
+          "Every figure computed by code",
+          "AI writes sentences, never numbers",
+          "Signed links that expire"
+        ]
+      },
+      "actions": [
+        {
+          "label": "Ask for early access",
+          "modal": "early",
+          "style": "primary"
+        },
+        {
+          "label": "See a report built",
+          "href": "#report",
+          "style": "ghost"
+        }
+      ],
+      "note": "Pre-launch. Be one of the first companies we build this for.",
+      "mock": {
+        "bar": "Board pack, sample month",
+        "kicker": "Report",
+        "product": "SaasReport",
+        "badge": "Sample data",
+        "steps": [
+          "Stripe data comes in",
+          "The engine computes the figures",
+          "Rules write the findings",
+          "Sentences are checked",
+          "A signed link is sent"
+        ],
+        "stepStatus": "Planned",
+        "stats": [
+          {
+            "count": 10,
+            "label": "readers"
+          },
+          {
+            "count": 9,
+            "label": "report types"
+          },
+          {
+            "count": 30,
+            "label": "defined metrics"
+          }
+        ]
+      }
+    },
+    {
+      "type": "audience",
+      "label": "Readers",
+      "title": "Written for",
+      "items": [
+        "CEO / Founder",
+        "CFO / Finance lead",
+        "Board",
+        "Investors",
+        "Sales",
+        "Marketing",
+        "Customer success",
+        "Refunds and returns",
+        "Tech support",
+        "Marketplace / platform operator"
+      ]
+    },
+    {
+      "type": "cards",
+      "id": "problem",
+      "style": "numbered",
+      "grid": "3",
+      "head": {
+        "eyebrow": "The problem",
+        "title": "The same month. Ten different questions."
+      },
+      "items": [
+        {
+          "title": "Monday, 9am",
+          "text": "The board wants one page. Support wants the failed payments. The CFO wants retention. Someone opens Stripe and starts three exports."
+        },
+        {
+          "title": "The sheet nobody trusts",
+          "text": "Numbers get pasted, filtered and renamed on the way. Two people pull the same month and get two answers."
+        },
+        {
+          "title": "One view for everyone",
+          "text": "The Stripe Dashboard is built for the person who runs Stripe. Everyone else asks that person for a screenshot."
+        }
+      ]
+    },
+    {
+      "type": "stepper",
+      "id": "how",
+      "surface": "paper",
+      "label": "Four steps",
+      "exampleLabel": "For example",
+      "outputsLabel": "You get",
+      "head": {
+        "eyebrow": "How it will work",
+        "title": "One set of numbers. One report per reader."
+      },
+      "steps": [
+        {
+          "tab": "Connect",
+          "title": "Install the app in Stripe.",
+          "text": "SaasReport asks for read access only. It never moves money and never changes your account.",
+          "example": "It reads subscriptions, charges, refunds, disputes and application fees.",
+          "outputs": [
+            "Read-only access"
+          ]
+        },
+        {
+          "tab": "Choose",
+          "title": "Pick who gets what.",
+          "text": "Choose a reader, a report and a schedule. Each report says which schedules it supports.",
+          "example": "CEO / Founder: Recurring revenue health, weekly, monthly, quarterly, annual. CFO / Finance lead: Recurring revenue health, weekly, monthly, quarterly, annual",
+          "outputs": [
+            "A reader",
+            "A report",
+            "A schedule"
+          ]
+        },
+        {
+          "tab": "Compute",
+          "title": "Code computes every number.",
+          "text": "Each figure follows a published definition. Rules turn the figures into findings, with the evidence beside them. AI words the summary and never writes a figure.",
+          "example": "Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "outputs": [
+            "Figures",
+            "Findings",
+            "Checked sentences"
+          ]
+        },
+        {
+          "tab": "Deliver",
+          "title": "Each reader gets a link.",
+          "text": "The email names the report and carries no figures. The link is signed, it expires, and you can revoke it.",
+          "example": "The report is a PDF stored under your own tenant.",
+          "outputs": [
+            "Signed link",
+            "Expires",
+            "Revocable"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "widgets",
+      "id": "people",
+      "head": {
+        "eyebrow": "Start with the person",
+        "title": "Pick who is asking."
+      },
+      "widgets": [
+        "who-asks"
+      ]
+    },
+    {
+      "type": "band",
+      "id": "cta-people",
+      "title": "Want this for the people who ask you?",
+      "actions": [
+        {
+          "label": "Ask for early access",
+          "modal": "early",
+          "style": "light"
+        }
+      ]
+    },
+    {
+      "type": "widgets",
+      "id": "report",
+      "head": {
+        "eyebrow": "One report, three readers",
+        "title": "Same data. The order follows the reader."
+      },
+      "widgets": [
+        "report-order"
+      ]
+    },
+    {
+      "type": "widgets",
+      "id": "findings",
+      "head": {
+        "eyebrow": "Findings, not opinions",
+        "title": "Every finding names its evidence."
+      },
+      "widgets": [
+        "findings"
+      ]
+    },
+    {
+      "type": "compare",
+      "id": "compare",
+      "head": {
+        "eyebrow": "Dashboard or report?",
+        "title": "The Dashboard shows everything. A report says what matters to you."
+      },
+      "columns": [
+        "The question",
+        "Stripe Dashboard",
+        "A SaasReport report"
+      ],
+      "rows": [
+        {
+          "option": "Who it is for",
+          "pro": "The person who runs Stripe.",
+          "con": "Each reader: CEO, CFO, board, investors, sales, marketing, success, refunds, support, platform operators.",
+          "us": true
+        },
+        {
+          "option": "What you see first",
+          "pro": "Every payment, customer and subscription.",
+          "con": "That reader's priority figures, in that reader's order.",
+          "us": true
+        },
+        {
+          "option": "When it arrives",
+          "pro": "When you open it.",
+          "con": "On a schedule: daily, weekly, monthly, quarterly or yearly, as the report allows.",
+          "us": true
+        },
+        {
+          "option": "What it says about a change",
+          "pro": "The figures.",
+          "con": "The figures, and a finding that names its evidence.",
+          "us": true
+        },
+        {
+          "option": "Who can read it",
+          "pro": "People with a Stripe login.",
+          "con": "Readers you choose, by a signed link that expires.",
+          "us": true
+        }
+      ]
+    },
+    {
+      "type": "widgets",
+      "id": "cost",
+      "head": {
+        "eyebrow": "What it costs you today",
+        "title": "How long does the Monday report take?"
+      },
+      "widgets": [
+        "cost"
+      ]
+    },
+    {
+      "type": "band",
+      "id": "cta-cost",
+      "title": "Seen the number? Let us build the reports instead.",
+      "actions": [
+        {
+          "label": "Ask for early access",
+          "modal": "early",
+          "style": "light"
+        }
+      ]
+    },
+    {
+      "type": "cards",
+      "id": "sectors",
+      "style": "icon",
+      "grid": "3",
+      "head": {
+        "eyebrow": "Who it is for",
+        "title": "If you take payments through Stripe, one of these is you."
+      },
+      "items": [
+        {
+          "icon": "chart",
+          "title": "Subscription businesses",
+          "text": "Recurring revenue, retention and churn for the CEO, CFO, board and investors, plus new customers for sales and marketing. Reports: Recurring revenue health, Retention and churn, Sales performance, New customers, Board pack and Investor quarterly. Needs Stripe Billing subscriptions."
+        },
+        {
+          "icon": "store",
+          "title": "Merchants without subscriptions",
+          "text": "Payments, refunds and disputes for finance and support. Reports: Refunds and returns and Payment health. They read charges, refunds and disputes only, so no subscriptions are needed."
+        },
+        {
+          "icon": "chain",
+          "title": "Marketplaces and platforms",
+          "text": "What the platform earns, and how its refunds and disputes behave. Report: Marketplace health. Stripe lets an app on a platform read only the platform's own data. Your merchants install SaasReport on their own accounts, and you can recommend it. That is a referral, not a data feed."
+        }
+      ]
+    },
+    {
+      "type": "widgets",
+      "id": "delivery",
+      "head": {
+        "eyebrow": "How a report reaches a person",
+        "title": "A signed link, not an attachment."
+      },
+      "widgets": [
+        "journey",
+        "schedule"
+      ]
+    },
+    {
+      "type": "cards",
+      "id": "trust",
+      "style": "numbered",
+      "grid": "3",
+      "head": {
+        "eyebrow": "Security and trust",
+        "title": "What we promise, and where each promise stands."
+      },
+      "items": [
+        {
+          "title": "Planned",
+          "text": "The Stripe App requests only read permissions and never creates, changes or deletes anything in the customer's Stripe account, and never moves money."
+        },
+        {
+          "title": "Planned",
+          "text": "SaasReport does not receive, store or process card numbers or bank account numbers."
+        },
+        {
+          "title": "Planned",
+          "text": "Each customer's data is stored and read only under that customer's own tenant identifier; one customer cannot read another's data."
+        },
+        {
+          "title": "Planned",
+          "text": "Every figure in a report is computed by deterministic code from Stripe data under published definitions; AI-written text is checked so that it contains no figure the code did not compute."
+        },
+        {
+          "title": "Planned",
+          "text": "The AI provider receives only computed aggregates and never customer names, email addresses or other personal data from the customer's Stripe account."
+        },
+        {
+          "title": "Planned",
+          "text": "After the customer uninstalls the app, the data derived from their Stripe account is deleted within the period stated in the privacy policy."
+        },
+        {
+          "title": "Planned",
+          "text": "Report emails are sent only through SaasReport's own mail service on Cloudflare, and each carries the legal footer."
+        },
+        {
+          "title": "Planned",
+          "text": "The website sets no cookies other than those strictly necessary, and runs no third-party advertising or tracking scripts."
+        },
+        {
+          "title": "Planned",
+          "text": "SaasReport does not sell personal data, and does not use a customer's Stripe data to train AI models or to build benchmarks for other customers."
+        },
+        {
+          "title": "Planned",
+          "text": "All traffic between Stripe, SaasReport's services, and report recipients' links uses encryption in transit."
+        },
+        {
+          "title": "Planned",
+          "text": "Findings and recommendations in a report come from published rules applied to computed figures, not from AI judgement; each cites the figures that triggered it, and the thresholds are not benchmarks against other companies."
+        },
+        {
+          "title": "Planned",
+          "text": "Reports are delivered as signed, expiring links to files stored under the customer's own tenant, and a link can be revoked."
+        }
+      ]
+    },
+    {
+      "type": "widgets",
+      "id": "trust-widgets",
+      "widgets": [
+        "roles-access",
+        "number-guard"
+      ]
+    },
+    {
+      "type": "faq",
+      "id": "faq",
+      "head": {
+        "eyebrow": "Questions",
+        "title": "Straight answers."
+      },
+      "items": [
+        {
+          "q": "Can I use it today?",
+          "a": "Not yet. The engine that computes the numbers is built and tested. The Stripe app, the report pages and the email delivery are not. Ask for early access and we will tell you when we start building for you."
+        },
+        {
+          "q": "Is my data safe?",
+          "a": "Nothing is stored yet, because nothing is built. The design is: read-only access, data kept under your own tenant identifier, encryption in transit, and no use of your data to train AI. Each promise is a commitment in the register above with its status."
+        },
+        {
+          "q": "Who sees what?",
+          "a": "A person sees a report only if their Stripe role already lets them see the data behind it. A role we do not know sees nothing. Try it in the Trust section."
+        },
+        {
+          "q": "Will AI make numbers up?",
+          "a": "It cannot. Code computes every figure. The AI is meant to write only the sentences around them, and a guard rejects any sentence that holds a number the engine did not compute. The guard exists in code. Try it in the Trust section."
+        },
+        {
+          "q": "What does it read?",
+          "a": "Only what the reports need: subscriptions, charges, refunds, disputes and application fees. It reads nothing today."
+        },
+        {
+          "q": "What does it cost?",
+          "a": "We have not set prices. Early-access companies help us decide what is fair."
+        },
+        {
+          "q": "When can I use it?",
+          "a": "There is no date. We will not invent one. Early access is how we choose what to build first."
+        },
+        {
+          "q": "What can it not tell me?",
+          "a": "Anything Stripe does not hold. Across the readers above that includes profit, cash in the bank, burn and runway, costs and expenses, profit and loss, cash balance outside Stripe, headcount and pipeline. SaasReport will not pretend to know them."
+        },
+        {
+          "q": "I run a marketplace. Can I see my merchants' numbers?",
+          "a": "Not through SaasReport. Stripe lets an app installed by a platform read only the platform's own data. Merchants can install SaasReport on their own accounts, and you can recommend it."
+        },
+        {
+          "q": "Is it in the Stripe App Marketplace?",
+          "a": "No. It is not listed there."
+        },
+        {
+          "q": "Who is behind it?",
+          "a": "SaasReport. The legal entity is not set up on paper yet: legal name, registration number, country of incorporation, governing law and courts are not set."
+        }
+      ]
+    },
+    {
+      "type": "final",
+      "id": "start",
+      "eyebrow": "Early access",
+      "title": "Be one of the first companies we build this for.",
+      "text": "Tell us who asks about your Stripe numbers and which report each would read. We will use your answer to decide what to build first.",
+      "actions": [
+        {
+          "label": "Ask for early access",
+          "modal": "early"
+        }
+      ],
+      "micro": "No card, no commitment. It is a form: we write back."
+    }
+  ],
+  "footer": {
+    "logoAlt": "SaasReport",
+    "contact": {
+      "label": "Ask for early access",
+      "modal": "early"
+    },
+    "columns": [
+      {
+        "title": "On this page",
+        "links": [
+          {
+            "label": "People",
+            "href": "#people"
+          },
+          {
+            "label": "How it works",
+            "href": "#how"
+          },
+          {
+            "label": "Cost",
+            "href": "#cost"
+          },
+          {
+            "label": "Who it is for",
+            "href": "#sectors"
+          },
+          {
+            "label": "Trust",
+            "href": "#trust"
+          },
+          {
+            "label": "Questions",
+            "href": "#faq"
+          }
+        ]
+      },
+      {
+        "title": "Status",
+        "links": [
+          {
+            "label": "Legal documents are drafts",
+            "modal": "privacy"
+          },
+          {
+            "label": "Not in the Stripe App Marketplace",
+            "modal": "privacy"
+          }
+        ]
+      }
+    ],
+    "legal": [
+      "© 2026 SaasReport™. Legal documents are drafts and are not published yet.",
+      "9 documents are drafts and none is published: terms of service, privacy policy, data processing addendum, acceptable use policy, cookie notice, subprocessors, email legal footer, report disclaimer and copyright and trademark notice. Company facts they need are not set yet: legal name, registration number, country of incorporation, governing law and courts."
+    ]
+  },
+  "modals": [
+    {
+      "id": "early",
+      "titleId": "m-early-t",
+      "form": "early-access",
+      "eyebrow": "Early access",
+      "title": "Tell us who asks about your numbers.",
+      "lead": "We read each request and write back. We will not add you to a list.",
+      "submit": "Send my request",
+      "fine": "This sends a form. You get a confirmation email.",
+      "fields": [
+        {
+          "name": "name",
+          "label": "Your name",
+          "required": true
+        },
+        {
+          "name": "email",
+          "label": "Work email",
+          "required": true
+        },
+        {
+          "name": "company",
+          "label": "Company",
+          "required": true
+        },
+        {
+          "name": "role",
+          "label": "Your role",
+          "required": true
+        },
+        {
+          "name": "reports",
+          "label": "Which reports would your people read?",
+          "control": "chips",
+          "options": [
+            "Recurring revenue health",
+            "Retention and churn",
+            "Sales performance",
+            "New customers",
+            "Board pack",
+            "Investor quarterly",
+            "Refunds and returns",
+            "Payment health",
+            "Marketplace health"
+          ],
+          "full": true
+        },
+        {
+          "name": "message",
+          "label": "Anything else? (optional)",
+          "control": "textarea",
+          "rows": 3,
+          "maxlength": 2000,
+          "full": true
+        }
+      ]
+    },
+    {
+      "id": "privacy",
+      "titleId": "m-privacy-t",
+      "eyebrow": "Privacy",
+      "title": "Privacy",
+      "doc": [
+        {
+          "p": "Our privacy policy is a draft and is not published yet. The early-access form asks only for what we need to answer you."
+        }
+      ]
+    }
+  ]
+}

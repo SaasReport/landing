@@ -1,0 +1,177 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-origin.schema.json",
+  "name": "@saasreport/sim",
+  "license": "Apache-2.0",
+  "adoption": "native-reimplementation",
+  "max_age_days": 365,
+  "inspirations": [
+    {
+      "repository": "ommaganti/yield-curve-sim",
+      "license": "MIT",
+      "readOn": "2026-10-07",
+      "files": [
+        "curve.py",
+        "bond.py",
+        "shocks.py",
+        "risk.py"
+      ],
+      "tookIdeas": [
+        "the shape of the toolkit: an NSS fit, full revaluation by bump and reprice for effective duration and convexity, key-rate duration tents, a shock library, seeded risk numbers",
+        "that duration and convexity are measured by repricing, not by closed-form modified duration"
+      ],
+      "notTaken": [
+        "any code (Python, numpy, scipy; nothing was copied or translated line by line)",
+        "the curve model: yield-curve-sim treats the par curve as the zero curve (curve.py discount); this package bootstraps par yields to zero rates",
+        "the live Treasury CSV fetch (this package has no I/O)",
+        "the PCA shock and the VaR/ES simulation (not in this release)"
+      ],
+      "knownFlaw": "Reads par yields as zero rates (stated in its own docstring). Not repeated: bootstrap.js, with a test that the shortcut gives a different discount factor on a sloped curve."
+    },
+    {
+      "repository": "TommasoBelluzzo/BaselTools",
+      "license": "Apache-2.0",
+      "readOn": "2026-10-07",
+      "files": [
+        "BaselOP.m",
+        "BaselCCR.m"
+      ],
+      "tookIdeas": [
+        "which formulas an SA-CCR and an SMA calculator need and how they chain (add-on, multiplier, EAD; BI, BIC, ILM, capital)",
+        "the multiplier and EAD expressions as a cross-check of the standard's text"
+      ],
+      "notTaken": [
+        "any code (MATLAB with a Java jar; nothing was copied or translated)",
+        "its SMA calibration: BaselOP.m implements the 2016 consultative SMA (buckets 11/15/19/23% at 1/3/10/30bn, ILM = ln(1.7183 + LC/BIC)); this package implements the final standard (OPE25: 12/15/18% at 1bn and 30bn, ILM = ln(e - 1 + (LC/BIC)^0.8))",
+        "its Excel dataset layout"
+      ],
+      "knownFlaw": "The SMA of the 2016 consultation is superseded by the final standard (BCBS d424, OPE25)."
+    },
+    {
+      "repository": "mgao6767/brms",
+      "license": "MIT",
+      "readOn": "2026-10-07",
+      "files": [
+        "core/rules/mark_to_market.py",
+        "capital.py"
+      ],
+      "tookIdeas": [
+        "rule-driven double-entry with Decimal money as the architecture for a later bank-day ledger engine (not in this release)"
+      ],
+      "notTaken": [
+        "any code",
+        "its capital ratio (equity over total assets, no risk weights)"
+      ]
+    }
+  ],
+  "standards": [
+    {
+      "id": "SRP31",
+      "title": "Interest rate risk in the banking book (Basel Framework SRP31; BCBS d368, April 2016)",
+      "body": "BCBS",
+      "url": "https://www.bis.org/basel_framework/chapter/SRP/31.htm",
+      "sections": [
+        "SRP31.82",
+        "SRP31.90",
+        "SRP31.91",
+        "SRP31.92",
+        "SRP31.93",
+        "SRP31.96"
+      ],
+      "engines": [
+        "irrbb"
+      ],
+      "note": "Consolidated text of 2019-12-15. Worked examples of SRP31.92 are the fixtures."
+    },
+    {
+      "id": "CRE52",
+      "title": "Standardised approach to counterparty credit risk, SA-CCR (Basel Framework CRE52; BCBS 279, March 2014, rev. April 2014)",
+      "body": "BCBS",
+      "url": "https://www.bis.org/basel_framework/chapter/CRE/52.htm",
+      "sections": [
+        "CRE52.1",
+        "CRE52.2",
+        "CRE52.10",
+        "CRE52.18",
+        "CRE52.20",
+        "CRE52.23",
+        "CRE52.34",
+        "CRE52.39",
+        "CRE52.40",
+        "CRE52.48",
+        "CRE52.50",
+        "CRE52.52",
+        "CRE52.57",
+        "CRE52.72",
+        "CRE52.73"
+      ],
+      "engines": [
+        "saccr"
+      ],
+      "note": "Formulas are images in the published HTML; the text of the paragraphs and Table 2 were read, the formulas are cross-checked against the worked examples."
+    },
+    {
+      "id": "CRE99",
+      "title": "Illustrative examples of the SA-CCR (Basel Framework CRE99; BCBS 279 Annex 4)",
+      "body": "BCBS",
+      "url": "https://www.bis.org/basel_framework/chapter/CRE/99.htm",
+      "sections": [
+        "CRE99.22 to CRE99.96"
+      ],
+      "engines": [
+        "saccr"
+      ],
+      "note": "Worked examples 1 to 5 are the fixtures (intermediate figures as printed; final EADs by recomputation, their formula images are not in the HTML text)."
+    },
+    {
+      "id": "OPE25",
+      "title": "Operational risk, standardised approach (Basel Framework OPE25 and OPE10; BCBS d424, December 2017)",
+      "body": "BCBS",
+      "url": "https://www.bis.org/basel_framework/chapter/OPE/25.htm",
+      "sections": [
+        "OPE25.1",
+        "OPE25.2",
+        "OPE25.5",
+        "OPE25.7",
+        "OPE25.8",
+        "OPE25.10",
+        "OPE25.11",
+        "OPE25.18",
+        "OPE10"
+      ],
+      "engines": [
+        "sma"
+      ],
+      "note": "The EUR 35bn example of OPE25.7 fn 2 is the fixture. The final calibration (12/15/18%) is implemented, not the 2016 consultation."
+    },
+    {
+      "id": "LCR",
+      "title": "Liquidity Coverage Ratio (Basel Framework LCR20, LCR30, LCR40; BCBS d238, January 2013)",
+      "body": "BCBS",
+      "url": "https://www.bis.org/basel_framework/chapter/LCR/40.htm",
+      "sections": [
+        "LCR20.5",
+        "LCR30.31 to LCR30.45",
+        "LCR40.5 to LCR40.93"
+      ],
+      "engines": [
+        "lcr"
+      ],
+      "note": "The standard publishes no numeric LCR case besides the deposit-insurance split of LCR40.7 fn 43; caps are validated by their defining inequalities."
+    },
+    {
+      "id": "NSF",
+      "title": "Net Stable Funding Ratio (Basel Framework NSF20, NSF30; BCBS d295, October 2014)",
+      "body": "BCBS",
+      "url": "https://www.bis.org/basel_framework/chapter/NSF/30.htm",
+      "sections": [
+        "NSF20.2",
+        "NSF30.10 to NSF30.14",
+        "NSF30.25 to NSF30.32"
+      ],
+      "engines": [
+        "nsfr"
+      ],
+      "note": "No published numeric NSFR example was found; validated by hand computation and an independent copy of the factor table."
+    }
+  ]
+}

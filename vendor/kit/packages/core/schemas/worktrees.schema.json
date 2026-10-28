@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/worktrees.schema.json",
+  "title": "kit.worktrees.v1",
+  "description": "scratch/worktrees.json: the machine's worktree registry (docs/FRESHNESS.md). Every worktree an agent or a person works in is listed with the repository, the branch, the owner agent and the main sha it last synced to; `kit check staleness --local` judges each against its repository's live main head and refuses an unregistered worktree under `root`.",
+  "type": "object",
+  "required": [
+    "v",
+    "root",
+    "worktrees"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "v": {
+      "const": 1
+    },
+    "root": {
+      "type": "string",
+      "pattern": "^/",
+      "description": "The directory whose git repositories (checkouts and their linked worktrees) must all be registered."
+    },
+    "worktrees": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "repo",
+          "branch",
+          "owner",
+          "last_sync"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^/"
+          },
+          "repo": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$"
+          },
+          "branch": {
+            "type": "string",
+            "minLength": 1
+          },
+          "owner": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The agent or person that owns the worktree."
+          },
+          "last_sync": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$",
+            "description": "The main sha the worktree was last brought up to."
+          }
+        }
+      }
+    },
+    "scratch": {
+      "type": "string",
+      "pattern": "^/",
+      "description": "The machine's scratch directory (KIT_SCRATCH overrides it): every entry of it is aged by its newest file."
+    }
+  }
+}

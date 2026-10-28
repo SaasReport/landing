@@ -1,0 +1,178 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/persian-config.schema.json",
+  "title": "kit.persian-config.v1",
+  "description": "persian.config.json: what `kit check persian` checks in a project (docs/PERSIAN.md). kit.canon.json names it under \"persian\"; a project whose digits locale is fa must. Sources are the files people edit (content packs, UI strings, podcast series specs and prompts, email templates, proposal text), never generated output.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "sources"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "files"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "An area name for reports (e.g. glossary, ui, podcast)."
+          },
+          "files": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            },
+            "description": "Files or globs. Kinds by extension: .json (every string value), .js/.mjs/.ts (string and template literals), .md, .html, .txt."
+          },
+          "register": {
+            "enum": [
+              "written",
+              "spoken"
+            ],
+            "default": "written",
+            "description": "spoken: colloquial scripts read aloud (podcasts); rules limited to written copy are skipped."
+          },
+          "mixed": {
+            "type": "boolean",
+            "default": false,
+            "description": "The files hold Persian and Arabic strings side by side (a shared strings file): any string written only in Arabic letters is taken as Arabic and skipped. Without it, only clear Arabic (ة, «ال», tanwin) is skipped, so a Persian sentence mistyped with ي/ك is still caught."
+          }
+        }
+      }
+    },
+    "exclude": {
+      "type": "array",
+      "description": "Files inside a source that are not copy to check, or (with keys) the values under some property names in them (verbatim quotations whose hash is verified, code samples), each with the reviewer's reason. An entry that matches nothing is stale and fails.",
+      "items": {
+        "type": "object",
+        "required": [
+          "files",
+          "reason"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "files": {
+            "type": "string"
+          },
+          "keys": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            },
+            "description": "Skip only the values of these property names (JSON keys, JS object keys, front-matter keys)."
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 10
+          }
+        }
+      }
+    },
+    "classes": {
+      "type": "object",
+      "description": "Words added to the pack's lexicon classes, or new classes: e.g. brand (the project's proper names, which follow their common noun: «پروتکل کی‌وای‌ای»).",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "uniqueItems": true
+      }
+    },
+    "rules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "The project's own rule packs (kit.fa-rules.v1 files), e.g. its glossary; run after the kit's pack."
+    },
+    "podcast": {
+      "type": "object",
+      "required": [
+        "from"
+      ],
+      "additionalProperties": false,
+      "description": "Also check every podcast script the cron would voice in `days` days from `from`, built exactly as the Worker builds it (spoken register), so Persian audio is checked before TTS. `from` is pinned so the check does not change with the date it runs on.",
+      "properties": {
+        "config": {
+          "type": "string",
+          "default": "kit.config.js"
+        },
+        "content": {
+          "type": "string",
+          "description": "The content pack module, when it is not the config's default."
+        },
+        "days": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 3700,
+          "default": 371
+        },
+        "from": {
+          "type": "string",
+          "format": "date",
+          "description": "First day of the window (pinned; move it forward on purpose)."
+        }
+      }
+    },
+    "allow": {
+      "type": "array",
+      "description": "Reviewed false positives, one entry per INSTANCE: the file, the rule, the matched text and its context (a text around the match, so exactly one place), each with the reviewer's reason. Never a rule-wide or file-wide waiver (no *). An entry also covers the same place in the podcast scripts built from the sources. An entry that matches nothing is stale and fails.",
+      "items": {
+        "type": "object",
+        "required": [
+          "file",
+          "rule",
+          "match",
+          "context",
+          "reason"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "file": {
+            "type": "string"
+          },
+          "rule": {
+            "type": "string"
+          },
+          "match": {
+            "type": "string",
+            "minLength": 1,
+            "not": {
+              "const": "*"
+            },
+            "description": "The exact text the rule matched (never *)."
+          },
+          "context": {
+            "type": "string",
+            "minLength": 4,
+            "description": "A text that appears in the finding's context (the matched text with its neighbours): the entry names one place, not every place the match occurs."
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 10
+          }
+        }
+      }
+    },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {},
+      "description": "Present when the project's Persian copy is under native review (`kit check fa-review`, run by the deploy). The ledger's path, kind, anchor and roster are NOT configured here: the kit project registry (packages/core/registry/projects.json, approvals.persian) is the one source, so a project cannot repoint the ledger or name its own approvers. Approvals are signed by the reader's own Ed25519 key (kit.approval-ledger.v1)."
+    }
+  }
+}

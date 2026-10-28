@@ -1,0 +1,33 @@
+{
+  "name": "@saasreport/widgets",
+  "version": "0.2.0",
+  "description": "The widget engine: archetype plugins with no content of their own (the original fifteen and the financial-network set: network, flow, split, netting, match, builder) behind a plugin registry (kit.widgets-plugin.v1), a generator that derives every widget from a project's widgets.spec.json and its contracts (kit widgets build), the guards (kit widgets check: scenario, traceability, cross-project vocabulary, freshness) and the accessible runtime (RTL/LTR, reduced motion, brand tokens).",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./schemas/*": "./schemas/*",
+    "./registry/*": "./registry/*",
+    "./assets/*": "./assets/*",
+    "./theme/*": "./theme/*",
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@saasreport/calendar": "*",
+    "@saasreport/format": "*",
+    "@saasreport/workbench": "*"
+  },
+  "files": [
+    "src",
+    "schemas",
+    "registry",
+    "assets",
+    "theme",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "license": "Apache-2.0",
+  "sideEffects": false
+}

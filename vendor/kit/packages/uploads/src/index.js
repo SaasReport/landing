@@ -1,0 +1,25 @@
+/** @saasreport/uploads: the upload-safety pipeline for Workers (docs/UPLOADS.md in the kit). */
+export { readBounded, readBoundedText, readBoundedJson, declaredLength, bodyErrorResponse, BodyError, BODY_ERROR_STATUS } from "./bounded.js";
+export { sniff, matchesDeclared, extensionOf, familyOf, ALLOWABLE_TYPES, TYPES } from "./sniff.js";
+export { normaliseFilename } from "./filename.js";
+export { TRIAGE_DEFAULTS, TRIAGE_CEILING, resolveLimits } from "./limits.js";
+export { triage, triagePdf, triageZip, triageOle, triageSvg, triageImage, triageText, STATEMENTS, PDF_MARKERS, PDF_STRUCTURAL, ZIP_MARKERS, OOXML_MARKERS, OLE_MARKERS, SVG_MARKERS, IMAGE_MARKERS, TEXT_MARKERS } from "./triage/index.js";
+export { VERDICTS, SEVERITY, worst, NO_SCANNER, runScan } from "./scan.js";
+export { decide, REASON_CODES } from "./decision.js";
+export { quarantineKey, releasedKey, uploadId } from "./keys.js";
+export { putOnce, readObject, memoryBucket } from "./store.js";
+export { memoryRecords, d1Records, recordsMigration, recordsMigration0002, MIGRATION_FILES, RecordError } from "./records.js";
+export { loadUploadsConfig, ConfigError } from "./config.js";
+export { createUploads, IntegrityError, UnknownFormError, ConflictError } from "./pipeline.js";
+export { AuthError, NotEligibleError } from "./errors.js";
+export { authenticate, appendEntry, cursorOf, ACTIONS as DECISION_ACTIONS, uploadDecisionEntry } from "./authority.js";
+export { bucketEvidence, EVIDENCE_PREFIX } from "./evidence.js";
+export { SYSTEM, RETENTION, humanPrincipal } from "./principal.js";
+export { serveHeaders, contentDisposition, signDownload, verifyDownload, downloadResponse, SERVE_CSP, INLINE_IMAGE_CSP, INLINE_TYPES, INERT_TYPES, inlineAllowed } from "./serve.js";
+export { publicOutcome, refusalBody } from "./public.js";
+export { UPLOAD_COPY } from "./copy.js";
+export { SCHEMAS, validateRecord, validateEvidence, validatePolicy, validateConfig, validateError, validateServeHeaders } from "./schemas.js";
+export { sha256Hex } from "./bytes.js";
+export { STATES, ACTORS, TABLE, SPEC as LIFECYCLE, canTransition, assertTransition, TransitionError, tightness } from "./lifecycle.js";
+export { createReconciler, parseKey } from "./reconcile.js";
+export { containerEnd } from "./triage/image.js";

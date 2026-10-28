@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sdk-manifest.schema.json",
+  "title": "kit.sdk-manifest.v1",
+  "description": "forge.manifest.json in a generated SDK's directory: the contract (path, sha256), the generator (@saasreport/forge with its upstream origin, the targets, and the kit transformer) and every generated file with its sha256. Written by `kit sdk generate`, verified by `kit check sdk`; never edited by hand.",
+  "type": "object",
+  "required": ["$schema", "generated_by", "target", "generator", "contract", "operations", "files"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "generated_by": { "const": "kit sdk generate" },
+    "target": { "type": "string" },
+    "generator": {
+      "type": "object",
+      "required": ["forge", "transformer"],
+      "additionalProperties": false,
+      "properties": {
+        "forge": {
+          "type": "object",
+          "required": ["package", "version", "license", "origin", "targets"],
+          "additionalProperties": false,
+          "properties": {
+            "package": { "const": "@saasreport/forge" },
+            "version": { "type": "string" },
+            "license": { "const": "Apache-2.0" },
+            "origin": {
+              "type": "object",
+              "required": ["repository", "commit"],
+              "additionalProperties": false,
+              "description": "The upstream commit the port started from (packages/forge/ORIGIN.json).",
+              "properties": {
+                "repository": { "type": "string" },
+                "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" }
+              }
+            },
+            "targets": { "type": "array", "minItems": 1, "items": { "enum": ["javascript", "python"] } }
+          }
+        },
+        "transformer": {
+          "type": "object",
+          "required": ["package", "version"],
+          "additionalProperties": false,
+          "properties": { "package": { "type": "string" }, "version": { "type": "string" } }
+        }
+      }
+    },
+    "contract": {
+      "type": "object",
+      "required": ["path", "sha256", "openapi"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string" },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "openapi": { "type": "string", "pattern": "^3\\.1\\." },
+        "title": { "type": "string" },
+        "version": { "type": "string" }
+      }
+    },
+    "operations": { "type": "integer", "minimum": 1 },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["path", "sha256", "bytes"],
+        "additionalProperties": false,
+        "properties": { "path": { "type": "string" }, "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }, "bytes": { "type": "integer", "minimum": 0 } }
+      }
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/ci-rerun-verdict.schema.json",
+  "title": "kit.ci-rerun-verdict.v1",
+  "description": "kit ci unstarted: whether a failed CI run is re-run once because none of its failed jobs ever started (no runner was assigned, so no step ran: an outage of the CI provider, never a test), and why. A run any of whose failed jobs ran a step is the repository's own failure and is never re-run; a run already re-run is never re-run again.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "run_attempt", "rerun", "reason", "failed_jobs"],
+  "properties": {
+    "schema": { "const": "kit.ci-rerun-verdict.v1" },
+    "run_attempt": { "type": "integer", "minimum": 1 },
+    "rerun": { "type": "boolean" },
+    "reason": { "enum": ["unstarted", "no_failed_job", "a_failed_job_ran_steps", "already_rerun"] },
+    "failed_jobs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "conclusion", "steps_started"],
+        "properties": {
+          "name": { "type": "string" },
+          "conclusion": { "type": "string" },
+          "steps_started": { "type": "integer", "minimum": 0 }
+        }
+      }
+    }
+  }
+}

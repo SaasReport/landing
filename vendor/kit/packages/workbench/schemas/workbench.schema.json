@@ -1,0 +1,789 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kit:schema:workbench:v1",
+  "title": "Workbench definition (kit.workbench.v1)",
+  "description": "A project's workbench, resolved for one locale: its sources (each a SourceEnvelope template), panes, commands and layouts. Generated from the project's widgets.spec.json by `kit widgets build` (export `workbench`); the kit ships none of it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "asOf",
+    "locale",
+    "title",
+    "sources",
+    "panes",
+    "commands",
+    "layouts",
+    "defaultLayout",
+    "byo",
+    "watchlist"
+  ],
+  "properties": {
+    "schema": {
+      "const": "kit.workbench.v1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{1,47}$"
+    },
+    "asOf": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "locale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "dir",
+        "digits",
+        "intl",
+        "tz"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "dir": {
+          "enum": [
+            "rtl",
+            "ltr"
+          ]
+        },
+        "digits": {
+          "enum": [
+            "latn",
+            "arabext",
+            "arab"
+          ]
+        },
+        "intl": {
+          "type": "string"
+        },
+        "tz": {
+          "type": "string"
+        }
+      }
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "intro": {
+      "type": "string"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "panes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/pane"
+      }
+    },
+    "commands": {
+      "$ref": "urn:kit:schema:workbench-commands:v1"
+    },
+    "layouts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "groups"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "title": {
+            "type": "string",
+            "minLength": 1
+          },
+          "groups": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4,
+            "items": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "pane"
+                ],
+                "properties": {
+                  "pane": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "args": {
+                    "type": "object"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "defaultLayout": {
+      "$ref": "#/$defs/id"
+    },
+    "byo": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "enabled",
+        "maxResponseBytes",
+        "maxDatasetBytes",
+        "maxRows",
+        "timeoutMs"
+      ],
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "maxResponseBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 5242880
+        },
+        "maxDatasetBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 5242880
+        },
+        "maxRows": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100000
+        },
+        "timeoutMs": {
+          "type": "integer",
+          "minimum": 500,
+          "maximum": 60000
+        }
+      }
+    },
+    "watchlist": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "max"
+      ],
+      "properties": {
+        "max": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9.-]{1,47}$"
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "name",
+        "kind",
+        "enabled",
+        "licence",
+        "freshness",
+        "reach",
+        "provenance",
+        "adapter"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{1,63}$"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "kind": {
+          "enum": [
+            "sandbox-mock",
+            "public-feed"
+          ],
+          "description": "Project sources. customer-endpoint and customer-dataset exist only at run time (the visitor's own data)."
+        },
+        "origin": {
+          "enum": [
+            "generated",
+            "sandbox-api",
+            "computed"
+          ]
+        },
+        "homepage": {
+          "type": "string",
+          "format": "uri"
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "disabledReason": {
+          "$ref": "#/$defs/text"
+        },
+        "licence": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "line",
+            "redistribution"
+          ],
+          "properties": {
+            "line": {
+              "$ref": "#/$defs/text"
+            },
+            "url": {
+              "type": "string",
+              "format": "uri"
+            },
+            "redistribution": {
+              "$ref": "urn:kit:schema:source-envelope:v1#/properties/licence/properties/redistribution"
+            },
+            "verifiedOn": {
+              "type": "string",
+              "format": "date"
+            },
+            "max_age_days": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 400,
+              "description": "Re-verify the licence within this many days; 90: terms change by quarter."
+            }
+          }
+        },
+        "freshness": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "slaSeconds",
+            "status"
+          ],
+          "properties": {
+            "slaSeconds": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "marketHours": {
+              "type": "string"
+            },
+            "status": {
+              "enum": [
+                "live",
+                "delayed",
+                "stale",
+                "closed",
+                "mock"
+              ]
+            }
+          }
+        },
+        "reach": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fromBrowser",
+            "testedOn"
+          ],
+          "properties": {
+            "fromBrowser": {
+              "enum": [
+                "ok",
+                "blocked",
+                "needs-relay",
+                "unverified",
+                "not-applicable"
+              ]
+            },
+            "fromWorker": {
+              "enum": [
+                "ok",
+                "blocked",
+                "needs-relay",
+                "unverified",
+                "not-applicable"
+              ]
+            },
+            "testedOn": {
+              "type": "string",
+              "format": "date"
+            },
+            "max_age_days": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 400,
+              "description": "Re-test the reach within this many days; 30: reachability changes by month."
+            }
+          }
+        },
+        "units": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "currency": {
+              "enum": [
+                "IRR",
+                "IRT",
+                "USD",
+                "none"
+              ]
+            },
+            "note": {
+              "type": "string"
+            }
+          }
+        },
+        "compliance": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ownerDecisionRef": {
+              "type": "string"
+            },
+            "sanctionsNote": {
+              "type": "string"
+            }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "adapter",
+            "adapterVersion"
+          ],
+          "properties": {
+            "adapter": {
+              "type": "string"
+            },
+            "adapterVersion": {
+              "type": "string"
+            },
+            "upstreamUrl": {
+              "type": "string"
+            }
+          }
+        },
+        "adapter": {
+          "$ref": "#/$defs/adapter"
+        },
+        "contract": {
+          "type": "object",
+          "description": "The JSON Schema (2020-12) the adapter's rows must match; a response that does not match is an error pane, never silently shown."
+        },
+        "fixture": {
+          "description": "A recorded or mock answer that satisfies `contract` (what a disabled adapter shows in the sources pane and what its test replays)."
+        }
+      },
+      "if": {
+        "properties": {
+          "enabled": {
+            "const": false
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "disabledReason"
+        ]
+      }
+    },
+    "adapter": {
+      "oneOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "seed",
+            "series",
+            "points"
+          ],
+          "properties": {
+            "type": {
+              "const": "seeded-series"
+            },
+            "seed": {
+              "type": "integer"
+            },
+            "points": {
+              "type": "integer",
+              "minimum": 5,
+              "maximum": 1000
+            },
+            "stepDays": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 31
+            },
+            "series": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "label",
+                  "base",
+                  "vol"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "label": {
+                    "$ref": "#/$defs/text"
+                  },
+                  "base": {
+                    "type": "number"
+                  },
+                  "drift": {
+                    "type": "number"
+                  },
+                  "vol": {
+                    "type": "number",
+                    "minimum": 0
+                  },
+                  "decimals": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 6
+                  },
+                  "unit": {
+                    "$ref": "#/$defs/text"
+                  }
+                }
+              }
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "url"
+          ],
+          "properties": {
+            "type": {
+              "const": "http-json"
+            },
+            "url": {
+              "type": "string",
+              "pattern": "^/[^/].*$|^https://"
+            },
+            "query": {
+              "type": "object",
+              "description": "Query parameter name to pane parameter (or a fixed value)."
+            },
+            "rows": {
+              "type": "string",
+              "description": "JSON pointer of the rows in the response."
+            },
+            "stamp": {
+              "type": "string",
+              "description": "JSON pointer of the source's own timestamp, if it has one."
+            },
+            "headers": {
+              "type": "object"
+            },
+            "keyed": {
+              "type": "boolean",
+              "description": "The rows pointer names an object: each entry becomes a row ({ key, ...fields } or { key, value })."
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "scripts",
+            "factory"
+          ],
+          "properties": {
+            "type": {
+              "const": "lab-engine"
+            },
+            "scripts": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "pattern": "^/"
+              }
+            },
+            "factory": {
+              "type": "string",
+              "pattern": "^[A-Za-z_$][\\w$]*$"
+            },
+            "storageKey": {
+              "type": "string"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "local"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type"
+          ],
+          "properties": {
+            "type": {
+              "const": "disabled"
+            },
+            "upstreamUrl": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "column": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "label"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[A-Za-z_][\\w.]{0,47}$"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "type": {
+          "enum": [
+            "text",
+            "number",
+            "bool",
+            "link",
+            "date"
+          ]
+        },
+        "href": {
+          "type": "string",
+          "description": "Key of the row field holding the link target (type link)."
+        }
+      }
+    },
+    "pane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "title",
+        "source"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "table",
+            "series",
+            "calendar",
+            "calculator",
+            "sandbox",
+            "sources",
+            "help",
+            "watchlist"
+          ]
+        },
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "summary": {
+          "$ref": "#/$defs/text"
+        },
+        "source": {
+          "type": "string",
+          "pattern": "^[a-z0-9][a-z0-9._-]{1,63}$",
+          "description": "The source this pane reads by default; the pane can switch only to a source it lists in `alternates`, and never shows two at once."
+        },
+        "alternates": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        },
+        "columns": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/column"
+          }
+        },
+        "empty": {
+          "$ref": "#/$defs/text"
+        },
+        "params": {
+          "type": "object"
+        },
+        "calcs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "op",
+              "label",
+              "inputs"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "op": {
+                "enum": [
+                  "jalali-to-gregorian",
+                  "gregorian-to-jalali",
+                  "rial-toman",
+                  "nav",
+                  "yield"
+                ]
+              },
+              "label": {
+                "$ref": "#/$defs/text"
+              },
+              "inputs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "label"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "pattern": "^[a-z][a-z0-9_]*$"
+                    },
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "type": {
+                      "enum": [
+                        "number",
+                        "date",
+                        "text"
+                      ]
+                    },
+                    "default": {
+                      "type": [
+                        "string",
+                        "number"
+                      ]
+                    }
+                  }
+                }
+              },
+              "outputs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "label"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string"
+                    },
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "unit": {
+                      "$ref": "#/$defs/text"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "ops": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "method",
+              "path",
+              "title"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9.]*$"
+              },
+              "method": {
+                "enum": [
+                  "GET",
+                  "POST",
+                  "DELETE"
+                ]
+              },
+              "path": {
+                "type": "string"
+              },
+              "title": {
+                "$ref": "#/$defs/text"
+              },
+              "params": {
+                "type": "object"
+              },
+              "idempotent": {
+                "type": "boolean"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

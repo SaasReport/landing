@@ -1,0 +1,2271 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/widgets/schemas/widgets-spec.schema.json",
+  "title": "kit.widgets-spec.v1",
+  "description": "widgets.spec.json at a project root: who the project's interactive widgets are for (audiences), what they do (use cases), the stories they show (scenarios: actors, steps, inputs, expected outcomes), where the facts come from (sources: OpenAPI, JSON Schemas, engines, content), the project's vocabulary, tone, locales, brand theme and honesty labels, which widget archetypes apply and, for every widget, its usage (where and how it is used), application (the product surface it demonstrates), architecture (the components and flow it visualises, with the project's diagram) and utility (what the visitor learns and does). `kit widgets build` turns it into widgets.generated.json; widgets carry no content of their own (docs/WIDGETS.md).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "project",
+    "locales",
+    "tone",
+    "theme",
+    "honesty",
+    "sources",
+    "vocabulary",
+    "audiences",
+    "useCases",
+    "scenarios",
+    "archetypes",
+    "build"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "$comment": {
+      "type": "string"
+    },
+    "project": {
+      "description": "The owning project: its key in the kit's project vocabulary registry (registry/vocabularies.json), its name and site.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "name",
+        "url",
+        "repo"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]*$"
+        },
+        "name": {
+          "$ref": "#/$defs/text"
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://"
+        },
+        "repo": {
+          "type": "string",
+          "pattern": "^https://github\\.com/[^/]+/[^/]+$",
+          "description": "The project's repository: widgets link their architecture diagram there."
+        }
+      }
+    },
+    "locales": {
+      "description": "Locales the widgets are generated in, the first is the default. dir and digits drive the runtime (RTL/LTR, numerals).",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "dir"
+        ],
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+          },
+          "dir": {
+            "enum": [
+              "rtl",
+              "ltr"
+            ]
+          },
+          "digits": {
+            "enum": [
+              "latn",
+              "arab",
+              "arabext"
+            ],
+            "description": "latn 0-9, arab ٠-٩, arabext ۰-۹ (Persian)"
+          },
+          "intl": {
+            "type": "string",
+            "pattern": "^[a-z]{2}(-[A-Za-z0-9]+)*$",
+            "description": "Intl tag for dates and numbers (e.g. fa-IR, ar-SA-u-ca-islamic-umalqura, en-GB); default: the code."
+          }
+        }
+      }
+    },
+    "tone": {
+      "description": "How the widgets speak: the register and the project's own writing notes (shown to authors, checked by review).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "register"
+      ],
+      "properties": {
+        "register": {
+          "enum": [
+            "formal",
+            "formal-plain",
+            "colloquial",
+            "technical"
+          ]
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "theme": {
+      "description": "Brand theme tokens: a module path (relative to the spec) whose default export holds the @saasreport/site tokens (color.accent, color.ink, …), or the token values inline. The runtime CSS is rendered from them.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tokens": {
+          "type": "string",
+          "minLength": 1
+        },
+        "values": {
+          "type": "object"
+        }
+      },
+      "minProperties": 1
+    },
+    "honesty": {
+      "description": "Every widget says what its data is: live (read from a running service), engine (computed by the project's engine at build time), sample (illustrative). The labels are the project's words.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "default",
+        "labels"
+      ],
+      "properties": {
+        "default": {
+          "$ref": "#/$defs/honesty"
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "live",
+            "engine",
+            "sample"
+          ],
+          "properties": {
+            "live": {
+              "$ref": "#/$defs/text"
+            },
+            "engine": {
+              "$ref": "#/$defs/text"
+            },
+            "sample": {
+              "$ref": "#/$defs/text"
+            }
+          }
+        }
+      }
+    },
+    "sources": {
+      "description": "The project's canonical sources (data contracts), by id. openapi, json-schema and content: a JSON file, a YAML file (with the project's yaml package) or a JS module (export: the named export, else the default) relative to the spec; engine: a module whose default export is an object of functions (call(args, { asOf, locale, addDays }) → JSON).",
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[a-z][a-z0-9-]*$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "path",
+          "describes"
+        ],
+        "properties": {
+          "kind": {
+            "enum": [
+              "openapi",
+              "json-schema",
+              "engine",
+              "content"
+            ]
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "describes": {
+            "type": "string",
+            "minLength": 1
+          },
+          "export": {
+            "type": "string",
+            "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*$",
+            "description": "For a JS module source (openapi, json-schema, content): the named export holding the document (default: the default export). The project's canonical module is used as is, no JSON copy."
+          }
+        }
+      }
+    },
+    "vocabulary": {
+      "description": "The project's own words: terms it owns (registered for the cross-project check), a glossary, and words its widgets must never use.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "owned"
+      ],
+      "properties": {
+        "owned": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          }
+        },
+        "glossary": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "term",
+              "definition"
+            ],
+            "properties": {
+              "term": {
+                "$ref": "#/$defs/text"
+              },
+              "definition": {
+                "$ref": "#/$defs/text"
+              },
+              "source": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "forbidden": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          }
+        }
+      }
+    },
+    "audiences": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "label": {
+            "$ref": "#/$defs/text"
+          },
+          "needs": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/text"
+            }
+          }
+        }
+      }
+    },
+    "useCases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "audiences"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "label": {
+            "$ref": "#/$defs/text"
+          },
+          "summary": {
+            "$ref": "#/$defs/text"
+          },
+          "audiences": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        }
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/scenario"
+      }
+    },
+    "archetypes": {
+      "description": "The archetypes that apply to this project (a widget of another archetype fails the check).",
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/archetype"
+      }
+    },
+    "build": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "asOf",
+        "out"
+      ],
+      "properties": {
+        "asOf": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+          "description": "The date engine calls and relative dates are computed from (deterministic builds; move it to refresh)."
+        },
+        "out": {
+          "type": "string",
+          "pattern": "\\.json$",
+          "description": "Where widgets.generated.json is written (relative to the spec)."
+        },
+        "page": {
+          "description": "The page that shows every widget (an @saasreport/site page of type widgets reads it).",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "title"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^/([a-z0-9-]+/)*$"
+            },
+            "title": {
+              "$ref": "#/$defs/text"
+            },
+            "intro": {
+              "$ref": "#/$defs/text"
+            }
+          }
+        },
+        "exports": {
+          "description": "Projections of a feed widget into another kit consumer's shape (terminal-notify: the terminal's notify view).",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "as",
+              "widget"
+            ],
+            "properties": {
+              "as": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$",
+                "description": "An export kind that a registered archetype produces (its `exports`); build checks that one does."
+              },
+              "widget": {
+                "$ref": "#/$defs/id"
+              },
+              "channels": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "key",
+                    "label"
+                  ],
+                  "properties": {
+                    "key": {
+                      "enum": [
+                        "push",
+                        "sms",
+                        "email",
+                        "msg",
+                        "inapp",
+                        "hook"
+                      ]
+                    },
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "includes": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "\\.json$"
+      },
+      "description": "Spec parts merged into this spec before it is checked (paths relative to the spec): generated scenario families (e.g. one widget per page, derived from the project's content by the project's own generator). Each part may add sources, audiences, useCases and scenarios; ids stay unique across the whole spec. The parts are inputs of the build (their hashes are in widgets.generated.json)."
+    },
+    "plugins": {
+      "description": "The project's own archetype plugins (kit.widgets-plugin.v1): files, or folders with a plugin.mjs. Their ids start with the project's prefix.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "honesty": {
+      "enum": [
+        "live",
+        "engine",
+        "sample"
+      ]
+    },
+    "archetype": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "The id of a registered archetype plugin (the kit's, or one the project declares in `plugins`); the registry says which exist."
+    },
+    "tone": {
+      "enum": [
+        "ok",
+        "warn",
+        "err",
+        "info",
+        "brand",
+        "pending"
+      ]
+    },
+    "text": {
+      "description": "A string in the default locale, a {locale: string} map, or a value taken from a source: {\"$ref\": \"<source>#/json/pointer\"} or {\"$engine\": {source, call, args}}.",
+      "anyOf": [
+        {
+          "type": "string",
+          "minLength": 1
+        },
+        {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+          },
+          "additionalProperties": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minProperties": 1
+        },
+        {
+          "$ref": "#/$defs/sourced"
+        }
+      ]
+    },
+    "sourced": {
+      "anyOf": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "$ref"
+          ],
+          "properties": {
+            "$ref": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9-]*#/"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "$engine"
+          ],
+          "properties": {
+            "$engine": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "source",
+                "call"
+              ],
+              "properties": {
+                "source": {
+                  "$ref": "#/$defs/id"
+                },
+                "call": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z_][A-Za-z0-9_]*$"
+                },
+                "args": {
+                  "type": "object"
+                },
+                "pick": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "value": {
+      "anyOf": [
+        {
+          "type": [
+            "number",
+            "boolean"
+          ]
+        },
+        {
+          "$ref": "#/$defs/text"
+        }
+      ]
+    },
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "useCase",
+        "audiences",
+        "title",
+        "actors",
+        "steps",
+        "widgets"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "useCase": {
+          "$ref": "#/$defs/id"
+        },
+        "audiences": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "summary": {
+          "$ref": "#/$defs/text"
+        },
+        "honesty": {
+          "$ref": "#/$defs/honesty"
+        },
+        "actors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label",
+              "kind"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "label": {
+                "$ref": "#/$defs/text"
+              },
+              "role": {
+                "$ref": "#/$defs/text"
+              },
+              "kind": {
+                "enum": [
+                  "person",
+                  "organisation",
+                  "agent",
+                  "system",
+                  "regulator"
+                ]
+              },
+              "sees": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/text"
+                }
+              }
+            }
+          }
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label",
+              "type",
+              "default"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-zA-Z0-9]*$"
+              },
+              "label": {
+                "$ref": "#/$defs/text"
+              },
+              "type": {
+                "enum": [
+                  "number",
+                  "select"
+                ]
+              },
+              "default": {
+                "type": [
+                  "number",
+                  "string"
+                ]
+              },
+              "min": {
+                "type": "number"
+              },
+              "max": {
+                "type": "number"
+              },
+              "step": {
+                "type": "number"
+              },
+              "unit": {
+                "$ref": "#/$defs/text"
+              },
+              "options": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "value",
+                    "label"
+                  ],
+                  "properties": {
+                    "value": {
+                      "type": "number"
+                    },
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "actor",
+              "action"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "actor": {
+                "$ref": "#/$defs/id"
+              },
+              "to": {
+                "$ref": "#/$defs/id"
+              },
+              "action": {
+                "$ref": "#/$defs/text"
+              },
+              "detail": {
+                "$ref": "#/$defs/text"
+              },
+              "outcome": {
+                "$ref": "#/$defs/text"
+              },
+              "status": {
+                "$ref": "#/$defs/tone"
+              },
+              "decision": {
+                "enum": [
+                  "allow",
+                  "deny",
+                  "approval"
+                ]
+              },
+              "event": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9_]*(\\.[a-z0-9_]+)+$"
+              },
+              "at": {
+                "description": "When: an ISO date, a day offset from build.asOf (\"+3d\", \"-1d\"), or a sourced value.",
+                "anyOf": [
+                  {
+                    "type": "string",
+                    "pattern": "^(\\d{4}-\\d{2}-\\d{2}|[+-]\\d+d)$"
+                  },
+                  {
+                    "$ref": "#/$defs/sourced"
+                  }
+                ]
+              },
+              "channels": {
+                "type": "array",
+                "uniqueItems": true,
+                "items": {
+                  "enum": [
+                    "push",
+                    "sms",
+                    "email",
+                    "msg",
+                    "inapp",
+                    "hook"
+                  ]
+                }
+              },
+              "icon": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 4
+              },
+              "rules": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/text"
+                }
+              },
+              "operation": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*#([A-Za-z_][A-Za-z0-9_.-]*|(GET|POST|PUT|PATCH|DELETE) /\\S*)$",
+                "description": "<openapi source>#<operationId>, or <openapi source>#<METHOD> <path> for documents without operationIds"
+              },
+              "payload": {
+                "$ref": "#/$defs/sourced",
+                "description": "The response the playground shows instead of the OpenAPI sample: a value from a source or an engine call (e.g. the engine's real answer at build.asOf)."
+              },
+              "fields": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "value"
+                  ],
+                  "properties": {
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/value"
+                    },
+                    "tone": {
+                      "$ref": "#/$defs/tone"
+                    }
+                  }
+                }
+              },
+              "actions": {
+                "type": "array",
+                "maxItems": 2,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "result"
+                  ],
+                  "properties": {
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "result": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "tone": {
+                      "$ref": "#/$defs/tone"
+                    },
+                    "done": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "title": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "kind": {
+                      "enum": [
+                        "approve",
+                        "decline",
+                        "verify",
+                        "revoke",
+                        "acknowledge"
+                      ]
+                    },
+                    "by": {
+                      "$ref": "#/$defs/id",
+                      "description": "The actor who acts (approve by the initiator is refused)."
+                    }
+                  }
+                }
+              },
+              "chip": {
+                "$ref": "#/$defs/text",
+                "description": "A short label for the step (a filter chip, a tab)."
+              },
+              "fails": {
+                "enum": [
+                  "push",
+                  "sms",
+                  "email",
+                  "msg",
+                  "inapp",
+                  "hook"
+                ],
+                "description": "A channel that fails in this story (the route falls back)."
+              },
+              "request": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "query": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": [
+                        "string",
+                        "number",
+                        "boolean"
+                      ]
+                    }
+                  },
+                  "body": {}
+                },
+                "description": "Request values the step sends (query parameters, body) instead of the OpenAPI examples."
+              },
+              "device": {
+                "$ref": "#/$defs/id",
+                "description": "The device this step's notification arrives on (archetype notify)."
+              },
+              "initiator": {
+                "$ref": "#/$defs/id",
+                "description": "The actor who initiated the request: an approve action by this actor is refused (maker is not checker)."
+              },
+              "scene": {
+                "description": "What opens when the notification is tapped: an animated scene.",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "kind",
+                  "items"
+                ],
+                "properties": {
+                  "kind": {
+                    "enum": [
+                      "chain",
+                      "checklist",
+                      "seal",
+                      "cascade"
+                    ]
+                  },
+                  "title": {
+                    "$ref": "#/$defs/text"
+                  },
+                  "hash": {
+                    "$ref": "#/$defs/text"
+                  },
+                  "items": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "label"
+                      ],
+                      "properties": {
+                        "label": {
+                          "$ref": "#/$defs/text"
+                        },
+                        "value": {
+                          "$ref": "#/$defs/value"
+                        },
+                        "tone": {
+                          "$ref": "#/$defs/tone"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "outcomes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "label": {
+                "$ref": "#/$defs/text"
+              },
+              "expr": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_+\\-*/().,\\s]+$",
+                "description": "Arithmetic over input ids: + - * / ( ), min, max, round, floor, ceil, pow, abs, gte(a, b) and lte(a, b) (1 or 0)."
+              },
+              "unit": {
+                "$ref": "#/$defs/text"
+              },
+              "decimals": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 6
+              },
+              "text": {
+                "$ref": "#/$defs/text"
+              },
+              "bands": {
+                "type": "array",
+                "description": "Labelled ranges of the computed value (calculator): the band with the highest min not above the value is shown.",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "min",
+                    "label"
+                  ],
+                  "properties": {
+                    "min": {
+                      "type": "number"
+                    },
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "text": {
+                      "$ref": "#/$defs/text"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "compare": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "columns",
+            "rows"
+          ],
+          "properties": {
+            "columns": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "label"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "label": {
+                    "$ref": "#/$defs/text"
+                  }
+                }
+              }
+            },
+            "rows": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "label",
+                  "cells"
+                ],
+                "properties": {
+                  "label": {
+                    "$ref": "#/$defs/text"
+                  },
+                  "cells": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "$ref": "#/$defs/value"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "screens": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "actor",
+              "title",
+              "lines"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "actor": {
+                "$ref": "#/$defs/id"
+              },
+              "title": {
+                "$ref": "#/$defs/text"
+              },
+              "lines": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "value"
+                  ],
+                  "properties": {
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/value"
+                    },
+                    "tone": {
+                      "$ref": "#/$defs/tone"
+                    },
+                    "id": {
+                      "$ref": "#/$defs/id",
+                      "description": "A region id a tour callout can anchor to."
+                    }
+                  }
+                }
+              },
+              "cta": {
+                "$ref": "#/$defs/text"
+              },
+              "regions": {
+                "type": "array",
+                "description": "Named regions of the screen a tour callout can anchor to (beyond the lines).",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "label"
+                  ],
+                  "properties": {
+                    "id": {
+                      "$ref": "#/$defs/id"
+                    },
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "widgets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "archetype",
+              "usage",
+              "application",
+              "architecture",
+              "utility"
+            ],
+            "properties": {
+              "archetype": {
+                "$ref": "#/$defs/archetype"
+              },
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "title": {
+                "$ref": "#/$defs/text"
+              },
+              "honesty": {
+                "$ref": "#/$defs/honesty"
+              },
+              "usage": {
+                "description": "Where and how the widget is used on the project's surfaces (the generated page, a landing section, the terminal, an embed, an app).",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "surfaces"
+                ],
+                "properties": {
+                  "surfaces": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "path",
+                        "placement",
+                        "how"
+                      ],
+                      "properties": {
+                        "path": {
+                          "type": "string",
+                          "pattern": "^/"
+                        },
+                        "placement": {
+                          "enum": [
+                            "page",
+                            "section",
+                            "terminal",
+                            "embed",
+                            "app"
+                          ]
+                        },
+                        "how": {
+                          "$ref": "#/$defs/text"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "application": {
+                "description": "The product surface the widget demonstrates (a product, an API, a console) and where it lives.",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "surface"
+                ],
+                "properties": {
+                  "surface": {
+                    "$ref": "#/$defs/text"
+                  },
+                  "href": {
+                    "type": "string",
+                    "pattern": "^(/|https://)"
+                  }
+                }
+              },
+              "architecture": {
+                "description": "What the widget visualises of the project's architecture: its components, the flow, and the project's diagram of it (a file under docs/diagrams/, checked to exist).",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "components",
+                  "flow",
+                  "diagram"
+                ],
+                "properties": {
+                  "components": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "#/$defs/text"
+                    }
+                  },
+                  "flow": {
+                    "$ref": "#/$defs/text"
+                  },
+                  "diagram": {
+                    "type": "string",
+                    "pattern": "^docs/diagrams/[^/]+\\.(png|mmd)$"
+                  }
+                }
+              },
+              "utility": {
+                "description": "What the visitor learns from the widget and what they can do with it.",
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "learns",
+                  "does"
+                ],
+                "properties": {
+                  "learns": {
+                    "$ref": "#/$defs/text"
+                  },
+                  "does": {
+                    "$ref": "#/$defs/text"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tour": {
+          "description": "A guided tour (archetype tour): a checklist of tasks, each a run of this scenario's steps; a callout pins a step to a named region of one of the scenario's screens. No lead form: the only call to action is on the finish card.",
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "tasks",
+            "finish"
+          ],
+          "properties": {
+            "tasks": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "id",
+                  "title",
+                  "steps"
+                ],
+                "properties": {
+                  "id": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "title": {
+                    "$ref": "#/$defs/text"
+                  },
+                  "benefit": {
+                    "$ref": "#/$defs/text"
+                  },
+                  "steps": {
+                    "type": "array",
+                    "minItems": 1,
+                    "items": {
+                      "$ref": "#/$defs/id"
+                    }
+                  }
+                }
+              }
+            },
+            "callouts": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "step",
+                  "screen",
+                  "anchor"
+                ],
+                "properties": {
+                  "step": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "screen": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "anchor": {
+                    "$ref": "#/$defs/id"
+                  },
+                  "appearance": {
+                    "enum": [
+                      "callout",
+                      "modal"
+                    ]
+                  },
+                  "beat": {
+                    "enum": [
+                      "toast",
+                      "device",
+                      "drawer",
+                      "seal"
+                    ]
+                  }
+                }
+              }
+            },
+            "finish": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "title",
+                "cta"
+              ],
+              "properties": {
+                "title": {
+                  "$ref": "#/$defs/text"
+                },
+                "text": {
+                  "$ref": "#/$defs/text"
+                },
+                "cta": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "href"
+                  ],
+                  "properties": {
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "href": {
+                      "type": "string",
+                      "pattern": "^(/|https://)"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "devices": {
+          "description": "Where notifications arrive (archetype notify): device mockups, each held by an actor.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "kind",
+              "label",
+              "actor"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "kind": {
+                "enum": [
+                  "phone",
+                  "console",
+                  "dashboard",
+                  "inbox"
+                ]
+              },
+              "label": {
+                "$ref": "#/$defs/text"
+              },
+              "actor": {
+                "$ref": "#/$defs/id"
+              }
+            }
+          }
+        },
+        "machines": {
+          "description": "State machines (archetype machine): grouped (a sector, a product), each with its states and transitions.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "group",
+              "title",
+              "states",
+              "transitions"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "group": {
+                "$ref": "#/$defs/text"
+              },
+              "title": {
+                "$ref": "#/$defs/text"
+              },
+              "summary": {
+                "$ref": "#/$defs/text"
+              },
+              "meta": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/$defs/text"
+                },
+                "description": "Short facts shown with the machine (regulations it implements, licence)."
+              },
+              "states": {
+                "type": "array",
+                "minItems": 2,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "id",
+                    "label"
+                  ],
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "kind": {
+                      "enum": [
+                        "initial",
+                        "transient",
+                        "terminal",
+                        "final",
+                        "error",
+                        "stable"
+                      ]
+                    },
+                    "detail": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "rules": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/$defs/text"
+                      }
+                    }
+                  }
+                }
+              },
+              "transitions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "from",
+                    "to"
+                  ],
+                  "properties": {
+                    "from": {
+                      "type": "string"
+                    },
+                    "to": {
+                      "type": "string"
+                    },
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "cases": {
+          "description": "Cases a runs widget lets the visitor pick (archetype runs): each runs through the scenario's steps (the stages) to its verdict.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "label",
+              "decision"
+            ],
+            "properties": {
+              "id": {
+                "$ref": "#/$defs/id"
+              },
+              "label": {
+                "$ref": "#/$defs/text"
+              },
+              "detail": {
+                "$ref": "#/$defs/text"
+              },
+              "inputs": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "label",
+                    "value"
+                  ],
+                  "properties": {
+                    "label": {
+                      "$ref": "#/$defs/text"
+                    },
+                    "value": {
+                      "$ref": "#/$defs/value"
+                    }
+                  }
+                }
+              },
+              "stops": {
+                "type": "string",
+                "description": "The step id where the case is stopped (held or refused); absent when it passes every stage."
+              },
+              "decision": {
+                "enum": [
+                  "allow",
+                  "deny",
+                  "approval"
+                ]
+              },
+              "outcome": {
+                "$ref": "#/$defs/text"
+              },
+              "reason": {
+                "$ref": "#/$defs/text"
+              }
+            }
+          }
+        },
+        "workbench": {
+          "description": "The workbench (archetype workbench): the project's sources, panes, commands and layouts. Resolved per locale and validated against @saasreport/workbench's kit.workbench.v1 by `kit widgets build`; texts are strings, {locale: text} maps, {$ref} or {$engine}.",
+          "type": "object"
+        },
+        "network": {
+          "$ref": "#/$defs/plugin.network"
+        },
+        "flow": {
+          "$ref": "#/$defs/plugin.flow"
+        },
+        "split": {
+          "$ref": "#/$defs/plugin.split"
+        },
+        "netting": {
+          "$ref": "#/$defs/plugin.netting"
+        },
+        "match": {
+          "$ref": "#/$defs/plugin.match"
+        },
+        "builder": {
+          "$ref": "#/$defs/plugin.builder"
+        }
+      }
+    },
+    "plugin.network": {
+      "description": "A network: nodes with roles around a hub, configurations (the views the visitor switches between) with their edges, typed flows, live counters and an optional provider-failover event.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hub",
+        "nodes",
+        "configurations"
+      ],
+      "properties": {
+        "mark": {
+          "description": "URL of the hub's image (the project's mark).",
+          "type": "string",
+          "minLength": 1
+        },
+        "hub": {
+          "description": "The node id of the hub (a node of class hub).",
+          "$ref": "#/$defs/id"
+        },
+        "nodes": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "$ref": "#/$defs/plugin.network.node"
+          }
+        },
+        "flowTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/plugin.network.flowType"
+          }
+        },
+        "configurations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/plugin.network.configuration"
+          }
+        },
+        "default": {
+          "description": "The configuration shown first (default: the first).",
+          "$ref": "#/$defs/id"
+        },
+        "selector": {
+          "description": "How the visitor switches configuration: tabs or a select (default: tabs up to six, else a select).",
+          "enum": [
+            "tabs",
+            "select"
+          ]
+        },
+        "selectorLabel": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "plugin.network.node": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "class"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "class": {
+          "description": "Its role in the topology; the stylesheet colours it from the project's tokens.",
+          "enum": [
+            "hub",
+            "participant",
+            "provider",
+            "infrastructure"
+          ]
+        },
+        "role": {
+          "$ref": "#/$defs/text"
+        },
+        "detail": {
+          "$ref": "#/$defs/text"
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/text"
+          }
+        }
+      }
+    },
+    "plugin.network.flowType": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "tone"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "tone": {
+          "$ref": "#/$defs/tone"
+        }
+      }
+    },
+    "plugin.network.flow": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "type",
+        "from",
+        "to",
+        "label"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "type": {
+          "$ref": "#/$defs/id"
+        },
+        "from": {
+          "$ref": "#/$defs/id"
+        },
+        "to": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "amount": {
+          "$ref": "#/$defs/value"
+        },
+        "direction": {
+          "description": "forward: from to to (default); reverse: to to from; both: both ways.",
+          "enum": [
+            "forward",
+            "reverse",
+            "both"
+          ]
+        }
+      }
+    },
+    "plugin.network.counter": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "value"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        }
+      }
+    },
+    "plugin.network.event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "label",
+        "flow",
+        "fails",
+        "reroute"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "const": "failover"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "done": {
+          "$ref": "#/$defs/text"
+        },
+        "flow": {
+          "description": "The flow that is re-routed.",
+          "$ref": "#/$defs/id"
+        },
+        "fails": {
+          "description": "The provider whose edge fades.",
+          "$ref": "#/$defs/id"
+        },
+        "reroute": {
+          "description": "The provider the flow continues through.",
+          "$ref": "#/$defs/id"
+        }
+      }
+    },
+    "plugin.network.configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "nodes"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "summary": {
+          "$ref": "#/$defs/text"
+        },
+        "layout": {
+          "enum": [
+            "rings",
+            "sides",
+            "tiers"
+          ]
+        },
+        "nodes": {
+          "description": "The nodes of this view (not the hub).",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/id"
+          }
+        },
+        "edges": {
+          "description": "Explicit edges as [from, to] node ids; default: every node to the hub.",
+          "type": "array",
+          "items": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        },
+        "flows": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/plugin.network.flow"
+          }
+        },
+        "counters": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/plugin.network.counter"
+          }
+        },
+        "event": {
+          "$ref": "#/$defs/plugin.network.event"
+        }
+      }
+    },
+    "plugin.flow": {
+      "description": "What travels along the scenario's steps (its hops, in order): an amount, a status sequence, figures, and optionally the API request and response.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "amount": {
+          "description": "The amount that travels (as the project writes it, currency included).",
+          "$ref": "#/$defs/value"
+        },
+        "amountLabel": {
+          "$ref": "#/$defs/text"
+        },
+        "metrics": {
+          "description": "Figures shown beside the path (counted up when it runs).",
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/plugin.flow.metric"
+          }
+        },
+        "statuses": {
+          "description": "The status sequence; each status holds from its step until the next one's.",
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/plugin.flow.status"
+          }
+        },
+        "request": {
+          "$ref": "#/$defs/plugin.flow.request"
+        },
+        "cta": {
+          "description": "The label of the button that runs it (default: the interface word).",
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "plugin.flow.metric": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "value"
+      ],
+      "properties": {
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        }
+      }
+    },
+    "plugin.flow.status": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "step",
+        "label"
+      ],
+      "properties": {
+        "step": {
+          "description": "The id of the scenario step where this status begins.",
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "tone": {
+          "$ref": "#/$defs/tone"
+        }
+      }
+    },
+    "plugin.flow.request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "method",
+        "path"
+      ],
+      "properties": {
+        "method": {
+          "$ref": "#/$defs/text"
+        },
+        "path": {
+          "$ref": "#/$defs/text"
+        },
+        "body": {
+          "$ref": "#/$defs/sourced"
+        },
+        "response": {
+          "$ref": "#/$defs/sourced"
+        }
+      }
+    },
+    "plugin.split": {
+      "description": "One amount and the allocations it divides into.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "amount",
+        "allocations"
+      ],
+      "properties": {
+        "amount": {
+          "$ref": "#/$defs/plugin.split.line"
+        },
+        "allocations": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 12,
+          "items": {
+            "$ref": "#/$defs/plugin.split.allocation"
+          }
+        },
+        "cta": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "plugin.split.line": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "value"
+      ],
+      "properties": {
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        }
+      }
+    },
+    "plugin.split.allocation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label",
+        "value"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        },
+        "weight": {
+          "description": "Its share of the amount (any positive number); default: the number in its value.",
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "plugin.netting": {
+      "description": "The participants, and the gross and net totals they collapse between.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "participants",
+        "gross",
+        "net"
+      ],
+      "properties": {
+        "participants": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 16,
+          "items": {
+            "$ref": "#/$defs/plugin.netting.participant"
+          }
+        },
+        "gross": {
+          "$ref": "#/$defs/plugin.netting.line"
+        },
+        "net": {
+          "$ref": "#/$defs/plugin.netting.line"
+        },
+        "count": {
+          "description": "The participant count as the project states it (shown beside the totals).",
+          "$ref": "#/$defs/plugin.netting.line"
+        },
+        "status": {
+          "$ref": "#/$defs/plugin.netting.line"
+        },
+        "cta": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "plugin.netting.participant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "plugin.netting.line": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "value"
+      ],
+      "properties": {
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        }
+      }
+    },
+    "plugin.match": {
+      "description": "The two sides, their counts, and what to show when an exception is opened.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expected",
+        "external",
+        "records",
+        "matched",
+        "exceptions"
+      ],
+      "properties": {
+        "expected": {
+          "$ref": "#/$defs/text"
+        },
+        "external": {
+          "$ref": "#/$defs/text"
+        },
+        "records": {
+          "$ref": "#/$defs/plugin.match.line"
+        },
+        "matched": {
+          "$ref": "#/$defs/plugin.match.line"
+        },
+        "exceptions": {
+          "$ref": "#/$defs/plugin.match.line"
+        },
+        "sample": {
+          "description": "How many records each side shows (default 8).",
+          "type": "integer",
+          "minimum": 4,
+          "maximum": 16
+        },
+        "investigation": {
+          "$ref": "#/$defs/plugin.match.investigation"
+        },
+        "cta": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "plugin.match.line": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "value"
+      ],
+      "properties": {
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "value": {
+          "$ref": "#/$defs/value"
+        }
+      }
+    },
+    "plugin.match.investigation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title"
+      ],
+      "properties": {
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "text": {
+          "$ref": "#/$defs/text"
+        },
+        "fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/plugin.match.line"
+          }
+        }
+      }
+    },
+    "plugin.builder": {
+      "description": "The hub, the steps with their options, and the figures that count the selection.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "hub",
+        "steps"
+      ],
+      "properties": {
+        "mark": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hub": {
+          "$ref": "#/$defs/text"
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "items": {
+            "$ref": "#/$defs/plugin.builder.step"
+          }
+        },
+        "output": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/plugin.builder.figure"
+          }
+        },
+        "outputLabel": {
+          "$ref": "#/$defs/text"
+        },
+        "cta": {
+          "$ref": "#/$defs/text"
+        }
+      }
+    },
+    "plugin.builder.step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "title",
+        "class",
+        "options"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "title": {
+          "$ref": "#/$defs/text"
+        },
+        "class": {
+          "description": "The role the chosen options take in the preview.",
+          "enum": [
+            "participant",
+            "provider",
+            "infrastructure"
+          ]
+        },
+        "options": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 14,
+          "items": {
+            "$ref": "#/$defs/plugin.builder.option"
+          }
+        }
+      }
+    },
+    "plugin.builder.option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "selected": {
+          "description": "Chosen at first.",
+          "type": "boolean"
+        }
+      }
+    },
+    "plugin.builder.figure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "label"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "label": {
+          "$ref": "#/$defs/text"
+        },
+        "step": {
+          "description": "Counts the options chosen in this step (default: in every step).",
+          "$ref": "#/$defs/id"
+        }
+      }
+    }
+  }
+}

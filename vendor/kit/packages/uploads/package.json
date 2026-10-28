@@ -1,0 +1,21 @@
+{
+  "name": "@saasreport/uploads",
+  "version": "0.1.0",
+  "description": "Upload safety for Workers: bounded body reader, magic-byte sniffer and per-form allowlist, native static triage (PDF, OOXML, OLE2, zip, SVG, images), quarantine then release on R2, a pluggable scan step with an explicit verdict, Evidence records, safe serving and retention.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./bounded": "./src/bounded.js",
+    "./triage": "./src/triage/index.js",
+    "./migrations/*": "./migrations/*",
+    "./package.json": "./package.json"
+  },
+  "dependencies": { "@saasreport/core": "*" },
+  "files": ["src", "migrations", "README.md"],
+  "scripts": { "test": "node --test test/*.test.mjs" },
+  "engines": { "node": ">=20.17.0" },
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "private": true
+}

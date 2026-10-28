@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Example Money Notes</title>
+<meta name="description" content="A sample kit site in two languages: a weekly topic, a monthly report and a term a day, as posts and short podcasts.">
+<link rel="canonical" href="https://example.org/">
+<link rel="alternate" hreflang="en" href="https://example.org/"><link rel="alternate" hreflang="ar" href="https://example.org/ar/"><link rel="alternate" hreflang="x-default" href="https://example.org/">
+<link rel="stylesheet" href="/kit/kit.css">
+<style>:root{--c-accent:#2F5BEA;--c-ink:#141414;--c-bg:#FAFAF8}</style>
+<link rel="alternate" type="application/rss+xml" title="Blog" href="/blog/feed.xml">
+<link rel="alternate" type="application/rss+xml" title="Money in Two Minutes" href="/podcasts/feed.xml">
+</head>
+<body class="kit">
+<a class="skip" href="#main">Skip to content</a>
+<header class="kbar"><div class="wrap kbar__in">
+  <a class="kbar__brand" href="/"><span class="kbar__name">Example Money Notes</span></a>
+  <nav class="kbar__nav" aria-label="Main"><a href="/blog/">Blog</a><a href="/podcasts/">Podcasts</a><a href="/glossary/">Glossary</a><a href="/events/">Events</a></nav>
+  <nav class="kbar__langs" aria-label="Languages"><a href="/ar/" hreflang="ar" lang="ar">العربية</a></nav>
+</div></header>
+<main id="main" class="wrap">
+  <section class="hero">
+    <p class="eyebrow">Sample site built with kit</p>
+    <h1>Money, explained a little every day</h1>
+    <p>A weekly topic, a monthly report and one term a day, published on schedule as posts and short two-voice podcasts.
+       Everything on this page is sample content: edit <code>public/index.html</code> (and <code>public/ar/index.html</code>), <code>kit.config.js</code> and <code>content/</code>.</p>
+    <div class="hero__act"><a class="btn btn--primary" href="/blog/">Read the blog</a><a class="btn btn--ghost" href="/podcasts/">Listen</a></div>
+  </section>
+
+  <section id="glossary" aria-labelledby="glossary-title">
+    <h2 class="sec" id="glossary-title">Term of the day</h2>
+    <div class="gtoday" data-glossary-today hidden></div>
+    <div class="gtoday" data-glossary-empty hidden><p>No term today. Browse the <a href="/glossary/">glossary</a>.</p></div>
+  </section>
+
+  <section id="podcasts" aria-labelledby="podcasts-title">
+    <h2 class="sec" id="podcasts-title">Podcasts</h2>
+    <div class="grid grid--2">
+      <article class="pcard"><a href="/podcasts/#weekly"><h3>Money in Two Minutes</h3><p>One topic a week, in about two minutes.</p></a></article>
+      <article class="pcard"><a href="/podcasts/#daily"><h3>One Term a Day</h3><p>One finance term a day, in about a minute.</p></a></article>
+    </div>
+  </section>
+</main>
+<footer class="kfoot"><div class="wrap kfoot__in">
+  <nav class="kfoot__links"><a href="/blog/feed.xml">RSS</a><a href="/sitemap.xml">Sitemap</a><a href="/llms.txt">llms.txt</a></nav>
+  <p>Built with kit. Sample content.</p>
+</div></footer>
+<script type="module">
+  // Term of the day from the glossary API (the monitor's landing journey looks for [data-glossary-today]).
+  const box = document.querySelector("[data-glossary-today]"), empty = document.querySelector("[data-glossary-empty]");
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  fetch("/api/glossary/today").then((r) => r.json()).then((d) => {
+    if (!d.term) { empty.hidden = false; return; }
+    box.innerHTML = `<span class="kb">Term of the day</span><h2><a href="/glossary/${esc(d.term.slug)}">${esc(d.term.term)}</a></h2><p>${esc(d.term.short)}</p>`;
+    box.hidden = false;
+  }).catch(() => { empty.hidden = false; });
+</script>
+</body>
+</html>

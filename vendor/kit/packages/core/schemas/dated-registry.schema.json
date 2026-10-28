@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/dated-registry.schema.json",
+  "title": "kit.dated-registry.v1",
+  "description": "The shape every registry that records a fact read from outside (a plan, a subprocessor, a provider's limit) takes: a top-level `max_age_days` and, on each fact, a `verified` day (YYYY-MM-DD). `kit check staleness` reports registry-fact-stale for any fact older than its max age (the fact's own max_age_days, else the registry's) and for a registry with a `verified` day and no declared max age. A registry schema references this one with allOf and adds its own facts.",
+  "type": "object",
+  "required": ["max_age_days"],
+  "properties": {
+    "max_age_days": { "type": "integer", "minimum": 1, "maximum": 400, "description": "The oldest a `verified` day in this registry may be before the fact is stale." }
+  },
+  "$defs": {
+    "verified": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$", "format": "date", "description": "The day the fact was read from its source." }
+  }
+}

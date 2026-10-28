@@ -1,0 +1,24 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Example lending library API", "version": "1.0.0" },
+  "paths": {
+    "/loans": {
+      "post": {
+        "operationId": "createLoan", "summary": "Lend a book to a member",
+        "requestBody": { "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LoanRequest" } } } },
+        "responses": { "201": { "description": "Loan created", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Loan" } } } } }
+      }
+    },
+    "/loans/{loanId}": {
+      "get": {
+        "operationId": "getLoan", "summary": "Read a loan",
+        "parameters": [{ "name": "loanId", "in": "path", "required": true, "schema": { "type": "string" }, "example": "ln_42" }],
+        "responses": { "200": { "description": "The loan", "content": { "application/json": { "example": { "id": "ln_42", "status": "open" } } } } }
+      }
+    }
+  },
+  "components": { "schemas": {
+    "LoanRequest": { "type": "object", "required": ["member", "book"], "properties": { "member": { "type": "string", "example": "m_7" }, "book": { "type": "string" }, "days": { "type": "integer", "default": 14 } } },
+    "Loan": { "type": "object", "properties": { "id": { "type": "string", "example": "ln_42" }, "due": { "type": "string", "format": "date" }, "status": { "enum": ["open", "returned"] } } }
+  } }
+}

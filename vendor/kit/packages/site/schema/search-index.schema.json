@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/site/schema/search-index.schema.json",
+  "title": "kit.search-index.v2",
+  "description": "/search-index.json, written by `kit site build` (writeSearchIndex) for every kit site and read by the shell's search (assets/shell.js): the pages [url, title, headings, description], an inverted index of body terms, the sections and facets the dialog filters by, synonym groups, and per page its section, weight and facet values (meta). Generated, never hand-edited. The cross-field rules a schema cannot say (one meta row per page, every index in range) are checked by checkSearchIndex.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["v", "pages", "terms", "sections", "facets", "synonyms", "meta"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "v": { "const": 2 },
+    "pages": { "type": "array", "items": { "type": "array", "minItems": 4, "maxItems": 4, "prefixItems": [{ "type": "string", "pattern": "^/" }, { "type": "string", "minLength": 1 }, { "type": "string" }, { "type": "string" }] } },
+    "terms": { "type": "object", "additionalProperties": { "type": "array", "minItems": 1, "items": { "type": "integer", "minimum": 0 } } },
+    "sections": { "type": "array", "items": { "type": "array", "minItems": 2, "maxItems": 2, "prefixItems": [{ "type": "string", "minLength": 1 }, { "type": "string", "minLength": 1 }] }, "description": "[id, label] in the order of the chips." },
+    "facets": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "label", "values"], "properties": {
+      "id": { "type": "string", "minLength": 1 }, "label": { "type": "string", "minLength": 1 },
+      "values": { "type": "array", "minItems": 1, "items": { "type": "array", "minItems": 3, "maxItems": 4, "prefixItems": [{ "type": "string", "minLength": 1 }, { "type": "string", "minLength": 1 }, { "type": "integer", "minimum": 0 }, { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 } }] }, "description": "[id, label, position, synonyms?]; the position is the value's number across all facets, as meta lists it." }
+    } } },
+    "synonyms": { "type": "array", "items": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 1 } } },
+    "meta": { "type": "array", "items": { "type": "array", "minItems": 3, "maxItems": 3, "prefixItems": [{ "type": "integer", "minimum": -1 }, { "type": "number" }, { "type": "array", "items": { "type": "integer", "minimum": 0 } }] }, "description": "Per page, in the order of pages: [section number (-1: none), weight, facet value positions]." }
+  }
+}

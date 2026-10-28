@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="{{locale.lang}}" dir="{{locale.dir}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="{{colorHex.accent}}">
+<title>{{c.meta.title}}</title>
+<meta name="description" content="{{c.meta.description|attr}}">
+<link rel="canonical" href="{{page.url}}"><meta name="robots" content="index, follow, max-image-preview:large">{{page.alternates}}
+<meta property="og:type" content="website"><meta property="og:locale" content="{{locale.og}}">{{page.ogAlternates}}<meta property="og:site_name" content="{{name|attr}}"><meta property="og:title" content="{{c.meta.ogTitle|attr}}"><meta property="og:description" content="{{c.meta.ogDescription|attr}}"><meta property="og:url" content="{{page.url}}"><meta property="og:image" content="{{page.ogImage}}">
+{{page.ld}}
+{{chrome.icons}}
+{{chrome.preload}}
+<link rel="stylesheet" href="{{a.styles.css}}">
+<link rel="stylesheet" href="{{a.notify.css}}">
+<link rel="stylesheet" href="{{a.content.css}}">
+<link rel="stylesheet" href="{{a.terminal.css}}">
+<link rel="stylesheet" href="{{a.pages.css}}">
+</head>
+<body class="tpage">
+{{chrome.bar}}
+<main>
+  <section class="hero-t wrap">
+    <p class="eyebrow">{{c.hero.eyebrow}}</p>
+    <h1>{{c.hero.title}}</h1>
+    <p>{{c.hero.lead}}</p>
+  </section>
+  <section class="wrap acad">
+    <div class="tabs" data-tabs>
+      <div class="tabs__list" role="tablist" aria-label="{{c.tabsLabel|attr}}">
+        <button role="tab" aria-selected="true" data-tab="paths">{{c.paths.tab}}</button>{{#each c.kinds}}<button role="tab" aria-selected="false" data-tab="{{.key}}">{{.tab}} <i data-count="{{.key}}"></i></button>{{/each}}
+      </div>
+      <div class="tabs__panel is-active" role="tabpanel">
+        <div class="lpaths">
+{{#each c.paths.items}}<article class="lpath" id="{{.id}}"><header><span class="pill idle">{{.level}}</span><span class="lpath__n">{{.stepsLabel}}</span></header><h3>{{.title}}</h3><p>{{.text}}</p><ol>{{#each .steps}}<li><a href="{{.href|attr}}"><span>{{.kind}}</span>{{.label}}</a></li>{{/each}}</ol></article>
+{{/each}}        </div>
+        <p class="acad__note">{{c.paths.note}}</p>
+      </div>
+{{#each c.kinds}}      <div class="tabs__panel" role="tabpanel" data-kind="{{.key}}">
+        <div class="acad__ev" data-ev="{{.key}}" aria-live="polite"></div>
+        <div class="acad__empty" data-empty="{{.key}}" hidden>
+          <div><h3>{{.title}}</h3><p>{{.text}}</p></div>
+          <form class="cform" data-cform="events-subscribe" novalidate>
+            <label><span>{{c.form.name}}</span><input name="name" required maxlength="120" autocomplete="name"></label>
+            <label><span>{{c.form.email}}</span><input name="email" type="email" required maxlength="200" autocomplete="email" dir="ltr"></label>
+            <input type="hidden" name="interests" value="{{.interest|attr}}">
+            <input name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
+            <label class="cform__ok"><input type="checkbox" name="consent" required><span>{{c.form.consent}}</span></label>
+            <button class="btn btn--primary" type="submit">{{c.form.submit}}</button>
+          </form>
+        </div>
+      </div>
+{{/each}}    </div>
+  </section>
+</main>
+{{chrome.footer}}
+<script src="{{a.notify.js}}" defer></script>
+<script src="{{a.content-client.js}}" defer></script>
+<script src="{{a.academy.js}}" defer></script>
+<script src="{{a.totop.js}}" defer></script>
+</body>
+</html>

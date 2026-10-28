@@ -1,17 +1,117 @@
+# The CI of a site that vendors the kit, inside the Actions minutes the account includes (docs/CONSTITUTION.md, finding class
+# ci-run-budget, kit.canon.json `workflows.ci`). Copy to .github/workflows/test.yml; `kit check canon` fails on any drift from the policy.
+#
+# Full CI runs once per commit that matters: on pull_request for a pull request that is not a draft, and on push to main (the merge).
+# There is no push trigger on other branches: a branch push is gated by the local pre-push hook, and a push AND a pull_request
+# run on one commit would test it twice. An agent keeps its pull request a draft while it works and marks it ready when done,
+# which starts the run (ready_for_review); every later push to a ready pull request starts one run (synchronize).
+# A pull request with a merge conflict gets no pull_request run (GitHub): merge main into the branch, which starts it.
 name: test
 on:
   pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    # No path filter here, ever (ci-run-budget): a required check that a path filter skips stays pending, so a pull request that changes
+    # only release.json or a wrangler config could never merge. The records pull request (opened by github-actions[bot] with GITHUB_TOKEN)
+    # needs none: GitHub holds its pull_request run as action_required, which creates no job check, and its required check comes from the
+    # push of the records branch below (docs/RELEASE.md).
   push:
-    branches: [main]
+    # main (the merge) and the records branch (docs/RELEASE.md): the push of the records branch is what puts the required check on the
+    # records pull request's head commit, since a workflow_dispatch run does not satisfy a ruleset's required status check and a push
+    # made with GITHUB_TOKEN starts no workflow. The pattern is `kit release records branch`'s prefix + `**` (ci-run-budget).
+    branches: [main, 'resilience-records/**']
+  workflow_dispatch:
+  # Weekly early warning for the next runner image (the canary job only), on a weekday at an off-minute.
+  schedule:
+    - cron: '17 3 * * 1'
+# One run per pull request (or per branch): a new push supersedes the run it replaces, and every run on main has a group of its
+# own, so none is cancelled (ci-run-concurrency).
+concurrency:
+  group: test-${{ github.ref == 'refs/heads/main' && github.run_id || format('{0}-{1}', github.event.pull_request.head.repo.full_name || github.repository, github.head_ref || github.ref_name) }}
+  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+permissions:
+  contents: read
 jobs:
   test:
+    # The runner image is declared once, in kit.canon.json `workflows`. The check name stays exactly `test (ubuntu-24.04)`:
+    # branch protection may require it.
+    name: test (ubuntu-24.04)
+    # A draft pull request runs no full CI, and the weekly schedule belongs to the canary: a skipped job allocates no runner.
+    if: (github.event_name != 'pull_request' || github.event.pull_request.draft == false) && github.event_name != 'schedule'
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      # the kit at its head (t=0, docs/FRESHNESS.md): scripts/kit.mjs fetches the published archive of the head with no credential, verifies it and runs it; nothing of the kit is checked out or committed
       - uses: actions/setup-node@v4
-        with: { node-version: 22 }
+        with:
+          node-version: 22.22.2
+          cache: npm
       - run: npm ci
       - run: npm test
+      # the same constitution rules over what this branch changes against main, run from the DEFAULT branch's code (a branch cannot edit the check it is judged by), and the latency budget at every boundary
+      - uses: actions/checkout@v4
+        if: github.ref != 'refs/heads/main'
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          path: base
+          persist-credentials: false
+      - name: agent-guard audit (default-branch code)
+        if: github.ref != 'refs/heads/main'
+        run: |
+          if [ -f base/vendor/kit/packages/cli/src/agent-guard/daemon.mjs ]; then
+            node base/vendor/kit/packages/cli/bin/kit.js agent-guard audit --base origin/${{ github.event.repository.default_branch }}
+          else
+            echo "::notice::the default branch has no agent-guard yet (bootstrap): the branch that introduces it is audited by its own code, once"
+            node vendor/kit/packages/cli/bin/kit.js agent-guard audit --base origin/${{ github.event.repository.default_branch }}
+          fi
+      - name: agent-guard bench
+        run: node vendor/kit/packages/cli/bin/kit.js agent-guard bench --check
+
+  visual:
+    # The rendered colour gate (kit site visual-qa, docs/COLOUR.md): every page template at 390x844 and 1280x800. It takes minutes,
+    # so it is a job of its own and an npm script (qa:visual), not a step of npm test.
+    name: visual (ubuntu-24.04)
+    if: (github.event_name != 'pull_request' || github.event.pull_request.draft == false) && github.event_name != 'schedule'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      # the kit at its head (t=0, docs/FRESHNESS.md): scripts/kit.mjs fetches the published archive of the head with no credential, verifies it and runs it; nothing of the kit is checked out or committed
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.2
+          cache: npm
+      - run: npm ci
       - run: npx playwright install --with-deps chromium
+      - run: npm run build --if-present
+      - run: npm run qa:visual
       - run: npm run qa
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: visual-qa
+          path: .visual-qa/
+
+  canary:
+    # The next image, tried weekly and on demand, never on a pull request or a merge; it may fail until kit.canon.json promotes it
+    # (workflows.canary.review_by). It is no required check (its name is not `test (ubuntu-24.04)`).
+    name: canary (ubuntu-26.04)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-26.04
+    continue-on-error: true
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      # the kit at its head (t=0, docs/FRESHNESS.md): scripts/kit.mjs fetches the published archive of the head with no credential, verifies it and runs it; nothing of the kit is checked out or committed
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.2
+          cache: npm
+      - run: npm ci
+      - run: npm test

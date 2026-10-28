@@ -1,0 +1,63 @@
+# The continuous staleness verifier of a site that vendors the kit (docs/FRESHNESS.md). Copy to .github/workflows/staleness.yml;
+# finding class `staleness-unverified` fails a repository with a vendored kit or a release.json that has no such workflow, and
+# `staleness-in-ci` fails it if `kit check staleness` is run by anything that is not scheduled.
+#
+# Every day it runs `kit check staleness --json` (kit.staleness-report.v1): a local branch behind main's live head, the vendored kit
+# behind the kit's head, a registry fact past its max age, node/npm/git/docker off the pin, a Worker behind the last deployable commit.
+# The report is uploaded whatever the result. On any finding the run alerts FROM THAT SAVED REPORT (no second read of the world) through
+# the routes this runner can reach (Telegram, Bale, webhook: the monitor's own alert channels, secrets named below) and then fails. A finding
+# is an obligation and an alert, never a red main: this workflow is scheduled, so it is not a check on any pull request, and GitHub mails
+# a failed scheduled run to whoever last changed the cron line (the owner commits that line).
+#
+# A daily schedule is more often than the CI run budget allows (ci-run-budget): declare the cron below in kit.canon.json as a reviewed
+# exception, workflows.ci.schedule_exceptions: [{ "cron": "41 5 * * *", "reason": "the daily staleness verifier: ..." }].
+name: staleness
+on:
+  schedule:
+    - cron: '41 5 * * *'
+  workflow_dispatch:
+# One constant group (ci-run-concurrency allows it only in a workflow never triggered by push or pull_request): the latest run supersedes the one before.
+concurrency:
+  group: staleness
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  staleness:
+    name: staleness (ubuntu-24.04)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          # the report reads main's live head with `git ls-remote origin` (branch-behind-main): in a private repository that read needs the
+          # checkout's scoped token, so the credential stays configured for this job (read-only; the job holds no other credential)
+          persist-credentials: true
+      # the kit at its head (t=0, docs/FRESHNESS.md): scripts/kit.mjs fetches the published archive of the head with no credential, verifies it and runs it; nothing of the kit is checked out or committed
+      # the exact node of registry/toolchain.json (a test proves they agree)
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.22.2
+      # this repository's dependencies from its lockfile; the kit's own come from the kit's lockfile, installed by scripts/kit.mjs at first use
+      - run: npm ci
+      - name: staleness report
+        id: report
+        run: node scripts/kit.mjs check staleness --json > staleness-report.json || echo "stale=true" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: staleness-report
+          path: staleness-report.json
+      - name: alert on any finding from the saved report, then fail
+        if: steps.report.outputs.stale == 'true'
+        run: node scripts/kit.mjs check staleness --alert --report staleness-report.json
+        env:
+          # generated:alert-env (node packages/cli/scripts/staleness-env.mjs; the secrets of every alert route a runner can reach)
+          MONITOR_TELEGRAM_CHAT_ID: ${{ secrets.MONITOR_TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          MONITOR_BALE_CHAT_ID: ${{ secrets.MONITOR_BALE_CHAT_ID }}
+          BALE_BOT_TOKEN: ${{ secrets.BALE_BOT_TOKEN }}
+          MONITOR_WEBHOOK_URL: ${{ secrets.MONITOR_WEBHOOK_URL }}
+          MONITOR_WEBHOOK_SECRET: ${{ secrets.MONITOR_WEBHOOK_SECRET }}
+          # /generated:alert-env

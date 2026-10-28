@@ -1,0 +1,323 @@
+{
+  "schema": "kit.upload-lifecycle.v1",
+  "states": {
+    "pending": {
+      "meaning": "The record exists and the objects are being written (intake in flight). The intent: nothing is served from it.",
+      "quarantine_object": "either",
+      "released_object": "either",
+      "terminal": false,
+      "sweepable": false
+    },
+    "quarantined": {
+      "meaning": "Stored in quarantine; the scan could not be completed (scan_failed). Never served. A rescan may tighten it; only a person releases it.",
+      "quarantine_object": "present",
+      "released_object": "absent",
+      "terminal": false,
+      "sweepable": true
+    },
+    "held": {
+      "meaning": "Stored in quarantine and waiting for a person (needs_sandbox, the form holds). Never served until released.",
+      "quarantine_object": "present",
+      "released_object": "absent",
+      "terminal": false,
+      "sweepable": true
+    },
+    "released": {
+      "meaning": "Copied to the released bucket; served as a download only.",
+      "quarantine_object": "present",
+      "released_object": "present",
+      "terminal": false,
+      "sweepable": true
+    },
+    "blocked": {
+      "meaning": "A block verdict (active content, polyglot, bomb, malware, type mismatch). Kept in quarantine as evidence until retention. It leaves only by deletion: releasing a block is refused until it has its own reviewed signing path.",
+      "quarantine_object": "present",
+      "released_object": "absent",
+      "terminal": false,
+      "sweepable": true
+    },
+    "rejected": {
+      "meaning": "Refused at the edge (size, type): nothing was stored. The record is the evidence until retention, then it becomes a tombstone.",
+      "quarantine_object": "absent",
+      "released_object": "absent",
+      "terminal": false,
+      "sweepable": true
+    },
+    "deleted": {
+      "meaning": "The objects are removed; the record stays as a tombstone (hash, verdict, deleted_at).",
+      "quarantine_object": "absent",
+      "released_object": "absent",
+      "terminal": true,
+      "sweepable": false
+    }
+  },
+  "actors": {
+    "system": "the pipeline itself (intake, rescan, rollback)",
+    "human": "a person, only as the verified entry of the approval ledger (kit.approval-ledger.v1, ledger <project>:uploads)",
+    "retention": "the scheduled retention sweep"
+  },
+  "operations": {
+    "intake": {
+      "effect": "record first (pending), then the objects, then the commit to the decided stage",
+      "if_interrupted": "roll_back"
+    },
+    "rollback": {
+      "effect": "an interrupted intake: the objects are removed and the record becomes a deleted tombstone",
+      "if_interrupted": "roll_forward"
+    },
+    "rescan": {
+      "effect": "re-evaluate the quarantined bytes; may only tighten; a released upload that is tightened loses its released object",
+      "if_interrupted": "roll_forward"
+    },
+    "release": {
+      "effect": "write the released object from verified quarantine bytes, then commit released",
+      "if_interrupted": "roll_back"
+    },
+    "delete": {
+      "effect": "remove the objects, then commit deleted",
+      "if_interrupted": "roll_forward"
+    },
+    "hold": {
+      "effect": "set or clear the retention hold; no object changes",
+      "if_interrupted": "none"
+    },
+    "migrate": {
+      "effect": "a record written before keys were derived from the record: copy its objects to the derived keys, verify, commit the record, then the legacy keys are removed once no record uses them",
+      "if_interrupted": "roll_back"
+    }
+  },
+  "transitions": [
+    {
+      "via": "intake",
+      "actors": [
+        "system"
+      ],
+      "from": [
+        null
+      ],
+      "to": [
+        "pending",
+        "rejected"
+      ]
+    },
+    {
+      "via": "intake",
+      "actors": [
+        "system"
+      ],
+      "from": [
+        "pending"
+      ],
+      "to": [
+        "quarantined",
+        "held",
+        "released",
+        "blocked"
+      ]
+    },
+    {
+      "via": "rollback",
+      "actors": [
+        "system"
+      ],
+      "from": [
+        "pending"
+      ],
+      "to": [
+        "deleted"
+      ]
+    },
+    {
+      "via": "rescan",
+      "actors": [
+        "system"
+      ],
+      "from": [
+        "released"
+      ],
+      "to": [
+        "released",
+        "quarantined",
+        "held",
+        "blocked"
+      ],
+      "note": "tighten only: a released upload may be withdrawn, never the other way"
+    },
+    {
+      "via": "rescan",
+      "actors": [
+        "system"
+      ],
+      "from": [
+        "quarantined"
+      ],
+      "to": [
+        "quarantined",
+        "held",
+        "blocked"
+      ]
+    },
+    {
+      "via": "rescan",
+      "actors": [
+        "system"
+      ],
+      "from": [
+        "held"
+      ],
+      "to": [
+        "held",
+        "blocked"
+      ]
+    },
+    {
+      "via": "rescan",
+      "actors": [
+        "system"
+      ],
+      "from": [
+        "blocked"
+      ],
+      "to": [
+        "blocked"
+      ]
+    },
+    {
+      "via": "delete",
+      "actors": [
+        "human",
+        "retention",
+        "system"
+      ],
+      "from": [
+        "quarantined",
+        "held",
+        "released",
+        "blocked",
+        "rejected"
+      ],
+      "to": [
+        "deleted"
+      ],
+      "note": "a person (signed decision), the retention sweep, or the engine withdrawing files of one refused request"
+    },
+    {
+      "via": "hold",
+      "actors": [
+        "human"
+      ],
+      "from": [
+        "quarantined"
+      ],
+      "to": [
+        "quarantined"
+      ],
+      "note": "a hold changes no stage"
+    },
+    {
+      "via": "hold",
+      "actors": [
+        "human"
+      ],
+      "from": [
+        "held"
+      ],
+      "to": [
+        "held"
+      ],
+      "note": "a hold changes no stage"
+    },
+    {
+      "via": "hold",
+      "actors": [
+        "human"
+      ],
+      "from": [
+        "released"
+      ],
+      "to": [
+        "released"
+      ],
+      "note": "a hold changes no stage"
+    },
+    {
+      "via": "hold",
+      "actors": [
+        "human"
+      ],
+      "from": [
+        "blocked"
+      ],
+      "to": [
+        "blocked"
+      ],
+      "note": "a hold changes no stage"
+    },
+    {
+      "via": "release",
+      "actors": [
+        "human"
+      ],
+      "from": [
+        "quarantined",
+        "held"
+      ],
+      "to": [
+        "released"
+      ],
+      "note": "a verified signed decision from a roster key. blocked is NOT releasable until a human release of a block has its own reviewed signing path: it is refused (fail closed)"
+    },
+    {
+      "via": "migrate",
+      "actors": [
+        "system"
+      ],
+      "from": [
+        "quarantined"
+      ],
+      "to": [
+        "quarantined"
+      ],
+      "note": "re-key a legacy record; no stage change"
+    },
+    {
+      "via": "migrate",
+      "actors": [
+        "system"
+      ],
+      "from": [
+        "held"
+      ],
+      "to": [
+        "held"
+      ],
+      "note": "re-key a legacy record; no stage change"
+    },
+    {
+      "via": "migrate",
+      "actors": [
+        "system"
+      ],
+      "from": [
+        "released"
+      ],
+      "to": [
+        "released"
+      ],
+      "note": "re-key a legacy record; no stage change"
+    },
+    {
+      "via": "migrate",
+      "actors": [
+        "system"
+      ],
+      "from": [
+        "blocked"
+      ],
+      "to": [
+        "blocked"
+      ],
+      "note": "re-key a legacy record; no stage change"
+    }
+  ]
+}
