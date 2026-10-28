@@ -12,11 +12,13 @@ Solid arrows: derives from (parent to derived). Dotted: supersedes. Relationship
 
 Source: [`lineage.mmd`](lineage.mmd)
 
-## Index (4)
+## Index (6)
 
 | id | title | kind | derives from | relates to | depicts | source |
 | --- | --- | --- | --- | --- | --- | --- |
 | `saasreport.diagrams.lineage` v1 | Diagram lineage (generated) | other | none | none | doc: [the diagram headers]() | [lineage.mmd](lineage.mmd) |
+| `saasreport.landing.api` v1 | The public API: contract first, from the core registries to the landing | architecture | none | sibling `saasreport.landing.architecture`<br>sibling `saasreport.landing.widgets` | file: [the API contract](../../contracts/api.openapi.json)<br>file: [the API Worker](../../workers/api/src/worker.js)<br>file: [the data bundler](../../scripts/api-data.mjs)<br>file: [the SDK config](../../kit.sdk.json) | [api-architecture.mmd](api-architecture.mmd) |
+| `saasreport.landing.api.overview` v1 | The public API: contract first, from the core registries to the landing | architecture | `saasreport.landing.api` | sibling `saasreport.landing.architecture`<br>sibling `saasreport.landing.widgets` | file: [the API contract](../../contracts/api.openapi.json)<br>file: [the API Worker](../../workers/api/src/worker.js)<br>file: [the data bundler](../../scripts/api-data.mjs)<br>file: [the SDK config](../../kit.sdk.json) | [ARCHITECTURE.md #2](../ARCHITECTURE.md) |
 | `saasreport.landing.architecture` v1 | How the landing is built | architecture | none | sibling `saasreport.landing.widgets` | file: [the content generator](../../scripts/generate.mjs)<br>file: [the site project](../../site.config.js)<br>doc: [the architecture description](../ARCHITECTURE.md) | [landing-architecture.mmd](landing-architecture.mmd) |
 | `saasreport.landing.architecture.overview` v1 | How the landing is built, in the architecture document | architecture | none | none | file: [the content generator](../../scripts/generate.mjs) | [ARCHITECTURE.md #1](../ARCHITECTURE.md) |
 | `saasreport.landing.widgets` v1 | Where each widget's numbers come from | flow | none | sibling `saasreport.landing.architecture` | file: [the widget spec](../../widgets.spec.json)<br>file: [the engine adapter](../../vendor/core/adapters/widgets-engine.mjs) | [landing-widgets.mmd](landing-widgets.mmd) |
@@ -28,6 +30,14 @@ Diagram lineage. Every diagram of this repository and how they derive from, supe
 ![Diagram lineage](lineage.png)
 
 Source: [`lineage.mmd`](lineage.mmd)
+
+## saasreport.landing.api
+
+The public API: contract first, from the core registries to the landing. One OpenAPI contract produces the Worker's routes and limits, the typed client and the reference page; the Worker serves the core registries and the engine on sample data; the landing links to it live.
+
+![The public API: contract first, from the core registries to the landing](api-architecture.png)
+
+Source: [`api-architecture.mmd`](api-architecture.mmd)
 
 ## saasreport.landing.architecture
 

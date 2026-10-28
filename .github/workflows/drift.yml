@@ -1,0 +1,68 @@
+# The deploy invariant, checked every day independently of the deploys and with no Cloudflare credential (docs/RELEASE.md). Copy it to
+# .github/workflows/drift.yml UNCHANGED (`kit check release` holds it to this template). Every Worker release.json declares must serve
+# main's HEAD on its public GET /api/build (kit.build.v1). A drift (a commit was read and it is another one: a dropped, failed or shell
+# deploy) fails the run, which alerts the owner, and dispatches the production workflow unless a production run is already active. An
+# endpoint that cannot be read fails and alerts but never dispatches. A repository whose release.json still says bootstrap while a
+# Worker serves a build fails here too: bootstrap is never claimed while production exists.
+name: drift
+on:
+  schedule:
+    - cron: '41 7 * * *'
+  workflow_dispatch:
+concurrency:
+  group: drift-${{ github.run_id }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  drift:
+    name: every Worker serves main's HEAD
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          persist-credentials: false
+      # the kit at its head (t=0, docs/FRESHNESS.md): scripts/kit.mjs fetches the published archive of the head with no credential, verifies it and runs it; nothing of the kit is checked out or committed
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: compare what each Worker serves with main's HEAD; on a drift, dispatch production unless a run is active
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          head="$(git rev-parse HEAD)"
+          set +e
+          node scripts/kit.mjs release verify --commit "${head}" > drift.txt 2>&1
+          code=$?
+          set -e
+          cat drift.txt
+          if [ "${code}" -eq 0 ]; then exit 0; fi
+          { echo "## Every Worker should serve ${head}"; echo; cat drift.txt; } >> "${GITHUB_STEP_SUMMARY}"
+          if [ "${code}" -ne 1 ]; then echo "::error::not a drift (an endpoint could not be read, or bootstrap is claimed while production exists): nothing was dispatched"; exit 1; fi
+          # one dispatcher at a time, from filtered, paginated queries (a status filter per call, every status that is not finished: queued,
+          # waiting, requested, pending, in progress): the active drift run with the lowest id dispatches, so two drift runs side by side
+          # never both skip nor both dispatch; nothing is dispatched while a production run is active (that run deploys main's HEAD).
+          # Fail closed: a failed query stops the step (pipefail, return 1, exit 1), it never reads as "no run active". Residual: a run
+          # GitHub has not yet listed as queued is not seen, so two drift runs started within that lag can both dispatch, and a second
+          # production run is then one more pending run behind the production concurrency group. A production run stuck in waiting or
+          # pending (for example an environment approval nobody gives) blocks dispatch until it ends, by design. A shared concurrency
+          # group is not admitted by the CI rule ci-run-concurrency.
+          active() { for status in queued waiting requested pending in_progress; do gh api --paginate "repos/${GITHUB_REPOSITORY}/actions/workflows/$1/runs?status=${status}&per_page=100" --jq '.workflow_runs[].id' || return 1; done; }
+          production="$(active production.yml)" || exit 1
+          drifts="$(active drift.yml)" || exit 1
+          busy=0; for id in ${production}; do busy=1; done
+          first=""; for id in ${drifts}; do if [ -z "${first}" ] || [ "${id}" -lt "${first}" ]; then first="${id}"; fi; done
+          if [ "${busy}" -eq 0 ] && [ "${first}" = "${GITHUB_RUN_ID}" ]; then
+            gh workflow run production.yml --ref main
+            echo "The production workflow was dispatched." >> "${GITHUB_STEP_SUMMARY}"
+          fi
+          echo "::error::drift: a Worker does not serve main's HEAD"
+          exit 1

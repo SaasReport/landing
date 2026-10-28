@@ -1,0 +1,1041 @@
+{
+  "openapi": "3.1.0",
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "info": {
+    "title": "SaasReport public API",
+    "version": "1.0.0",
+    "summary": "Read-only, unauthenticated, CORS-open and cacheable: the SaasReport registries, the number guard and the engine on sample data.",
+    "description": "The public API of SaasReport at api.saasreport.ai. It serves the registries of SaasReport/core as they are, the metric engine run on the core SAMPLE dataset (every such response says \"sample\": true and carries the sample label), and the number guard. It stores nothing and holds no customer data. Every operation is a GET except the guard, which only reads its body. Limits are declared per operation in x-limits and enforced by the Worker.",
+    "license": {
+      "name": "UNLICENSED",
+      "identifier": "LicenseRef-Proprietary"
+    }
+  },
+  "servers": [
+    {
+      "url": "https://api.saasreport.ai",
+      "description": "production"
+    }
+  ],
+  "tags": [
+    {
+      "name": "service",
+      "description": "Whether the API is up and which commit it serves."
+    },
+    {
+      "name": "registries",
+      "description": "The core registries, one canonical source per fact."
+    },
+    {
+      "name": "sample",
+      "description": "The core engine computed on the SAMPLE dataset, never on customer data."
+    },
+    {
+      "name": "guard",
+      "description": "The number guard: every number in a sentence must be one the engine computed."
+    }
+  ],
+  "x-limits": {
+    "rate": {
+      "limit": 60,
+      "period_seconds": 60,
+      "scope": "client address",
+      "binding": "RATE_LIMITER"
+    },
+    "max_body_bytes": 8192
+  },
+  "paths": {
+    "/v1/health": {
+      "get": {
+        "operationId": "getHealth",
+        "tags": [
+          "service"
+        ],
+        "summary": "Whether the API is up",
+        "description": "Answers ok when the Worker runs. It reads nothing else, so it never depends on another service.",
+        "responses": {
+          "200": {
+            "description": "The API is up.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Health"
+                },
+                "example": {
+                  "status": "ok",
+                  "service": "saasreport-api",
+                  "api_version": "1.0.0"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        }
+      }
+    },
+    "/v1/build": {
+      "get": {
+        "operationId": "getBuild",
+        "tags": [
+          "service"
+        ],
+        "summary": "The commit this API serves",
+        "description": "The commit the production workflow deployed, or null for a Worker that carries none (a local run). The same fact is served at /api/build for the release verifier.",
+        "responses": {
+          "200": {
+            "description": "The served commit.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Build"
+                },
+                "example": {
+                  "commit": "0123456789abcdef0123456789abcdef01234567"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        }
+      }
+    },
+    "/v1/registries": {
+      "get": {
+        "operationId": "listRegistries",
+        "tags": [
+          "registries"
+        ],
+        "summary": "The index of the registries",
+        "description": "Every registry the API serves, with its version and the JSON Schema it is validated against.",
+        "responses": {
+          "200": {
+            "description": "The index.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegistryIndex"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        }
+      }
+    },
+    "/v1/registries/{name}": {
+      "get": {
+        "operationId": "getRegistry",
+        "tags": [
+          "registries"
+        ],
+        "summary": "One registry, as the core publishes it",
+        "description": "The registry file of SaasReport/core, byte for byte in content, valid against its core JSON Schema. A name outside the index is a 404 problem.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/RegistryName"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The registry.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "https://github.com/SaasReport/landing/blob/main/vendor/core/schemas/stakeholders.schema.json"
+                    },
+                    {
+                      "$ref": "https://github.com/SaasReport/landing/blob/main/vendor/core/schemas/metrics.schema.json"
+                    },
+                    {
+                      "$ref": "https://github.com/SaasReport/landing/blob/main/vendor/core/schemas/report-types.schema.json"
+                    },
+                    {
+                      "$ref": "https://github.com/SaasReport/landing/blob/main/vendor/core/schemas/cadences.schema.json"
+                    },
+                    {
+                      "$ref": "https://github.com/SaasReport/landing/blob/main/vendor/core/schemas/findings.schema.json"
+                    },
+                    {
+                      "$ref": "https://github.com/SaasReport/landing/blob/main/vendor/core/schemas/commitments.schema.json"
+                    },
+                    {
+                      "$ref": "https://github.com/SaasReport/landing/blob/main/vendor/core/schemas/roles.schema.json"
+                    },
+                    {
+                      "$ref": "https://github.com/SaasReport/landing/blob/main/vendor/core/schemas/currencies.schema.json"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        }
+      }
+    },
+    "/v1/sample/stakeholders/{id}": {
+      "get": {
+        "operationId": "getSampleStakeholder",
+        "tags": [
+          "sample"
+        ],
+        "summary": "One stakeholder and the engine's figures for them on sample data",
+        "description": "The stakeholder from the registry, their priority metrics computed by the core engine on the SAMPLE dataset, the reports offered to them and the findings that fire for them.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/StakeholderId"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The stakeholder on sample data.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SampleStakeholder"
+                }
+              }
+            }
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        }
+      }
+    },
+    "/v1/sample/findings": {
+      "get": {
+        "operationId": "getSampleFindings",
+        "tags": [
+          "sample"
+        ],
+        "summary": "The findings that fire on the sample month",
+        "description": "Every published finding rule applied by the core engine to the SAMPLE dataset, ordered by severity.",
+        "responses": {
+          "200": {
+            "description": "The findings on sample data.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SampleFindings"
+                }
+              }
+            }
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        }
+      }
+    },
+    "/v1/sample/report": {
+      "get": {
+        "operationId": "getSampleReport",
+        "tags": [
+          "sample"
+        ],
+        "summary": "One report type as one stakeholder reads it, on sample data",
+        "description": "The sections of the report type in the order the stakeholder's priorities give, each figure computed by the core engine on the SAMPLE dataset.",
+        "parameters": [
+          {
+            "$ref": "#/components/parameters/ReportType"
+          },
+          {
+            "$ref": "#/components/parameters/StakeholderQuery"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The report on sample data.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/CacheControl"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SampleReport"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/Unprocessable"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        }
+      }
+    },
+    "/v1/guard": {
+      "post": {
+        "operationId": "checkNarrative",
+        "tags": [
+          "guard"
+        ],
+        "summary": "Check that every number in a text is a fact the caller supplies",
+        "description": "The core number guard (verifyNarrative). Every number in text must appear in facts; any other number is listed as unsupported and the decision is deny. Nothing is stored. The body is capped by x-limits.max_body_bytes.",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GuardRequest"
+              },
+              "example": {
+                "text": "Net revenue retention was 104% last month.",
+                "facts": [
+                  "104%"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "The verdict.",
+            "headers": {
+              "Cache-Control": {
+                "$ref": "#/components/headers/NoStore"
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GuardResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequest"
+          },
+          "413": {
+            "$ref": "#/components/responses/PayloadTooLarge"
+          },
+          "415": {
+            "$ref": "#/components/responses/UnsupportedMediaType"
+          },
+          "429": {
+            "$ref": "#/components/responses/TooManyRequests"
+          },
+          "503": {
+            "$ref": "#/components/responses/Unavailable"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "headers": {
+      "CacheControl": {
+        "description": "Public and cacheable: the data changes only with a deploy.",
+        "schema": {
+          "type": "string"
+        }
+      },
+      "NoStore": {
+        "description": "Never cached.",
+        "schema": {
+          "type": "string",
+          "const": "no-store"
+        }
+      },
+      "RetryAfter": {
+        "description": "Seconds until the client may call again.",
+        "schema": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "parameters": {
+      "RegistryName": {
+        "name": "name",
+        "in": "path",
+        "required": true,
+        "description": "A registry name from the index.",
+        "schema": {
+          "type": "string",
+          "enum": [
+            "stakeholders",
+            "metrics",
+            "report-types",
+            "cadences",
+            "findings",
+            "commitments",
+            "roles",
+            "currencies"
+          ]
+        },
+        "example": "stakeholders"
+      },
+      "StakeholderId": {
+        "name": "id",
+        "in": "path",
+        "required": true,
+        "description": "A stakeholder id from the stakeholders registry.",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "maxLength": 64
+        },
+        "example": "ceo_founder"
+      },
+      "ReportType": {
+        "name": "type",
+        "in": "query",
+        "required": true,
+        "description": "A report type id from the report-types registry.",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_-]*$",
+          "maxLength": 64
+        },
+        "example": "revenue-health"
+      },
+      "StakeholderQuery": {
+        "name": "stakeholder",
+        "in": "query",
+        "required": true,
+        "description": "A stakeholder id the report type is offered to.",
+        "schema": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$",
+          "maxLength": 64
+        },
+        "example": "ceo_founder"
+      }
+    },
+    "responses": {
+      "BadRequest": {
+        "description": "The request is malformed: a missing or invalid parameter, or a body that is not the declared JSON.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "No such registry, stakeholder or report type.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "Unprocessable": {
+        "description": "Both ids exist but the report type is not offered to the stakeholder.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "PayloadTooLarge": {
+        "description": "The body is larger than x-limits.max_body_bytes; it is not read further.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "UnsupportedMediaType": {
+        "description": "The body is not application/json.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "TooManyRequests": {
+        "description": "The client is over x-limits.rate.",
+        "headers": {
+          "Retry-After": {
+            "$ref": "#/components/headers/RetryAfter"
+          }
+        },
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            }
+          }
+        }
+      },
+      "Unavailable": {
+        "description": "The API cannot enforce its limits (the rate limiter is not bound), so it answers nothing else.",
+        "content": {
+          "application/problem+json": {
+            "schema": {
+              "$ref": "#/components/schemas/Problem"
+            }
+          }
+        }
+      }
+    },
+    "schemas": {
+      "Problem": {
+        "title": "saasreport.api.problem.v1",
+        "description": "One error shape for every non-2xx answer (RFC 9457).",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "title",
+          "status"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "pattern": "^https://api\\.saasreport\\.ai/problems/[a-z-]+$",
+            "description": "A stable URI naming the kind of problem."
+          },
+          "title": {
+            "type": "string"
+          },
+          "status": {
+            "type": "integer",
+            "minimum": 400,
+            "maximum": 599
+          },
+          "detail": {
+            "type": "string"
+          },
+          "instance": {
+            "type": "string",
+            "description": "The request path."
+          }
+        }
+      },
+      "Health": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "service",
+          "api_version"
+        ],
+        "properties": {
+          "status": {
+            "const": "ok"
+          },
+          "service": {
+            "type": "string"
+          },
+          "api_version": {
+            "type": "string"
+          }
+        }
+      },
+      "Build": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "commit"
+        ],
+        "properties": {
+          "commit": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{40}$"
+          }
+        }
+      },
+      "RegistryIndex": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "registries"
+        ],
+        "properties": {
+          "registries": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "name",
+                "registry",
+                "version",
+                "schema",
+                "href"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "registry": {
+                  "type": "string"
+                },
+                "version": {
+                  "type": "string"
+                },
+                "schema": {
+                  "type": "string",
+                  "description": "The $id of the core JSON Schema."
+                },
+                "href": {
+                  "type": "string",
+                  "pattern": "^/v1/registries/[a-z-]+$"
+                }
+              }
+            }
+          }
+        }
+      },
+      "SampleLabel": {
+        "description": "What the sample dataset is, from its own meta file. Every sample response carries it.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "label",
+          "description",
+          "currency",
+          "reference_date"
+        ],
+        "properties": {
+          "label": {
+            "const": "SAMPLE"
+          },
+          "description": {
+            "type": "string"
+          },
+          "currency": {
+            "type": "string"
+          },
+          "reference_date": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      },
+      "Figure": {
+        "description": "One metric computed by the engine; value is an integer in the unit's minor form, display is the engine's formatting.",
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "metric",
+          "name",
+          "unit",
+          "value",
+          "display"
+        ],
+        "properties": {
+          "metric": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "unit": {
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "display": {
+            "type": "string"
+          }
+        }
+      },
+      "SampleFinding": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "rule",
+          "severity",
+          "headline",
+          "evidence",
+          "recommendation"
+        ],
+        "properties": {
+          "rule": {
+            "type": "string"
+          },
+          "severity": {
+            "type": "string"
+          },
+          "headline": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "metric",
+                "name",
+                "current",
+                "prior"
+              ],
+              "properties": {
+                "metric": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "current": {
+                  "type": "string"
+                },
+                "prior": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "recommendation": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "SampleStakeholder": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sample",
+          "meta",
+          "stakeholder",
+          "figures",
+          "reports",
+          "findings"
+        ],
+        "properties": {
+          "sample": {
+            "const": true
+          },
+          "meta": {
+            "$ref": "#/components/schemas/SampleLabel"
+          },
+          "stakeholder": {
+            "type": "object",
+            "required": [
+              "id",
+              "name",
+              "decision_questions",
+              "priority_metrics",
+              "not_in_stripe"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              },
+              "decision_questions": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "priority_metrics": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "not_in_stripe": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "figures": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Figure"
+            }
+          },
+          "reports": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "name",
+                "cadences"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "cadences": {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SampleFinding"
+            }
+          }
+        }
+      },
+      "SampleFindings": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sample",
+          "meta",
+          "findings"
+        ],
+        "properties": {
+          "sample": {
+            "const": true
+          },
+          "meta": {
+            "$ref": "#/components/schemas/SampleLabel"
+          },
+          "findings": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SampleFinding"
+            }
+          }
+        }
+      },
+      "SampleReport": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sample",
+          "meta",
+          "report_type",
+          "stakeholder",
+          "title",
+          "sections"
+        ],
+        "properties": {
+          "sample": {
+            "const": true
+          },
+          "meta": {
+            "$ref": "#/components/schemas/SampleLabel"
+          },
+          "report_type": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "stakeholder": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "name"
+            ],
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "name": {
+                "type": "string"
+              }
+            }
+          },
+          "title": {
+            "type": "string"
+          },
+          "sections": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "id",
+                "title",
+                "figures"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "title": {
+                  "type": "string"
+                },
+                "figures": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Figure"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "GuardRequest": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "text",
+          "facts"
+        ],
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 4000,
+            "description": "The sentence or paragraph to check."
+          },
+          "facts": {
+            "type": "array",
+            "maxItems": 200,
+            "items": {
+              "type": "string",
+              "maxLength": 64
+            },
+            "description": "The strings the engine produced: formatted values, counts, period labels."
+          }
+        }
+      },
+      "GuardResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "decision",
+          "unsupported"
+        ],
+        "properties": {
+          "ok": {
+            "type": "boolean"
+          },
+          "decision": {
+            "enum": [
+              "allow",
+              "deny"
+            ]
+          },
+          "unsupported": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "The numbers in text that no fact supports."
+          }
+        }
+      }
+    }
+  }
+}

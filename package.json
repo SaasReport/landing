@@ -30,11 +30,13 @@
   },
   "scripts": {
     "generate": "node scripts/generate.mjs",
-    "build": "node scripts/generate.mjs && kit widgets build && kit site build && cp -r public/. dist/",
-    "check": "node scripts/generate.mjs --check && kit widgets check && kit widgets build --check && kit site check && kit diagrams check && npm run comms:check",
-    "test": "kit check canon && kit comms check --config comms.config.js --forms src/forms.js && npm run check && npm run build && kit site shell --out dist",
+    "build": "node scripts/generate.mjs && node scripts/api-data.mjs && kit widgets build && kit site build && cp -r public/. dist/ && mkdir -p dist/sdk && cp -r sdk/saasreport dist/sdk/",
+    "check": "node scripts/generate.mjs --check && node scripts/api-data.mjs --check && kit widgets check && kit widgets build --check && kit site check && kit diagrams check && npm run comms:check",
+    "test": "kit check canon && npm run test:api && kit comms check --config comms.config.js --forms src/forms.js && npm run check && npm run build && kit site shell --out dist",
     "qa": "node test/interact.test.mjs",
     "qa:visual": "kit site visual-qa --out dist",
-    "comms:check": "kit comms check --config comms.config.js --forms src/forms.js"
+    "comms:check": "kit comms check --config comms.config.js --forms src/forms.js",
+    "test:api": "node --test workers/api/test/*.test.mjs",
+    "qa:api": "node test/api-browser.test.mjs"
   }
 }

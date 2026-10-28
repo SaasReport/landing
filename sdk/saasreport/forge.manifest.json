@@ -1,0 +1,74 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sdk-manifest.schema.json",
+  "generated_by": "kit sdk generate",
+  "target": "saasreport",
+  "generator": {
+    "forge": {
+      "package": "@saasreport/forge",
+      "version": "0.2.0",
+      "license": "Apache-2.0",
+      "origin": {
+        "repository": "cloudflare/forge",
+        "commit": "86cb1ef3047abc7441d96c894e8cd35e826fa8e5"
+      },
+      "targets": [
+        "javascript",
+        "python"
+      ]
+    },
+    "transformer": {
+      "package": "@saasreport/sdk",
+      "version": "0.2.0"
+    }
+  },
+  "contract": {
+    "path": "contracts/api.openapi.json",
+    "sha256": "0ab746a6af7bfde18a8f4924a3fa47dd8e22a02200e0ae7439ad93293bde1dfb",
+    "openapi": "3.1.0",
+    "title": "SaasReport public API",
+    "version": "1.0.0"
+  },
+  "operations": 8,
+  "files": [
+    {
+      "path": "cli.mjs",
+      "sha256": "ee284cb4a14d83b20a01363ffd6eeb7844c9ef42171788763d9a2807c37db399",
+      "bytes": 5581
+    },
+    {
+      "path": "index.d.ts",
+      "sha256": "0781968b5bbc3e85e1e5bb3c8202fd09a0939aa8f2e4664f9dc84bb282061d03",
+      "bytes": 10670
+    },
+    {
+      "path": "index.mjs",
+      "sha256": "1044e7f4eda42de33cf255a18d575fbcbc5227f70f3e65ccad613e6019c806ae",
+      "bytes": 11933
+    },
+    {
+      "path": "package.json",
+      "sha256": "8efc2e3ffe67f8e3ead51c17ff71d04d6a9333c0c0d742713470e6359f4e1b87",
+      "bytes": 446
+    },
+    {
+      "path": "python/pyproject.toml",
+      "sha256": "3a6ae495c251ca32b41d75c55c773f34a4d670a168cabd6df5580afc60e140d0",
+      "bytes": 555
+    },
+    {
+      "path": "python/saasreport_sdk/__init__.py",
+      "sha256": "c51bc7a7219395daa9e4ceed403bef1759a56e1d794be279e595785657bd076b",
+      "bytes": 23134
+    },
+    {
+      "path": "python/saasreport_sdk/py.typed",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "README.md",
+      "sha256": "620fe78662edd845ef0e60a92b2ad6e6544701d7cc6551021a4733991aef4ed0",
+      "bytes": 2175
+    }
+  ]
+}

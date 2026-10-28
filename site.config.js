@@ -4,6 +4,8 @@ import copy from "./content/copy.json" with { type: "json" };
 import landing from "./content/generated/landing.en.json" with { type: "json" };
 import chrome from "./content/generated/chrome.en.json" with { type: "json" };
 import generated from "./content/generated/widgets.generated.json" with { type: "json" };
+import sdk from "./kit.sdk.json" with { type: "json" };
+import { readFileSync } from "node:fs";
 
 const { _note, ...color } = tokens;
 /** The colour tokens, for `kit check tokens` (kit.canon.json). */
@@ -30,6 +32,8 @@ export default {
   assets: { "landing.js": {}, "totop.js": {} },
   pageChrome: { strings: { en: { footer: chrome.footer } }, cta: { en: [chrome.cta] } },
   pages: [
+    // The API reference, rendered by the kit from the OpenAPI contract that the SDK is generated from (one contract, one source).
+    { type: "reference", path: copy.developers.referencePath, specs: sdk.targets.map((t) => ({ file: t.contract.split("/").pop(), doc: JSON.parse(readFileSync(new URL(t.contract, import.meta.url), "utf8")), raw: readFileSync(new URL(t.contract, import.meta.url), "utf8") })), source: { label: "SaasReport/landing", url: "https://github.com/SaasReport/landing" }, content: { en: copy.developers.reference } },
     { type: "widgets", path: "/examples/", generated, content: { en: { meta: { title: copy.widgets.page.title, description: copy.widgets.page.metaDescription } } } },
   ],
 };

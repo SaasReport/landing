@@ -436,6 +436,10 @@
         "label": "Trust"
       },
       {
+        "section": "developers",
+        "label": "Developers"
+      },
+      {
         "section": "faq",
         "label": "Questions"
       }
@@ -671,5 +675,75 @@
     "paragraphs": [
       "Our privacy policy is a draft and is not published yet. The early-access form asks only for what we need to answer you."
     ]
+  },
+  "developers": {
+    "referencePath": "/developers/api/",
+    "eyebrow": "For developers",
+    "title": "The registries and the engine are an API.",
+    "items": [
+      {
+        "title": "Registries",
+        "text": "Stakeholders, metrics, report types, cadences, findings, commitments, roles and currencies are served as JSON from api.saasreport.ai, each valid against its published JSON Schema. No key and no sign-up."
+      },
+      {
+        "title": "The engine on sample data",
+        "text": "The metric engine that builds a report also answers per stakeholder, per report and per finding, on a made-up sample company. Every such answer says it is a sample."
+      },
+      {
+        "title": "The number guard",
+        "text": "Send a sentence and the numbers it may contain. The API lists every number the engine did not compute. It stores nothing."
+      },
+      {
+        "title": "What is live",
+        "text": "The API answers live. The widgets on this page show figures computed when the page was built, from the same engine and the same sample data. A widget that calls the API when you open the page needs a change in the site kit that is not made yet."
+      }
+    ],
+    "band": {
+      "title": "Read the contract, call it, or use the client.",
+      "actions": {
+        "reference": "API reference",
+        "contract": "OpenAPI document",
+        "live": "Open a live call",
+        "client": "JavaScript client"
+      }
+    },
+    "reference": {
+      "index": {
+        "title": "API reference | SaasReport",
+        "description": "The operations of the SaasReport public API: registries, the engine on sample data and the number guard.",
+        "eyebrow": "API",
+        "h1": "SaasReport API reference",
+        "lead": "Read-only, no key, open to browsers. Every response is valid against the contract below.",
+        "note": "Generated from the OpenAPI contract of this repository."
+      },
+      "spec": {
+        "title": "{title} | SaasReport",
+        "description": "{count} operations of the SaasReport public API, from {file}.",
+        "eyebrow": "API contract"
+      },
+      "labels": {
+        "operations": "operations",
+        "servers": "Servers",
+        "version": "Version",
+        "source": "Source",
+        "auth": "Authentication",
+        "parameters": "Parameters",
+        "body": "Request body",
+        "responses": "Responses",
+        "required": "required",
+        "groups": "Groups",
+        "all": "All contracts",
+        "json": "JSON",
+        "yaml": "OpenAPI document",
+        "none": "none",
+        "contracts": "Contracts"
+      },
+      "bar": [
+        {
+          "href": "/",
+          "label": "SaasReport"
+        }
+      ]
+    }
   }
 }

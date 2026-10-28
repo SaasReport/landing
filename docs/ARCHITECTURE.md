@@ -58,3 +58,53 @@ The picture of record, with every file, is `docs/diagrams/landing-architecture.p
 ![How the landing is built](diagrams/landing-architecture.png)
 
 ![Where each widget's numbers come from](diagrams/landing-widgets.png)
+
+## The public API
+
+api.saasreport.ai is a Cloudflare Worker (`workers/api/`) that implements exactly `contracts/api.openapi.json`. The contract is written first and is the one
+source of the Worker's routes, its request schema, its rate limit and body cap (`x-limits`), the typed client (`sdk/saasreport`, `kit sdk generate`) and the
+reference page at `/developers/api/` (the kit's `reference` page type). The Worker serves the core registries as they are and runs the core engine on the core
+sample dataset; it stores nothing and holds no secret. `docs/API.md` lists the operations, the limits and what is live.
+
+![The public API: contract first, from the core registries to the landing (saasreport.landing.api.overview)](diagrams/api-architecture.png)
+
+<details><summary>Mermaid source (saasreport.landing.api.overview)</summary>
+
+```mermaid
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Inter, Arial, sans-serif","fontSize":"15px","textColor":"#0B0B0B","stateLabelColor":"#0B0B0B","transitionLabelColor":"#0B0B0B","background":"#F7F9FC","primaryColor":"#FFFFFF","primaryTextColor":"#0B0B0B","primaryBorderColor":"#0B0B0B","lineColor":"#4D5B70","secondaryColor":"#EDF1F6","tertiaryColor":"#F7F9FC","clusterBkg":"#EDF1F6","clusterBorder":"#B9C6D8","edgeLabelBackground":"#F7F9FC","titleColor":"#0B0B0B","actorBkg":"#0B0B0B","actorBorder":"#0B0B0B","actorTextColor":"#FFFFFF","actorLineColor":"#B9C6D8","signalColor":"#0B0B0B","signalTextColor":"#0B0B0B","labelBoxBkgColor":"#F7F9FC","labelBoxBorderColor":"#B9C6D8","noteBkgColor":"#EEF3F9","noteBorderColor":"#6F9BD8","sequenceNumberColor":"#FFFFFF","stateBkg":"#FFFFFF","stateBorder":"#0B0B0B","transitionColor":"#4D5B70","specialStateColor":"#12396B"}}}%%
+%% kit:diagram {"id":"saasreport.landing.api.overview","title":"The public API: contract first, from the core registries to the landing","project":"saasreport","kind":"architecture","summary":"One OpenAPI contract produces the Worker's routes and limits, the typed client and the reference page; the Worker serves the core registries and the engine on sample data; the landing links to it live.","lineage":{"derives_from":["saasreport.landing.api"],"supersedes":[],"version":"1"},"relates_to":[{"id":"saasreport.landing.architecture","relation":"sibling"},{"id":"saasreport.landing.widgets","relation":"sibling"}],"depicts":[{"kind":"file","ref":"the API contract","path":"contracts/api.openapi.json"},{"kind":"file","ref":"the API Worker","path":"workers/api/src/worker.js"},{"kind":"file","ref":"the data bundler","path":"scripts/api-data.mjs"},{"kind":"file","ref":"the SDK config","path":"kit.sdk.json"}],"reviewed":"2026-10-28"}
+flowchart TB
+  contract("Contract contracts/api.openapi.json OpenAPI 3.1, limits in x-limits")
+  core("Core vendor/core: registries, schemas, sample data, engine source")
+  bundle("scripts/api-data.mjs registries and sample as static imports")
+  worker("API Worker api.saasreport.ai 8 operations, no storage")
+  rl("Rate limiter binding 60 per 60 s per client")
+  sdk("Generated client sdk/saasreport kit sdk generate")
+  ref("Reference page /developers/api/ kit site, from the contract")
+  landing("Landing saasreport.ai Developers section, live links")
+  visitor("Visitor browser, curl or an app")
+  ci("Release and watcher /api/build, /v1/health")
+  contract -->|"routes, limits, request schema"| worker
+  contract -->|"kit sdk generate"| sdk
+  contract -->|"kit site reference page"| ref
+  core --> bundle --> worker
+  worker --> rl
+  sdk --> landing
+  ref --> landing
+  landing -->|"live links"| visitor
+  visitor -->|"GET, POST /v1/guard"| worker
+  ci -->|"read served commit, health"| worker
+  class contract,worker accent
+  classDef accent fill:#12396B,stroke:#12396B,color:#FFFFFF,stroke-width:2px
+```
+
+</details>
+
+| Piece | What it is | Source of truth |
+| --- | --- | --- |
+| `contracts/api.openapi.json` | the OpenAPI 3.1 contract; core schemas are referenced by `$id`, never copied | this repository |
+| `workers/api/src/worker.js` | the routes, one handler per `operationId`, CORS, caching, limits | the contract |
+| `workers/api/src/engine.js` | the core engine on the sample dataset, pure, for a Worker | `vendor/core/src`, `vendor/core/sample` |
+| `workers/api/src/data.generated.js` | registries, schemas and sample files as static imports | `scripts/api-data.mjs` |
+| `sdk/saasreport` | JavaScript, CLI and Python clients | the contract, `kit.sdk.json` |
+| `release.json`, `resilience.json`, `.github/workflows/{production,drift,watch}.yml` | how the Worker is released, proven and watched | the kit's templates |

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/release.schema.json",
+  "project": "saasreport",
+  "state": "bootstrap",
+  "build": { "run": "npm run build", "artifact": ["dist"] },
+  "databases": [],
+  "paths": ["workers/api", "contracts", "vendor/core", "vendor/kit", "sdk", "package.json", "package-lock.json"],
+  "owner": { "secret": "OPS_NOTIFY_TO", "targets": [] },
+  "workers": [
+    { "wrangler": "workers/api/wrangler.toml", "build": "https://api.saasreport.ai/api/build" }
+  ]
+}

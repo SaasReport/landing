@@ -1,0 +1,17 @@
+# The public API of SaasReport (contracts/api.openapi.json). Deployed only by the production workflow (release.json), never by hand.
+name = "saasreport-api-production"
+main = "src/worker.js"
+compatibility_date = "2026-09-01"
+workers_dev = true
+
+# api.saasreport.ai is the production hostname of the naming registry (sub "api"); the zone is the owner's.
+routes = [{ pattern = "api.saasreport.ai", custom_domain = true }]
+
+# The per-client limit declared by the contract's x-limits.rate (a test holds the two equal). No namespace id is secret.
+[[ratelimits]]
+name = "RATE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 60, period = 60 }
+
+[observability]
+enabled = true
