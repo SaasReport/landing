@@ -18,51 +18,18 @@
       "schema": "schemas/copy.schema.json"
     },
     {
-      "files": [
-        "data/sample/meta.json"
-      ],
-      "schema": "schemas/sample-meta.schema.json"
+      "module": "comms.config.js",
+      "schema": "comms-config"
     },
     {
-      "files": [
-        "data/sample/subscriptions.*.json"
-      ],
-      "schema": "vendor/core/schemas/subscription-snapshot.schema.json",
-      "each": true
-    },
-    {
-      "files": [
-        "data/sample/charges.json"
-      ],
-      "schema": "vendor/core/schemas/charge-snapshot.schema.json",
-      "each": true
-    },
-    {
-      "files": [
-        "data/sample/refunds.json"
-      ],
-      "schema": "vendor/core/schemas/refund-snapshot.schema.json",
-      "each": true
-    },
-    {
-      "files": [
-        "data/sample/disputes.json"
-      ],
-      "schema": "vendor/core/schemas/dispute-snapshot.schema.json",
-      "each": true
-    },
-    {
-      "files": [
-        "data/sample/application-fees.json"
-      ],
-      "schema": "vendor/core/schemas/application-fee-snapshot.schema.json",
-      "each": true
+      "module": "src/forms.js",
+      "export": "FORMS",
+      "schema": "lead-forms"
     }
   ],
   "hardcoding": {
     "paths": [
-      "scripts/**",
-      "engine/**"
+      "scripts/**"
     ],
     "allow": "canon.allow.json"
   },
@@ -71,7 +38,7 @@
       "name": "the landing's generated content, scenarios and brand files (scripts/generate.mjs)",
       "command": "node scripts/generate.mjs --check",
       "outputs": [
-        "content/generated/pages.en.json",
+        "content/generated/landing.en.json",
         "content/generated/chrome.en.json",
         "content/generated/scenarios.json",
         "public/brand/logo.svg",

@@ -15,6 +15,7 @@
  * llms.txt / llms-full.txt. With `project.markdown.llms` ({ about, intro } or true) a static-only site also gets its own
  * llms.txt and llms-full.txt. `twins` in the result lists them.
  */
+import { scriptTag, cloudflareSafe } from "@saasreport/core/cloudflare-safe";
 import { formatForBrowser } from "@saasreport/format/browser";
 import { createHash } from "node:crypto";
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -50,8 +51,11 @@ const nameFor = (project, code) => (typeof project.name === "string" ? project.n
  * Every script to generate: project.assets plus the scripts of the configured pages (a page's own script takes
  * its strings from the page content's `script` field, per locale).
  */
+/** Whether the landing embeds a generated widget (a `widgets` section in any locale's content). */
+export const landingHasWidgets = (project) => project.landing !== false && Object.values(project.content || {}).some((c) => (c?.sections || []).some((s) => s?.type === "widgets"));
+
 export function projectAssets(project, locales) {
-  const cfg = { "shell.js": {}, ...(project.assets || {}) };   // every page carries the shell (src/shell.js)
+  const cfg = { "shell.js": {}, ...(landingHasWidgets(project) ? { "widgets.js": {} } : {}), ...(project.assets || {}) };   // every page carries the shell (src/shell.js); a landing with a widget carries the widget runtime
   for (const page of project.pages || []) {
     const def = PAGE_TYPES[page.type];
     if (!def?.script || cfg[def.script]) continue;
@@ -85,9 +89,10 @@ export function buildSite(project, { root = process.cwd(), write = false, outDir
   const tokens = resolveTokens(project.tokens);
   const locales = projectLocales(project);
   // Page types that bring their own theme file (widgets.css) add it to the project's list.
-  const themeFiles = [...new Set([...(project.css || THEME_CSS), ...(project.pages || []).flatMap((p) => PAGE_TYPES[p.type]?.css || [])])];
+  const themeFiles = [...new Set([...(project.css || THEME_CSS), ...(project.pages || []).flatMap((p) => PAGE_TYPES[p.type]?.css || []), ...(landingHasWidgets(project) ? ["widgets.css"] : [])])];
   // The plugin set of the site: the union over every widgets page's registry (the set checkProject validated), so no page's plugins ship without their CSS or runtime
-  const widgetsRegistry = (project.pages || []).some((p) => p.type === "widgets" && p.registry) ? unionRegistries((project.pages || []).filter((p) => p.type === "widgets").map((p) => p.registry || kitRegistry())).registry : undefined;
+  const widgetRegs = [...(project.pages || []).filter((p) => p.type === "widgets").map((p) => p.registry || kitRegistry()), ...(landingHasWidgets(project) && project.widgets?.registry ? [project.widgets.registry] : [])];
+  const widgetsRegistry = (project.pages || []).some((p) => p.type === "widgets" && p.registry) || project.widgets?.registry ? unionRegistries(widgetRegs).registry : undefined;
   const files = {};
   // The brand mark is applied before any ?v hash is taken, so hashes always match what is written.
   const tm = trademarker(project.trademark) || ((f, b) => b);
@@ -144,11 +149,11 @@ export function buildSite(project, { root = process.cwd(), write = false, outDir
     const L = loc.L;
     const content = project.content[loc.code];
     const site = { name: nameFor(project, loc.code), url: project.url };
-    const styles = (project.styles || themeFiles.map((f) => `/${f}`)).map((href) => {
+    const styles = [...(project.styles || themeFiles.map((f) => `/${f}`)), ...(landingHasWidgets(project) && project.styles && !project.styles.includes("/widgets.css") ? ["/widgets.css"] : [])].map((href) => {
       const f = href.replace(/^\//, "");
       return fileFor[loc.code][f] ? `/${fileFor[loc.code][f]}` : href;
     });
-    const scripts = (project.scripts || []).map((s) => (typeof s === "string" ? { src: s } : s))
+    const scripts = [...(project.scripts || []), ...(landingHasWidgets(project) && !(project.scripts || []).some((s) => (s.src || s) === "/widgets.js") ? ["/widgets.js"] : [])].map((s) => (typeof s === "string" ? { src: s } : s))
       .map((s) => { const f = s.src.replace(/^\//, ""); return fileFor[loc.code][f] ? { ...s, src: `/${fileFor[loc.code][f]}` } : s; });
     const page = {
       project, site, content, L, t: L.t, d: L.toDigits, tokens, url: siteUrl + loc.path,
@@ -201,13 +206,18 @@ export function buildSite(project, { root = process.cwd(), write = false, outDir
   // The kit's one number formatter in the browser (CONSTITUTION.md §7): /format.js sets globalThis.KitFormat and every
   // page loads it before its own scripts, so client code formats numbers with it (never with Intl or toLocaleString).
   files["format.js"] = formatForBrowser({ locales });   // a site with no Persian or Arabic locale gets no Persian or Arabic tables
-  const formatTag = `<script src="${assetFor(locales[0].code)("/format.js")}"></script>`;
+  const formatTag = scriptTag({ src: assetFor(locales[0].code)("/format.js"), defer: false });
   for (const rel of Object.keys(files)) {
     if (!rel.endsWith(".html") || files[rel].includes(formatTag)) continue;
     files[rel] = files[rel].replace(/<script\b(?![^>]*\btype\s*=\s*["']?application\/(?:ld\+)?json)[^>]*\bsrc\s*=/i, (m) => `${formatTag}\n${m}`);
   }
 
   for (const rel of Object.keys(files)) files[rel] = tm(rel, files[rel]);
+
+  // Behind Cloudflare (Rocket Loader, Email Address Obfuscation): every executable script says data-cfasync="false" before src,
+  // and mailto markup sits in email_off (project.cloudflare.emailOff, default true). The net under the emitters: a script
+  // or a link a project's content writes by hand gets it too.
+  for (const rel of Object.keys(files)) if (rel.endsWith(".html")) files[rel] = cloudflareSafe(files[rel], { emailOff: project.cloudflare?.emailOff !== false });
 
   const twins = markdownTwins(project, files, sitemap, siteUrl, locales);
 

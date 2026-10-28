@@ -30,10 +30,11 @@
   },
   "scripts": {
     "generate": "node scripts/generate.mjs",
-    "build": "node scripts/generate.mjs && node vendor/kit/packages/cli/bin/kit.js widgets build && node vendor/kit/packages/cli/bin/kit.js site build && cp -r public/. dist/",
-    "check": "node scripts/generate.mjs --check && node vendor/kit/packages/cli/bin/kit.js widgets check && node vendor/kit/packages/cli/bin/kit.js widgets build --check && node vendor/kit/packages/cli/bin/kit.js site check && node vendor/kit/packages/cli/bin/kit.js diagrams check",
-    "test": "node vendor/kit/packages/cli/bin/kit.js check canon && npm run check && npm run build && node vendor/kit/packages/cli/bin/kit.js site shell --out dist",
+    "build": "node scripts/generate.mjs && kit widgets build && kit site build && cp -r public/. dist/",
+    "check": "node scripts/generate.mjs --check && kit widgets check && kit widgets build --check && kit site check && kit diagrams check && npm run comms:check",
+    "test": "kit check canon && kit comms check --config comms.config.js --forms src/forms.js && npm run check && npm run build && kit site shell --out dist",
     "qa": "node test/interact.test.mjs",
-    "qa:visual": "node vendor/kit/packages/cli/bin/kit.js site visual-qa --out dist"
+    "qa:visual": "kit site visual-qa --out dist",
+    "comms:check": "kit comms check --config comms.config.js --forms src/forms.js"
   }
 }

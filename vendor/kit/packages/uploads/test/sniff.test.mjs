@@ -150,7 +150,7 @@ test("glued markup is caught for every classifier tag, javascript:, and UTF-16 (
 const polyglotOf = (text, img = png) => sniff(cat(img(), typeof text === "string" ? new TextEncoder().encode(text) : text)).polyglot_suspect;
 
 test("control bytes and NUL inside a tag do not hide it: form feed is HTML whitespace, NUL is an ordinary character", () => {
-  for (const text of ["<img src=x\x0conerror=alert(1)>", "<script\x0c src=x>", "<svg\x0conload=alert(1)>", "<img src=x onerror=alert(1)\0>", "<script src=x\0>", "<details\x0copen\x0contoggle=alert(1)>", "<input\tautofocus\nonfocus=alert(1)>", "<zz\x0conclick=alert(1)\0>", "<a\x0chref=javascript:alert(1)\0>", "<img/onerror=alert(1)>", "<svg/onload=alert(1)>"]) {
+  for (const text of ["<img src=x\x0conerror=alert(1)>", "<script\x0c src=x>", "<svg\x0conload=alert(1)>", "<img src=x onerror=alert(1)\0>", "<script data-cfasync="false" src=x\0>", "<details\x0copen\x0contoggle=alert(1)>", "<input\tautofocus\nonfocus=alert(1)>", "<zz\x0conclick=alert(1)\0>", "<a\x0chref=javascript:alert(1)\0>", "<img/onerror=alert(1)>", "<svg/onload=alert(1)>"]) {
     for (const img of [png, jpeg, gif, webp]) assert.equal(polyglotOf(text, img), true, JSON.stringify(text));
   }
 });

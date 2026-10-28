@@ -14,7 +14,7 @@ export async function writeWidgetsSite(dir, specPath, { locale = "en", tokens = 
   mkdirSync(dir, { recursive: true });
   let body = renderWidgetsBody(built.generated, locale, { registry: built.registry });
   if (filter) body = filter(body);
-  writeFileSync(join(dir, "index.html"), `<!doctype html><html lang="${locale}" dir="${loc.dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Widgets</title><link rel="stylesheet" href="/widgets.css"></head><body class="kw-body">${body}<script src="/widgets.js" defer></script></body></html>`);
+  writeFileSync(join(dir, "index.html"), `<!doctype html><html lang="${locale}" dir="${loc.dir}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Widgets</title><link rel="stylesheet" href="/widgets.css"></head><body class="kw-body">${body}<script data-cfasync="false" src="/widgets.js" defer></script></body></html>`);
   const rendered = renderCss(themeTemplate(built.registry), { file: "widgets.css", tokens: t, locale: createLocale(locale), name: "Test" });
   writeFileSync(join(dir, "widgets.css"), `:root{\n${colorVars(t.color)}\n}\nbody{margin:0;font-family:system-ui,sans-serif;background:var(--c-bg);color:var(--c-ink)}\n.kw-page{max-width:1000px}\n${rendered}\n${css}`);
   cpSync(RUNTIME_FILE, join(dir, "widgets.js"));

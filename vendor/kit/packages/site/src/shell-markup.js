@@ -3,6 +3,7 @@
  * src/page.js) and the Worker's pages (@saasreport/cloudflare shell): no Node APIs here. src/shell.js has the index and
  * the checks. SHELL_CSS uses the theme's variables, falling back to the Worker theme's (kit.css).
  */
+import { scriptTag } from "@saasreport/core/cloudflare-safe";
 const esc = (v) => String(v ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 const SEARCH_ICO = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 4.5 4.5"/></svg>';
 const SECTIONS_ICO = '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"/></svg>';
@@ -44,7 +45,7 @@ export function shellMarkup({ menu = [], t, home = "/", script = "/shell.js?v=0"
     `<div class="kshell__sr" role="status" aria-live="polite" data-kit-count></div>`,
     `<ol class="kshell__results" id="kshell-results" role="listbox" aria-label="${esc(s("search", "Search"))}"></ol></div>`,
     `</div>`,
-    `<script src="${esc(script)}" defer></script>`,
+    scriptTag({ src: script }),
   ].join("\n");
   return { buttons, panels };
 }

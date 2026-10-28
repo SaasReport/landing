@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/sample-meta.schema.json",
+  "title": "saasreport.sample-meta.v1",
+  "description": "What the sample data files are, and the one fact the snapshots cannot hold: the customers with recurring revenue before the first snapshot.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "label",
+    "description",
+    "currency",
+    "history",
+    "reference_date"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "label": {
+      "const": "SAMPLE"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 20
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[a-z]{3}$"
+    },
+    "history": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "reference_date": {
+      "type": "string",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+      "description": "The date the sample is anchored to: its figures are for the last complete month before it and the month before that. A build never moves it."
+    }
+  }
+}

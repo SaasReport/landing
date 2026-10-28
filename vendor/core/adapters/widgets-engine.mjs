@@ -1,20 +1,21 @@
-// The $engine adapter of widgets.spec.json: the vendored core metric engine run on the sample data files of data/sample.
+// The build-time $engine adapter for kit widget specs (kit.widgets-spec.v1 `engine` source): the metric engine run on the sample dataset in sample/.
+// Build-time only (Node: it reads files); never imported by a Worker. Any surface that shows the product uses it, so the illustration is one source.
 // No name, number or sentence of its own: everything comes from the core registries, the sample data and the arguments.
 import { readFileSync } from "node:fs";
-import { computeMetrics, evaluateFindings, formatValue, periodWindow, civilFromDays, daysFromCivil, allowedReportTypes, planReport, verifyNarrative } from "../vendor/core/src/index.js";
+import { computeMetrics, evaluateFindings, formatValue, periodWindow, civilFromDays, daysFromCivil, allowedReportTypes, planReport, verifyNarrative } from "../src/index.js";
 
 const read = (rel) => JSON.parse(readFileSync(new URL(rel, import.meta.url), "utf8"));
-const reg = (name) => read(`../vendor/core/registry/${name}.json`);
-const sample = (name) => read(`../data/sample/${name}.json`);
+const reg = (name) => read(`../registry/${name}.json`);
+const sample = (name) => read(`../sample/${name}.json`);
 const pad = (n) => String(n).padStart(2, "0");
 const iso = (epoch) => { const [y, m, d] = civilFromDays(Math.floor(epoch / 86400)); return `${y}-${pad(m)}-${pad(d)}`; };
 const epochOf = (isoDate) => { const [y, m, d] = isoDate.split("-").map(Number); return daysFromCivil(y, m, d) * 86400; };
 
-/** The registries, and the figures of the last complete month and the one before it, at asOf. */
-function world(asOf) {
+/** The registries, and the figures of the last complete month and the one before it, at the sample's own reference date (never the build date). */
+function world() {
   const R = { stakeholders: reg("stakeholders"), metrics: reg("metrics"), reportTypes: reg("report-types"), cadences: reg("cadences"), roles: reg("roles"), findings: reg("findings"), currencies: reg("currencies") };
   const meta = sample("meta");
-  const cur = periodWindow("month", epochOf(asOf));
+  const cur = periodWindow("month", epochOf(meta.reference_date));
   const prev = periodWindow("month", cur.from);
   const ctx = (w) => ({ start: sample(`subscriptions.${iso(w.from)}`), end: sample(`subscriptions.${iso(w.to)}`), history: meta.history, window: { from: w.from, to: w.to }, charges: sample("charges"), refunds: sample("refunds"), disputes: sample("disputes"), application_fees: sample("application-fees") });
   const ids = R.metrics.metrics.map((m) => m.id);
@@ -35,7 +36,7 @@ export default {
   /** One stakeholder: questions, priority figures, reports with cadences, what Stripe cannot tell them, findings. */
   stakeholder({ id, templates }, { asOf }) {
     const fill = (t, o) => Object.entries(o).reduce((s, [k, v]) => s.replace(`{${k}}`, v), t);
-    const W = world(asOf);
+    const W = world();
     const s = W.R.stakeholders.stakeholders.find((x) => x.id === id);
     const cadenceName = (c) => lowerFirst(W.R.cadences.cadences.find((x) => x.id === c).name);
     return {
@@ -49,13 +50,13 @@ export default {
   },
   /** Every finding that fires on the sample month, once per rule, for every stakeholder. */
   findings(_args, { asOf }) {
-    const W = world(asOf);
+    const W = world();
     const seen = new Set();
     return findingsFor(W, undefined).filter((f) => !seen.has(f.rule) && seen.add(f.rule)).map((f) => ({ severity: f.severity, headline: f.headline, evidence: evidenceLines(f), recommendation: f.recommendation?.text ?? "" }));
   },
   /** One report type as one of its readers sees it: sections in the reader's order, each figure computed. */
   report({ type, stakeholder }, { asOf }) {
-    const W = world(asOf);
+    const W = world();
     const plan = planReport(W.R.reportTypes, W.R.stakeholders, type, stakeholder);
     const who = W.R.stakeholders.stakeholders.find((x) => x.id === stakeholder).name;
     const rt = W.R.reportTypes.report_types.find((x) => x.id === type).name;
@@ -63,7 +64,7 @@ export default {
   },
   /** Stripe roles grouped by what they can see: the reports one role of the group may read, and those held back. */
   roleGroup({ index, more }, { asOf }) {
-    const W = world(asOf);
+    const W = world();
     const groups = new Map();
     for (const r of W.R.roles.roles) { const k = [...r.sees].sort().join("|"); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(r); }
     const members = [...groups.values()][index];
@@ -75,7 +76,7 @@ export default {
   },
   /** The role groups: how many there are. */
   roleGroups(_args, { asOf }) {
-    const W = world(asOf);
+    const W = world();
     return { count: new Set(W.R.roles.roles.map((r) => [...r.sees].sort().join("|"))).size };
   },
   /** The period a cadence covers on the build date. */
@@ -87,7 +88,7 @@ export default {
   },
   /** The number guard on a drafted sentence: {nrr} is the engine's figure; any other number is not. */
   guard({ draft }, { asOf }) {
-    const W = world(asOf);
+    const W = world();
     const text = draft.replace("{nrr}", value(W, "nrr"));
     const facts = findingsFor(W, undefined).flatMap((f) => f.facts).concat(value(W, "nrr"));
     const v = verifyNarrative(text, facts);

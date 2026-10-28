@@ -19,7 +19,7 @@ Source: [`lineage.mmd`](lineage.mmd)
 | `saasreport.diagrams.lineage` v1 | Diagram lineage (generated) | other | none | none | doc: [the diagram headers]() | [lineage.mmd](lineage.mmd) |
 | `saasreport.landing.architecture` v1 | How the landing is built | architecture | none | sibling `saasreport.landing.widgets` | file: [the content generator](../../scripts/generate.mjs)<br>file: [the site project](../../site.config.js)<br>doc: [the architecture description](../ARCHITECTURE.md) | [landing-architecture.mmd](landing-architecture.mmd) |
 | `saasreport.landing.architecture.overview` v1 | How the landing is built, in the architecture document | architecture | none | none | file: [the content generator](../../scripts/generate.mjs) | [ARCHITECTURE.md #1](../ARCHITECTURE.md) |
-| `saasreport.landing.widgets` v1 | Where each widget's numbers come from | flow | none | sibling `saasreport.landing.architecture` | file: [the widget spec](../../widgets.spec.json)<br>file: [the engine adapter](../../engine/engine.mjs) | [landing-widgets.mmd](landing-widgets.mmd) |
+| `saasreport.landing.widgets` v1 | Where each widget's numbers come from | flow | none | sibling `saasreport.landing.architecture` | file: [the widget spec](../../widgets.spec.json)<br>file: [the engine adapter](../../vendor/core/adapters/widgets-engine.mjs) | [landing-widgets.mmd](landing-widgets.mmd) |
 
 ## saasreport.diagrams.lineage
 

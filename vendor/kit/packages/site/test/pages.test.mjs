@@ -53,8 +53,8 @@ test("the sample builds every page per locale: en at its path, ar under /ar/, wi
   }
   assert.ok(files["directory/directory.json"] && files["ar/directory/directory.json"]);
   // each page links its own locale's scripts and styles
-  assert.match(files["ar/terminal/index.html"], /<script src="\/terminal\.ar\.js\?v=[a-f0-9]{10}" defer>/);
-  assert.match(files["terminal/index.html"], /<script src="\/terminal\.js\?v=[a-f0-9]{10}" defer>/);
+  assert.match(files["ar/terminal/index.html"], /<script data-cfasync="false" src="\/terminal\.ar\.js\?v=[a-f0-9]{10}" defer>/);
+  assert.match(files["terminal/index.html"], /<script data-cfasync="false" src="\/terminal\.js\?v=[a-f0-9]{10}" defer>/);
   assert.match(files["ar/lab/index.html"], /<link rel="stylesheet" href="\/styles\.ar\.css\?v=/);
 });
 
@@ -74,7 +74,7 @@ test("generated scripts parse, per locale, with the locale's strings, digits and
   assert.doesNotMatch(en + ar, /toLocaleString|NumberFormat/);     // numbers through @saasreport/format (KitFormat)
   assert.match(en, /KitFormat\.formatNumber\(n, "en", \{ decimals: d, numerals: "latin" \}\)/);
   assert.match(ar, /KitFormat\.digits\(v, "arabic"\)/);
-  assert.match(files["index.html"], /<script src="\/format\.js\?v=[a-z0-9]+"><\/script>\n<script/);
+  assert.match(files["index.html"], /<script data-cfasync="false" src="\/format\.js\?v=[a-z0-9]+"><\/script>\n<script/);
   assert.match(en, /window\.ExampleNotify/);
   assert.match(files["lab.js"], /const STORE_KEY = "example-lab-v1";/);
   assert.match(files["notify.js"], /window\.ExampleNotify = api;/);

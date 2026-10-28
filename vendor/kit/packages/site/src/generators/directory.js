@@ -11,6 +11,7 @@
  *
  *   { type: "directory", path: "/directory/", data, taxonomy, sectors, changes, generator?, json?, content: { en: {…} } }
  */
+import { scriptTag } from "@saasreport/core/cloudflare-safe";
 import { fill } from "../locale.js";
 import { roleVar } from "../tokens.js";
 import { createRequire } from "node:module";
@@ -288,10 +289,10 @@ ${H.notice.items.map((x) => `        <li>${f(x, { json: `${PATH}directory.json` 
   </section>
 </main>
 ${chrome.footer(c.footNote)}
-<script src="${asset("/notify.js")}" defer></script>
-<script src="${asset("/content-client.js")}" defer></script>
-<script src="${asset("/directory.js")}" defer></script>
-<script src="${asset("/totop.js")}" defer></script>
+${scriptTag({ src: asset("/notify.js") })}
+${scriptTag({ src: asset("/content-client.js") })}
+${scriptTag({ src: asset("/directory.js") })}
+${scriptTag({ src: asset("/totop.js") })}
 </body>
 </html>
 `;

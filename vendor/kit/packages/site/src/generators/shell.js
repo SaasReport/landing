@@ -8,6 +8,7 @@
  *                    body, footNote, generator }) → html
  *   esc(value), crumbsLd(items), webPageLd({ type, name, description, url, ctx, extra })
  */
+import { scriptTag } from "@saasreport/core/cloudflare-safe";
 export const esc = (v) => String(v ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 /** Plain text of an HTML fragment (for titles, descriptions and JSON-LD). */
 export const plainText = (h) => String(h ?? "").replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, "\"").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&#39;/g, "'").replace(/\s+/g, " ").trim();
@@ -60,7 +61,7 @@ ${chrome.bar(o.bar || [], path)}
 ${o.body}
 </main>
 ${chrome.footer(o.footNote || "")}
-${scripts.map((h) => `<script src="${asset(h)}" defer></script>`).join("\n")}
+${scripts.map((h) => scriptTag({ src: asset(h) })).join("\n")}
 </body>
 </html>
 `;

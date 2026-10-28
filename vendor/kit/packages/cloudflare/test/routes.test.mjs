@@ -22,7 +22,7 @@ for (const lang of ["fa", "en"]) {
     assert.match(html, new RegExp(`<meta property="og:locale" content="${lang === "fa" ? "fa_IR" : "en_US"}">`));
     assert.match(html, new RegExp(`<style>:root\\{--c-accent:${config.brand.colors.accent};--c-ink:#101010;--font-body:Inter, sans-serif\\}</style>`));
     assert.match(html, /<link rel="stylesheet" href="\/kit\/kit\.css\?v=/);
-    assert.match(html, /<script src="\/kit\/kit\.js\?v=[^"]+" defer>/);
+    assert.match(html, /<script data-cfasync="false" src="\/kit\/kit\.js\?v=[^"]+" defer>/);
     assert.match(html, /<meta property="og:title"/);
     assert.match(html, /<meta name="twitter:card"/);
     assert.match(html, new RegExp(`<link rel="canonical" href="${config.site.url}/blog/">`));
@@ -103,7 +103,7 @@ for (const lang of ["fa", "en"]) {
     for (const id of Object.keys(config.shows)) assert.match(html, new RegExp(`<section class="wrap podshow" id="${id}"`));
     const series = jsonLd(html).filter((n) => n["@type"] === "PodcastSeries");
     assert.equal(series.length, 2);
-    assert.match(html, /<script src="\/kit\/podcast\.js\?v=/);
+    assert.match(html, /<script data-cfasync="false" src="\/kit\/podcast\.js\?v=/);
     html = await page(get, "/podcasts/weekly-2026-09-26");
     const ep = jsonLd(html).find((n) => n["@type"] === "PodcastEpisode");
     assert.equal(ep.associatedMedia.contentUrl, `${config.site.url}/podcasts/audio/weekly-2026-09-26.mp3`);
@@ -140,7 +140,7 @@ for (const lang of ["fa", "en"]) {
     assert.match(html, /data-gsearch/); assert.match(html, /<section class="gcat" id="pay" data-gcat>/);
     assert.match(html, /data-gterm href="\/glossary\/iban"/);
     assert.match(html, /data-glossary-today/, "term of the day on 2026-10-01");
-    assert.match(html, /<script src="\/kit\/glossary\.js\?v=/);
+    assert.match(html, /<script data-cfasync="false" src="\/kit\/glossary\.js\?v=/);
     html = await page(get, "/glossary/iban");
     const term = jsonLd(html).find((n) => n["@type"] === "DefinedTerm");
     assert.equal(term.termCode, "iban");

@@ -58,7 +58,7 @@ function boot() {
   const fail = (code, extra = {}) => Object.assign(new Error(code), { code, ...extra });
   const envFor = (src, o) => WB.makeEnvelope(src, { lang: L.code, tz: L.tz, ...o });
   const scriptsLoaded = new Map();
-  const loadScript = (href) => scriptsLoaded.get(href) || (scriptsLoaded.set(href, new Promise((res, rej) => { const s = document.createElement("script"); s.src = href; s.onload = res; s.onerror = () => rej(fail("script", { href })); document.head.append(s); })), scriptsLoaded.get(href));
+  const loadScript = (href) => scriptsLoaded.get(href) || (scriptsLoaded.set(href, new Promise((res, rej) => { const s = document.createElement("script"); s.setAttribute("data-cfasync", "false"); s.src = href; s.onload = res; s.onerror = () => rej(fail("script", { href })); document.head.append(s); })), scriptsLoaded.get(href));
   const engines = new Map();
   async function engineOf(src) {
     if (engines.has(src.id)) return engines.get(src.id);

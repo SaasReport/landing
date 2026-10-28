@@ -74,6 +74,8 @@ function prepareLab(ctx) {
 export const ASSETS = {
   "notify.js": { file: "notify.js", prepare: (ctx) => { ctx.d = { ...NOTIFY_DATA, ...ctx.d }; } },
   "totop.js": { file: "totop.js" },
+  // the landing's behaviours (reveal, counters, tabs, stepper, modals, mega menus, nav, section index): no copy, see assets/landing.js
+  "landing.js": { file: "landing.js" },
   // the site shell on every page: menu drawer + global search (src/shell.js)
   "shell.js": { file: "shell.js" },
   // The widget runtime (@saasreport/widgets): a plain script, no project strings (the page holds every word).

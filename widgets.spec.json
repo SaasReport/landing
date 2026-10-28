@@ -13,7 +13,7 @@
     }
   },
   "sources": {
-    "engine": { "kind": "engine", "path": "engine/engine.mjs", "describes": "the core metric engine on the sample data files" },
+    "engine": { "kind": "engine", "path": "vendor/core/adapters/widgets-engine.mjs", "describes": "the core widgets engine adapter: the metric engine on the core sample dataset" },
     "copy": { "kind": "content", "path": "content/copy.json", "describes": "the landing page's own copy" },
     "stakeholders": { "kind": "content", "path": "vendor/core/registry/stakeholders.json", "describes": "the stakeholder registry of SaasReport/core" },
     "commitments": { "kind": "content", "path": "vendor/core/registry/commitments.json", "describes": "the commitments register of SaasReport/core" }

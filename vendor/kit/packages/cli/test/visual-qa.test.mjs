@@ -27,8 +27,8 @@ function png(w, h, rgb) {
 
 test("sitePages: every html file, redirects flagged, pages built from the same stylesheets and scripts share a template", { timeout: BROWSER_TEST_MS }, () => {
   const root = put(join(TMP, "pages"), {
-    "index.html": '<html><body class="home"><link rel="stylesheet" href="/a.css?v=1"><script src="/a.js"></script></body></html>',
-    "x/index.html": '<html><body class="home"><link rel="stylesheet" href="/a.css?v=2"><script src="/a.js"></script></body></html>',
+    "index.html": '<html><body class="home"><link rel="stylesheet" href="/a.css?v=1"><script data-cfasync="false" src="/a.js"></script></body></html>',
+    "x/index.html": '<html><body class="home"><link rel="stylesheet" href="/a.css?v=2"><script data-cfasync="false" src="/a.js"></script></body></html>',
     "y/index.html": '<html><body><link rel="stylesheet" href="/b.css"></body></html>',
     "old.html": '<meta http-equiv="refresh" content="0;url=/">',
   });

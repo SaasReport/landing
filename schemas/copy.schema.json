@@ -8,16 +8,20 @@
   "required": [
     "meta",
     "hero",
+    "audience",
     "problem",
     "how",
     "people",
     "roi",
+    "compare",
     "sectors",
     "delivery",
     "trust",
     "faq",
     "final",
     "nav",
+    "form",
+    "privacy",
     "footer",
     "widgets"
   ],
@@ -188,9 +192,12 @@
         "eyebrow",
         "title",
         "lead",
-        "status",
+        "chipsLabel",
+        "chips",
         "primary",
-        "secondary"
+        "secondary",
+        "note",
+        "mock"
       ],
       "properties": {
         "eyebrow": {
@@ -200,19 +207,73 @@
           "$ref": "#/$defs/line"
         },
         "lead": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600,
+          "pattern": "^[^<>]*$"
+        },
+        "chipsLabel": {
           "$ref": "#/$defs/line"
         },
-        "status": {
-          "$ref": "#/$defs/line"
-        },
-        "statusLabel": {
-          "$ref": "#/$defs/line"
+        "chips": {
+          "type": "array",
+          "minItems": 3,
+          "items": {
+            "$ref": "#/$defs/line"
+          }
         },
         "primary": {
           "$ref": "#/$defs/line"
         },
         "secondary": {
           "$ref": "#/$defs/line"
+        },
+        "note": {
+          "$ref": "#/$defs/line"
+        },
+        "mock": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "bar",
+            "kicker",
+            "product",
+            "badge",
+            "stepStatus",
+            "steps",
+            "stats"
+          ],
+          "properties": {
+            "bar": {
+              "$ref": "#/$defs/line"
+            },
+            "kicker": {
+              "$ref": "#/$defs/line"
+            },
+            "product": {
+              "$ref": "#/$defs/line"
+            },
+            "badge": {
+              "$ref": "#/$defs/line"
+            },
+            "stepStatus": {
+              "$ref": "#/$defs/line"
+            },
+            "steps": {
+              "type": "array",
+              "minItems": 3,
+              "items": {
+                "$ref": "#/$defs/line"
+              }
+            },
+            "stats": {
+              "type": "array",
+              "minItems": 3,
+              "items": {
+                "$ref": "#/$defs/line"
+              }
+            }
+          }
         }
       }
     },
@@ -243,10 +304,12 @@
         "eyebrow",
         "title",
         "lead",
+        "stepsLabel",
+        "exampleLabel",
+        "outputsLabel",
         "steps",
         "statusLabel",
-        "status",
-        "stepsLabel"
+        "status"
       ],
       "properties": {
         "eyebrow": {
@@ -261,8 +324,47 @@
         "stepsLabel": {
           "$ref": "#/$defs/line"
         },
+        "exampleLabel": {
+          "$ref": "#/$defs/line"
+        },
+        "outputsLabel": {
+          "$ref": "#/$defs/line"
+        },
         "steps": {
-          "$ref": "#/$defs/titledList"
+          "type": "array",
+          "minItems": 4,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "tab",
+              "title",
+              "text",
+              "example",
+              "outputs"
+            ],
+            "properties": {
+              "tab": {
+                "$ref": "#/$defs/line"
+              },
+              "title": {
+                "$ref": "#/$defs/line"
+              },
+              "text": {
+                "$ref": "#/$defs/line"
+              },
+              "example": {
+                "$ref": "#/$defs/line"
+              },
+              "outputs": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "$ref": "#/$defs/line"
+                }
+              }
+            }
+          }
         },
         "statusLabel": {
           "$ref": "#/$defs/line"
@@ -282,7 +384,8 @@
         "sampleNote",
         "who",
         "order",
-        "findings"
+        "findings",
+        "cta"
       ],
       "properties": {
         "eyebrow": {
@@ -351,7 +454,8 @@
             "title",
             "text",
             "summary",
-            "report"
+            "report",
+            "eyebrow"
           ],
           "properties": {
             "title": {
@@ -367,6 +471,9 @@
               "type": "string",
               "pattern": "^[a-z][a-z-]*$",
               "description": "A report type id of the registry with at least three readers."
+            },
+            "eyebrow": {
+              "$ref": "#/$defs/line"
             }
           }
         },
@@ -379,7 +486,8 @@
             "summary",
             "systemName",
             "evidenceLabel",
-            "doNext"
+            "doNext",
+            "eyebrow"
           ],
           "properties": {
             "title": {
@@ -399,6 +507,25 @@
             },
             "doNext": {
               "$ref": "#/$defs/line"
+            },
+            "eyebrow": {
+              "$ref": "#/$defs/line"
+            }
+          }
+        },
+        "cta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "action"
+          ],
+          "properties": {
+            "title": {
+              "$ref": "#/$defs/line"
+            },
+            "action": {
+              "$ref": "#/$defs/line"
             }
           }
         }
@@ -416,7 +543,8 @@
         "you",
         "step",
         "inputs",
-        "outputs"
+        "outputs",
+        "cta"
       ],
       "properties": {
         "eyebrow": {
@@ -483,6 +611,22 @@
               "$ref": "#/$defs/output"
             }
           }
+        },
+        "cta": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "title",
+            "action"
+          ],
+          "properties": {
+            "title": {
+              "$ref": "#/$defs/line"
+            },
+            "action": {
+              "$ref": "#/$defs/line"
+            }
+          }
         }
       }
     },
@@ -512,7 +656,8 @@
             "required": [
               "id",
               "title",
-              "text"
+              "text",
+              "icon"
             ],
             "properties": {
               "id": {
@@ -527,6 +672,10 @@
               },
               "text": {
                 "$ref": "#/$defs/line"
+              },
+              "icon": {
+                "type": "string",
+                "pattern": "^[a-z]+$"
               }
             }
           }
@@ -901,8 +1050,7 @@
           "$ref": "#/$defs/line"
         },
         "action": {
-          "$ref": "#/$defs/line",
-          "description": "{email}"
+          "$ref": "#/$defs/line"
         },
         "small": {
           "$ref": "#/$defs/line"
@@ -915,7 +1063,7 @@
       "required": [
         "links",
         "cta",
-        "ctaLabel"
+        "drawerAction"
       ],
       "properties": {
         "links": {
@@ -942,7 +1090,7 @@
         "cta": {
           "$ref": "#/$defs/line"
         },
-        "ctaLabel": {
+        "drawerAction": {
           "$ref": "#/$defs/line"
         }
       }
@@ -951,12 +1099,40 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "text"
+        "text",
+        "columns",
+        "statusLinks",
+        "contact"
       ],
       "properties": {
         "text": {
-          "$ref": "#/$defs/line",
-          "description": "{year}, {holder}"
+          "$ref": "#/$defs/line"
+        },
+        "contact": {
+          "$ref": "#/$defs/line"
+        },
+        "columns": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "page",
+            "status"
+          ],
+          "properties": {
+            "page": {
+              "$ref": "#/$defs/line"
+            },
+            "status": {
+              "$ref": "#/$defs/line"
+            }
+          }
+        },
+        "statusLinks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/line"
+          }
         }
       }
     },
@@ -1115,6 +1291,203 @@
             "number-guard": {
               "$ref": "#/$defs/note"
             }
+          }
+        }
+      }
+    },
+    "audience": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "title"
+      ],
+      "properties": {
+        "label": {
+          "$ref": "#/$defs/line"
+        },
+        "title": {
+          "$ref": "#/$defs/line"
+        }
+      }
+    },
+    "compare": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eyebrow",
+        "title",
+        "columns",
+        "rows"
+      ],
+      "properties": {
+        "eyebrow": {
+          "$ref": "#/$defs/line"
+        },
+        "title": {
+          "$ref": "#/$defs/line"
+        },
+        "columns": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 3,
+          "items": {
+            "$ref": "#/$defs/line"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "option",
+              "dashboard",
+              "report"
+            ],
+            "properties": {
+              "option": {
+                "$ref": "#/$defs/line"
+              },
+              "dashboard": {
+                "$ref": "#/$defs/line"
+              },
+              "report": {
+                "$ref": "#/$defs/line"
+              }
+            }
+          }
+        }
+      }
+    },
+    "form": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "eyebrow",
+        "title",
+        "lead",
+        "submit",
+        "fine",
+        "done",
+        "fields",
+        "autoreply",
+        "ownerLabel"
+      ],
+      "properties": {
+        "eyebrow": {
+          "$ref": "#/$defs/line"
+        },
+        "title": {
+          "$ref": "#/$defs/line"
+        },
+        "lead": {
+          "$ref": "#/$defs/line"
+        },
+        "submit": {
+          "$ref": "#/$defs/line"
+        },
+        "fine": {
+          "$ref": "#/$defs/line"
+        },
+        "done": {
+          "$ref": "#/$defs/line"
+        },
+        "fields": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name",
+            "email",
+            "company",
+            "role",
+            "reports",
+            "message"
+          ],
+          "properties": {
+            "name": {
+              "$ref": "#/$defs/line"
+            },
+            "email": {
+              "$ref": "#/$defs/line"
+            },
+            "company": {
+              "$ref": "#/$defs/line"
+            },
+            "role": {
+              "$ref": "#/$defs/line"
+            },
+            "reports": {
+              "$ref": "#/$defs/line"
+            },
+            "message": {
+              "$ref": "#/$defs/line"
+            }
+          }
+        },
+        "autoreply": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "subject",
+            "preheader",
+            "title",
+            "intro",
+            "steps"
+          ],
+          "properties": {
+            "subject": {
+              "type": "string",
+              "minLength": 1
+            },
+            "preheader": {
+              "$ref": "#/$defs/line"
+            },
+            "title": {
+              "$ref": "#/$defs/line"
+            },
+            "intro": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "$ref": "#/$defs/line"
+              }
+            },
+            "steps": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "$ref": "#/$defs/line"
+              }
+            }
+          }
+        },
+        "ownerLabel": {
+          "$ref": "#/$defs/line"
+        }
+      }
+    },
+    "privacy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "eyebrow",
+        "paragraphs"
+      ],
+      "properties": {
+        "title": {
+          "$ref": "#/$defs/line"
+        },
+        "eyebrow": {
+          "$ref": "#/$defs/line"
+        },
+        "paragraphs": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/line"
           }
         }
       }

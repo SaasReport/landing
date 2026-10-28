@@ -23,7 +23,7 @@ test("every built page carries the menu button, the drawer with the project's me
     assert.match(files[f], /data-kit-menu/, f);
     assert.match(files[f], /<a href="\/terminal\/">Terminal<\/a>/, `${f}: the menu`);
     assert.match(files[f], /data-kit-sections[^-]/, `${f}: the docked sections control`);
-    assert.match(files[f], /<script src="\/shell(\.\w+)?\.js\?v=[a-z0-9]+" defer><\/script>/, f);
+    assert.match(files[f], /<script data-cfasync="false" src="\/shell(\.\w+)?\.js\?v=[a-z0-9]+" defer><\/script>/, f);
   }
   assert.match(files["styles.css"], /\.kshell__drawer\{position:fixed/);
   assert.doesNotMatch(files["styles.css"], /\.totop\{|\.pagex\{/, "no floating back-to-top or sections button");

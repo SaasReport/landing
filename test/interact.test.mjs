@@ -73,6 +73,17 @@ for (const [w, h] of [[390, 844], [1280, 800]]) {
       const b = await page.$(sel); check(Boolean(b), `${where}: missing ${sel}`);
       if (b) { await b.scrollIntoViewIfNeeded(); await b.click(); }
     }
+    // the early-access call to action opens the form modal, which carries every declared field
+    if (path === "/") {
+      const cta = await page.$('.hero [data-modal="early"]');
+      check(Boolean(cta), `${where}: no early-access call to action in the hero`);
+      if (cta) {
+        await cta.click(); await page.waitForTimeout(400);
+        check(await page.$eval("#m-early", (d) => d.open), `${where}: the early-access modal did not open`);
+        check((await page.$$('#m-early [name]')).length >= 6, `${where}: the early-access form lacks fields`);
+      }
+      check((await page.$$('[data-modal="early"]')).length >= 5, `${where}: fewer than five early-access calls to action`);
+    }
     await page.close();
   }
 }

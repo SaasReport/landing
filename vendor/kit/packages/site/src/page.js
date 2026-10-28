@@ -11,6 +11,7 @@ import { fontType } from "./tokens.js";
 import { shellMarkup } from "./shell-markup.js";
 import { preferredSourceCard } from "./preferred.js";
 import { menuFor } from "./pages.js";
+import { scriptTag } from "@saasreport/core/cloudflare-safe";
 
 const lines = (x) => x.join("\n");
 
@@ -281,7 +282,7 @@ function tail(page) {
     ``,
     `<div class="toast" role="status" aria-live="polite" hidden></div>`,
     ``,
-    ...page.scripts.map((s) => (s.module ? `<script type="module" src="${attr(asset(s.src))}"></script>` : `<script src="${attr(asset(s.src))}"${s.defer === false ? "" : " defer"}></script>`)),
+    ...page.scripts.map((s) => scriptTag({ src: asset(s.src), module: s.module, defer: s.defer !== false })),
     `</body>`,
     `</html>`,
     ``,

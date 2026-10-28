@@ -20,6 +20,7 @@
     if (window.Clerk) return Promise.resolve(window.Clerk);
     return new Promise((resolve, reject) => {
       const s = document.createElement("script");
+      s.setAttribute("data-cfasync", "false");   // before src: Cloudflare Rocket Loader leaves it alone
       s.src = `${box.dataset.frontendApi}/npm/@clerk/clerk-js@5/dist/clerk.browser.js`;
       s.setAttribute("data-clerk-publishable-key", box.dataset.publishableKey);
       s.async = true; s.crossOrigin = "anonymous";

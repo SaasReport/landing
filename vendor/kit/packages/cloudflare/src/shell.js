@@ -5,6 +5,7 @@
 import { shellMarkup, SHELL_CSS } from "../../site/src/shell-markup.js";
 import { preferredSourceCard, PREFERRED_CSS } from "../../site/src/preferred.js";
 import { hreflangs } from "@saasreport/core";
+import { cloudflareSafe, scriptTag } from "@saasreport/core/cloudflare-safe";
 import { esc, cssValue, kebab } from "./util.js";
 
 export const VERSION = "0.1.0";
@@ -109,7 +110,7 @@ export function createShell(k) {
     const logo = L ? `<img class="kbar__logo" src="${esc(L.src)}" alt="${esc(L.alt || site.name)}"${L.width ? ` width="${esc(L.width)}"` : ""}${L.height ? ` height="${esc(L.height)}"` : ""}>` : `<span class="kbar__name">${esc(site.name)}</span>`;
     const fontLink = sh.fonts !== false && config.brand.fonts?.href ? `<link rel="stylesheet" href="${esc(config.brand.fonts.href)}">` : "";
     const extraCss = (sh.stylesheets || []).map((h) => `<link rel="stylesheet" href="${esc(h)}">`).join("");
-    const extraJs = (sh.scripts || []).map((h) => `<script src="${esc(h)}" defer></script>`).join("");
+    const extraJs = (sh.scripts || []).map((h) => scriptTag({ src: h })).join("");
     // the site shell (menu drawer + global search over the static site's /search-index.json, @saasreport/site), the
     // same as on the static pages; shell: { search: false } turns it off for a Worker without a static site
     // the header's call to action (shell.cta, the landing's: [{ label, href | modal, style? }]); a modal opens on the
@@ -120,7 +121,7 @@ export function createShell(k) {
     const pref = (where) => preferredSourceCard(sh.preferredSource, { placement: where, code: site.localeBase || site.locale, name: site.name, url: site.url, digits: (v) => String(v).replace(/[0-9]+/g, (n) => k.d(n)) });
     const prefPage = placement ? pref(placement) : "", prefFoot = pref("footer");
     const shell = sh.search === false ? {} : shellMarkup({ menu: sh.menu || [], t: (k) => t.opt(k) || k, home: H("/"), script: sh.shellScript || "/shell.js", cta, links: navItems().map(([href, label]) => ({ href, label: esc(label) })) });
-    return `<!doctype html>
+    return cloudflareSafe(`<!doctype html>
 <html lang="${esc(site.localeBase)}" dir="${esc(site.dir)}">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
@@ -144,8 +145,8 @@ ${jsonld ? `<script type="application/ld+json">${JSON.stringify(jsonld).replace(
 </div></footer>
 <div class="toast" role="status" aria-live="polite" hidden></div>
 <script type="application/json" id="kit-strings">${clientStrings}</script>
-<script src="${asset("format.js")}" defer></script><script src="${asset("kit.js")}" defer></script>${scripts.map((s) => `<script src="${asset(s)}" defer></script>`).join("")}${extraJs}
-</body></html>`;
+${scriptTag({ src: asset("format.js") })}${scriptTag({ src: asset("kit.js") })}${scripts.map((s) => scriptTag({ src: asset(s) })).join("")}${extraJs}
+</body></html>`, { emailOff: sh.emailOff !== false });
   }
 
   /**

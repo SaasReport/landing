@@ -123,7 +123,7 @@ test("apps: one page per view, nav, API contract, sign-in data, no data of their
   assert.match(d, /data-endpoints="\[&quot;\/api\/v1\/decisions&quot;\]"/);
   assert.match(d, /<td><code>\/api\/v1\/decisions<\/code><\/td><td>GET, POST<\/td>/);
   assert.match(d, /<code>decisions\/\[id\]<\/code>: One decision/);
-  assert.match(d, /<script src="\/apps\.js\?v=[a-f0-9]{10}" defer>/);
+  assert.match(d, /<script data-cfasync="false" src="\/apps\.js\?v=[a-f0-9]{10}" defer>/);
   assert.match(files["app/settings/index.html"], /This view calls no API of its own\./);
   const b = files["billing/index.html"];
   assert.match(b, /class="wrap ap ap--single"/);
@@ -169,7 +169,7 @@ test("widgets page: renders the generated widgets in the site's chrome with widg
   const { files: f, sitemap: sm } = buildSite(project, { root: SAMPLE });
   const html = f["examples/index.html"];
   assert.match(html, /<link rel="stylesheet" href="\/widgets\.css\?v=[a-f0-9]{10}">/);
-  assert.match(html, /<script src="\/widgets\.js\?v=[a-f0-9]{10}" defer><\/script>/);
+  assert.match(html, /<script data-cfasync="false" src="\/widgets\.js\?v=[a-f0-9]{10}" defer><\/script>/);
   assert.match(html, /data-widget="chain"/); assert.match(html, /<h1>Examples<\/h1>/);
   assert.match(f["widgets.css"], /--kw-accent:var\(--c-accent\)/, "the widgets read the accent role");
   assert.ok(sm.some((x) => x.loc.endsWith("/examples/")));

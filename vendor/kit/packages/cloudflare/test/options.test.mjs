@@ -22,7 +22,7 @@ test("shell: logo, extra head, robots, og image details, footer items and note, 
   assert.doesNotMatch(html, /fonts.googleapis/);
   assert.match(html, /<nav class="kfoot__links"><a href="\/">صفحه اصلی<\/a><a href="\/blog\/">بلاگ<\/a><a href="\/blog\/feed.xml">/);
   assert.match(html, /<p>© ۱۴۰۵ \/ ۲۰۲۶ — سازمان نمونه<\/p>/);
-  assert.match(html, /<script src="\/extra.js" defer><\/script>/);
+  assert.match(html, /<script data-cfasync="false" src="\/extra.js" defer><\/script>/);
 });
 
 test("section strings: eyebrow, heading, lead (HTML), description, page and item titles; og images per section", async () => {

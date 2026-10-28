@@ -21,6 +21,7 @@
     "./agenda": "./src/agenda.js",
     "./markdown": "./src/markdown.js",
     "./seo": "./src/seo.js",
+    "./cloudflare-safe": "./src/cloudflare-safe.js",
     "./feeds": "./src/feeds.js",
     "./calendar-links": "./src/calendar-links.js",
     "./i18n": "./src/i18n.js",

@@ -13,6 +13,7 @@
  * What is never published: draft jurisdiction blocks (status "draft …") and paragraphs with unfilled placeholders.
  * `drafts: true` / `placeholders: "show"` on the page show them, for a local preview only.
  */
+import { scriptTag } from "@saasreport/core/cloudflare-safe";
 import { noticeBlocks, selectNotices, noticePageStrings, fillNotice, noticeValues } from "@saasreport/comms/notices";
 
 const esc = (s) => String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -89,7 +90,7 @@ ${chrome.bar(c.bar, page.path)}
 ${blocks.length > 1 ? `  <nav class="lg-toc" aria-labelledby="lg-toc-t"><p id="lg-toc-t">${esc(S.contents)}</p><ol>${blocks.map((b) => `<li><a href="#${b.id}">${esc(b.title)}</a></li>`).join("")}</ol></nav>\n` : ""}${blocks.map(section).join("\n")}
 </main>
 ${chrome.footer(c.footNote)}
-<script src="${asset("/totop.js")}" defer></script>
+${scriptTag({ src: asset("/totop.js") })}
 </body>
 </html>
 `,

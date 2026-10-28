@@ -9,6 +9,7 @@
  *
  *   { type: "sectors", path: "/sectors/", data, taxonomy, glossary, generator?, content: { en: {…} } }
  */
+import { scriptTag } from "@saasreport/core/cloudflare-safe";
 import { fill } from "../locale.js";
 
 export const SECTORS_SCRIPT = "sectors.js";
@@ -142,8 +143,8 @@ ${chrome.bar(c.index.bar, page.path)}
   </section>
 </main>
 ${chrome.footer(c.footNote)}
-<script src="${asset("/sectors.js")}" defer></script>
-<script src="${asset("/totop.js")}" defer></script>
+${scriptTag({ src: asset("/sectors.js") })}
+${scriptTag({ src: asset("/totop.js") })}
 </body>
 </html>
 `;
@@ -234,9 +235,9 @@ ${S.actors.directory ? `      <p class="sx-dir"><a class="link" href="${esc(S.ac
   </section>
 </main>
 ${chrome.footer(c.footNote)}
-<script src="${asset("/notify.js")}" defer></script>
-<script src="${asset("/terminal.js")}" defer></script>
-<script src="${asset("/totop.js")}" defer></script>
+${scriptTag({ src: asset("/notify.js") })}
+${scriptTag({ src: asset("/terminal.js") })}
+${scriptTag({ src: asset("/totop.js") })}
 </body>
 </html>
 `;

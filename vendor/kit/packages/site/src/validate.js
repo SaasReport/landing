@@ -13,9 +13,52 @@ import { checkContent } from "./generators/content.js";
 import { checkReference } from "./generators/reference.js";
 import { checkApps } from "./generators/apps.js";
 import { checkNoticesPage } from "./generators/notices.js";
-import { checkWidgetsPage } from "./generators/widgets.js";
+import { checkWidgetsPage, GENERATED_SCHEMA } from "./generators/widgets.js";
 import { kitRegistry, unionRegistries, isRegistry } from "../../widgets/src/registry.js";
 import { checkWorkbenchPage } from "./generators/workbench.js";
+
+/** The project's `cloudflare` options (docs/SITE.md, "Behind Cloudflare"). */
+export const CLOUDFLARE_SCHEMA = {
+  $schema: "https://json-schema.org/draft/2020-12/schema", $id: "kit.site-cloudflare.v1", title: "Site options for pages served behind Cloudflare",
+  type: "object", additionalProperties: false,
+  properties: { emailOff: { type: "boolean", default: true, description: "Wrap every mailto link and mailto form in <!--email_off--> so Cloudflare's Email Address Obfuscation leaves it alone (default true); false lets Cloudflare obfuscate them." } },
+};
+
+/** The `widgets` landing section (docs/SITE.md): which generated widgets the landing embeds. */
+export const WIDGETS_SECTION_SCHEMA = {
+  $schema: "https://json-schema.org/draft/2020-12/schema", $id: "kit.site-widgets-section.v1", title: "A landing section that embeds generated widgets",
+  type: "object", required: ["type", "widgets"],
+  properties: {
+    type: { const: "widgets" }, id: { type: "string" }, comment: { type: "string" }, surface: { type: "string" },
+    head: { type: "object", properties: { eyebrow: { type: "string" }, title: { type: "string" }, lead: { type: ["string", "array"] }, dot: { type: "boolean" } } },
+    widgets: { type: "array", minItems: 1, uniqueItems: true, items: { type: "string", pattern: "^[a-z0-9][a-z0-9-]*$" }, description: "Widget ids from widgets.generated.json (widgets[].id)." },
+    embed: { type: "boolean", default: true }, level: { type: "integer", minimum: 2, maximum: 6, default: 3 },
+    generated: { type: "object", description: "A kit.widgets-generated.v1 file; default: the project's widgets.generated." },
+    registry: { description: "The widgets Registry from registryFor(spec, dir); default: the project's widgets.registry, else the kit's." },
+  },
+};
+
+/** Problems with the `widgets` sections of a project's landing content (the generated file, the ids, the archetypes). */
+function checkLandingWidgets(project, codes) {
+  const p = [];
+  const base = project.widgets;
+  if (base?.registry !== undefined && !isRegistry(base.registry)) p.push("widgets.registry: must be the widgets Registry from registryFor(spec, dir)");
+  for (const code of codes) (project.content?.[code]?.sections || []).forEach((s, i) => {
+    if (s?.type !== "widgets") return;
+    const at = `content.${code}.sections[${i}]${s.id ? ` (#${s.id})` : ""}`;
+    for (const e of validateSchema(s, WIDGETS_SECTION_SCHEMA)) p.push(`${at}: widgets section${e.path === "/" ? "" : e.path}: ${e.message}`);
+    const g = s.generated ?? base?.generated;
+    if (!g || g.schema !== GENERATED_SCHEMA) { p.push(`${at}: needs a ${GENERATED_SCHEMA} file (kit widgets build) as the section's \`generated\` or the project's widgets.generated`); return; }
+    const reg = (s.registry !== undefined ? (isRegistry(s.registry) ? s.registry : null) : null) || (base?.registry && isRegistry(base.registry) ? base.registry : kitRegistry());
+    if (!(g.locales || []).some((l) => l.code === code)) p.push(`${at}: widgets.generated.json has no ${code} widgets`);
+    for (const id of Array.isArray(s.widgets) ? s.widgets : []) {
+      const w = (g.widgets || []).find((x) => x.id === id && x.locale === code);
+      if (!w) p.push(`${at}: no widget "${id}" for ${code} in the generated file`);
+      else if (!reg.has(w.archetype)) p.push(`${at}: widget "${id}" uses the archetype "${w.archetype}", which is not registered; pass the project's registry as widgets.registry`);
+    }
+  });
+  return p;
+}
 
 /** Fields each section type needs (dotted paths). */
 export const REQUIRED = {
@@ -33,6 +76,7 @@ export const REQUIRED = {
   apps: ["items", "play", "reset"],
   mount: ["class"],
   calendar: ["mount", "engine.code", "engine.channels"],
+  widgets: ["widgets"],
   stage: ["view"],
   agentic: ["checks", "toggle", "run", "agents", "agent.flow"],
   dashboard: ["kpis", "chart.title", "chart.series", "recent.items", "widgets"],
@@ -126,10 +170,12 @@ export function checkProject(project) {
   p.push(...checkAssets(project.assets, codes));
   if (project.search != null) for (const e of validateSchema(project.search, SEARCH_CONFIG_SCHEMA)) p.push(`search${e.path === "/" ? "" : e.path}: ${e.message}`);
   if (project.menu != null) for (const e of validateSchema(project.menu, MENU_SCHEMA)) p.push(`menu${e.path === "/" ? "" : e.path}: ${e.message}`);
+  if (project.cloudflare != null) for (const e of validateSchema(project.cloudflare, CLOUDFLARE_SCHEMA)) p.push(`cloudflare${e.path === "/" ? "" : e.path}: ${e.message}`);
   if (project.preferredSource != null) {
     for (const e of validateSchema(project.preferredSource, PREFERRED_SOURCE_SCHEMA)) p.push(`preferredSource${e.path === "/" ? "" : e.path}: ${e.message}`);
     p.push(...checkPreferredSource(project.preferredSource, codes));
   }
+  p.push(...checkLandingWidgets(project, codes));
   const pagePaths = new Set();
   const widgetsPages = (project.pages || []).filter((x) => x?.type === "widgets" && (x.registry === undefined || isRegistry(x.registry)));      // a malformed registry is reported by checkWidgetsPage
   if (widgetsPages.length > 1) for (const c of unionRegistries(widgetsPages.map((x) => x.registry || kitRegistry())).conflicts) p.push(`widgets pages: ${c}`);

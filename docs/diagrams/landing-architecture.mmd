@@ -1,20 +1,18 @@
 %%{init: {"theme":"base","themeVariables":{"fontFamily":"Inter, Arial, sans-serif","fontSize":"15px","textColor":"#0B0B0B","stateLabelColor":"#0B0B0B","transitionLabelColor":"#0B0B0B","background":"#F7F9FC","primaryColor":"#FFFFFF","primaryTextColor":"#0B0B0B","primaryBorderColor":"#0B0B0B","lineColor":"#4D5B70","secondaryColor":"#EDF1F6","tertiaryColor":"#F7F9FC","clusterBkg":"#EDF1F6","clusterBorder":"#B9C6D8","edgeLabelBackground":"#F7F9FC","titleColor":"#0B0B0B","actorBkg":"#0B0B0B","actorBorder":"#0B0B0B","actorTextColor":"#FFFFFF","actorLineColor":"#B9C6D8","signalColor":"#0B0B0B","signalTextColor":"#0B0B0B","labelBoxBkgColor":"#F7F9FC","labelBoxBorderColor":"#B9C6D8","noteBkgColor":"#EEF3F9","noteBorderColor":"#6F9BD8","sequenceNumberColor":"#FFFFFF","stateBkg":"#FFFFFF","stateBorder":"#0B0B0B","transitionColor":"#4D5B70","specialStateColor":"#12396B"}}}%%
 %% kit:diagram {"id":"saasreport.landing.architecture","title":"How the landing is built","project":"saasreport","kind":"architecture","summary":"From the core registries and the page's own copy, through the content generator, the kit's widgets and site builders, to dist on Cloudflare Pages.","lineage":{"derives_from":[],"supersedes":[],"version":"1"},"relates_to":[{"id":"saasreport.landing.widgets","relation":"sibling"}],"depicts":[{"kind":"file","ref":"the content generator","path":"scripts/generate.mjs"},{"kind":"file","ref":"the site project","path":"site.config.js"},{"kind":"doc","ref":"the architecture description","path":"docs/ARCHITECTURE.md"}],"reviewed":"2026-10-28"}
 flowchart TB
-  reg("Core registries vendor/core: stakeholders, metrics, report types, cadences, roles, findings, commitments, company")
+  reg("Core registries, sample dataset and widgets adapter vendor/core")
   copy("Page copy content/copy.json checked by its schema")
-  sample("Sample data data/sample: snapshots in the core contracts")
   gen("Content generator scripts/generate.mjs")
   gen_out("Generated content pages, widget scenarios, logo and icon")
-  eng("Engine adapter engine/engine.mjs runs the core metric engine")
+  eng("Core widgets adapter vendor/core/adapters runs the metric engine")
   spec("widgets.spec.json audiences, use cases, sources")
   wb("kit widgets build widgets.generated.json")
-  sb("kit site build one landing page, an examples page, CSS and scripts")
+  sb("kit site build the kit landing with widget sections, form modals, an examples page")
   dist("dist served by Cloudflare Pages")
   kit("Vendored kit vendor/kit, written by kit vendor sync")
   reg --> gen
   copy --> gen
-  sample --> eng
   reg --> eng
   gen --> gen_out
   gen_out --> wb
@@ -25,5 +23,8 @@ flowchart TB
   kit --> wb
   kit --> sb
   sb --> dist
+  forms("Early-access form comms.config.js, src/forms.js: comms engine receipt and owner copy")
+  copy --> forms
+  forms -.-> sb
   class gen,dist accent
   classDef accent fill:#12396B,stroke:#12396B,color:#FFFFFF,stroke-width:2px

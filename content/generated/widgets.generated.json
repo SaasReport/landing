@@ -1752,11 +1752,11 @@
     "engine": "@saasreport/widgets 0.2.0",
     "sources": {
       "commitments": "8090053df1146cea",
-      "copy": "0bc515da7c518c37",
-      "engine": "c2e0d12b12a599d2",
+      "copy": "d26eff02bc230308",
+      "engine": "8d739d6a3bc3fd4c",
       "stakeholders": "70f6034218cd5601"
     },
-    "spec": "7914c093c60a2356"
+    "spec": "bfdba5999cf5cc51"
   },
   "labels": {
     "en": {
@@ -1801,17 +1801,17 @@
         {
           "id": "report-order",
           "summary": "Open the same report as three different readers.",
-          "title": "One report, three orders"
+          "title": "Same data. The order follows the reader."
         },
         {
           "id": "findings",
           "summary": "Every rule that fires on the sample month, most urgent first.",
-          "title": "Findings come from written rules"
+          "title": "Every finding names its evidence."
         },
         {
           "id": "cost",
           "summary": "Reporting by hand, on your inputs.",
-          "title": "Count the hours your reports take."
+          "title": "How long does the Monday report take?"
         },
         {
           "id": "roles-access",
@@ -2762,7 +2762,9 @@
         "links": [],
         "roles": [
           {
-            "does": [],
+            "does": [
+              "A person opens SaasReport. We read their Stripe roles and offer only the reports those roles can see."
+            ],
             "id": "group-1",
             "kind": "person",
             "label": "Super Administrator, Administrator and 5 more",
@@ -2781,13 +2783,7 @@
           },
           {
             "does": [
-              "Recurring revenue health",
-              "Retention and churn",
-              "Sales performance",
-              "New customers",
-              "Board pack",
-              "Investor quarterly",
-              "Marketplace health"
+              "A person opens SaasReport. We read their Stripe roles and offer only the reports those roles can see."
             ],
             "id": "group-2",
             "kind": "person",
@@ -2800,14 +2796,7 @@
           },
           {
             "does": [
-              "Recurring revenue health",
-              "Retention and churn",
-              "Sales performance",
-              "New customers",
-              "Board pack",
-              "Investor quarterly",
-              "Refunds and returns",
-              "Marketplace health"
+              "A person opens SaasReport. We read their Stripe roles and offer only the reports those roles can see."
             ],
             "id": "group-3",
             "kind": "person",
@@ -2819,15 +2808,7 @@
           },
           {
             "does": [
-              "Recurring revenue health",
-              "Retention and churn",
-              "Sales performance",
-              "New customers",
-              "Board pack",
-              "Investor quarterly",
-              "Refunds and returns",
-              "Payment health",
-              "Marketplace health"
+              "A person opens SaasReport. We read their Stripe roles and offer only the reports those roles can see."
             ],
             "id": "group-4",
             "kind": "person",
@@ -2851,7 +2832,8 @@
         "copy#/trust/access/title",
         "copy#/trust/access/summary",
         "engine#/roleGroup",
-        "copy#/trust/access/noneLabel"
+        "copy#/trust/access/noneLabel",
+        "copy#/trust/access/step"
       ],
       "usage": {
         "surfaces": [

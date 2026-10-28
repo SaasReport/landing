@@ -1,7 +1,10 @@
 {
-  "$schema": "../../schemas/sample-meta.schema.json",
+  "$schema": "../schemas/sample-meta.schema.json",
   "label": "SAMPLE",
   "description": "Made-up data for a made-up company that sells subscriptions and runs a small marketplace. It follows the core snapshot contracts. It is not a customer, an average or a benchmark.",
   "currency": "usd",
-  "history": ["cus_16"]
+  "history": [
+    "cus_16"
+  ],
+  "reference_date": "2026-10-28"
 }

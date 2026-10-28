@@ -6,11 +6,15 @@
 import { attr, attrs, button, ico, link, pad, rows, flat } from "../html.js";
 import { head, section, actions, note, stage, addon } from "./common.js";
 import { roleVar } from "../tokens.js";
+import { renderWidget } from "../../../widgets/src/html.js";
+import { kitRegistry } from "../../../widgets/src/registry.js";
 
 const li = (x) => `<li>${x}</li>`;
 const span = (x) => `<span>${x}</span>`;
 const sel = (i, on = 0) => (i === on ? "true" : "false");
 const tone = (x, tag = "span") => (typeof x === "string" ? `<${tag}>${x}</${tag}>` : `<${tag} class="${attr(x.tone)}">${x.text}</${tag}>`);
+/** A counter's text as the page holds it (landing.js counts up to it; without the script it is the value): the number, or a percent. */
+const counted = (x, c) => (x.format === "percent" ? c.L.percent(x.count) : c.d(x.count));
 const status = (x) => `<em class="st st--${attr(x.tone)}">${x.text}</em>`;
 
 /** The opening cover: copy, calls to action and a product mock with steps and counters. */
@@ -51,7 +55,7 @@ function hero(s, c) {
     `        </ol>`,
     `        <div class="mock__flow" aria-hidden="true"><i></i></div>`,
     `        <div class="mock__stats">`,
-    ...m.stats.map((x) => `          <div><strong data-count="${attr(x.count)}"${x.format ? ` data-format="${attr(x.format)}"` : ""}>${c.d(0)}</strong><small>${x.label}</small></div>`),
+    ...m.stats.map((x) => `          <div><strong data-count="${attr(x.count)}"${x.format ? ` data-format="${attr(x.format)}"` : ""}>${counted(x, c)}</strong><small>${x.label}</small></div>`),
     `        </div>`,
     `      </div>`,
     `      </div>`,
@@ -266,6 +270,33 @@ function mount(s) {
   return section(s, [...head(s.head), `    <div class="${attr(s.class)}"${attrs(s.attrs)}></div>`]);
 }
 
+/**
+ * Generated widgets embedded in the landing: { type: "widgets", id?, surface?, head?, widgets: [<widget id>, …], embed?: true, level?: 3,
+ * generated?: <widgets.generated.json> }. The widgets come from the project's widgets.generated.json (`kit widgets build`): the
+ * section's own `generated`, else the project's `widgets: { generated, registry? }`; the section picks them by id (the id the
+ * generated file gives each widget) and the locale's instance is rendered by @saasreport/widgets (renderWidget, `embed` by default:
+ * no "how this is built" block, no learn/try lead). The site adds widgets.css and widgets.js to the landing when it has one.
+ * No renderer of the project's own, and no copy here: the words are the generated file's.
+ */
+function widgets(s, c) {
+  const g = s.generated ?? c.project?.widgets?.generated;
+  const registry = s.registry ?? c.project?.widgets?.registry ?? kitRegistry();
+  const locale = g.locales.find((l) => l.code === c.L.code) || g.locales[0];
+  const labels = g.labels?.[locale.code];
+  const level = s.level ?? 3;
+  const found = s.widgets.map((id) => {
+    const w = g.widgets.find((x) => x.id === id && x.locale === locale.code);
+    if (!w) throw new Error(`widgets section${s.id ? ` #${s.id}` : ""}: no widget "${id}" for ${locale.code} in the generated file`);
+    return w;
+  });
+  return section(s, [
+    ...(s.head ? head(s.head) : []),
+    `    <div class="kw-embed reveal">`,
+    ...found.map((w) => renderWidget(w, { locale, labels, level, registry, embed: s.embed !== false }).split("\n").map((l) => `      ${l}`).join("\n")),
+    `    </div>`,
+  ]);
+}
+
 /** Calendar: the embedded calendar, the engine card with code tabs, and links. */
 function calendar(s) {
   const e = s.engine;
@@ -315,7 +346,7 @@ function agentic(s) {
 /** The control surface: KPIs, a chart, recent items and widgets (demo data, animated by the client script). */
 function dashboard(s, c) {
   const k = (x) => {
-    const num = x.suffix ? `<b><span data-count="${attr(x.count)}">${c.d(0)}</span>${x.suffix}</b>` : `<b data-count="${attr(x.count)}">${c.d(0)}</b>`;
+    const num = x.suffix ? `<b><span data-count="${attr(x.count)}">${counted(x, c)}</span>${x.suffix}</b>` : `<b data-count="${attr(x.count)}">${counted(x, c)}</b>`;
     const tr = x.trend.dir ? `<i class="${attr(x.trend.dir)}">${x.trend.text}</i>` : `<i>${x.trend.text}</i>`;
     return `        <div class="kpi${x.warn ? " kpi--warn" : ""}"><small>${x.label}</small>${num}${tr}</div>`;
   };
@@ -663,7 +694,7 @@ function final(s) {
 
 export const SECTIONS = {
   hero, audience, cards, approach, roles, domains, stepper, packs, lifecycle, simulation, usecases, apps, mount,
-  calendar, stage: stageSection, agentic, dashboard, terminal, developers, playground, architecture, ecosystem,
+  calendar, widgets, stage: stageSection, agentic, dashboard, terminal, developers, playground, architecture, ecosystem,
   marketplace, governance, compare, band, brand, explore, blog, podcasts, glossary, events, faq, final,
 };
 
