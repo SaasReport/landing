@@ -1,0 +1,219 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/findings.schema.json",
+  "title": "saasreport.findings.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "registry",
+    "version",
+    "principle",
+    "severity_order",
+    "recommendations",
+    "rules"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "registry": {
+      "const": "saasreport.findings"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "principle": {
+      "type": "string",
+      "minLength": 1
+    },
+    "severity_order": {
+      "const": [
+        "act",
+        "watch",
+        "info"
+      ]
+    },
+    "recommendations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "text"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "text": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "severity",
+          "stakeholders",
+          "metric",
+          "when",
+          "headline",
+          "evidence"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "severity": {
+            "enum": [
+              "act",
+              "watch",
+              "info"
+            ]
+          },
+          "stakeholders": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$"
+            }
+          },
+          "metric": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "when": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "all"
+            ],
+            "properties": {
+              "all": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "oneOf": [
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "metric",
+                        "op",
+                        "value"
+                      ],
+                      "properties": {
+                        "metric": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9_]*$"
+                        },
+                        "op": {
+                          "enum": [
+                            "lt",
+                            "lte",
+                            "gt",
+                            "gte",
+                            "eq"
+                          ]
+                        },
+                        "value": {
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "metric",
+                        "op",
+                        "other"
+                      ],
+                      "properties": {
+                        "metric": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9_]*$"
+                        },
+                        "op": {
+                          "enum": [
+                            "lt",
+                            "lte",
+                            "gt",
+                            "gte",
+                            "eq"
+                          ]
+                        },
+                        "other": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9_]*$"
+                        }
+                      }
+                    },
+                    {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "metric",
+                        "change_op",
+                        "change_bp"
+                      ],
+                      "properties": {
+                        "metric": {
+                          "type": "string",
+                          "pattern": "^[a-z][a-z0-9_]*$"
+                        },
+                        "change_op": {
+                          "enum": [
+                            "lt",
+                            "lte",
+                            "gt",
+                            "gte"
+                          ]
+                        },
+                        "change_bp": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "headline": {
+            "type": "string",
+            "minLength": 1
+          },
+          "recommendation": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_]*$"
+          },
+          "evidence": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_]*$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/currencies.schema.json",
+  "title": "saasreport.currencies.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "registry",
+    "version",
+    "source",
+    "note",
+    "default_exponent",
+    "zero_decimal",
+    "three_decimal",
+    "two_decimal_by_stripe_convention"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "registry": {
+      "const": "saasreport.currencies"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "source": {
+      "type": "string",
+      "pattern": "^https://"
+    },
+    "note": {
+      "type": "string",
+      "minLength": 1
+    },
+    "default_exponent": {
+      "const": 2
+    },
+    "zero_decimal": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]{3}$"
+      }
+    },
+    "three_decimal": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]{3}$"
+      }
+    },
+    "two_decimal_by_stripe_convention": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]{3}$"
+      }
+    }
+  }
+}

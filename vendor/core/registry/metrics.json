@@ -1,0 +1,380 @@
+{
+  "$schema": "../schemas/metrics.schema.json",
+  "registry": "saasreport.metrics",
+  "version": "1.0.0",
+  "metrics": [
+    {
+      "id": "mrr",
+      "name": "Monthly recurring revenue",
+      "unit": "money_minor",
+      "computation": "mrr",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "Counts subscriptions whose status is active or past_due; trialing, paused, incomplete, unpaid and canceled count as zero.",
+        "Each subscription item is normalised to one month and rounded half-up to a whole minor unit, then items are summed.",
+        "List price: before discounts, coupons, tax and usage overage. One currency per figure, never converted."
+      ]
+    },
+    {
+      "id": "arr",
+      "name": "Annual recurring revenue",
+      "unit": "money_minor",
+      "computation": "arr",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "MRR times twelve, same currency."
+      ]
+    },
+    {
+      "id": "new_mrr",
+      "name": "New MRR",
+      "unit": "money_minor",
+      "computation": "new_mrr",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "Customers with no MRR at the period start and no earlier recurring history in the data, with MRR at the period end."
+      ]
+    },
+    {
+      "id": "reactivation_mrr",
+      "name": "Reactivation MRR",
+      "unit": "money_minor",
+      "computation": "reactivation_mrr",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "Customers with no MRR at the period start, earlier recurring history in the data, and MRR at the period end."
+      ]
+    },
+    {
+      "id": "expansion_mrr",
+      "name": "Expansion MRR",
+      "unit": "money_minor",
+      "computation": "expansion_mrr",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "For customers with MRR at both ends, the increase."
+      ]
+    },
+    {
+      "id": "contraction_mrr",
+      "name": "Contraction MRR",
+      "unit": "money_minor",
+      "computation": "contraction_mrr",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "For customers with MRR at both ends, the decrease, reported as a positive amount."
+      ]
+    },
+    {
+      "id": "churned_mrr",
+      "name": "Churned MRR",
+      "unit": "money_minor",
+      "computation": "churned_mrr",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "Customers with MRR at the period start and none at the end, reported as a positive amount."
+      ]
+    },
+    {
+      "id": "net_new_mrr",
+      "name": "Net new MRR",
+      "unit": "money_minor",
+      "computation": "net_new_mrr",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "New plus reactivation plus expansion, minus contraction, minus churned. Equals end MRR minus start MRR."
+      ]
+    },
+    {
+      "id": "nrr",
+      "name": "Net revenue retention",
+      "unit": "ratio_bp",
+      "computation": "nrr",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "(start MRR plus expansion minus contraction minus churned) divided by start MRR, in basis points, rounded half-up. Undefined (null) when start MRR is zero."
+      ]
+    },
+    {
+      "id": "grr",
+      "name": "Gross revenue retention",
+      "unit": "ratio_bp",
+      "computation": "grr",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "(start MRR minus contraction minus churned) divided by start MRR, in basis points, rounded half-up. Undefined (null) when start MRR is zero."
+      ]
+    },
+    {
+      "id": "logo_churn_rate",
+      "name": "Logo churn rate",
+      "unit": "ratio_bp",
+      "computation": "logo_churn_rate",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "Customers with MRR at the start and none at the end, divided by customers with MRR at the start, in basis points, rounded half-up. Undefined (null) when there were none."
+      ]
+    },
+    {
+      "id": "arpa",
+      "name": "Average revenue per account",
+      "unit": "money_minor",
+      "computation": "arpa",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "End MRR divided by customers with MRR at the end, rounded half-up. Undefined (null) when there are none."
+      ]
+    },
+    {
+      "id": "new_customers",
+      "name": "New customers",
+      "unit": "count",
+      "computation": "new_customers",
+      "inputs": [
+        "subscription"
+      ],
+      "rules": [
+        "Customers counted in new MRR: no revenue at the period start, no earlier recurring history in the data, revenue at the period end. Reactivations are not new customers."
+      ]
+    },
+    {
+      "id": "gross_volume",
+      "name": "Gross payment volume",
+      "unit": "money_minor",
+      "computation": "gross_volume",
+      "inputs": [
+        "charge"
+      ],
+      "rules": [
+        "Sum of succeeded charges. Records are counted when their `created` time falls in the report period, [from, to) in UTC.",
+        "Pending and failed charges are excluded. One currency per figure."
+      ]
+    },
+    {
+      "id": "successful_payments",
+      "name": "Successful payments",
+      "unit": "count",
+      "computation": "successful_payments",
+      "inputs": [
+        "charge"
+      ],
+      "rules": [
+        "Count of succeeded charges. Records are counted when their `created` time falls in the report period, [from, to) in UTC."
+      ]
+    },
+    {
+      "id": "failed_payments",
+      "name": "Failed payments",
+      "unit": "count",
+      "computation": "failed_payments",
+      "inputs": [
+        "charge"
+      ],
+      "rules": [
+        "Count of failed charges. Records are counted when their `created` time falls in the report period, [from, to) in UTC.",
+        "Retries are separate charges and are counted as they occur."
+      ]
+    },
+    {
+      "id": "payment_failure_rate_bp",
+      "name": "Payment failure rate",
+      "unit": "ratio_bp",
+      "computation": "payment_failure_rate_bp",
+      "inputs": [
+        "charge"
+      ],
+      "rules": [
+        "Failed charges divided by (failed plus succeeded) charges, in basis points, rounded half away from zero. Pending charges are excluded. Undefined (null) when there were none."
+      ]
+    },
+    {
+      "id": "average_order_value",
+      "name": "Average order value",
+      "unit": "money_minor",
+      "computation": "average_order_value",
+      "inputs": [
+        "charge"
+      ],
+      "rules": [
+        "Gross payment volume divided by successful payments, rounded half away from zero. Undefined (null) when there were none."
+      ]
+    },
+    {
+      "id": "refund_amount",
+      "name": "Refunded amount",
+      "unit": "money_minor",
+      "computation": "refund_amount",
+      "inputs": [
+        "refund"
+      ],
+      "rules": [
+        "Sum of succeeded refunds. Records are counted when their `created` time falls in the report period, [from, to) in UTC.",
+        "A refund is counted in the period it was created, not the period of the charge it refunds."
+      ]
+    },
+    {
+      "id": "refund_count",
+      "name": "Refunds",
+      "unit": "count",
+      "computation": "refund_count",
+      "inputs": [
+        "refund"
+      ],
+      "rules": [
+        "Count of succeeded refunds. Records are counted when their `created` time falls in the report period, [from, to) in UTC."
+      ]
+    },
+    {
+      "id": "refund_rate_bp",
+      "name": "Refund rate",
+      "unit": "ratio_bp",
+      "computation": "refund_rate_bp",
+      "inputs": [
+        "refund",
+        "charge"
+      ],
+      "rules": [
+        "Refunded amount divided by gross payment volume of the same period, in basis points, rounded half away from zero. Can exceed 100% when refunds in the period are for earlier charges. Undefined (null) when gross volume is zero."
+      ]
+    },
+    {
+      "id": "refund_count_requested_by_customer",
+      "name": "Refunds requested by the customer",
+      "unit": "count",
+      "computation": "refund_count_requested_by_customer",
+      "inputs": [
+        "refund"
+      ],
+      "rules": [
+        "Succeeded refunds whose Stripe reason is requested_by_customer. Records are counted when their `created` time falls in the report period, [from, to) in UTC."
+      ]
+    },
+    {
+      "id": "refund_count_duplicate",
+      "name": "Refunds for duplicate charges",
+      "unit": "count",
+      "computation": "refund_count_duplicate",
+      "inputs": [
+        "refund"
+      ],
+      "rules": [
+        "Succeeded refunds whose Stripe reason is duplicate. Records are counted when their `created` time falls in the report period, [from, to) in UTC."
+      ]
+    },
+    {
+      "id": "refund_count_fraudulent",
+      "name": "Refunds for fraud",
+      "unit": "count",
+      "computation": "refund_count_fraudulent",
+      "inputs": [
+        "refund"
+      ],
+      "rules": [
+        "Succeeded refunds whose Stripe reason is fraudulent. Records are counted when their `created` time falls in the report period, [from, to) in UTC.",
+        "Refunds with no reason are in refund_count only."
+      ]
+    },
+    {
+      "id": "net_volume",
+      "name": "Net payment volume",
+      "unit": "money_minor",
+      "computation": "net_volume",
+      "inputs": [
+        "charge",
+        "refund"
+      ],
+      "rules": [
+        "Gross payment volume minus refunded amount. Disputed amounts are not deducted; they are reported separately."
+      ]
+    },
+    {
+      "id": "dispute_count",
+      "name": "Disputes",
+      "unit": "count",
+      "computation": "dispute_count",
+      "inputs": [
+        "dispute"
+      ],
+      "rules": [
+        "Count of disputes opened. Records are counted when their `created` time falls in the report period, [from, to) in UTC."
+      ]
+    },
+    {
+      "id": "dispute_amount",
+      "name": "Disputed amount",
+      "unit": "money_minor",
+      "computation": "dispute_amount",
+      "inputs": [
+        "dispute"
+      ],
+      "rules": [
+        "Sum of the amounts of disputes opened. Records are counted when their `created` time falls in the report period, [from, to) in UTC.",
+        "Outcome is not applied: won and lost disputes are both counted."
+      ]
+    },
+    {
+      "id": "dispute_rate_bp",
+      "name": "Dispute rate",
+      "unit": "ratio_bp",
+      "computation": "dispute_rate_bp",
+      "inputs": [
+        "dispute",
+        "charge"
+      ],
+      "rules": [
+        "Disputes opened divided by successful payments of the same period, in basis points, rounded half away from zero. Undefined (null) when there were no successful payments."
+      ]
+    },
+    {
+      "id": "platform_fees",
+      "name": "Platform fees (net)",
+      "unit": "money_minor",
+      "computation": "platform_fees",
+      "inputs": [
+        "application_fee"
+      ],
+      "rules": [
+        "Sum of application fees created in the period, less the amount refunded on each. Only fees on the platform's own account are visible to an app installed by the platform.",
+        "One currency per figure."
+      ]
+    },
+    {
+      "id": "take_rate_bp",
+      "name": "Take rate",
+      "unit": "ratio_bp",
+      "computation": "take_rate_bp",
+      "inputs": [
+        "application_fee",
+        "charge"
+      ],
+      "rules": [
+        "Net platform fees divided by the volume of the succeeded charges that earned them, in basis points, rounded half away from zero.",
+        "Undefined (null) unless every fee of the period matches a visible succeeded charge of the same period and currency. With direct charges the charges live on the connected accounts and are not visible to the platform's install, so the rate is undefined rather than wrong."
+      ]
+    }
+  ]
+}

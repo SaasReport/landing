@@ -1,0 +1,21 @@
+{
+  "name": "saasreport-landing",
+  "private": true,
+  "type": "module",
+  "description": "saasreport.ai: a static site generated from the core registries; its widgets run the real engine on labelled sample data.",
+  "license": "UNLICENSED",
+  "scripts": {
+    "sync": "node scripts/sync-core.mjs",
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "qa": "node scripts/qa.mjs",
+    "test": "npm run check && node --test test/*.test.mjs && npm run build"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0",
+    "playwright": "^1.49.1"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

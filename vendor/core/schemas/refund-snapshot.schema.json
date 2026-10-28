@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/refund-snapshot.schema.json",
+  "title": "saasreport.refund-snapshot.v1",
+  "description": "A Stripe refund reduced to what the metric engine reads.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "currency",
+    "amount",
+    "status",
+    "created"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "charge": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[a-z]{3}$"
+    },
+    "amount": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "status": {
+      "enum": [
+        "succeeded",
+        "failed",
+        "pending",
+        "canceled"
+      ]
+    },
+    "reason": {
+      "enum": [
+        null,
+        "duplicate",
+        "fraudulent",
+        "requested_by_customer"
+      ]
+    },
+    "created": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

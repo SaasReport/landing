@@ -1,0 +1,436 @@
+{
+  "$schema": "../schemas/findings.schema.json",
+  "registry": "saasreport.findings",
+  "version": "1.0.0",
+  "principle": "A finding is a published rule applied to computed figures, never an AI judgement. It shows the figures that triggered it. Thresholds are SaasReport defaults for how much change is worth mentioning; they are not benchmarks against other companies and have no outside source. A change is relative to the previous period of the same cadence; with no prior figure, or a prior of zero, a change rule does not fire.",
+  "severity_order": [
+    "act",
+    "watch",
+    "info"
+  ],
+  "recommendations": [
+    {
+      "id": "review_losses",
+      "text": "Look at the customers behind churned and contraction revenue and note the likely cause of each (price, fit, a failed payment, or a change on their side)."
+    },
+    {
+      "id": "compare_added_and_lost",
+      "text": "Compare what was added with what was lost this period and decide whether acquisition or retention needs attention first."
+    },
+    {
+      "id": "review_payment_retries",
+      "text": "Check how failed subscription payments are retried and how customers are told about them, in your Stripe Billing settings."
+    },
+    {
+      "id": "review_refund_causes",
+      "text": "Read a sample of this period's refunds, group them by reason, and act on the largest group first."
+    },
+    {
+      "id": "investigate_duplicate_charges",
+      "text": "Check how checkout or your integration could create the same charge twice, for example double submits or retries without an idempotency key."
+    },
+    {
+      "id": "respond_to_disputes",
+      "text": "Open the disputes that still need a response in the Stripe Dashboard and submit evidence before each deadline."
+    },
+    {
+      "id": "review_fraud_refunds",
+      "text": "Review the payments refunded as fraudulent and check whether your fraud rules, for example in Stripe Radar, need tightening."
+    },
+    {
+      "id": "repeat_what_worked",
+      "text": "Note what drove the gain (new, expansion or fewer losses) so it can be repeated."
+    },
+    {
+      "id": "check_fee_changes",
+      "text": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period."
+    }
+  ],
+  "rules": [
+    {
+      "id": "nrr_below_full",
+      "severity": "watch",
+      "stakeholders": [
+        "ceo_founder",
+        "cfo",
+        "board",
+        "investors",
+        "customer_success"
+      ],
+      "metric": "nrr",
+      "when": {
+        "all": [
+          {
+            "metric": "nrr",
+            "op": "lt",
+            "value": 10000
+          }
+        ]
+      },
+      "headline": "Net revenue retention was {cur}: existing customers brought in less revenue than they did at the start of the period.",
+      "evidence": [
+        "nrr"
+      ],
+      "recommendation": "review_losses"
+    },
+    {
+      "id": "nrr_at_or_above_full",
+      "severity": "info",
+      "stakeholders": [
+        "ceo_founder",
+        "cfo",
+        "board",
+        "investors",
+        "customer_success"
+      ],
+      "metric": "nrr",
+      "when": {
+        "all": [
+          {
+            "metric": "nrr",
+            "op": "gte",
+            "value": 10000
+          }
+        ]
+      },
+      "headline": "Net revenue retention was {cur}: existing customers brought in at least as much revenue as at the start of the period.",
+      "evidence": [
+        "nrr"
+      ],
+      "recommendation": "repeat_what_worked"
+    },
+    {
+      "id": "mrr_fell",
+      "severity": "watch",
+      "stakeholders": [
+        "ceo_founder",
+        "cfo",
+        "board",
+        "investors"
+      ],
+      "metric": "mrr",
+      "when": {
+        "all": [
+          {
+            "metric": "mrr",
+            "change_op": "lt",
+            "change_bp": 0
+          }
+        ]
+      },
+      "headline": "Monthly recurring revenue fell {change} to {cur}, from {prior}.",
+      "evidence": [
+        "mrr"
+      ],
+      "recommendation": "compare_added_and_lost"
+    },
+    {
+      "id": "net_new_negative",
+      "severity": "act",
+      "stakeholders": [
+        "ceo_founder",
+        "cfo",
+        "board",
+        "investors",
+        "sales"
+      ],
+      "metric": "net_new_mrr",
+      "when": {
+        "all": [
+          {
+            "metric": "net_new_mrr",
+            "op": "lt",
+            "value": 0
+          }
+        ]
+      },
+      "headline": "Net new MRR was {cur}: more recurring revenue left than arrived.",
+      "evidence": [
+        "net_new_mrr",
+        "new_mrr",
+        "churned_mrr"
+      ],
+      "recommendation": "compare_added_and_lost"
+    },
+    {
+      "id": "net_new_positive",
+      "severity": "info",
+      "stakeholders": [
+        "ceo_founder",
+        "cfo",
+        "board",
+        "investors",
+        "sales"
+      ],
+      "metric": "net_new_mrr",
+      "when": {
+        "all": [
+          {
+            "metric": "net_new_mrr",
+            "op": "gt",
+            "value": 0
+          }
+        ]
+      },
+      "headline": "Net new MRR was {cur}: more recurring revenue arrived than left.",
+      "evidence": [
+        "net_new_mrr",
+        "new_mrr",
+        "churned_mrr"
+      ],
+      "recommendation": "repeat_what_worked"
+    },
+    {
+      "id": "churn_outweighs_new",
+      "severity": "act",
+      "stakeholders": [
+        "ceo_founder",
+        "cfo",
+        "board",
+        "investors",
+        "customer_success",
+        "sales"
+      ],
+      "metric": "churned_mrr",
+      "when": {
+        "all": [
+          {
+            "metric": "churned_mrr",
+            "op": "gt",
+            "other": "new_mrr"
+          }
+        ]
+      },
+      "headline": "Churned MRR of {cur} was larger than new MRR in the same period.",
+      "evidence": [
+        "churned_mrr",
+        "new_mrr"
+      ],
+      "recommendation": "compare_added_and_lost"
+    },
+    {
+      "id": "contraction_rising",
+      "severity": "watch",
+      "stakeholders": [
+        "ceo_founder",
+        "cfo",
+        "board",
+        "investors",
+        "customer_success"
+      ],
+      "metric": "contraction_mrr",
+      "when": {
+        "all": [
+          {
+            "metric": "contraction_mrr",
+            "change_op": "gte",
+            "change_bp": 2000
+          }
+        ]
+      },
+      "headline": "Contraction MRR rose {change} to {cur}, from {prior}.",
+      "evidence": [
+        "contraction_mrr"
+      ],
+      "recommendation": "review_losses"
+    },
+    {
+      "id": "failure_rate_rising",
+      "severity": "watch",
+      "stakeholders": [
+        "tech_support",
+        "customer_success",
+        "cfo",
+        "marketplace_operator"
+      ],
+      "metric": "payment_failure_rate_bp",
+      "when": {
+        "all": [
+          {
+            "metric": "payment_failure_rate_bp",
+            "change_op": "gte",
+            "change_bp": 2000
+          }
+        ]
+      },
+      "headline": "The payment failure rate rose to {cur} from {prior}.",
+      "evidence": [
+        "payment_failure_rate_bp",
+        "failed_payments"
+      ],
+      "recommendation": "review_payment_retries"
+    },
+    {
+      "id": "refund_rate_rising",
+      "severity": "watch",
+      "stakeholders": [
+        "refunds_returns",
+        "cfo",
+        "ceo_founder",
+        "marketplace_operator"
+      ],
+      "metric": "refund_rate_bp",
+      "when": {
+        "all": [
+          {
+            "metric": "refund_rate_bp",
+            "change_op": "gte",
+            "change_bp": 2000
+          }
+        ]
+      },
+      "headline": "The refund rate rose to {cur} from {prior}.",
+      "evidence": [
+        "refund_rate_bp",
+        "refund_amount",
+        "refund_count"
+      ],
+      "recommendation": "review_refund_causes"
+    },
+    {
+      "id": "fraud_refunds_present",
+      "severity": "act",
+      "stakeholders": [
+        "refunds_returns",
+        "tech_support",
+        "cfo"
+      ],
+      "metric": "refund_count_fraudulent",
+      "when": {
+        "all": [
+          {
+            "metric": "refund_count_fraudulent",
+            "op": "gt",
+            "value": 0
+          }
+        ]
+      },
+      "headline": "Refunds issued as fraudulent this period: {cur}.",
+      "evidence": [
+        "refund_count_fraudulent"
+      ],
+      "recommendation": "review_fraud_refunds"
+    },
+    {
+      "id": "duplicate_refunds_present",
+      "severity": "watch",
+      "stakeholders": [
+        "refunds_returns",
+        "tech_support"
+      ],
+      "metric": "refund_count_duplicate",
+      "when": {
+        "all": [
+          {
+            "metric": "refund_count_duplicate",
+            "op": "gt",
+            "value": 0
+          }
+        ]
+      },
+      "headline": "Refunds for duplicate charges this period: {cur}.",
+      "evidence": [
+        "refund_count_duplicate"
+      ],
+      "recommendation": "investigate_duplicate_charges"
+    },
+    {
+      "id": "disputes_rising",
+      "severity": "act",
+      "stakeholders": [
+        "refunds_returns",
+        "tech_support",
+        "cfo",
+        "board",
+        "marketplace_operator"
+      ],
+      "metric": "dispute_count",
+      "when": {
+        "all": [
+          {
+            "metric": "dispute_count",
+            "change_op": "gte",
+            "change_bp": 2000
+          }
+        ]
+      },
+      "headline": "Disputes opened rose {change} to {cur}, from {prior}.",
+      "evidence": [
+        "dispute_count",
+        "dispute_rate_bp",
+        "dispute_amount"
+      ],
+      "recommendation": "respond_to_disputes"
+    },
+    {
+      "id": "new_customers_up",
+      "severity": "info",
+      "stakeholders": [
+        "sales",
+        "marketing"
+      ],
+      "metric": "new_customers",
+      "when": {
+        "all": [
+          {
+            "metric": "new_customers",
+            "change_op": "gt",
+            "change_bp": 0
+          }
+        ]
+      },
+      "headline": "New paying customers rose {change} to {cur}, from {prior}.",
+      "evidence": [
+        "new_customers",
+        "new_mrr"
+      ],
+      "recommendation": "repeat_what_worked"
+    },
+    {
+      "id": "platform_fees_fell",
+      "severity": "watch",
+      "stakeholders": [
+        "marketplace_operator"
+      ],
+      "metric": "platform_fees",
+      "when": {
+        "all": [
+          {
+            "metric": "platform_fees",
+            "change_op": "lt",
+            "change_bp": 0
+          }
+        ]
+      },
+      "headline": "Net platform fees fell {change} to {cur}, from {prior}.",
+      "evidence": [
+        "platform_fees"
+      ],
+      "recommendation": "check_fee_changes"
+    },
+    {
+      "id": "take_rate_fell",
+      "severity": "watch",
+      "stakeholders": [
+        "marketplace_operator"
+      ],
+      "metric": "take_rate_bp",
+      "when": {
+        "all": [
+          {
+            "metric": "take_rate_bp",
+            "change_op": "lt",
+            "change_bp": 0
+          }
+        ]
+      },
+      "headline": "The take rate fell to {cur}, from {prior}.",
+      "evidence": [
+        "take_rate_bp",
+        "platform_fees",
+        "gross_volume"
+      ],
+      "recommendation": "check_fee_changes"
+    }
+  ]
+}

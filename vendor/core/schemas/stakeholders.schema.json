@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/stakeholders.schema.json",
+  "title": "saasreport.stakeholders.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "registry",
+    "version",
+    "stakeholders"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "registry": {
+      "const": "saasreport.stakeholders"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "stakeholders": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "name",
+          "decision_questions",
+          "priority_metrics",
+          "not_in_stripe"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9_-]*$",
+            "description": "stakeholder id"
+          },
+          "name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "decision_questions": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "priority_metrics": {
+            "type": "array",
+            "minItems": 1,
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z][a-z0-9_-]*$",
+              "description": "metric id"
+            }
+          },
+          "not_in_stripe": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "minLength": 1
+            },
+            "description": "What this persona asks for that Stripe cannot answer; stated so no report pretends to."
+          }
+        }
+      }
+    }
+  }
+}

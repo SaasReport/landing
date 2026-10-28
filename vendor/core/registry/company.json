@@ -1,0 +1,46 @@
+{
+  "$schema": "../schemas/company.schema.json",
+  "registry": "saasreport.company",
+  "version": "1.0.0",
+  "note": "Facts the owner supplies. null means NOT CONFIGURED: a legal document that needs it cannot be published. No postal address is published (owner decision 2026-10-28; counsel to confirm no jurisdiction requires one). Never put a secret here.",
+  "company": {
+    "legal_name": null,
+    "trading_name": "SaasReport",
+    "registration_number": null,
+    "country_of_incorporation": null,
+    "governing_law": null,
+    "courts": null,
+    "copyright_holder": "SaasReport™"
+  },
+  "contacts": {
+    "legal_email": "info@saasreport.ai",
+    "privacy_email": "info@saasreport.ai",
+    "security_email": "info@saasreport.ai",
+    "support_email": "info@saasreport.ai"
+  },
+  "terms": {
+    "liability_cap": null,
+    "notice_period_days": null,
+    "pricing_url": null
+  },
+  "data": {
+    "report_retention_days": null,
+    "derived_data_retention_days_after_uninstall": null,
+    "breach_notice_hours": null,
+    "hosting_regions": null,
+    "transfer_mechanism": null
+  },
+  "ai": {
+    "provider_name": null,
+    "provider_location": null
+  },
+  "site": {
+    "uses_analytics": null
+  },
+  "subprocessors": [],
+  "senders": {
+    "reports": "reports@saasreport.ai",
+    "system": "noreply@saasreport.ai",
+    "reply_to": "info@saasreport.ai"
+  }
+}

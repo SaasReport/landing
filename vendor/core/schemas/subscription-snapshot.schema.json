@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/subscription-snapshot.schema.json",
+  "title": "saasreport.subscription-snapshot.v1",
+  "description": "Input contract of the metric engine. Ingestion maps a Stripe subscription at a point in time to this; the engine never reads a raw Stripe payload.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "customer",
+    "currency",
+    "status",
+    "items"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "customer": {
+      "type": "string",
+      "minLength": 1
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[a-z]{3}$"
+    },
+    "status": {
+      "enum": [
+        "active",
+        "past_due",
+        "trialing",
+        "paused",
+        "incomplete",
+        "incomplete_expired",
+        "unpaid",
+        "canceled"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "unit_amount",
+          "quantity",
+          "interval",
+          "interval_count"
+        ],
+        "properties": {
+          "unit_amount": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "quantity": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "interval": {
+            "enum": [
+              "day",
+              "week",
+              "month",
+              "year"
+            ]
+          },
+          "interval_count": {
+            "type": "integer",
+            "minimum": 1
+          }
+        }
+      }
+    }
+  }
+}

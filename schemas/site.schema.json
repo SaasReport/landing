@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/site.schema.json",
+  "title": "saasreport.site.v1",
+  "description": "The words on the landing page. Strings may not contain digits: every figure on the page comes from the engine, never from copy.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "title", "description", "status", "contact", "hero", "problem", "solution", "sectors", "tryit", "access", "roi", "commitments", "legal", "footer"],
+  "$defs": {
+    "text": { "type": "string", "minLength": 1, "pattern": "^[^0-9]*$" },
+    "titled": { "type": "object", "additionalProperties": false, "required": ["title", "text"], "properties": { "title": { "$ref": "#/$defs/text" }, "text": { "$ref": "#/$defs/text" } } }
+  },
+  "properties": {
+    "$schema": { "type": "string" },
+    "title": { "$ref": "#/$defs/text" },
+    "description": { "$ref": "#/$defs/text" },
+    "status": { "$ref": "#/$defs/text" },
+    "contact": { "type": "object", "additionalProperties": false, "required": ["label", "mailto", "subject"], "properties": { "label": { "$ref": "#/$defs/text" }, "mailto": { "type": "string", "pattern": "^[a-z]+@saasreport\\.ai$" }, "subject": { "$ref": "#/$defs/text" } } },
+    "hero": { "type": "object", "additionalProperties": false, "required": ["headline", "sub", "secondary"], "properties": { "headline": { "$ref": "#/$defs/text" }, "sub": { "$ref": "#/$defs/text" }, "secondary": { "$ref": "#/$defs/text" } } },
+    "problem": { "type": "object", "additionalProperties": false, "required": ["title", "points"], "properties": { "title": { "$ref": "#/$defs/text" }, "points": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/titled" } } } },
+    "solution": { "type": "object", "additionalProperties": false, "required": ["title", "steps"], "properties": { "title": { "$ref": "#/$defs/text" }, "steps": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/titled" } } } },
+    "sectors": { "type": "object", "additionalProperties": false, "required": ["title", "note", "items"], "properties": { "title": { "$ref": "#/$defs/text" }, "note": { "$ref": "#/$defs/text" },
+      "items": { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "required": ["id", "name", "text", "status"], "properties": { "id": { "type": "string", "pattern": "^[a-z]+$" }, "name": { "$ref": "#/$defs/text" }, "text": { "$ref": "#/$defs/text" }, "status": { "$ref": "#/$defs/text" } } } } } },
+    "tryit": { "type": "object", "additionalProperties": false, "required": ["title", "note", "currency"], "properties": { "title": { "$ref": "#/$defs/text" }, "note": { "$ref": "#/$defs/text" }, "currency": { "$ref": "#/$defs/text" } } },
+    "access": { "type": "object", "additionalProperties": false, "required": ["title", "text", "none"], "properties": { "title": { "$ref": "#/$defs/text" }, "text": { "$ref": "#/$defs/text" }, "none": { "$ref": "#/$defs/text" } } },
+    "roi": { "type": "object", "additionalProperties": false, "required": ["title", "note", "fields", "result"], "properties": { "title": { "$ref": "#/$defs/text" }, "note": { "$ref": "#/$defs/text" },
+      "fields": { "type": "object", "additionalProperties": false, "required": ["people", "perMonth", "hours", "rate", "share"], "properties": { "people": { "$ref": "#/$defs/text" }, "perMonth": { "$ref": "#/$defs/text" }, "hours": { "$ref": "#/$defs/text" }, "rate": { "$ref": "#/$defs/text" }, "share": { "$ref": "#/$defs/text" } } },
+      "result": { "type": "object", "additionalProperties": false, "required": ["hours", "cost", "year", "freed"], "properties": { "hours": { "$ref": "#/$defs/text" }, "cost": { "$ref": "#/$defs/text" }, "year": { "$ref": "#/$defs/text" }, "freed": { "$ref": "#/$defs/text" } } } } },
+    "commitments": { "type": "object", "additionalProperties": false, "required": ["title", "note"], "properties": { "title": { "$ref": "#/$defs/text" }, "note": { "$ref": "#/$defs/text" } } },
+    "legal": { "$ref": "#/$defs/text" },
+    "footer": { "type": "object", "additionalProperties": false, "required": ["rights"], "properties": { "rights": { "$ref": "#/$defs/text" } } }
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "$schema": "../schemas/naming.schema.json",
+  "registry": "saasreport.naming",
+  "version": "1.0.0",
+  "project": "saasreport",
+  "domain": "saasreport.ai",
+  "github_org": "SaasReport",
+  "npm_scope": "@saasreport",
+  "values": {
+    "env": [
+      "production",
+      "staging",
+      "development"
+    ],
+    "component": [
+      "api",
+      "ingest",
+      "report",
+      "render",
+      "comms-engine",
+      "mail-sender",
+      "monitor",
+      "web"
+    ],
+    "purpose": [
+      "artifacts",
+      "backups",
+      "events",
+      "registry",
+      "uploads"
+    ],
+    "sub": [
+      "api",
+      "reports",
+      "app",
+      "www",
+      "status"
+    ],
+    "repo": [
+      "core",
+      "kit",
+      "landing",
+      "stripe-app",
+      "docs"
+    ],
+    "app": [
+      "analytics"
+    ],
+    "mailbox": [
+      "info",
+      "noreply",
+      "reports"
+    ]
+  },
+  "kinds": [
+    {
+      "id": "worker",
+      "pattern": "saasreport-{component}-{env}"
+    },
+    {
+      "id": "workflow",
+      "pattern": "saasreport-{component}-{env}"
+    },
+    {
+      "id": "d1",
+      "pattern": "saasreport-{component}-{env}"
+    },
+    {
+      "id": "r2",
+      "pattern": "saasreport-{purpose}-{env}"
+    },
+    {
+      "id": "kv",
+      "pattern": "saasreport-{purpose}-{env}"
+    },
+    {
+      "id": "queue",
+      "pattern": "saasreport-{purpose}-{env}"
+    },
+    {
+      "id": "pages",
+      "pattern": "saasreport-{component}"
+    },
+    {
+      "id": "r2_archive",
+      "pattern": "saasreport-archive",
+      "note": "The one bucket with no environment: frozen copies under DO-NOT-DELETE/<date>/."
+    },
+    {
+      "id": "hostname_production",
+      "pattern": "{sub}.saasreport.ai",
+      "envs": [
+        "production"
+      ]
+    },
+    {
+      "id": "hostname_other",
+      "pattern": "{sub}.{env}.saasreport.ai",
+      "envs": [
+        "staging",
+        "development"
+      ]
+    },
+    {
+      "id": "github_repo",
+      "pattern": "SaasReport/{repo}"
+    },
+    {
+      "id": "npm_package",
+      "pattern": "@saasreport/{repo}"
+    },
+    {
+      "id": "stripe_app_id",
+      "pattern": "com.saasreport.{app}"
+    },
+    {
+      "id": "mailbox",
+      "pattern": "{mailbox}@saasreport.ai",
+      "note": "info: contact; noreply: automatic replies and system mail; reports: report delivery."
+    }
+  ],
+  "rules": [
+    "Every resource this company owns starts with the project name, written out in full: saasreport. No abbreviation, no second prefix.",
+    "A name is built from the registry by src/naming.js, never typed. A value missing from `values` is added here first, then used.",
+    "One resource serves one environment; production and staging never share a database, bucket, queue or namespace.",
+    "Secrets are named for the service they unlock in UPPER_SNAKE_CASE (STRIPE_WEBHOOK_SECRET) and are never written to a file.",
+    "Before any resource is deleted: check its routes, domains and bindings, copy it to saasreport-archive under DO-NOT-DELETE/<date>/, and keep a GitHub branch archive/<date> for code."
+  ],
+  "legacy": [
+    {
+      "kind": "worker",
+      "name": "saasreport-enterprise-architecture",
+      "action": "archived to saasreport-archive and verified, then deleted 2026-10-28"
+    },
+    {
+      "kind": "d1",
+      "name": "saasreport-production",
+      "action": "archived to saasreport-archive and verified, then deleted 2026-10-28"
+    },
+    {
+      "kind": "kv",
+      "name": "REGISTRY_KV",
+      "action": "archived to saasreport-archive and verified, then deleted 2026-10-28"
+    },
+    {
+      "kind": "r2",
+      "name": "saasreport-artifacts",
+      "action": "archived to saasreport-archive and verified, then deleted 2026-10-28"
+    },
+    {
+      "kind": "r2",
+      "name": "saasreport-artifacts-staging",
+      "action": "empty; deleted 2026-10-28"
+    },
+    {
+      "kind": "github_repo",
+      "name": "SaasReport/app",
+      "action": "frozen on branch archive/2026-10-28; superseded by SaasReport/core"
+    }
+  ]
+}

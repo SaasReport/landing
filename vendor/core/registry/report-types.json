@@ -1,0 +1,369 @@
+{
+  "$schema": "../schemas/report-types.schema.json",
+  "registry": "saasreport.report-types",
+  "version": "2.0.0",
+  "report_types": [
+    {
+      "id": "revenue-health",
+      "name": "Recurring revenue health",
+      "cadences": [
+        "week",
+        "month",
+        "quarter",
+        "year"
+      ],
+      "stakeholders": [
+        "ceo_founder",
+        "cfo",
+        "board",
+        "investors"
+      ],
+      "sections": [
+        {
+          "id": "position",
+          "title": "Where we stand",
+          "metrics": [
+            "mrr",
+            "arr"
+          ]
+        },
+        {
+          "id": "movement",
+          "title": "How revenue moved",
+          "metrics": [
+            "new_mrr",
+            "reactivation_mrr",
+            "expansion_mrr",
+            "contraction_mrr",
+            "churned_mrr",
+            "net_new_mrr"
+          ]
+        },
+        {
+          "id": "retention",
+          "title": "How much we kept",
+          "metrics": [
+            "nrr",
+            "grr"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "retention",
+      "name": "Retention and churn",
+      "cadences": [
+        "month",
+        "quarter",
+        "year"
+      ],
+      "stakeholders": [
+        "customer_success",
+        "ceo_founder",
+        "board"
+      ],
+      "sections": [
+        {
+          "id": "rates",
+          "title": "Retention rates",
+          "metrics": [
+            "nrr",
+            "grr",
+            "logo_churn_rate"
+          ]
+        },
+        {
+          "id": "losses",
+          "title": "What we lost",
+          "metrics": [
+            "churned_mrr",
+            "contraction_mrr"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sales-performance",
+      "name": "Sales performance",
+      "cadences": [
+        "week",
+        "month",
+        "quarter"
+      ],
+      "stakeholders": [
+        "sales",
+        "cfo",
+        "investors"
+      ],
+      "sections": [
+        {
+          "id": "added",
+          "title": "What we added",
+          "metrics": [
+            "new_mrr",
+            "reactivation_mrr",
+            "expansion_mrr",
+            "new_customers"
+          ]
+        },
+        {
+          "id": "net",
+          "title": "Net result",
+          "metrics": [
+            "net_new_mrr",
+            "arpa",
+            "average_order_value"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "acquisition",
+      "name": "New customers",
+      "cadences": [
+        "week",
+        "month",
+        "quarter"
+      ],
+      "stakeholders": [
+        "marketing",
+        "sales"
+      ],
+      "sections": [
+        {
+          "id": "arrivals",
+          "title": "Who arrived",
+          "metrics": [
+            "new_customers",
+            "new_mrr"
+          ]
+        },
+        {
+          "id": "value",
+          "title": "What they are worth",
+          "metrics": [
+            "arpa",
+            "average_order_value",
+            "gross_volume"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "board-pack",
+      "name": "Board pack",
+      "cadences": [
+        "month",
+        "quarter"
+      ],
+      "stakeholders": [
+        "board",
+        "ceo_founder",
+        "investors"
+      ],
+      "sections": [
+        {
+          "id": "position",
+          "title": "Where we stand",
+          "metrics": [
+            "arr",
+            "mrr"
+          ]
+        },
+        {
+          "id": "movement",
+          "title": "How revenue moved",
+          "metrics": [
+            "new_mrr",
+            "reactivation_mrr",
+            "expansion_mrr",
+            "contraction_mrr",
+            "churned_mrr",
+            "net_new_mrr"
+          ]
+        },
+        {
+          "id": "retention",
+          "title": "How much we kept",
+          "metrics": [
+            "nrr",
+            "grr",
+            "logo_churn_rate"
+          ]
+        },
+        {
+          "id": "customers",
+          "title": "Who pays",
+          "metrics": [
+            "arpa"
+          ]
+        },
+        {
+          "id": "risk",
+          "title": "Payment risk",
+          "metrics": [
+            "refund_rate_bp",
+            "dispute_rate_bp"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "investor-quarterly",
+      "name": "Investor quarterly",
+      "cadences": [
+        "quarter",
+        "year"
+      ],
+      "stakeholders": [
+        "investors",
+        "board"
+      ],
+      "sections": [
+        {
+          "id": "scale",
+          "title": "Scale",
+          "metrics": [
+            "arr",
+            "mrr"
+          ]
+        },
+        {
+          "id": "growth",
+          "title": "Growth",
+          "metrics": [
+            "net_new_mrr",
+            "new_mrr",
+            "expansion_mrr"
+          ]
+        },
+        {
+          "id": "durability",
+          "title": "Durability",
+          "metrics": [
+            "nrr",
+            "grr",
+            "logo_churn_rate"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "refunds-returns",
+      "name": "Refunds and returns",
+      "cadences": [
+        "day",
+        "week",
+        "month"
+      ],
+      "stakeholders": [
+        "refunds_returns",
+        "cfo"
+      ],
+      "sections": [
+        {
+          "id": "volume",
+          "title": "How much was refunded",
+          "metrics": [
+            "refund_amount",
+            "refund_count",
+            "refund_rate_bp",
+            "net_volume"
+          ]
+        },
+        {
+          "id": "why",
+          "title": "Why",
+          "metrics": [
+            "refund_count_requested_by_customer",
+            "refund_count_duplicate",
+            "refund_count_fraudulent"
+          ]
+        },
+        {
+          "id": "disputes",
+          "title": "Disputes",
+          "metrics": [
+            "dispute_count",
+            "dispute_amount"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "payment-health",
+      "name": "Payment health",
+      "cadences": [
+        "day",
+        "week",
+        "month"
+      ],
+      "stakeholders": [
+        "tech_support",
+        "cfo",
+        "customer_success"
+      ],
+      "sections": [
+        {
+          "id": "success",
+          "title": "Payments",
+          "metrics": [
+            "successful_payments",
+            "failed_payments",
+            "payment_failure_rate_bp",
+            "gross_volume"
+          ]
+        },
+        {
+          "id": "disputes",
+          "title": "Disputes",
+          "metrics": [
+            "dispute_count",
+            "dispute_rate_bp",
+            "dispute_amount"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "marketplace-health",
+      "name": "Marketplace health",
+      "cadences": [
+        "week",
+        "month",
+        "quarter"
+      ],
+      "stakeholders": [
+        "marketplace_operator"
+      ],
+      "sections": [
+        {
+          "id": "earnings",
+          "title": "What the platform earned",
+          "metrics": [
+            "platform_fees",
+            "take_rate_bp"
+          ]
+        },
+        {
+          "id": "flow",
+          "title": "Volume through the platform",
+          "metrics": [
+            "gross_volume",
+            "successful_payments",
+            "net_volume"
+          ]
+        },
+        {
+          "id": "risk",
+          "title": "Refunds, disputes and failures",
+          "metrics": [
+            "refund_rate_bp",
+            "dispute_rate_bp",
+            "payment_failure_rate_bp"
+          ]
+        }
+      ]
+    }
+  ]
+}

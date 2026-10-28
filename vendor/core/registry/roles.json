@@ -1,0 +1,238 @@
+{
+  "$schema": "../schemas/roles.schema.json",
+  "registry": "saasreport.roles",
+  "version": "1.0.0",
+  "source": "https://docs.stripe.com/get-started/account/teams/roles",
+  "verified": "2026-10-28",
+  "principle": "Least privilege equals Stripe visibility: a person sees a report in SaasReport only if their Stripe role already lets them see the data behind it. The default for any role not listed, and for any user whose roles cannot be verified, is no access. An account administrator may grant more inside SaasReport; the grant is recorded and is never the default.",
+  "unknowns": [
+    "How the account owner appears in userContext.roles is not documented; until confirmed in a test-mode install, the owner is treated through the administrator grant path.",
+    "userContext.roles can be undefined in some contexts (documented for embedded apps); undefined means no access."
+  ],
+  "classes": {
+    "revenue": "Subscription and invoice data: recurring revenue, movements, retention.",
+    "payments": "Charges: volume and payment failures.",
+    "refunds": "Refund records and their reasons.",
+    "disputes": "Dispute records.",
+    "platform": "Platform fees a Connect platform earns on its connected accounts' payments (application fees on the platform's own account)."
+  },
+  "input_class": {
+    "subscription": "revenue",
+    "charge": "payments",
+    "refund": "refunds",
+    "dispute": "disputes",
+    "application_fee": "platform"
+  },
+  "roles": [
+    {
+      "id": "super_admin",
+      "name": "Super Administrator",
+      "sees": [
+        "revenue",
+        "payments",
+        "refunds",
+        "disputes",
+        "platform"
+      ],
+      "rationale": "Can see and manage almost everything, including financial reports."
+    },
+    {
+      "id": "admin",
+      "name": "Administrator",
+      "sees": [
+        "revenue",
+        "payments",
+        "refunds",
+        "disputes",
+        "platform"
+      ],
+      "rationale": "Similar access to the account owner."
+    },
+    {
+      "id": "developer",
+      "name": "Developer",
+      "sees": [
+        "revenue",
+        "payments",
+        "refunds",
+        "disputes",
+        "platform"
+      ],
+      "rationale": "Can view payments, disputes and customers, and create, view and download financial reports."
+    },
+    {
+      "id": "analyst",
+      "name": "Analyst",
+      "sees": [
+        "revenue",
+        "payments",
+        "refunds",
+        "disputes",
+        "platform"
+      ],
+      "rationale": "Can view payments and disputes, and create, view and download financial reports."
+    },
+    {
+      "id": "view_only",
+      "name": "View Only",
+      "sees": [
+        "revenue",
+        "payments",
+        "refunds",
+        "disputes",
+        "platform"
+      ],
+      "rationale": "Can view payments, disputes, customers and balance, and download financial reports."
+    },
+    {
+      "id": "accountant",
+      "name": "Accountant",
+      "sees": [
+        "revenue",
+        "payments",
+        "refunds",
+        "disputes",
+        "platform"
+      ],
+      "rationale": "Can view payments, disputes, customers and balance, and create, view and download financial reports."
+    },
+    {
+      "id": "tax_analyst",
+      "name": "Tax Analyst",
+      "sees": [
+        "revenue",
+        "payments",
+        "refunds",
+        "disputes",
+        "platform"
+      ],
+      "rationale": "Can view payments, disputes and customers, and create, view and download financial reports."
+    },
+    {
+      "id": "refund_analyst",
+      "name": "Refund Analyst",
+      "sees": [
+        "payments",
+        "refunds",
+        "disputes"
+      ],
+      "rationale": "Can view and refund payments and view disputes. Cannot download financial reports, so aggregate recurring revenue is not granted by default."
+    },
+    {
+      "id": "support_associate",
+      "name": "Support Associate",
+      "sees": [
+        "payments",
+        "refunds",
+        "disputes"
+      ],
+      "rationale": "Can view and refund payments and resolve disputes. Cannot download financial reports."
+    },
+    {
+      "id": "support_specialist",
+      "name": "Support Specialist",
+      "sees": [
+        "payments",
+        "refunds",
+        "disputes"
+      ],
+      "rationale": "Can view and refund payments and resolve disputes. Cannot download financial reports."
+    },
+    {
+      "id": "dispute_analyst",
+      "name": "Dispute Analyst",
+      "sees": [
+        "payments",
+        "disputes"
+      ],
+      "rationale": "Can view and resolve disputes and view payments. Cannot refund payments or download financial reports."
+    },
+    {
+      "id": "transfer_analyst",
+      "name": "Transfer Analyst",
+      "sees": [
+        "payments",
+        "disputes"
+      ],
+      "rationale": "Can view balance, payouts, disputes and payments. Cannot download financial reports."
+    },
+    {
+      "id": "iam_admin",
+      "name": "IAM Administrator",
+      "sees": [],
+      "rationale": "Access management only; cannot view payments, balance or financial reports."
+    },
+    {
+      "id": "support_communications",
+      "name": "Support Communications",
+      "sees": [],
+      "rationale": "Support messages only; cannot access financial information."
+    },
+    {
+      "id": "terminal_specialist",
+      "name": "Terminal Specialist",
+      "sees": [],
+      "rationale": "Terminal fleet only; cannot view payments."
+    },
+    {
+      "id": "data_migration_specialist",
+      "name": "Data Migration Specialist",
+      "sees": [],
+      "rationale": "Customers and data copies only; cannot view live payments."
+    },
+    {
+      "id": "connect_onboarding_analyst",
+      "name": "Connect Onboarding Analyst",
+      "sees": [],
+      "rationale": "Connected accounts only; cannot view payments or financial reports."
+    },
+    {
+      "id": "connect_risk_analyst",
+      "name": "Connect Risk Analyst",
+      "sees": [],
+      "rationale": "Connected-account risk only; cannot create, view or download financial reports. Not granted by default."
+    },
+    {
+      "id": "sandbox_admin",
+      "name": "Sandbox Admin",
+      "sees": [],
+      "rationale": "Sandboxes only; no access to live data."
+    },
+    {
+      "id": "sandbox_user",
+      "name": "Sandbox User",
+      "sees": [],
+      "rationale": "Sandboxes only; no access to live data."
+    },
+    {
+      "id": "identity_analyst",
+      "name": "Identity Analyst",
+      "sees": [],
+      "rationale": "Identity verifications only."
+    },
+    {
+      "id": "identity_view_only",
+      "name": "Identity View Only",
+      "sees": [],
+      "rationale": "Identity verifications only."
+    },
+    {
+      "id": "topup_specialist",
+      "name": "Top-up Specialist",
+      "sees": [],
+      "rationale": "Top-ups, balance and payouts only."
+    },
+    {
+      "id": "financial_connections_specialist",
+      "name": "Financial Connections Specialist",
+      "sees": [],
+      "rationale": "Financial Connections only."
+    },
+    {
+      "id": "data_engineer",
+      "name": "Data Engineer",
+      "sees": [],
+      "rationale": "Stripe Data Pipeline only."
+    }
+  ]
+}

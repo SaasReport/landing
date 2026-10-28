@@ -1,0 +1,80 @@
+{
+  "$schema": "../schemas/commitments.schema.json",
+  "registry": "saasreport.commitments",
+  "version": "1.0.0",
+  "note": "Every promise a legal document makes. A document that cites a commitment can be published only when its status is implemented and its evidence names a file or test that proves it.",
+  "commitments": [
+    {
+      "id": "stripe_read_only",
+      "statement": "The Stripe App requests only read permissions and never creates, changes or deletes anything in the customer's Stripe account, and never moves money.",
+      "status": "planned",
+      "evidence": null
+    },
+    {
+      "id": "no_card_data",
+      "statement": "SaasReport does not receive, store or process card numbers or bank account numbers.",
+      "status": "planned",
+      "evidence": null
+    },
+    {
+      "id": "tenant_isolation",
+      "statement": "Each customer's data is stored and read only under that customer's own tenant identifier; one customer cannot read another's data.",
+      "status": "planned",
+      "evidence": null
+    },
+    {
+      "id": "numbers_computed_not_generated",
+      "statement": "Every figure in a report is computed by deterministic code from Stripe data under published definitions; AI-written text is checked so that it contains no figure the code did not compute.",
+      "status": "planned",
+      "evidence": null
+    },
+    {
+      "id": "ai_receives_aggregates_only",
+      "statement": "The AI provider receives only computed aggregates and never customer names, email addresses or other personal data from the customer's Stripe account.",
+      "status": "planned",
+      "evidence": null
+    },
+    {
+      "id": "deletion_on_uninstall",
+      "statement": "After the customer uninstalls the app, the data derived from their Stripe account is deleted within the period stated in the privacy policy.",
+      "status": "planned",
+      "evidence": null
+    },
+    {
+      "id": "email_only_via_own_engine",
+      "statement": "Report emails are sent only through SaasReport's own mail service on Cloudflare, and each carries the legal footer.",
+      "status": "planned",
+      "evidence": null
+    },
+    {
+      "id": "no_tracking_cookies",
+      "statement": "The website sets no cookies other than those strictly necessary, and runs no third-party advertising or tracking scripts.",
+      "status": "planned",
+      "evidence": null
+    },
+    {
+      "id": "no_sale_no_training",
+      "statement": "SaasReport does not sell personal data, and does not use a customer's Stripe data to train AI models or to build benchmarks for other customers.",
+      "status": "planned",
+      "evidence": null
+    },
+    {
+      "id": "encryption_in_transit",
+      "statement": "All traffic between Stripe, SaasReport's services, and report recipients' links uses encryption in transit.",
+      "status": "planned",
+      "evidence": null
+    },
+    {
+      "id": "findings_rule_based",
+      "statement": "Findings and recommendations in a report come from published rules applied to computed figures, not from AI judgement; each cites the figures that triggered it, and the thresholds are not benchmarks against other companies.",
+      "status": "planned",
+      "evidence": null
+    },
+    {
+      "id": "report_links_signed_expiring",
+      "statement": "Reports are delivered as signed, expiring links to files stored under the customer's own tenant, and a link can be revoked.",
+      "status": "planned",
+      "evidence": null
+    }
+  ]
+}
