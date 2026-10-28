@@ -52,6 +52,8 @@ test("the Worker config follows the naming registry and uses no Node compatibili
   const toml = readFileSync(new URL("workers/api/wrangler.toml", root), "utf8");
   assert.match(toml, /^name = "saasreport-api-production"$/m);
   assert.doesNotMatch(toml, /nodejs_compat/);
+  assert.match(toml, /^routes = \[\{ pattern = "api\.saasreport\.ai\/\*", zone_name = "saasreport\.ai" \}\]$/m, "a route on the zone, not a custom-domain create");
+  assert.doesNotMatch(toml, /custom_domain/);
   assert.doesNotMatch(toml, /\[\[(kv_namespaces|d1_databases|r2_buckets)\]\]/, "the API holds no storage");
 });
 

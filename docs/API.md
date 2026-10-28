@@ -31,5 +31,14 @@ time without hand-written JavaScript, which the constitution forbids. The propos
 
 ## Owner-pending (never invented here)
 
-The `production` GitHub environment and its secrets, the `api` DNS hostname and zone, the Telegram route secrets of the watcher, the `API_HEALTH_URL` variable, the
-rate limiter namespace in the account, the first production run (`release.json` state `bootstrap`) and its drills.
+Credentials: the production workflow reads the GitHub Actions secrets `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` of the `production` environment (the kit
+template's names). The owner's decision is to use the existing repository secrets `CLOUDFLARE_API_KEY`, `CLOUDFLARE_ACCOUNT_ID` and `CLOUDFLARE_ZONE_ID`, the names
+of the kit-head workflow in SaasReport/toolkit. Their state is **pending-verified-on-first-run**: nobody has listed them. The mapping, a first step that checks
+the three by boolean only, and a gate that keeps push runs from failing and mailing until the first dispatch passes all need a change to the kit's production
+template, which `kit check release` holds byte for byte; the proposed change is in the pull request. Until then, disable the `production` workflow in the
+Actions settings, or dispatch it by hand once the secrets are in place.
+
+DNS: the proxied record for `api.saasreport.ai` already exists; the Worker takes the route `api.saasreport.ai/*` on the zone `saasreport.ai`.
+
+Still pending: the `API_HEALTH_URL` variable and the Telegram route secrets of the watcher, the rate limit namespace in the account (id kept as is), the first
+production run (`release.json` state `bootstrap`) and its drills.

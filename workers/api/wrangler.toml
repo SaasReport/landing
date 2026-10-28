@@ -4,8 +4,9 @@ main = "src/worker.js"
 compatibility_date = "2026-09-01"
 workers_dev = true
 
-# api.saasreport.ai is the production hostname of the naming registry (sub "api"); the zone is the owner's.
-routes = [{ pattern = "api.saasreport.ai", custom_domain = true }]
+# api.saasreport.ai is the production hostname of the naming registry (sub "api"). Its proxied DNS record already exists (a
+# placeholder), so the Worker takes the route on the zone; no custom domain is created.
+routes = [{ pattern = "api.saasreport.ai/*", zone_name = "saasreport.ai" }]
 
 # The per-client limit declared by the contract's x-limits.rate (a test holds the two equal). No namespace id is secret.
 [[ratelimits]]
