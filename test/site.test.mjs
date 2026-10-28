@@ -25,3 +25,13 @@ test("the build is reproducible for a fixed date", async () => {
   const run = () => { execFileSync("node", ["scripts/build.mjs"], { env: { ...process.env, SOURCE_DATE_EPOCH: "1800000000" } }); return readFileSync("dist/index.html", "utf8"); };
   assert.equal(run(), run());
 });
+
+test("the page survives Cloudflare's Rocket Loader and email obfuscation, which are on for the zone", async () => {
+  const { execFileSync } = await import("node:child_process");
+  execFileSync("node", ["scripts/build.mjs"]);
+  const html = readFileSync("dist/index.html", "utf8");
+  assert.match(html, /<script type="module" src="app\.js" data-cfasync="false">/, "Rocket Loader must skip the module script");
+  const off = html.indexOf("<!--email_off-->"), on = html.indexOf("<!--/email_off-->");
+  assert.ok(off !== -1 && on > off, "email obfuscation must be off around the page");
+  for (const m of html.matchAll(/mailto:/g)) assert.ok(m.index > off && m.index < on, "every mailto sits inside the email_off block");
+});
