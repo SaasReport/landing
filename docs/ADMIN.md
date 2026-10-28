@@ -47,17 +47,18 @@ A section that has no source says so and shows no figure; nothing is estimated o
 
 `admin.widgets.spec.json` and `workers/admin/ui/panes.json` describe the panes; `scripts/admin-ui.mjs` derives sources, row contracts and command arguments from the OpenAPI contract (a column the contract does not have is a build error); `kit widgets build` and `kit site build` make the pages the Worker serves behind Access. Tokens are the landing's. `test/admin/ui.test.mjs` opens it in Chromium at 390 and 1280 against the Worker in-process with a signed test token.
 
-## Lead's provisioning checklist (the lead provisions; nothing here was applied)
+## Provisioning checklist
 
-No `provisioning.json` exists in the vendored kit, so this is the checklist.
+Provisioned by the owner in Cloudflare (public identifiers, in `workers/admin/wrangler.toml`): the Access application `saasreport-admin-production` for `admin.saasreport.ai` with an owner-only email policy, the D1 databases `saasreport-admin-production` and `saasreport-comms-engine-production`, and the DNS record `admin.saasreport.ai` (a proxied placeholder). The Worker route is `admin.saasreport.ai/*` on zone `saasreport.ai`.
 
-1. Naming: SaasReport/core `claude/naming-admin` must merge (component `admin`, host sub `admin`); until then `saasreport-admin-production` and `admin.saasreport.ai` are not in the registry (`getProvisioning` says so).
-2. Cloudflare Access application for `admin.saasreport.ai`, policy: allow the owner's email only. Note the application's AUD tag and the team domain.
-3. Worker secrets on `saasreport-admin-production` (names only; values are never in git): `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD`, `ADMIN_ALLOWED_EMAILS` (the owner's address), optional read-only `GITHUB_READ_TOKEN`.
-4. D1 `saasreport-admin-production`: create, put its id in `workers/admin/wrangler.toml`, apply `workers/admin/migrations`. Put the engine D1's id in the `ENGINE_DB` binding.
-5. DNS and route: custom domain `admin.saasreport.ai` to the Worker, only behind Access. Bypass for `/api/build` if `kit release verify` must read it.
-6. Release wiring: `workers/admin/wrangler.toml` is listed as not deployed in `canon.allow.json` until the repository has `release.json`, `resilience.json` (a monitor that does not watch the admin's own D1) and the production workflow; remove that entry when they exist.
-7. Inbound handler: deploy and migrate `comms_inbound`, or tell the admin its real column names.
+Deploy path: `.github/workflows/admin-deploy.yml`, `workflow_dispatch` only until its first run has passed. It uses the account's existing Actions secrets and no new names: `CLOUDFLARE_API_KEY` (mapped to `CLOUDFLARE_API_TOKEN` for wrangler), `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_ZONE_ID`. It checks their presence first as booleans and fails naming the missing one, never printing a value. Then it builds and tests, applies the migrations of each D1 (the admin's own, then the engine's), runs `scripts/admin-secrets.mjs`, and deploys. That script reads the team domain, the application's AUD tag and the policy's emails from the Cloudflare API and writes `ACCESS_TEAM_DOMAIN`, `ACCESS_AUD` and `ADMIN_ALLOWED_EMAILS` to the Worker as secrets (values on wrangler's stdin, only names logged; it refuses a policy that allows more than named emails). The AUD tag is not secret but stays a Worker secret read by name, as designed; none of the three is ever in git.
+
+Still open:
+
+1. Naming: SaasReport/core `claude/naming-admin` must merge (component and host sub `admin`); until then `getProvisioning` reports the planned names as registry-invalid.
+2. Release wiring: `workers/admin/wrangler.toml` and the deploy command of `admin-deploy.yml` are listed as not deployed in `canon.allow.json` until the repository has `release.json`, `resilience.json` (a monitor that does not watch the admin's own D1) and the production workflow; remove those entries when they exist. The workflow's first run and its secrets are unproven.
+3. If `kit release verify` must read `/api/build`, the Access application needs a bypass for that path.
+4. Inbound handler: deploy and migrate `comms_inbound`, or tell the admin its real column names. The engine D1 migrations applied by the workflow are the comms package's only.
 
 ## Proposed kit changes (gaps found; nothing was worked around by hand-written code)
 

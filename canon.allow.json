@@ -14,6 +14,13 @@
       "match": "\"https://comms/v1/comms/suppress\"",
       "context": "v1/comms/suppress",
       "reason": "Not a form: the engine's own POST /v1/comms/suppress, the only way to add a suppression (it hashes the address and writes the engine's audit chain). The kit has no client for it; a suppress() helper in @saasreport/comms replaces this call (proposed kit change, docs/ADMIN.md)."
+    },
+    {
+      "file": ".github/workflows/admin-deploy.yml",
+      "category": "not-deployed",
+      "match": "wrangler deploy",
+      "context": "npx wrangler deploy -c workers/admin/wrangler.toml",
+      "reason": "Reviewed pending state: a dispatch-only workflow that the owner starts until its first run has passed; the full release wiring (release.json, resilience.json with its monitor) lands with it and this entry is then removed (docs/ADMIN.md)."
     }
   ]
 }
