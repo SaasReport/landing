@@ -1,0 +1,25 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Inter, Arial, sans-serif","fontSize":"15px","textColor":"#0B0B0B","stateLabelColor":"#0B0B0B","transitionLabelColor":"#0B0B0B","background":"#F7F9FC","primaryColor":"#FFFFFF","primaryTextColor":"#0B0B0B","primaryBorderColor":"#0B0B0B","lineColor":"#4D5B70","secondaryColor":"#EDF1F6","tertiaryColor":"#F7F9FC","clusterBkg":"#EDF1F6","clusterBorder":"#B9C6D8","edgeLabelBackground":"#F7F9FC","titleColor":"#0B0B0B","actorBkg":"#0B0B0B","actorBorder":"#0B0B0B","actorTextColor":"#FFFFFF","actorLineColor":"#B9C6D8","signalColor":"#0B0B0B","signalTextColor":"#0B0B0B","labelBoxBkgColor":"#F7F9FC","labelBoxBorderColor":"#B9C6D8","noteBkgColor":"#EEF3F9","noteBorderColor":"#6F9BD8","sequenceNumberColor":"#FFFFFF","stateBkg":"#FFFFFF","stateBorder":"#0B0B0B","transitionColor":"#4D5B70","specialStateColor":"#12396B"}}}%%
+%% kit:diagram {"id":"saasreport.admin.request","title":"What happens to an admin request","project":"saasreport","kind":"flow","summary":"The order of the checks: Access token, configuration, key set, claims, allowlist, route, origin, body, idempotency, audit, effect.","lineage":{"derives_from":[],"supersedes":[],"version":"1"},"relates_to":[{"id":"saasreport.admin.architecture","relation":"sibling"}],"depicts":[{"kind":"file","ref":"the Access verification","path":"workers/admin/src/access.js"},{"kind":"file","ref":"the request pipeline","path":"workers/admin/src/index.js"}],"reviewed":"2026-10-28"}
+flowchart TB
+  req("Request")
+  cfg{"Access configuration set?"}
+  tok{"Token and claims hold? Email on the allowlist?"}
+  route{"Route in the contract?"}
+  mut{"Change: same origin, JSON body valid?"}
+  idem{"Idempotency key seen?"}
+  log("Audit row, then carry it out comms engine or admin D1")
+  replay("Replay the first answer")
+  no("Refused 503, 401, 403, 404, 405, 400, 413 or 415")
+  req --> cfg
+  cfg -->|yes| tok
+  tok -->|yes| route
+  route -->|yes| mut
+  mut -->|yes| idem
+  idem -->|no| log
+  idem -->|yes| replay
+  cfg -->|no| no
+  tok -->|no| no
+  route -->|no| no
+  mut -->|no| no
+  class tok accent
+  classDef accent fill:#12396B,stroke:#12396B,color:#FFFFFF,stroke-width:2px

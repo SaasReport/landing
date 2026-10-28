@@ -25,11 +25,18 @@
       "module": "src/forms.js",
       "export": "FORMS",
       "schema": "lead-forms"
+    },
+    {
+      "files": [
+        "workers/admin/admin.config.json"
+      ],
+      "schema": "workers/admin/admin-config.schema.json"
     }
   ],
   "hardcoding": {
     "paths": [
-      "scripts/**"
+      "scripts/**",
+      "workers/admin/src/**"
     ],
     "allow": "canon.allow.json"
   },
@@ -50,6 +57,13 @@
       "command": "node vendor/kit/packages/cli/bin/kit.js widgets build --check",
       "outputs": [
         "content/generated/widgets.generated.json"
+      ]
+    },
+    {
+      "name": "the admin Worker's build snapshot (scripts/admin-snapshot.mjs)",
+      "command": "node scripts/admin-snapshot.mjs --check",
+      "outputs": [
+        "workers/admin/generated/snapshot.json"
       ]
     }
   ],
@@ -105,12 +119,6 @@
     }
   },
   "notApplicable": {
-    "contracts": {
-      "predicate": "no-http-surface"
-    },
-    "sdk": {
-      "predicate": "no-openapi-contract"
-    },
     "digits": {
       "predicate": "no-persian-site"
     },
@@ -123,5 +131,15 @@
     "release": {
       "predicate": "no-deployed-workers"
     }
-  }
+  },
+  "contracts": [
+    {
+      "name": "admin",
+      "type": "openapi",
+      "contract": "contracts/admin.openapi.json",
+      "sources": [
+        "workers/admin/src"
+      ]
+    }
+  ]
 }

@@ -1,0 +1,1232 @@
+{
+  "$schema": "./panes.schema.json",
+  "schema": "saasreport.admin-panes.v1",
+  "title": "SaasReport admin",
+  "intro": "Type a command, or open a tab. Every pane reads the admin API and says so; changes (lead status, retries, suppressions) are made through the API, and every one is written to the audit log.",
+  "licence": "Private to the owner. Read through Cloudflare Access; nothing here may be copied out.",
+  "layouts": [
+    {
+      "id": "users",
+      "title": "User management",
+      "groups": [
+        [
+          "users",
+          "roles"
+        ],
+        [
+          "invitations",
+          "audit"
+        ]
+      ]
+    },
+    {
+      "id": "finops-bizops",
+      "title": "FinOps and BizOps",
+      "groups": [
+        [
+          "finops"
+        ],
+        [
+          "bizops",
+          "funnel"
+        ]
+      ]
+    },
+    {
+      "id": "platform-saas-infra",
+      "title": "Platform, SaaS and Infra",
+      "groups": [
+        [
+          "platformops",
+          "saasops"
+        ],
+        [
+          "infraops",
+          "workers"
+        ]
+      ]
+    },
+    {
+      "id": "inbox",
+      "title": "Leads and deliveries",
+      "groups": [
+        [
+          "leads",
+          "funnel"
+        ],
+        [
+          "deliveries",
+          "deliveries-summary",
+          "alerts"
+        ]
+      ]
+    },
+    {
+      "id": "mail",
+      "title": "Mail",
+      "groups": [
+        [
+          "inbound",
+          "autoreply"
+        ],
+        [
+          "suppressions",
+          "receipts"
+        ]
+      ]
+    },
+    {
+      "id": "registries",
+      "title": "Registries",
+      "groups": [
+        [
+          "stakeholders",
+          "metrics",
+          "report-types"
+        ],
+        [
+          "findings",
+          "commitments",
+          "legal"
+        ]
+      ]
+    },
+    {
+      "id": "operations",
+      "title": "Operations",
+      "groups": [
+        [
+          "workers",
+          "audit"
+        ],
+        [
+          "provisioning-config",
+          "provisioning-bindings",
+          "provisioning-planned"
+        ]
+      ]
+    }
+  ],
+  "defaultLayout": "finops-bizops",
+  "panes": [
+    {
+      "id": "workers",
+      "operation": "getOverview",
+      "rows": "/workers",
+      "title": "Workers",
+      "summary": "Every Worker's /api/build: the commit it serves, and whether it is main's head.",
+      "empty": "No Worker answered.",
+      "command": {
+        "verb": "WORKERS",
+        "aliases": [
+          "health",
+          "builds"
+        ],
+        "summary": "Health and commit of every Worker",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "id",
+          "label": "Worker"
+        },
+        {
+          "key": "via",
+          "label": "Reached by"
+        },
+        {
+          "key": "reachable",
+          "label": "Reachable",
+          "type": "bool"
+        },
+        {
+          "key": "commit",
+          "label": "Commit"
+        },
+        {
+          "key": "matches_main",
+          "label": "Is main's head",
+          "type": "bool"
+        },
+        {
+          "key": "error",
+          "label": "Error"
+        }
+      ]
+    },
+    {
+      "id": "funnel",
+      "operation": "getOverview",
+      "rows": "/leads/by_status",
+      "keyed": true,
+      "title": "Lead funnel",
+      "summary": "Leads by status.",
+      "empty": "No leads yet.",
+      "command": {
+        "verb": "FUNNEL",
+        "aliases": [
+          "pipeline"
+        ],
+        "summary": "Leads by status",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "key",
+          "label": "Status"
+        },
+        {
+          "key": "value",
+          "label": "Leads",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "id": "deliveries-summary",
+      "operation": "getOverview",
+      "rows": "/deliveries",
+      "keyed": true,
+      "title": "Delivery summary",
+      "summary": "The counts the monitor reads over the last day.",
+      "empty": "The delivery ledger is not available.",
+      "command": {
+        "verb": "DSUM",
+        "aliases": [
+          "summary"
+        ],
+        "summary": "Delivery counts over the last day",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "key",
+          "label": "Count"
+        },
+        {
+          "key": "value",
+          "label": "Value"
+        }
+      ]
+    },
+    {
+      "id": "leads",
+      "operation": "listLeads",
+      "rows": "/items",
+      "title": "Leads",
+      "summary": "Newest first. Open a lead, set its status or export the list through the API (getLead, updateLead, exportLeads).",
+      "empty": "No lead matches.",
+      "command": {
+        "verb": "LEADS",
+        "aliases": [
+          "lead"
+        ],
+        "summary": "Leads, filtered by status, form or name",
+        "args": [
+          {
+            "param": "status",
+            "hint": "new, contacted, qualified, won or lost"
+          },
+          {
+            "param": "form",
+            "hint": "a form id"
+          },
+          {
+            "param": "q",
+            "hint": "part of a name or company"
+          }
+        ],
+        "example": "LEADS new"
+      },
+      "columns": [
+        {
+          "key": "created_at",
+          "label": "Received",
+          "type": "date"
+        },
+        {
+          "key": "name",
+          "label": "Name"
+        },
+        {
+          "key": "company",
+          "label": "Company"
+        },
+        {
+          "key": "form",
+          "label": "Form"
+        },
+        {
+          "key": "status",
+          "label": "Status"
+        },
+        {
+          "key": "comms_status",
+          "label": "Autoreply"
+        },
+        {
+          "key": "id",
+          "label": "Reference"
+        }
+      ]
+    },
+    {
+      "id": "deliveries",
+      "operation": "listDeliveries",
+      "rows": "/items",
+      "title": "Form deliveries",
+      "summary": "The receipt and the owner's notification of every submission. A failed one is retried through the comms engine (retryDelivery).",
+      "empty": "No delivery matches.",
+      "command": {
+        "verb": "DELIV",
+        "aliases": [
+          "deliveries",
+          "ledger"
+        ],
+        "summary": "The form delivery ledger",
+        "args": [
+          {
+            "param": "state",
+            "hint": "all, failed or pending"
+          },
+          {
+            "param": "form_id",
+            "hint": "a form id"
+          }
+        ],
+        "example": "DELIV failed"
+      },
+      "columns": [
+        {
+          "key": "created_at",
+          "label": "Received",
+          "type": "date"
+        },
+        {
+          "key": "reference",
+          "label": "Reference"
+        },
+        {
+          "key": "form_id",
+          "label": "Form"
+        },
+        {
+          "key": "receipt.status",
+          "label": "Receipt"
+        },
+        {
+          "key": "owner.status",
+          "label": "Owner"
+        },
+        {
+          "key": "owner.error",
+          "label": "Owner error"
+        }
+      ]
+    },
+    {
+      "id": "alerts",
+      "operation": "listOwnerAlertFailures",
+      "rows": "/failures",
+      "title": "Owner-alert failures",
+      "summary": "Owner notifications that failed or are still pending, and failed operator dispatches.",
+      "empty": "No owner alert has failed in the window.",
+      "command": {
+        "verb": "ALERTS",
+        "aliases": [
+          "failures"
+        ],
+        "summary": "Owner-alert failures",
+        "args": [
+          {
+            "param": "window_hours",
+            "hint": "hours to look back"
+          }
+        ],
+        "example": "ALERTS 24"
+      },
+      "columns": [
+        {
+          "key": "at",
+          "label": "When",
+          "type": "date"
+        },
+        {
+          "key": "kind",
+          "label": "Kind"
+        },
+        {
+          "key": "id",
+          "label": "Reference"
+        },
+        {
+          "key": "form_id",
+          "label": "Form"
+        },
+        {
+          "key": "status",
+          "label": "Status"
+        },
+        {
+          "key": "error",
+          "label": "Error"
+        }
+      ]
+    },
+    {
+      "id": "inbound",
+      "operation": "listInbound",
+      "rows": "/items",
+      "title": "Inbound mail",
+      "summary": "Sender as the hash the table stores, the receiving mailbox, the forward per destination and the autoreply state.",
+      "empty": "No inbound message, or the inbound table is not deployed yet.",
+      "command": {
+        "verb": "INBOX",
+        "aliases": [
+          "inbound",
+          "mail"
+        ],
+        "summary": "Inbound messages",
+        "args": [
+          {
+            "param": "status",
+            "hint": "received, forwarded, partial, failed, rejected or dropped"
+          }
+        ],
+        "example": "INBOX failed"
+      },
+      "columns": [
+        {
+          "key": "received_at",
+          "label": "Received",
+          "type": "date"
+        },
+        {
+          "key": "recipient",
+          "label": "Mailbox"
+        },
+        {
+          "key": "status",
+          "label": "Status"
+        },
+        {
+          "key": "forwards",
+          "label": "Forwards"
+        },
+        {
+          "key": "autoreply.state",
+          "label": "Autoreply"
+        },
+        {
+          "key": "sender_hash",
+          "label": "Sender (hash)"
+        }
+      ]
+    },
+    {
+      "id": "autoreply",
+      "operation": "getAutoreplyStats",
+      "rows": "/inbound/by_state",
+      "keyed": true,
+      "title": "Autoreplies",
+      "summary": "Inbound autoreplies by state over the window.",
+      "empty": "No autoreply in the window, or the inbound table is not deployed yet.",
+      "command": {
+        "verb": "REPLY",
+        "aliases": [
+          "autoreply"
+        ],
+        "summary": "Autoreply statistics",
+        "args": [
+          {
+            "param": "window_hours",
+            "hint": "hours to look back"
+          }
+        ],
+        "example": "REPLY 168"
+      },
+      "columns": [
+        {
+          "key": "key",
+          "label": "State"
+        },
+        {
+          "key": "value",
+          "label": "Messages",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "id": "receipts",
+      "operation": "getAutoreplyStats",
+      "rows": "/form_receipts/by_status",
+      "keyed": true,
+      "title": "Form receipts",
+      "summary": "Receipts sent to submitters by status over the window.",
+      "empty": "No receipt in the window.",
+      "command": {
+        "verb": "RECEIPT",
+        "aliases": [
+          "receipts"
+        ],
+        "summary": "Form receipts by status",
+        "args": [
+          {
+            "param": "window_hours",
+            "hint": "hours to look back"
+          }
+        ],
+        "example": "RECEIPT 24"
+      },
+      "columns": [
+        {
+          "key": "key",
+          "label": "Status"
+        },
+        {
+          "key": "value",
+          "label": "Receipts",
+          "type": "number"
+        }
+      ]
+    },
+    {
+      "id": "suppressions",
+      "operation": "listSuppressions",
+      "rows": "/items",
+      "title": "Suppressions",
+      "summary": "Recipients the engine will not write to, as hashes. Add and remove through the API (addSuppression, removeSuppression).",
+      "empty": "The suppression list is empty.",
+      "command": {
+        "verb": "SUPP",
+        "aliases": [
+          "suppressions"
+        ],
+        "summary": "The suppression list",
+        "args": [
+          {
+            "param": "reason",
+            "hint": "hard-bounce, complaint, unsubscribe.marketing, unsubscribe.operational or dsar-erasure"
+          }
+        ],
+        "example": "SUPP complaint"
+      },
+      "columns": [
+        {
+          "key": "created_at",
+          "label": "Since",
+          "type": "date"
+        },
+        {
+          "key": "reason",
+          "label": "Reason"
+        },
+        {
+          "key": "scope",
+          "label": "Scope"
+        },
+        {
+          "key": "recipient_hash",
+          "label": "Recipient (hash)"
+        },
+        {
+          "key": "actor_id",
+          "label": "By"
+        }
+      ]
+    },
+    {
+      "id": "stakeholders",
+      "operation": "getRegistry",
+      "path": "/api/registries/stakeholders",
+      "rows": "/items",
+      "title": "Stakeholders",
+      "summary": "The stakeholder registry of the core repository.",
+      "empty": "Empty.",
+      "command": {
+        "verb": "STAKE",
+        "aliases": [
+          "stakeholders"
+        ],
+        "summary": "Stakeholders",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "id",
+          "label": "Id"
+        },
+        {
+          "key": "name",
+          "label": "Name"
+        },
+        {
+          "key": "priority_metrics",
+          "label": "Priority metrics"
+        },
+        {
+          "key": "not_in_stripe",
+          "label": "Not in Stripe"
+        }
+      ]
+    },
+    {
+      "id": "metrics",
+      "operation": "getRegistry",
+      "path": "/api/registries/metrics",
+      "rows": "/items",
+      "title": "Metrics",
+      "summary": "The metric registry.",
+      "empty": "Empty.",
+      "command": {
+        "verb": "METRIC",
+        "aliases": [
+          "metrics"
+        ],
+        "summary": "Metrics",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "id",
+          "label": "Id"
+        },
+        {
+          "key": "name",
+          "label": "Name"
+        },
+        {
+          "key": "unit",
+          "label": "Unit"
+        },
+        {
+          "key": "computation",
+          "label": "Computation"
+        },
+        {
+          "key": "inputs",
+          "label": "Inputs"
+        }
+      ]
+    },
+    {
+      "id": "report-types",
+      "operation": "getRegistry",
+      "path": "/api/registries/report-types",
+      "rows": "/items",
+      "title": "Report types",
+      "summary": "The report types and who reads them.",
+      "empty": "Empty.",
+      "command": {
+        "verb": "REPORT",
+        "aliases": [
+          "reports"
+        ],
+        "summary": "Report types",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "id",
+          "label": "Id"
+        },
+        {
+          "key": "name",
+          "label": "Name"
+        },
+        {
+          "key": "cadences",
+          "label": "Cadences"
+        },
+        {
+          "key": "stakeholders",
+          "label": "Readers"
+        }
+      ]
+    },
+    {
+      "id": "findings",
+      "operation": "getRegistry",
+      "path": "/api/registries/findings",
+      "rows": "/items",
+      "title": "Findings rules",
+      "summary": "Each rule with the metrics that are its evidence.",
+      "empty": "Empty.",
+      "command": {
+        "verb": "FIND",
+        "aliases": [
+          "findings",
+          "rules"
+        ],
+        "summary": "Findings rules and their evidence",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "id",
+          "label": "Rule"
+        },
+        {
+          "key": "severity",
+          "label": "Severity"
+        },
+        {
+          "key": "metric",
+          "label": "Metric"
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence"
+        },
+        {
+          "key": "stakeholders",
+          "label": "Readers"
+        }
+      ]
+    },
+    {
+      "id": "commitments",
+      "operation": "getRegistry",
+      "path": "/api/registries/commitments",
+      "rows": "/items",
+      "title": "Commitments",
+      "summary": "What the company promises, and whether it is implemented.",
+      "empty": "Empty.",
+      "command": {
+        "verb": "COMMIT",
+        "aliases": [
+          "commitments",
+          "promises"
+        ],
+        "summary": "Commitments and their status",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "id",
+          "label": "Id"
+        },
+        {
+          "key": "status",
+          "label": "Status"
+        },
+        {
+          "key": "statement",
+          "label": "Statement"
+        },
+        {
+          "key": "evidence",
+          "label": "Evidence"
+        }
+      ]
+    },
+    {
+      "id": "legal",
+      "operation": "getRegistry",
+      "path": "/api/registries/legal",
+      "rows": "/items",
+      "title": "Legal documents",
+      "summary": "Each document with what blocks its publication.",
+      "empty": "Empty.",
+      "command": {
+        "verb": "LEGAL",
+        "aliases": [
+          "documents",
+          "blockers"
+        ],
+        "summary": "Legal documents and their publish blockers",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "id",
+          "label": "Id"
+        },
+        {
+          "key": "title",
+          "label": "Title"
+        },
+        {
+          "key": "status",
+          "label": "Status"
+        },
+        {
+          "key": "effective_date",
+          "label": "Effective"
+        },
+        {
+          "key": "blockers",
+          "label": "Blocked by"
+        },
+        {
+          "key": "text_checked",
+          "label": "Text checked",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "id": "provisioning-config",
+      "operation": "getProvisioning",
+      "rows": "/config",
+      "title": "Configuration",
+      "summary": "Names the Worker reads, and whether each is set. Values are never shown.",
+      "empty": "Empty.",
+      "command": {
+        "verb": "PROV",
+        "aliases": [
+          "provisioning",
+          "config"
+        ],
+        "summary": "Configuration present or missing",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "name",
+          "label": "Name"
+        },
+        {
+          "key": "kind",
+          "label": "Kind"
+        },
+        {
+          "key": "required",
+          "label": "Required",
+          "type": "bool"
+        },
+        {
+          "key": "present",
+          "label": "Present",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "id": "provisioning-bindings",
+      "operation": "getProvisioning",
+      "rows": "/bindings",
+      "title": "Bindings",
+      "summary": "Databases, services and assets the Worker needs.",
+      "empty": "Empty.",
+      "command": {
+        "verb": "BIND",
+        "aliases": [
+          "bindings"
+        ],
+        "summary": "Bindings present or missing",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "name",
+          "label": "Binding"
+        },
+        {
+          "key": "kind",
+          "label": "Kind"
+        },
+        {
+          "key": "required",
+          "label": "Required",
+          "type": "bool"
+        },
+        {
+          "key": "present",
+          "label": "Present",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "id": "provisioning-planned",
+      "operation": "getProvisioning",
+      "rows": "/planned",
+      "title": "Planned resources",
+      "summary": "The names this Worker will have, against the naming registry.",
+      "empty": "Empty.",
+      "command": {
+        "verb": "PLAN",
+        "aliases": [
+          "planned",
+          "naming"
+        ],
+        "summary": "Planned resource names",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "kind",
+          "label": "Kind"
+        },
+        {
+          "key": "name",
+          "label": "Name"
+        },
+        {
+          "key": "registry_valid",
+          "label": "In the registry",
+          "type": "bool"
+        },
+        {
+          "key": "problem",
+          "label": "Why not"
+        }
+      ]
+    },
+    {
+      "id": "audit",
+      "operation": "listAudit",
+      "rows": "/items",
+      "title": "Audit log",
+      "summary": "Every admin action, newest first. Append-only; the actor is a hash of the Access email.",
+      "empty": "No action has been taken yet.",
+      "command": {
+        "verb": "AUDIT",
+        "aliases": [
+          "log",
+          "actions"
+        ],
+        "summary": "The audit log",
+        "args": [
+          {
+            "param": "action",
+            "hint": "an operation id, such as updateLead"
+          },
+          {
+            "param": "target_id",
+            "hint": "a lead, delivery or recipient"
+          }
+        ],
+        "example": "AUDIT updateLead"
+      },
+      "columns": [
+        {
+          "key": "seq",
+          "label": "No.",
+          "type": "number"
+        },
+        {
+          "key": "at",
+          "label": "When",
+          "type": "date"
+        },
+        {
+          "key": "action",
+          "label": "Action"
+        },
+        {
+          "key": "outcome",
+          "label": "Outcome"
+        },
+        {
+          "key": "target_kind",
+          "label": "Target"
+        },
+        {
+          "key": "target_id",
+          "label": "Id"
+        },
+        {
+          "key": "actor_hash",
+          "label": "By (hash)"
+        }
+      ]
+    },
+    {
+      "id": "users",
+      "operation": "listUsers",
+      "rows": "/items",
+      "title": "Users",
+      "summary": "Who can use the admin, as hashes. Access itself is the Cloudflare Access policy and the allowlist secret.",
+      "empty": "No user.",
+      "command": {
+        "verb": "USERS",
+        "aliases": [
+          "people",
+          "principals"
+        ],
+        "summary": "Users and their roles",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "id",
+          "label": "User (hash)"
+        },
+        {
+          "key": "role",
+          "label": "Role"
+        },
+        {
+          "key": "status",
+          "label": "Status"
+        },
+        {
+          "key": "source",
+          "label": "Source"
+        },
+        {
+          "key": "created_at",
+          "label": "Since",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "id": "roles",
+      "operation": "listRoles",
+      "rows": "/roles",
+      "title": "Roles (RBAC)",
+      "summary": "The permissions each role holds; every API operation names the permission it needs.",
+      "empty": "No role.",
+      "command": {
+        "verb": "ROLES",
+        "aliases": [
+          "rbac",
+          "permissions"
+        ],
+        "summary": "Roles and permissions",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "id",
+          "label": "Role"
+        },
+        {
+          "key": "title",
+          "label": "Title"
+        },
+        {
+          "key": "permissions",
+          "label": "Permissions"
+        },
+        {
+          "key": "assignable",
+          "label": "Assignable",
+          "type": "bool"
+        }
+      ]
+    },
+    {
+      "id": "invitations",
+      "operation": "listInvitations",
+      "rows": "/items",
+      "title": "Invitations",
+      "summary": "Recorded invitations (hashes). They grant nothing until the lead widens the Access policy. Create and revoke through the API.",
+      "empty": "No invitation has been recorded.",
+      "command": {
+        "verb": "INVITE",
+        "aliases": [
+          "invitations"
+        ],
+        "summary": "Invitations",
+        "args": [
+          {
+            "param": "state",
+            "hint": "pending, revoked, accepted or expired"
+          }
+        ],
+        "example": "INVITE pending"
+      },
+      "columns": [
+        {
+          "key": "created_at",
+          "label": "Created",
+          "type": "date"
+        },
+        {
+          "key": "invitee_hash",
+          "label": "Invitee (hash)"
+        },
+        {
+          "key": "role",
+          "label": "Role"
+        },
+        {
+          "key": "state",
+          "label": "State"
+        },
+        {
+          "key": "expires_at",
+          "label": "Expires",
+          "type": "date"
+        }
+      ]
+    },
+    {
+      "id": "finops",
+      "operation": "getFinOps",
+      "rows": "/sections",
+      "title": "FinOps",
+      "summary": "Revenue, plans and cloud cost",
+      "empty": "No section.",
+      "command": {
+        "verb": "FINOPS",
+        "aliases": [
+          "finance",
+          "cost"
+        ],
+        "summary": "Revenue, plans and cloud cost",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "title",
+          "label": "Section"
+        },
+        {
+          "key": "state",
+          "label": "State"
+        },
+        {
+          "key": "summary",
+          "label": "What it shows, or why nothing"
+        },
+        {
+          "key": "source",
+          "label": "Source"
+        }
+      ]
+    },
+    {
+      "id": "bizops",
+      "operation": "getBizOps",
+      "rows": "/sections",
+      "title": "BizOps",
+      "summary": "Leads, commitments and legal documents",
+      "empty": "No section.",
+      "command": {
+        "verb": "BIZOPS",
+        "aliases": [
+          "business"
+        ],
+        "summary": "Leads, commitments and legal documents",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "title",
+          "label": "Section"
+        },
+        {
+          "key": "state",
+          "label": "State"
+        },
+        {
+          "key": "summary",
+          "label": "What it shows, or why nothing"
+        },
+        {
+          "key": "source",
+          "label": "Source"
+        }
+      ]
+    },
+    {
+      "id": "platformops",
+      "operation": "getPlatformOps",
+      "rows": "/sections",
+      "title": "PlatformOps",
+      "summary": "Workers, deliveries and mail",
+      "empty": "No section.",
+      "command": {
+        "verb": "PLATFORM",
+        "aliases": [
+          "platformops"
+        ],
+        "summary": "Workers, deliveries and mail",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "title",
+          "label": "Section"
+        },
+        {
+          "key": "state",
+          "label": "State"
+        },
+        {
+          "key": "summary",
+          "label": "What it shows, or why nothing"
+        },
+        {
+          "key": "source",
+          "label": "Source"
+        }
+      ]
+    },
+    {
+      "id": "saasops",
+      "operation": "getSaaSOps",
+      "rows": "/sections",
+      "title": "SaaSOps",
+      "summary": "Report types, stakeholders, metrics and tenants",
+      "empty": "No section.",
+      "command": {
+        "verb": "SAASOPS",
+        "aliases": [
+          "saas"
+        ],
+        "summary": "Report types, stakeholders, metrics and tenants",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "title",
+          "label": "Section"
+        },
+        {
+          "key": "state",
+          "label": "State"
+        },
+        {
+          "key": "summary",
+          "label": "What it shows, or why nothing"
+        },
+        {
+          "key": "source",
+          "label": "Source"
+        }
+      ]
+    },
+    {
+      "id": "infraops",
+      "operation": "getInfraOps",
+      "rows": "/sections",
+      "title": "InfraOps",
+      "summary": "Bindings, planned resources, release and backups",
+      "empty": "No section.",
+      "command": {
+        "verb": "INFRA",
+        "aliases": [
+          "infraops",
+          "infrastructure"
+        ],
+        "summary": "Bindings, planned resources, release and backups",
+        "args": []
+      },
+      "columns": [
+        {
+          "key": "title",
+          "label": "Section"
+        },
+        {
+          "key": "state",
+          "label": "State"
+        },
+        {
+          "key": "summary",
+          "label": "What it shows, or why nothing"
+        },
+        {
+          "key": "source",
+          "label": "Source"
+        }
+      ]
+    }
+  ]
+}

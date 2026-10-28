@@ -1,0 +1,326 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/landing/blob/main/workers/admin/admin-config.schema.json",
+  "title": "saasreport.admin-config.v1",
+  "description": "The admin Worker's configuration by NAME: which secrets, variables and bindings it reads, the limits it applies and the Workers it health-checks. No value is written here: the team domain, the Access application's AUD tag and the email allowlist are Worker secrets the lead sets; a missing or invalid one refuses every request (503, no detail).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "component",
+    "secrets",
+    "bindings",
+    "github",
+    "access",
+    "limits",
+    "targets",
+    "roles",
+    "invitations"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schema": {
+      "const": "saasreport.admin-config.v1"
+    },
+    "component": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "The component word in resource names (saasreport-<component>-<env>) and the host sub (<sub>.<domain>). Pending in the naming registry until SaasReport/core claude/naming-admin merges."
+    },
+    "secrets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "teamDomain",
+        "aud",
+        "allowlist",
+        "githubRead"
+      ],
+      "properties": {
+        "teamDomain": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "Name of the secret holding the Access team domain (<team>.cloudflareaccess.com)."
+        },
+        "aud": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "Name of the secret holding the Access application's AUD tag."
+        },
+        "allowlist": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "Name of the secret holding the comma-separated email allowlist."
+        },
+        "githubRead": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "Name of the OPTIONAL read-only secret used to ask GitHub for main's head; absent means main's head is reported as not available."
+        }
+      }
+    },
+    "buildCommit": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9_]*$",
+      "description": "Name of the variable that carries the deployed commit (kit.build.v1)."
+    },
+    "bindings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "audit",
+        "engineDb",
+        "comms",
+        "assets"
+      ],
+      "properties": {
+        "audit": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "The admin's own D1 (audit log, lead state, idempotency)."
+        },
+        "engineDb": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "The comms engine's D1 (comms_form_deliveries, comms_dispatch, comms_suppression, comms_inbound, leads)."
+        },
+        "comms": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "The service binding to the comms engine."
+        },
+        "assets": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "The static assets (the generated interface)."
+        }
+      }
+    },
+    "github": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "host"
+      ],
+      "properties": {
+        "host": {
+          "type": "string",
+          "pattern": "^[a-z0-9.-]+$",
+          "description": "The host asked for main's head (only with the read secret)."
+        }
+      }
+    },
+    "tables": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "leads": {
+          "type": "string",
+          "pattern": "^[a-z_]+$",
+          "description": "The table of stored leads in the engine D1 (the kit's leads shape, packages/cloudflare/migrations/0005_leads.sql)."
+        },
+        "inbound": {
+          "type": "string",
+          "pattern": "^[a-z_]+$",
+          "description": "The inbound handler's table (comms_inbound)."
+        }
+      }
+    },
+    "access": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "jwksTtlSeconds",
+        "skewSeconds",
+        "refetchMinIntervalSeconds",
+        "teamDomainPattern",
+        "header"
+      ],
+      "properties": {
+        "header": {
+          "type": "string",
+          "description": "The request header that carries the Access token."
+        },
+        "jwksTtlSeconds": {
+          "type": "integer",
+          "minimum": 30,
+          "maximum": 3600
+        },
+        "skewSeconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 300
+        },
+        "refetchMinIntervalSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 600,
+          "description": "A key id the cache does not know triggers ONE refetch, and not more often than this."
+        },
+        "teamDomainPattern": {
+          "type": "string",
+          "description": "A team domain that does not match is a configuration failure; the Worker never fetches keys from another host."
+        }
+      }
+    },
+    "limits": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "bodyMaxBytes",
+        "pageMax",
+        "pageDefault",
+        "exportMaxRows",
+        "leadScanWindow",
+        "fetchTimeoutMs",
+        "noteMax"
+      ],
+      "properties": {
+        "bodyMaxBytes": {
+          "type": "integer",
+          "minimum": 256,
+          "maximum": 65536
+        },
+        "pageMax": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 200
+        },
+        "pageDefault": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "exportMaxRows": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20000
+        },
+        "leadScanWindow": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000,
+          "description": "Rows of the leads table examined per page when the status filter is applied."
+        },
+        "fetchTimeoutMs": {
+          "type": "integer",
+          "minimum": 500,
+          "maximum": 10000
+        },
+        "noteMax": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 4000
+        }
+      }
+    },
+    "targets": {
+      "type": "array",
+      "minItems": 1,
+      "description": "The Workers the overview asks for GET /api/build: through a service binding, or at the registry hostname of a sub.",
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "via",
+              "binding"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              "via": {
+                "const": "binding"
+              },
+              "binding": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]*$"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "via",
+              "sub"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              "via": {
+                "const": "url"
+              },
+              "sub": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "roles": {
+      "type": "array",
+      "minItems": 1,
+      "description": "RBAC: the roles and the permissions each holds. Every operation of the contract names one permission (x-permission). The owner role is held only through the Access allowlist.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "title",
+          "permissions",
+          "assignable"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z-]*$"
+          },
+          "title": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "read",
+                "export",
+                "operate",
+                "admin"
+              ]
+            },
+            "uniqueItems": true
+          },
+          "assignable": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "invitations": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "defaultDays"
+      ],
+      "properties": {
+        "defaultDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
+        }
+      }
+    }
+  }
+}

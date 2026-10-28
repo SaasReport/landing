@@ -1,0 +1,74 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sdk-manifest.schema.json",
+  "generated_by": "kit sdk generate",
+  "target": "saasreport-admin",
+  "generator": {
+    "forge": {
+      "package": "@saasreport/forge",
+      "version": "0.2.0",
+      "license": "Apache-2.0",
+      "origin": {
+        "repository": "cloudflare/forge",
+        "commit": "86cb1ef3047abc7441d96c894e8cd35e826fa8e5"
+      },
+      "targets": [
+        "javascript",
+        "python"
+      ]
+    },
+    "transformer": {
+      "package": "@saasreport/sdk",
+      "version": "0.2.0"
+    }
+  },
+  "contract": {
+    "path": "contracts/admin.openapi.json",
+    "sha256": "dc2b6c3317651d042a8ca2ca2a083a098369e212bc7dc53e476e0f9b1fd72210",
+    "openapi": "3.1.0",
+    "title": "SaasReport admin API",
+    "version": "1.0.0"
+  },
+  "operations": 31,
+  "files": [
+    {
+      "path": "cli.mjs",
+      "sha256": "a9bcfca32ac7542d98d8aa6d1e066545de5ed3edbd6ace5b011d1e0fecac5516",
+      "bytes": 5598
+    },
+    {
+      "path": "index.d.ts",
+      "sha256": "f1f2abb90fc2c9cd05a6e91359240797ff9a52c07232d23acb1bb153aab45709",
+      "bytes": 28691
+    },
+    {
+      "path": "index.mjs",
+      "sha256": "6a1b4b92dd448ca82ab5e3f4a96e6d6496c6cd6b7e36d3e9e14899332f079604",
+      "bytes": 22428
+    },
+    {
+      "path": "package.json",
+      "sha256": "31c825a44786f136ab3b725cae445d3c1c89ee5dc6f07aad7a1b57ba12405a8b",
+      "bytes": 460
+    },
+    {
+      "path": "python/pyproject.toml",
+      "sha256": "fc2b40fa135e97ddd1e6f261980260b7e3a2128cbb7d6420da8b3c9ce45bb73e",
+      "bytes": 575
+    },
+    {
+      "path": "python/saasreport_admin_sdk/__init__.py",
+      "sha256": "61c4ec0b01da4ac71e1bf133d52f5096739fe53e54b039d0a8d22700ef870a7e",
+      "bytes": 58277
+    },
+    {
+      "path": "python/saasreport_admin_sdk/py.typed",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "bytes": 0
+    },
+    {
+      "path": "README.md",
+      "sha256": "304821c5561baacd625e1e4a6f328b68848b470e660716825032251ea230277d",
+      "bytes": 5762
+    }
+  ]
+}

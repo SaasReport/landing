@@ -1,1 +1,19 @@
-{ "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/canon-allow.schema.json", "entries": [] }
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/canon-allow.schema.json",
+  "entries": [
+    {
+      "file": "workers/admin/wrangler.toml",
+      "category": "not-deployed",
+      "match": "saasreport-admin-production",
+      "context": "name = \"saasreport-admin-production\"",
+      "reason": "Reviewed pending state: the deploy wiring (release.json, resilience.json with its monitor, the production workflow) is the lead's and lands with the repository's first deployed Worker; this Worker is not deployed from here until then (docs/ADMIN.md)."
+    },
+    {
+      "file": "workers/admin/src/handlers/suppressions.js",
+      "category": "finding:form-bypasses-comms-submit",
+      "match": "\"https://comms/v1/comms/suppress\"",
+      "context": "v1/comms/suppress",
+      "reason": "Not a form: the engine's own POST /v1/comms/suppress, the only way to add a suppression (it hashes the address and writes the engine's audit chain). The kit has no client for it; a suppress() helper in @saasreport/comms replaces this call (proposed kit change, docs/ADMIN.md)."
+    }
+  ]
+}

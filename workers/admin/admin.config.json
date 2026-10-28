@@ -1,0 +1,87 @@
+{
+  "$schema": "./admin-config.schema.json",
+  "schema": "saasreport.admin-config.v1",
+  "component": "admin",
+  "secrets": {
+    "teamDomain": "ACCESS_TEAM_DOMAIN",
+    "aud": "ACCESS_AUD",
+    "allowlist": "ADMIN_ALLOWED_EMAILS",
+    "githubRead": "GITHUB_READ_TOKEN"
+  },
+  "buildCommit": "BUILD_COMMIT",
+  "bindings": {
+    "audit": "DB",
+    "engineDb": "ENGINE_DB",
+    "comms": "COMMS",
+    "assets": "ASSETS"
+  },
+  "github": {
+    "host": "api.github.com"
+  },
+  "tables": {
+    "leads": "leads",
+    "inbound": "comms_inbound"
+  },
+  "access": {
+    "header": "Cf-Access-Jwt-Assertion",
+    "jwksTtlSeconds": 300,
+    "skewSeconds": 60,
+    "refetchMinIntervalSeconds": 10,
+    "teamDomainPattern": "^[a-z0-9][a-z0-9-]{0,62}\\.cloudflareaccess\\.com$"
+  },
+  "limits": {
+    "bodyMaxBytes": 8192,
+    "pageMax": 100,
+    "pageDefault": 25,
+    "exportMaxRows": 5000,
+    "leadScanWindow": 400,
+    "fetchTimeoutMs": 3000,
+    "noteMax": 1000
+  },
+  "targets": [
+    {
+      "id": "comms-engine",
+      "via": "binding",
+      "binding": "COMMS"
+    },
+    {
+      "id": "api",
+      "via": "url",
+      "sub": "api"
+    }
+  ],
+  "roles": [
+    {
+      "id": "owner",
+      "title": "Owner",
+      "permissions": [
+        "read",
+        "export",
+        "operate",
+        "admin"
+      ],
+      "assignable": false
+    },
+    {
+      "id": "operator",
+      "title": "Operator",
+      "permissions": [
+        "read",
+        "export",
+        "operate"
+      ],
+      "assignable": true
+    },
+    {
+      "id": "viewer",
+      "title": "Viewer",
+      "permissions": [
+        "read"
+      ],
+      "assignable": true
+    }
+  ],
+  "invitations": {
+    "defaultDays": 7
+  }
+}
