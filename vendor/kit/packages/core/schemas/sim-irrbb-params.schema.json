@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-irrbb-params.schema.json",
+  "title": "kit.sim-irrbb-params.v1",
+  "description": "The IRRBB standard as data for @saasreport/sim: currency-specific shock sizes (SRP31.90 Table 2), the 19 time buckets (SRP31.96 Table 3), the shaping decay and rotation coefficients (SRP31.91, 31.92), the NII scenarios and the outlier threshold (SRP31.82). Editable per jurisdiction profile without code changes.",
+  "type": "object",
+  "required": ["$schema", "schema", "id", "version", "standard", "profile", "shapingDecayYears", "rotation", "buckets", "shocksBp", "nii", "outlier", "floor"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "schema": { "const": "kit.sim-irrbb-params.v1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9.-]{1,63}$" },
+    "version": { "type": "string", "format": "date" },
+    "profile": { "type": "string", "minLength": 1 },
+    "standard": {
+      "type": "object", "required": ["body", "title", "url", "versionPublished"], "additionalProperties": false,
+      "properties": { "body": { "type": "string" }, "title": { "type": "string" }, "url": { "type": "string", "format": "uri" }, "versionPublished": { "type": "string", "format": "date" } }
+    },
+    "shapingDecayYears": { "type": "object", "required": ["value", "ref"], "additionalProperties": false, "properties": { "value": { "type": "number", "exclusiveMinimum": 0 }, "ref": { "type": "string", "minLength": 1 } } },
+    "rotation": {
+      "type": "object", "required": ["steepener", "flattener", "ref"], "additionalProperties": false,
+      "properties": {
+        "steepener": { "$ref": "#/$defs/coefficients" },
+        "flattener": { "$ref": "#/$defs/coefficients" },
+        "ref": { "type": "string", "minLength": 1 }
+      }
+    },
+    "buckets": {
+      "type": "object", "required": ["ref", "items"], "additionalProperties": false,
+      "properties": {
+        "ref": { "type": "string" },
+        "items": {
+          "type": "array", "minItems": 2,
+          "items": {
+            "type": "object", "required": ["id", "upperYears", "midpointYears"], "additionalProperties": false,
+            "properties": { "id": { "type": "string", "minLength": 1 }, "upperYears": { "type": ["number", "null"], "exclusiveMinimum": 0 }, "midpointYears": { "type": "number", "exclusiveMinimum": 0 } }
+          }
+        }
+      }
+    },
+    "shocksBp": {
+      "type": "object", "required": ["ref", "currencies"], "additionalProperties": false,
+      "properties": {
+        "ref": { "type": "string" },
+        "currencies": {
+          "type": "object", "minProperties": 1, "propertyNames": { "pattern": "^[A-Z]{3}$" },
+          "additionalProperties": {
+            "type": "object", "required": ["parallel", "short", "long"], "additionalProperties": false,
+            "properties": { "parallel": { "type": "integer", "minimum": 0, "maximum": 2000 }, "short": { "type": "integer", "minimum": 0, "maximum": 2000 }, "long": { "type": "integer", "minimum": 0, "maximum": 2000 } }
+          }
+        }
+      }
+    },
+    "nii": {
+      "type": "object", "required": ["horizonYears", "scenarios", "ref"], "additionalProperties": false,
+      "properties": { "horizonYears": { "type": "number", "exclusiveMinimum": 0, "maximum": 5 }, "scenarios": { "type": "array", "minItems": 1, "items": { "enum": ["parallel-up", "parallel-down"] } }, "ref": { "type": "string" } }
+    },
+    "outlier": { "type": "object", "required": ["tier1ShareBp", "ref"], "additionalProperties": false, "properties": { "tier1ShareBp": { "type": "integer", "minimum": 1, "maximum": 10000 }, "ref": { "type": "string" } } },
+    "floor": { "type": "object", "required": ["ref"], "additionalProperties": false, "properties": { "ref": { "type": "string" } } }
+  },
+  "$defs": {
+    "coefficients": { "type": "object", "required": ["shortCoefficient", "longCoefficient"], "additionalProperties": false, "properties": { "shortCoefficient": { "type": "number" }, "longCoefficient": { "type": "number" } } }
+  }
+}

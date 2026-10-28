@@ -1,0 +1,136 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/podcast-provenance.schema.json",
+  "title": "kit.podcast-provenance.v1",
+  "description": "The record every podcast episode row carries (podcast_episodes.provenance_json): proof it came from the pipeline. The cron writes it when it queues the episode (origin, trigger, the hashes of the spec and of the config that voiced it); the workflow adds the render facts when it publishes (provider, model, pacing, measured duration and longest pause). A row without it cannot be inserted (database trigger); the monitor fails on a published episode whose origin is not accepted.",
+  "type": "object",
+  "required": [
+    "v",
+    "origin",
+    "trigger",
+    "series",
+    "ref",
+    "spec_sha256",
+    "created_at"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "origin": {
+      "enum": [
+        "cron",
+        "cron-retry",
+        "catchup",
+        "admin",
+        "legacy"
+      ],
+      "description": "cron: queued by the scheduled run; cron-retry: re-queued by the scheduled run after a failed render; catchup: made by the scheduled run for a past day (inside the project's catch-up window) that had no episode, never by a person; admin: made through an admin route (not accepted by a project whose podcast.config.json sets provenance.origins); legacy: predates this record (set once, by the migration)."
+    },
+    "trigger": {
+      "enum": [
+        "scheduled",
+        "admin-api",
+        "migration"
+      ]
+    },
+    "scheduled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The cron event's scheduled time."
+    },
+    "series": {
+      "type": "string"
+    },
+    "ref": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "spec_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "config_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "engine": {
+      "type": "string"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "note": {
+      "type": "string"
+    },
+    "render": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "provider": {
+          "type": "string"
+        },
+        "model": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "voices": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "pacing": {
+          "type": "object"
+        },
+        "chunks": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "duration_ms": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "longest_pause_ms": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "rendered_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "missed_date": {
+      "type": "string",
+      "format": "date",
+      "description": "catchup only: the day the episode was missed (the day it belongs to). Any other origin carrying it is refused (schema, JS check and the generated triggers)."
+    }
+  },
+  "x-trigger-by-origin": {
+    "cron": "scheduled",
+    "cron-retry": "scheduled",
+    "catchup": "scheduled",
+    "admin": "admin-api",
+    "legacy": "migration"
+  },
+  "x-required-by-origin": {
+    "catchup": [
+      "missed_date"
+    ]
+  },
+  "x-allowed-only-by-origin": {
+    "missed_date": [
+      "catchup"
+    ]
+  }
+}

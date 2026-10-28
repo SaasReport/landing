@@ -1,0 +1,277 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/capability-manifest.schema.json",
+  "title": "kit.capability-manifest.v1",
+  "description": "Canonical Capability-as-Code, Workspace-as-Code, Platform-as-Code and Capability-as-a-Service manifest. A provisionable capability always has API/Forge SDK/Widget parity, a negative failure test and sandbox-to-production promotion evidence; media capabilities additionally require feed and byte-range smoke.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "version",
+    "capabilities"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "const": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/capability-manifest.schema.json"
+    },
+    "version": {
+      "const": 1
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/capability"
+      }
+    }
+  },
+  "$defs": {
+    "path": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*\\.\\.)(?!.*://)[A-Za-z0-9_./-]+$",
+      "minLength": 3
+    },
+    "capability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "kind",
+        "as_code",
+        "as_service",
+        "api",
+        "sdk",
+        "widget",
+        "failures",
+        "promotion"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9.-]{3,100}$"
+        },
+        "kind": {
+          "enum": [
+            "workspace",
+            "platform",
+            "connector",
+            "plugin",
+            "service",
+            "data",
+            "media",
+            "agentic",
+            "workflow"
+          ]
+        },
+        "as_code": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "definition",
+            "schema"
+          ],
+          "properties": {
+            "definition": {
+              "$ref": "#/$defs/path"
+            },
+            "schema": {
+              "$ref": "#/$defs/path"
+            }
+          }
+        },
+        "as_service": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "binding",
+            "environment"
+          ],
+          "properties": {
+            "binding": {
+              "type": "string",
+              "minLength": 2
+            },
+            "environment": {
+              "enum": [
+                "sandbox",
+                "production",
+                "both"
+              ]
+            }
+          }
+        },
+        "api": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "contract",
+            "path",
+            "method",
+            "operationId"
+          ],
+          "properties": {
+            "contract": {
+              "$ref": "#/$defs/path"
+            },
+            "path": {
+              "type": "string",
+              "pattern": "^/api/"
+            },
+            "method": {
+              "enum": [
+                "get",
+                "post",
+                "patch",
+                "put",
+                "delete"
+              ]
+            },
+            "operationId": {
+              "type": "string",
+              "minLength": 2
+            }
+          }
+        },
+        "sdk": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "generator",
+            "module",
+            "operationId"
+          ],
+          "properties": {
+            "generator": {
+              "const": "forge"
+            },
+            "module": {
+              "$ref": "#/$defs/path"
+            },
+            "operationId": {
+              "type": "string",
+              "minLength": 2
+            }
+          }
+        },
+        "widget": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "module",
+            "operationId",
+            "usesGeneratedSdk"
+          ],
+          "properties": {
+            "module": {
+              "$ref": "#/$defs/path"
+            },
+            "operationId": {
+              "type": "string",
+              "minLength": 2
+            },
+            "usesGeneratedSdk": {
+              "const": true
+            }
+          }
+        },
+        "failures": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "negativeTests",
+            "recovery"
+          ],
+          "properties": {
+            "negativeTests": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "$ref": "#/$defs/path"
+              }
+            },
+            "recovery": {
+              "enum": [
+                "idempotent-retry",
+                "fail-closed",
+                "durable-checkpoint"
+              ]
+            }
+          }
+        },
+        "promotion": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sandboxFirst",
+            "contractHash",
+            "smokeProof",
+            "independentReview",
+            "productionGate"
+          ],
+          "properties": {
+            "sandboxFirst": {
+              "const": true
+            },
+            "contractHash": {
+              "const": true
+            },
+            "smokeProof": {
+              "const": true
+            },
+            "independentReview": {
+              "const": true
+            },
+            "productionGate": {
+              "const": true
+            }
+          }
+        },
+        "media": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "feed",
+            "rangeRequests",
+            "byteSmoke"
+          ],
+          "properties": {
+            "feed": {
+              "type": "string",
+              "pattern": "^/"
+            },
+            "rangeRequests": {
+              "const": true
+            },
+            "byteSmoke": {
+              "const": true
+            }
+          }
+        },
+        "federation": {
+          "enum": [
+            "local",
+            "federated",
+            "cross-tenant-policy-gated"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "media"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "media"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

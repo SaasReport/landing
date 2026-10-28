@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="{{locale.lang}}" dir="{{locale.dir}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>{{c.meta.title}}</title>
+<meta name="description" content="{{c.meta.description|attr}}">
+<meta name="theme-color" content="{{colorHex.accent}}">
+<link rel="canonical" href="{{page.url}}"><meta name="robots" content="index, follow, max-image-preview:large">{{page.alternates}}
+<meta property="og:type" content="website"><meta property="og:locale" content="{{locale.og}}">{{page.ogAlternates}}<meta property="og:site_name" content="{{name|attr}}">
+<meta property="og:title" content="{{c.meta.ogTitle|attr}}"><meta property="og:description" content="{{c.meta.ogDescription|attr}}">
+<meta property="og:url" content="{{page.url}}"><meta property="og:image" content="{{page.ogImage}}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{{c.meta.ogImageAlt|attr}}">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{{c.meta.ogTitle|attr}}"><meta name="twitter:description" content="{{c.meta.ogDescription|attr}}"><meta name="twitter:image" content="{{page.ogImage}}">
+{{page.ld}}
+{{chrome.icons}}
+{{chrome.preload}}
+<link rel="stylesheet" href="{{a.styles.css}}">
+<link rel="stylesheet" href="{{a.notify.css}}">
+<link rel="stylesheet" href="{{a.terminal.css}}">
+<link rel="stylesheet" href="{{a.lab.css}}">
+</head>
+<body class="tpage lab-page">
+<a class="skip" href="#lab">{{c.skip}}</a>
+{{chrome.bar}}
+<main>
+  <section class="hero-t wrap">
+    <p class="eyebrow">{{c.hero.eyebrow}}</p>
+    <h1>{{c.hero.title}}</h1>
+    <p>{{c.hero.lead}}</p>
+    <p class="demo-banner" role="note"><b>{{c.hero.notice.label}}</b><span>{{c.hero.notice.text}}</span></p>
+  </section>
+
+  <section class="lab" id="lab" data-lab aria-label="{{c.label|attr}}">
+    <div class="lab-wrap">
+      <noscript><p class="lab-noscript">{{c.noscript}}</p></noscript>
+
+      <div class="lab-bar">
+        <div class="lab-bar__scen" role="group" aria-labelledby="lab-scen-label">
+          <span class="lab-bar__label" id="lab-scen-label">{{c.toolbar.scenario}}</span>
+          <div class="lab-scen" data-lab-scen></div>
+          <p class="lab-bar__hint" data-lab-scen-hint></p>
+        </div>
+        <div class="lab-bar__lat">
+          <label for="lab-lat" class="lab-bar__label">{{c.toolbar.latency}}</label>
+          <input type="range" id="lab-lat" min="50" max="3000" step="50" value="300" aria-describedby="lab-lat-out">
+          <output id="lab-lat-out" for="lab-lat" data-lab-lat-out>{{c.toolbar.latencyValue}}</output>
+        </div>
+        <div class="lab-bar__act">
+          <button type="button" class="btn btn--ghost btn--sm" data-lab-export>{{c.toolbar.export}}</button>
+          <button type="button" class="btn btn--ghost btn--sm" data-lab-curl>{{c.toolbar.curl}}</button>
+          <button type="button" class="btn btn--ghost btn--sm" data-lab-reset>{{c.toolbar.reset}}</button>
+          <a class="lab-prog" href="#missions"><span>{{c.missions.title}}</span> <b data-lab-progress>{{lab.progress}}</b><i data-lab-progressbar aria-hidden="true"></i></a>
+        </div>
+      </div>
+
+      <div class="lab-grid">
+        <nav class="lab-side" aria-label="{{c.side.label|attr}}">
+          <label class="lab-side__sel"><span>{{c.side.select}}</span>
+            <select id="lab-op"></select>
+          </label>
+          <div class="lab-side__list" data-lab-side></div>
+        </nav>
+
+        <section class="lab-panel lab-req" aria-labelledby="lab-req-h">
+          <header class="lab-panel__h">
+            <h2 id="lab-req-h">{{c.request.title}}</h2>
+            <span class="lab-kind" data-lab-kind></span>
+          </header>
+          <div class="lab-line" dir="ltr"><span class="lab-m" data-lab-method>GET</span><code class="lab-path" data-lab-path></code></div>
+          <p class="lab-req__t"><b data-lab-title></b> <span data-lab-desc></span></p>
+
+          <label for="lab-body" class="lab-lbl" data-lab-body-label>{{c.request.body}}</label>
+          <textarea id="lab-body" class="lab-body mono" dir="ltr" rows="9" spellcheck="false" autocapitalize="off" autocomplete="off" aria-describedby="lab-body-err lab-body-help"></textarea>
+          <p class="lab-err" id="lab-body-err" role="alert" data-lab-body-err hidden></p>
+          <p class="lab-help" id="lab-body-help">{{c.request.help}}</p>
+
+          <div class="lab-idem" data-lab-idem hidden>
+            <label for="lab-key" class="lab-lbl">{{c.request.key}}</label>
+            <div class="lab-idem__row">
+              <input id="lab-key" class="mono" dir="ltr" type="text" spellcheck="false" autocomplete="off" aria-describedby="lab-key-help">
+              <button type="button" class="btn btn--ghost btn--sm" data-lab-newkey>{{c.request.newKey}}</button>
+            </div>
+            <p class="lab-help" id="lab-key-help">{{c.request.keyHelp}}</p>
+          </div>
+
+          <div class="lab-actions">
+            <button type="button" class="btn btn--primary" data-lab-run><span>{{c.request.run}}</span></button>
+            <button type="button" class="btn btn--ghost btn--sm" data-lab-copy>{{c.request.copy}}</button>
+            <button type="button" class="btn btn--ghost btn--sm" data-lab-resetbody>{{c.request.resetBody}}</button>
+          </div>
+
+          <div class="lab-code">
+            <div class="tabs-t lab-tabs" role="tablist" aria-label="{{c.request.tabs|attr}}" data-lab-tabs></div>
+            <pre class="code-t lab-snippet" id="lab-snippet" role="tabpanel" tabindex="0" data-lab-snippet></pre>
+          </div>
+        </section>
+
+        <section class="lab-panel lab-res" aria-labelledby="lab-res-h">
+          <header class="lab-panel__h">
+            <h2 id="lab-res-h">{{c.response.title}}</h2>
+            <span class="lab-kind" data-lab-rkind hidden></span>
+          </header>
+          <div class="lab-res__meta" aria-live="polite" aria-atomic="true">
+            <span class="lab-status" data-lab-rstatus dir="ltr">—</span>
+            <span class="lab-time" data-lab-rtime></span>
+            <p class="lab-note" data-lab-rnote></p>
+          </div>
+          <p class="lab-empty" data-lab-rempty>{{c.response.empty}}</p>
+          <dl class="lab-heads" data-lab-rheaders hidden></dl>
+          <pre class="code-t lab-json" data-lab-rbody tabindex="0" aria-label="{{c.response.body|attr}}" hidden></pre>
+        </section>
+      </div>
+
+      <div class="lab-lower">
+        <section class="lab-panel lab-envp" aria-labelledby="lab-env-h">
+          <header class="lab-panel__h"><h2 id="lab-env-h">{{c.env.title}}</h2><span class="badge badge--demo">{{c.env.badge}}</span></header>
+          <div class="lab-stats" data-lab-envstats></div>
+          <ul class="lab-accs" data-lab-env aria-label="{{c.env.accounts|attr}}"></ul>
+        </section>
+
+        <section class="lab-panel lab-evp" aria-labelledby="lab-ev-h">
+          <header class="lab-panel__h"><h2 id="lab-ev-h">{{c.events.title}}</h2><span class="lab-count" data-lab-evcount>{{lab.zero}}</span></header>
+          <p class="lab-help">{{c.events.help}}</p>
+          <ol class="lab-evs" data-lab-events aria-live="polite" aria-relevant="additions"></ol>
+        </section>
+
+        <section class="lab-panel lab-misp" id="missions" aria-labelledby="lab-mis-h">
+          <header class="lab-panel__h"><h2 id="lab-mis-h">{{c.missions.title}}</h2><b class="lab-count" data-lab-progress>{{lab.progress}}</b></header>
+          <p class="lab-help">{{c.missions.help}}</p>
+          <ol class="lab-miss" data-lab-missions></ol>
+          <div class="lab-done" data-lab-done hidden>
+            <b>{{c.missions.done.title}}</b>
+            <p>{{c.missions.done.text}}</p>
+            <a class="btn btn--primary" href="{{c.missions.done.action.href|attr}}">{{c.missions.done.action.label}}</a>
+          </div>
+          <button type="button" class="lab-mreset" data-lab-mreset>{{c.missions.reset}}</button>
+        </section>
+      </div>
+    </div>
+  </section>
+</main>
+{{chrome.footer}}
+<script src="{{a.notify.js}}" defer></script>
+<script src="{{a.lab-data.js}}" defer></script>
+<script src="{{a.lab.js}}" defer></script>
+<script src="{{a.totop.js}}" defer></script>
+</body>
+</html>

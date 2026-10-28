@@ -1,0 +1,206 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/directory-v2.schema.json",
+  "title": "kit.directory.v2",
+  "description": "Role-only machine-readable directory. Category colour roles are semantic tokens; no brand-specific hex values are serialized. Opt-in via page.json.schema = kit.directory.v2; v1 remains for compatibility.",
+  "type": "object",
+  "required": [
+    "schema",
+    "url",
+    "corrections",
+    "count",
+    "taxonomy",
+    "entries"
+  ],
+  "properties": {
+    "schema": {
+      "const": "kit.directory.v2"
+    },
+    "url": {
+      "type": "string",
+      "format": "uri"
+    },
+    "corrections": {
+      "type": "string",
+      "format": "uri"
+    },
+    "updated": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+    },
+    "count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "taxonomy": {
+      "type": "object",
+      "required": [
+        "tiers",
+        "categories",
+        "tags",
+        "sectors"
+      ],
+      "properties": {
+        "tiers": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "key",
+              "order"
+            ],
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "order": {
+                "type": "integer",
+                "minimum": 1
+              }
+            }
+          }
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "key",
+              "tier",
+              "colorRole"
+            ],
+            "properties": {
+              "key": {
+                "type": "string"
+              },
+              "tier": {
+                "type": "string"
+              },
+              "colorRole": {
+                "enum": [
+                  "chart1",
+                  "chart2",
+                  "chart3",
+                  "chart4",
+                  "chart5",
+                  "chart6",
+                  "accent",
+                  "ok",
+                  "warn",
+                  "err"
+                ],
+                "description": "Semantic colour role resolved from the consumer's own stylesheet, never an RGB literal."
+              }
+            },
+            "not": {
+              "required": [
+                "color"
+              ]
+            }
+          }
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "key"
+            ],
+            "properties": {
+              "key": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "sectors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "slug",
+              "url"
+            ],
+            "properties": {
+              "slug": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "url",
+          "category",
+          "tier",
+          "tags",
+          "sectors",
+          "site",
+          "source"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "category": {
+            "type": "string"
+          },
+          "tier": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "sectors": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "site": {
+            "type": "string"
+          },
+          "source": {
+            "type": "object",
+            "required": [
+              "title",
+              "url",
+              "checked"
+            ],
+            "properties": {
+              "title": {
+                "type": "string"
+              },
+              "url": {
+                "type": "string"
+              },
+              "checked": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

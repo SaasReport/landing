@@ -1,0 +1,16 @@
+{
+  "description": "A normalised event signed with two keys during a rotation (2026-10 new, 2026-07 old). Secrets are test values, never real.",
+  "keys": {
+    "2026-10": "test-secret-new",
+    "2026-07": "test-secret-old"
+  },
+  "id": "evt_fixture0001",
+  "timestamp": 1790856000,
+  "now_ms": 1790856060000,
+  "body": "{\"schema\":\"kit.webhook-event.v1\",\"id\":\"evt_fixture0001\",\"type\":\"comms.dispatched\",\"occurred_at\":\"2026-10-01T12:00:00.000Z\",\"source\":\"https://example.org\",\"data\":{\"dispatch_id\":\"x:comms:email:1\",\"template_id\":\"x.contact.ack.en.v1\",\"status\":\"sent\"},\"upstream\":null,\"caused_by\":null}",
+  "headers": {
+    "webhook-id": "evt_fixture0001",
+    "webhook-timestamp": "1790856000",
+    "webhook-signature": "v1,2026-10,heJdBVChY2KN00rlKjxhP8SP9nqmCMhaYVx709Ifugo= v1,2026-07,SGmMj8hqY29LWUi/L58eO2EmOp04aNbfolrVELAp8KE="
+  }
+}

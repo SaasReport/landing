@@ -1,0 +1,118 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/upload-record.schema.json",
+  "title": "kit.upload-record.v1",
+  "description": "The Evidence record of one upload (@saasreport/uploads): its sha256, what it claimed and what its bytes are, the triage markers, the scanner that ran (name and version; \"none\" when no scanner is configured), the explicit verdict, the policy that decided and where the object is. There is deliberately no \"safe\" or \"clean\" value anywhere: a verdict says what the pipeline did with the file, never that the file is harmless.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "upload_id", "project", "form", "policy_id", "received_at", "decided_at", "size_bytes", "sha256", "declared", "sniffed", "stage", "verdict", "reason_code", "limits", "triage", "scan", "storage", "retention"],
+  "properties": {
+    "schema": { "const": "kit.upload-record.v1" },
+    "upload_id": { "type": "string", "pattern": "^upl_[0-9a-f]{32}$" },
+    "version": { "type": "integer", "minimum": 1, "description": "The record's version, assigned by the records sink. Every write is a compare-and-set on it, and a deleted tombstone is final." },
+    "last_ref_seq": { "type": "integer", "minimum": 0, "description": "The cursor of person decisions: the highest ledger seq this record has used. A decision is accepted only above it (a replay is never a lower or equal seq), so the record needs no list of every seq ever used." },
+    "project": { "type": "string", "pattern": "^[a-z][a-z0-9]*$", "description": "A key of the project registry." },
+    "form": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,39}$", "description": "The key of the form in uploads.config.json." },
+    "policy_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$", "description": "The UploadPolicy id that decided." },
+    "subject_ref": { "type": ["string", "null"], "maxLength": 200, "description": "The tenant, lead or reference the upload belongs to." },
+    "received_at": { "type": "string", "format": "date-time" },
+    "decided_at": { "type": "string", "format": "date-time" },
+    "size_bytes": { "type": "integer", "minimum": 0 },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "Of the stored bytes (for a PNG, JPEG, GIF or WebP, the bytes up to the container's own end: see trailing_stripped)." },
+    "trailing_stripped": {
+      "type": "object", "additionalProperties": false, "required": ["bytes", "original_size", "original_sha256"],
+      "description": "Present when bytes followed the end of a PNG (IEND), JPEG (EOI), GIF (trailer) or WebP (RIFF size). They were cut off before anything was stored or released and are not kept: only their length and the hash of the file as received are.",
+      "properties": {
+        "bytes": { "type": "integer", "minimum": 1, "description": "How many bytes were removed." },
+        "original_size": { "type": "integer", "minimum": 1 },
+        "original_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "The sha256 of the file as it was received." }
+      }
+    },
+    "declared": {
+      "type": "object", "additionalProperties": false, "required": ["content_type", "filename"],
+      "properties": {
+        "content_type": { "type": ["string", "null"], "maxLength": 200 },
+        "filename": { "type": ["string", "null"], "maxLength": 300 },
+        "filename_normalised": { "type": ["string", "null"], "maxLength": 120 },
+        "filename_full": { "type": ["string", "null"], "maxLength": 1024, "description": "The whole normalised filename (NFKC, no bidi or zero-width characters, no path, no stream suffix): what every rule reads and what a rescan re-evaluates. The display name is filename_normalised." }
+      }
+    },
+    "sniffed": {
+      "type": "object", "additionalProperties": false, "required": ["type", "family", "matches_declared"],
+      "properties": {
+        "type": { "type": "string", "maxLength": 100, "description": "From the file's own bytes; application/octet-stream when no signature matched." },
+        "family": { "enum": ["document", "image", "text", "archive", "executable", "script", "unknown"] },
+        "matches_declared": { "type": "boolean", "description": "False when the declared content type or the filename extension names another type than the bytes." },
+        "polyglot_suspect": { "type": "boolean" }
+      }
+    },
+    "stage": { "enum": ["pending", "quarantined", "held", "released", "blocked", "rejected", "deleted"], "description": "The lifecycle state (packages/uploads/lifecycle.json, kit.upload-lifecycle.v1). pending: intake in flight; quarantined: stored, the scan could not be completed; held: waiting for a person; released: copied to the released bucket; blocked: a block verdict; rejected: refused at the edge (nothing stored); deleted: removed, tombstone kept." },
+    "op": {
+      "type": "object", "additionalProperties": false, "required": ["action", "to", "actor", "started_at"],
+      "description": "An operation in flight: the intent written BEFORE any object changes and cleared by the commit. A record with an op is never served; the reconciler rolls an interrupted one back or forward.",
+      "properties": {
+        "action": { "enum": ["intake", "release", "rescan", "delete", "migrate"] },
+        "from": { "enum": [null, "pending", "quarantined", "held", "released", "blocked", "rejected"] },
+        "actor": { "enum": ["system", "human", "retention"], "description": "Who caused the transition (the table says which actors may)." },
+        "to": { "enum": ["quarantined", "held", "released", "blocked", "deleted"] },
+        "started_at": { "type": "string", "format": "date-time" },
+        "fence": { "type": "string", "maxLength": 80, "description": "A fencing token: written into the metadata of every object this operation writes, so a stale settle or a late effect only ever touches objects of its own operation." }
+      }
+    },
+    "verdict": { "enum": ["allow", "allow_with_limits", "needs_sandbox", "block", "scan_failed"], "description": "allow: nothing found and the scanner said allow. allow_with_limits: released with the serving limits listed. needs_sandbox: cannot be cleared here; opening it needs a sandbox. block. scan_failed: the scan could not be completed (a block, never a pass)." },
+    "reason_code": { "enum": ["none", "type_not_allowed", "type_mismatch", "too_large", "active_content_found", "archive_not_allowed", "archive_bomb", "polyglot_suspect", "malware_detected", "could_not_check", "scanner_not_configured", "needs_sandbox_review", "policy_hold"] },
+    "limits": { "type": "array", "uniqueItems": true, "items": { "enum": ["download_only", "no_inline_render", "reencode_before_inline", "open_only_in_sandbox"] }, "description": "The serving limits that come with allow_with_limits (and are kept on needs_sandbox when a form releases it for download)." },
+    "triage": {
+      "type": "object", "additionalProperties": false, "required": ["engine", "engine_version", "complete", "markers", "statement"],
+      "properties": {
+        "engine": { "type": "string", "maxLength": 60 },
+        "engine_version": { "type": "string", "maxLength": 30 },
+        "complete": { "type": "boolean", "description": "False when a limit or a parse error stopped the analysis: the verdict is then at best needs_sandbox." },
+        "markers": {
+          "type": "array", "maxItems": 100,
+          "items": { "type": "object", "additionalProperties": false, "required": ["name", "severity", "count"],
+            "properties": { "name": { "type": "string", "maxLength": 60 }, "severity": { "enum": ["block", "needs_sandbox", "info"] }, "count": { "type": "integer", "minimum": 1 }, "first_ref": { "type": ["string", "null"], "maxLength": 80 } } }
+        },
+        "statement": { "type": "string", "maxLength": 200, "description": "Fixed text: 'markers found' or 'no known active-content markers found; opening still needs a sandbox'." },
+        "incomplete_because": { "type": "array", "maxItems": 10, "items": { "type": "string", "maxLength": 120 }, "description": "Why the analysis is incomplete (a limit, a parse failure)." }
+      }
+    },
+    "scan": {
+      "type": "object", "additionalProperties": false, "required": ["status", "scanner", "scanner_version", "scanned_at"],
+      "properties": {
+        "status": { "enum": ["not_run", "no_detection", "detected", "error", "timeout"] },
+        "scanner": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]{0,59}$", "description": "none when no scanner is configured." },
+        "scanner_version": { "type": "string", "maxLength": 60 },
+        "signature_db_version": { "type": ["string", "null"], "maxLength": 80 },
+        "scanned_at": { "type": ["string", "null"], "format": "date-time" },
+        "third_party_consent_ref": { "type": ["string", "null"], "maxLength": 200, "description": "Required when the scanner sends the file to a third party." }
+      }
+    },
+    "storage": {
+      "type": "object", "additionalProperties": false, "required": ["bucket", "key", "public_read"],
+      "properties": {
+        "bucket": { "type": "string", "pattern": "^[a-z][a-z0-9]*-[a-z0-9-]+$" },
+        "key": { "type": "string", "maxLength": 200, "description": "Derived from the record: q/<form>/<sha256>/<upload id>. The original filename is metadata only, never part of a key." },
+        "public_read": { "const": false },
+        "released_bucket": { "type": ["string", "null"], "pattern": "^[a-z][a-z0-9]*-[a-z0-9-]+$" },
+        "released_key": { "type": ["string", "null"], "maxLength": 200 },
+        "stored": { "type": "boolean", "description": "False for a file refused at the edge: nothing was written." }
+      }
+    },
+    "retention": {
+      "type": "object", "additionalProperties": false, "required": ["retain_until"],
+      "properties": { "retain_until": { "type": "string", "format": "date-time" }, "hold": { "type": "boolean" }, "deleted_at": { "type": ["string", "null"], "format": "date-time" } }
+    },
+    "decisions": {
+      "type": "array", "maxItems": 20,
+      "description": "A person's decisions on this upload (references to ledger entries), newest last, at most the newest 20: the ledger is the full history, and system bookkeeping lives in the evidence log (kit.upload-evidence.v1), never here.",
+      "items": { "type": "object", "additionalProperties": false, "required": ["action", "by", "at"],
+        "properties": { "action": { "enum": ["release", "delete", "hold", "rescan", "migrate"] }, "by": { "type": "string", "minLength": 1, "maxLength": 120 }, "at": { "type": "string", "format": "date-time" }, "note": { "type": "string", "maxLength": 300 }, "ref": { "type": "object", "additionalProperties": false, "required": ["ledger", "seq", "entry_hash"], "description": "A person's decision is a REFERENCE to the entry of the approval ledger (kit.approval-ledger.v1, <project>:uploads) that holds the signature, the member and the note: nothing signed or free-text is copied into the record, so a tombstone carries no note. One ledger entry is used once.", "properties": { "ledger": { "type": "string", "maxLength": 120 }, "seq": { "type": "integer", "minimum": 1 }, "entry_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" } } } } }
+    },
+    "evidence_ref": { "type": ["string", "null"], "maxLength": 200, "description": "Pointer into the project's evidence chain." }
+  },
+  "allOf": [
+    { "if": { "properties": { "scan": { "properties": { "scanner": { "const": "none" } }, "required": ["scanner"] } }, "required": ["scan"] },
+      "then": { "properties": { "verdict": { "enum": ["needs_sandbox", "block", "scan_failed"] } }, "description": "With no scanner configured no file is ever allow or allow_with_limits." } }
+  ]
+}

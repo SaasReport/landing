@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/site/schema/taxonomy.schema.json",
+  "title": "kit.taxonomy.v1",
+  "description": "A site's information architecture as rules, never as page lists: the sections and groups every page belongs to (the vertical tree: home, section hub, group hub, page) and the facets pages are browsed by (the horizontal axes: audience, industry, product, capability, regulation, lifecycle stage, content type). The kit's page registry (src/registry.js buildRegistry) applies these rules to the project's pages; the menu, hubs, facet pages, breadcrumbs, related links, sitemap, llms.txt and search index are generated from the result. Labels here name generated hubs and facet values only; a link to an existing page always shows that page's own label.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["sections", "fallback", "facets"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "$comment": { "type": "string" },
+    "browse": { "type": "string", "pattern": "^/([a-z0-9-]+/)+$", "default": "/browse/", "description": "Where generated hubs and facet pages live." },
+    "titleStrip": { "type": "array", "items": { "type": "string" }, "description": "Regular expressions removed from page titles to get the page's label (the site name suffix)." },
+    "home": { "type": "object", "additionalProperties": false, "required": ["url", "label"], "properties": { "url": { "type": "string", "pattern": "^/" }, "label": { "type": "string", "minLength": 1 } } },
+    "sections": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/section" } },
+    "fallback": { "type": "object", "additionalProperties": false, "required": ["section", "group"], "properties": { "section": { "$ref": "#/$defs/id" }, "group": { "$ref": "#/$defs/id" } }, "description": "Where a page that no group rule matches is listed (so no page is ever an orphan)." },
+    "facets": { "type": "array", "items": { "$ref": "#/$defs/facet" } },
+    "contentType": { "$ref": "#/$defs/facet", "description": "The single-valued facet every page has one value of (guide, reference, comparison, …): the first value whose rule matches best." },
+    "synonyms": { "type": "array", "items": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 1 } }, "description": "Groups of words the search treats as one (the first is the canonical term)." },
+    "related": { "type": "object", "additionalProperties": false, "properties": { "max": { "type": "integer", "minimum": 0, "maximum": 12 } } },
+    "menu": { "type": "object", "additionalProperties": false, "properties": { "perGroup": { "type": "integer", "minimum": 0, "maximum": 12 }, "browse": { "type": "boolean" } } }
+  },
+  "$defs": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+    "match": {
+      "type": "object", "additionalProperties": false,
+      "description": "A page matches when any listed field matches. Strength, strongest first: sources and exact paths (4), path globs (3), families, parents, rails, surfaces and kinds (2), words in the title, heading or summary (1). A page goes to the group whose rule matches it most strongly; ties go to the first in order. within restricts a rule to an area; a rule with only within matches at 0.5.",
+      "properties": {
+        "sources": { "type": "array", "items": { "type": "string" }, "description": "Tags the project's page input carries (e.g. menu:<legacy group id>)." },
+        "paths": { "type": "array", "items": { "type": "string", "pattern": "^/" }, "description": "Exact paths or globs (* within a segment, ** across)." },
+        "families": { "type": "array", "items": { "type": "string" } },
+        "parents": { "type": "array", "items": { "type": "string" } },
+        "rails": { "type": "array", "items": { "type": "string" } },
+        "surfaces": { "type": "array", "items": { "type": "string" } },
+        "kinds": { "type": "array", "items": { "type": "string" } },
+        "words": { "type": "array", "items": { "type": "string", "minLength": 2 }, "description": "Whole words or phrases (case-insensitive) in the title, heading or summary." },
+        "within": { "type": "array", "items": { "type": "string", "pattern": "^/" }, "description": "Paths or globs a page must be under for the rule to apply at all. A rule with only within is the catch-all of that area: it matches more weakly (0.5) than any other rule." }
+      }
+    },
+    "group": {
+      "type": "object", "additionalProperties": false, "required": ["id", "label", "match"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "label": { "type": "string", "minLength": 1 }, "summary": { "type": "string" },
+        "hub": { "type": "string", "pattern": "^/", "description": "An existing page that is this group's hub; without it the hub is generated under browse." },
+        "weight": { "type": "number", "description": "Added to every page's weight in this group (ranking in hubs, the menu and search)." },
+        "match": { "$ref": "#/$defs/match" }
+      }
+    },
+    "section": {
+      "type": "object", "additionalProperties": false, "required": ["id", "label", "groups"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "label": { "type": "string", "minLength": 1 }, "summary": { "type": "string" },
+        "hub": { "type": "string", "pattern": "^/", "description": "An existing page that is this section's hub; without it the hub is generated under browse." },
+        "groups": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/group" } }
+      }
+    },
+    "facet": {
+      "type": "object", "additionalProperties": false, "required": ["id", "label", "values"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" }, "label": { "type": "string", "minLength": 1 }, "summary": { "type": "string" },
+        "values": { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "required": ["id", "label", "match"], "properties": {
+          "id": { "$ref": "#/$defs/id" }, "label": { "type": "string", "minLength": 1 }, "summary": { "type": "string" },
+          "synonyms": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+          "visual": { "type": "string", "description": "The widget archetype a page with this value is shown with when it has no widget of its own (content types only)." },
+          "match": { "$ref": "#/$defs/match" }
+        } } }
+      }
+    }
+  }
+}

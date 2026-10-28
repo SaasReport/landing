@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/upload-error.schema.json",
+  "title": "kit.upload-error.v1",
+  "description": "The JSON body a form or webhook intake answers with when it refuses a request body or a file (@saasreport/uploads, readFormRequest): a reason code and, for an upload, its reference. Never a signature name, scanner output or stack trace.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ok", "error"],
+  "properties": {
+    "ok": { "const": false },
+    "error": { "enum": [
+      "too_large", "length_required", "bad_content_length", "length_mismatch", "read_failed", "invalid_json", "bad_content_type",
+      "file_parts_not_accepted", "file_field_not_accepted", "file_required", "too_many_files", "invalid_multipart",
+      "type_not_allowed", "type_mismatch", "active_content_found", "archive_not_allowed", "archive_bomb", "polyglot_suspect",
+      "malware_detected", "could_not_check"
+    ] },
+    "field": { "type": "string", "maxLength": 80 },
+    "reference": { "type": "string", "pattern": "^upl_[0-9a-f]{32}$" }
+  }
+}

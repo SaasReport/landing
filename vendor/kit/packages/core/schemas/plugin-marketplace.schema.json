@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/plugin-marketplace.schema.json",
+  "title": "kit.plugin-marketplace.v1",
+  "description": "A project's .claude-plugin/marketplace.json: the marketplace name is the project's registry key (full prefix without the dash), the owner is the project, and every plugin points at ./plugins/<short prefix>.",
+  "type": "object",
+  "required": ["name", "owner", "plugins"],
+  "properties": {
+    "name": { "type": "string", "pattern": "^[a-z][a-z0-9]*$" },
+    "owner": { "type": "object", "required": ["name"], "properties": { "name": { "type": "string", "minLength": 1 }, "url": { "type": "string", "format": "uri" }, "email": { "type": "string", "format": "email" } } },
+    "description": { "type": "string" },
+    "plugins": {
+      "type": "array", "minItems": 1,
+      "items": { "type": "object", "required": ["name", "source"], "properties": {
+        "name": { "type": "string", "pattern": "^[a-z][a-z0-9]*$" },
+        "source": { "type": "string", "pattern": "^\\./plugins/[a-z][a-z0-9]*$" },
+        "description": { "type": "string", "minLength": 20 } } }
+    }
+  }
+}

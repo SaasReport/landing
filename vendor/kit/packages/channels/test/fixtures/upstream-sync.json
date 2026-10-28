@@ -1,0 +1,25 @@
+{
+  "description": "An upstream provider delivery (a calendar sync finished) as relayed, and what the project normalises it to.",
+  "provider": "example-calendar",
+  "eventType": "sync.completed",
+  "eventId": "up_42",
+  "verified": true,
+  "receivedAt": "2026-10-01T12:00:05.000Z",
+  "payload": {
+    "event": "sync.completed",
+    "account": "acct_7",
+    "changed": {
+      "added": 3,
+      "removed": 1
+    },
+    "raw_extra": "kept as is"
+  },
+  "normalised": {
+    "type": "calendar.sync_completed",
+    "data": {
+      "account": "acct_7",
+      "added": 3,
+      "removed": 1
+    }
+  }
+}

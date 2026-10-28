@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/diagram-externals.schema.json",
+  "title": "kit.diagram-externals.v1",
+  "description": "docs/diagrams/externals.json: the diagram ids of other repositories this repository's diagrams may refer to in `derives_from`, `supersedes` or `relates_to` (docs/DIAGRAMS.md, the lineage rule). A reference to an id that is neither in this repository nor declared here is dangling and `kit diagrams check` fails on it.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "externals"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "externals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "repo",
+          "ids"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "repo": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$",
+            "description": "owner/name of the repository that owns the ids."
+          },
+          "ids": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "$ref": "#/$defs/id"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^(saasreport|kit)\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    }
+  }
+}

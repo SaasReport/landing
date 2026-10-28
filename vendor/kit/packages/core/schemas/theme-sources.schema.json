@@ -1,0 +1,182 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/theme-sources.schema.json",
+  "title": "kit.theme-sources.v1",
+  "description": "Where each vendored diagram theme (packages/core/registry/themes/<key>.init) came from: the project key, the repository and path it was taken from, the upstream commit, and the git blob id (sha1 of \"blob <length>\\0<content>\", what `git hash-object` prints) of the vendored file and of each font file it loads. A test recomputes every blob id, so a hand edit of a vendored file fails. The file is written by `kit diagrams themes --sync`, never by hand (docs/DIAGRAMS.md, \"each organisation's own colours\").",
+  "type": "object",
+  "required": [
+    "$schema",
+    "themes"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "themes": {
+      "type": "array",
+      "minItems": 0,
+      "items": {
+        "type": "object",
+        "required": [
+          "project",
+          "via",
+          "blob",
+          "fonts"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "project": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9]*$",
+            "description": "Registry key of the project; its entry in projects.json names the vendored file in `theme`."
+          },
+          "via": {
+            "enum": [
+              "copy",
+              "derive",
+              "provisional"
+            ],
+            "description": "copy: the file is a byte copy of the upstream docs/diagrams/theme.init at `path`. derive: the upstream has no usable theme.init, so the file is the output of `kit diagrams derive` on the upstream brand tokens at `path`. provisional: the project has no brand kit yet, so the file is a stand-in written in the kit and no upstream exists; it names no repo, path or commit, carries a `note` that says what it waits for, and is replaced by a copy once the project publishes its theme.init."
+          },
+          "repo": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$",
+            "description": "owner/repo; one of the project's `github` repositories in projects.json (copy and derive)."
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The upstream file: its docs/diagrams/theme.init (copy) or its brand tokens module (derive)."
+          },
+          "commit": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$",
+            "description": "The upstream commit (origin/main of `repo`) the file was taken from."
+          },
+          "blob": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$",
+            "description": "Git blob id of the vendored file."
+          },
+          "fonts": {
+            "type": "array",
+            "description": "The font files the theme's `%% font:` lines load, vendored beside it so a diagram of this project renders anywhere.",
+            "items": {
+              "type": "object",
+              "required": [
+                "theme_path",
+                "file",
+                "blob"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "theme_path": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "The path in the theme's `%% font:` line (relative to the upstream repository)."
+                },
+                "file": {
+                  "type": "string",
+                  "pattern": "^fonts/[a-z][a-z0-9]*/[^/]+$",
+                  "description": "The vendored font, relative to packages/core/registry/themes/."
+                },
+                "blob": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                }
+              }
+            }
+          },
+          "source_blob": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$",
+            "description": "via derive: the git blob id of the source (the tokens file at path, at commit) the theme was derived from; blob is then the derived theme's own bytes"
+          },
+          "note": {
+            "type": "string",
+            "minLength": 10,
+            "description": "via provisional: why the theme is provisional and what it waits for (the owner's brand kit)."
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "via": {
+                  "const": "derive"
+                }
+              },
+              "required": [
+                "via"
+              ]
+            },
+            "then": {
+              "required": [
+                "source_blob"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "via": {
+                  "enum": [
+                    "copy",
+                    "derive"
+                  ]
+                }
+              },
+              "required": [
+                "via"
+              ]
+            },
+            "then": {
+              "required": [
+                "repo",
+                "path",
+                "commit"
+              ]
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "via": {
+                  "const": "provisional"
+                }
+              },
+              "required": [
+                "via"
+              ]
+            },
+            "then": {
+              "required": [
+                "note"
+              ],
+              "not": {
+                "anyOf": [
+                  {
+                    "required": [
+                      "repo"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "path"
+                    ]
+                  },
+                  {
+                    "required": [
+                      "commit"
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

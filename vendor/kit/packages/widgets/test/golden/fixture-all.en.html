@@ -1,0 +1,292 @@
+<div class="kw-page" dir="ltr" lang="en">
+<header class="kw-page__head"><h1>Examples</h1><div class="kw-filter" role="group" aria-label="Show widgets for"><button type="button" class="kw-chip" aria-pressed="true" data-kw-aud="">All</button><button type="button" class="kw-chip" aria-pressed="false" data-kw-aud="members">Members</button><button type="button" class="kw-chip" aria-pressed="false" data-kw-aud="staff">Staff</button></div><p class="kw-empty" data-kw-empty hidden>No widget for this audience yet.</p></header>
+<section class="kw-uc" id="uc-lending" aria-labelledby="uc-lending-t"><h2 id="uc-lending-t">Lending</h2>
+<article class="kw-sc" id="sc-borrow" data-audiences="members staff" aria-labelledby="sc-borrow-t">
+<h3 id="sc-borrow-t">Borrow a book</h3><p class="kw-sc__sum">From the desk to the reminder.</p>
+<p class="kw-sc__for">For: <span class="kw-chip">Members</span> <span class="kw-chip">Staff</span></p>
+<div class="kw-grid"><section class="kw kw--feed" id="w-borrow-feed-en" data-widget="feed" aria-labelledby="w-borrow-feed-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-borrow-feed-en-t">Feed</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<div class="kw__bar"><button type="button" class="kw-btn" data-kw-replay>Replay</button></div>
+<ol class="kw-feed" data-kw-items aria-live="polite"><li class="kw-feed__item" data-tone="info">
+<span class="kw-feed__icon" aria-hidden="true"></span>
+<div class="kw-feed__body"><p class="kw-feed__meta"><span><b>Member</b> <span aria-hidden="true">→</span> Lending desk</span><code dir="ltr">loan.requested</code></p>
+<p class="kw-feed__title">Asks for a book</p>
+
+
+
+</div></li><li class="kw-feed__item" data-tone="ok">
+<span class="kw-feed__icon" aria-hidden="true"></span>
+<div class="kw-feed__body"><p class="kw-feed__meta"><span><b>Lending desk</b> <span aria-hidden="true">→</span> Member</span><span><time datetime="2026-10-15">15 October 2026</time></span><span class="kw-decision" data-decision="allow">Allowed</span></p>
+<p class="kw-feed__title">Loan</p><p class="kw-feed__text">Due in 14 days</p>
+<p class="kw-chips" aria-label="Channels"><span class="kw-chip">Email</span><span class="kw-chip">App push</span></p>
+<ul class="kw-rules" aria-label="Rules"><li>Two renewals at most</li></ul>
+<div class="kw-acts"><button type="button" class="kw-btn" data-kw-act data-done="Done" data-result="Renewed" data-tone="ok">Renew</button><button type="button" class="kw-btn kw-btn--ghost" data-kw-act data-done="Done" data-result="Seal verified" data-tone="ok">Verify</button><p class="kw-result" data-kw-result hidden></p></div>
+</div></li></ol>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown with every widget of the scenario.</li><li><a href="/terminal/">/terminal/</a>: The terminal's notify view.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--chain" id="w-borrow-chain-en" data-widget="chain" aria-labelledby="w-borrow-chain-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-borrow-chain-en-t">Chain</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<div class="kw__bar"><button type="button" class="kw-btn" data-kw-walk>Walk the chain</button></div>
+<ol class="kw-chain" data-kw-items><li class="kw-chain__link" data-tone="info" data-kind="person">
+<div class="kw-chain__node" aria-hidden="true">1</div>
+<div class="kw-chain__card"><p class="kw-chain__who"><b>Member</b> <span aria-hidden="true">→</span> Lending desk</p>
+<p class="kw-chain__what">Asks for a book</p><div class="kw-chain__more" data-kw-more></div></div>
+<span class="kw-chain__rail" aria-hidden="true"></span></li><li class="kw-chain__link" data-tone="ok" data-kind="organisation">
+<div class="kw-chain__node" aria-hidden="true">2</div>
+<div class="kw-chain__card"><p class="kw-chain__who"><b>Lending desk</b> <span aria-hidden="true">→</span> Member<span class="kw-decision" data-decision="allow">Allowed</span></p>
+<p class="kw-chain__what">Loan</p><div class="kw-chain__more" data-kw-more><p class="kw-chain__out">Due in 14 days</p></div></div>
+</li></ol><div class="kw-expect"><h5>Expected outcome</h5><ul><li><b>Result</b> The member has the book.</li></ul></div>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown with every widget of the scenario.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--timeline" id="w-borrow-timeline-en" data-widget="timeline" aria-labelledby="w-borrow-timeline-en-t" data-reset-label="Start again" data-kw-runtime="static">
+<header class="kw__head"><h4 id="w-borrow-timeline-en-t">Timeline</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<p class="kw-asof">As of 1 October 2026</p>
+<ol class="kw-tl"><li class="kw-tl__ev" data-tone="ok" data-when="next">
+<time datetime="2026-10-15">15 October 2026</time><div><p class="kw-tl__title">Loan</p><p class="kw-tl__text">Due in 14 days</p><p class="kw-tl__who">Lending desk</p></div></li></ol>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown with every widget of the scenario.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--calculator" id="w-borrow-calculator-en" data-widget="calculator" aria-labelledby="w-borrow-calculator-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-borrow-calculator-en-t">Calculator</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<form class="kw-calc" data-kw-calc data-numerals="0123456789" data-group="," data-decimal="."><fieldset><legend>Inputs</legend><label class="kw-calc__in"><span>Days</span><input type="number" inputmode="decimal" name="days" value="14" min="1" max="60"></label></fieldset>
+<div class="kw-calc__out" aria-live="polite"><h5>Results</h5><p><span>Days with two renewals</span> <span class="kw-calc__val"><output data-expr="days * 3" data-decimals="0">42</output></span></p></div></form><div class="kw-expect"><h5>Expected outcome</h5><ul><li><b>Result</b> The member has the book.</li></ul></div>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown with every widget of the scenario.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--playground" id="w-borrow-playground-en" data-widget="playground" aria-labelledby="w-borrow-playground-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-borrow-playground-en-t">API explorer</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<div class="kw-tabs" role="tablist" aria-label="Borrow a book"><button type="button" role="tab" id="borrow-playground-en-call-0-tab" aria-controls="borrow-playground-en-call-0" aria-selected="true" data-kw-tab><code dir="ltr">POST</code> Asks for a book</button><button type="button" role="tab" id="borrow-playground-en-call-1-tab" aria-controls="borrow-playground-en-call-1" aria-selected="false" data-kw-tab><code dir="ltr">GET</code> Loan</button></div>
+<div class="kw-pg" role="tabpanel" id="borrow-playground-en-call-0" aria-labelledby="borrow-playground-en-call-0-tab" data-kw-panel>
+<p class="kw-pg__who"><b>Member</b> · Asks for a book</p>
+<h5>Request</h5><pre dir="ltr" class="kw-code"><b>POST</b> /loans
+
+{
+  &quot;book&quot;: &quot;&lt;book&gt;&quot;,
+  &quot;days&quot;: 14,
+  &quot;member&quot;: &quot;m_7&quot;
+}</pre>
+<button type="button" class="kw-btn" data-kw-send>Send request</button>
+<div data-kw-response><h5>Response <code dir="ltr">201</code></h5><pre dir="ltr" class="kw-code">{
+  &quot;due&quot;: &quot;2026-10-01&quot;,
+  &quot;id&quot;: &quot;ln_42&quot;,
+  &quot;status&quot;: &quot;open&quot;
+}</pre></div></div><div class="kw-pg" role="tabpanel" id="borrow-playground-en-call-1" aria-labelledby="borrow-playground-en-call-1-tab" data-kw-panel hidden>
+<p class="kw-pg__who"><b>Lending desk</b> · Loan</p>
+<h5>Request</h5><pre dir="ltr" class="kw-code"><b>GET</b> /loans/ln_42</pre>
+<button type="button" class="kw-btn" data-kw-send>Send request</button>
+<div data-kw-response><h5>Response <code dir="ltr">200</code></h5><pre dir="ltr" class="kw-code">{
+  &quot;id&quot;: &quot;ln_42&quot;,
+  &quot;status&quot;: &quot;open&quot;
+}</pre></div></div>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown with every widget of the scenario.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--roles" id="w-borrow-roles-en" data-widget="roles" aria-labelledby="w-borrow-roles-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-borrow-roles-en-t">Who does what</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<div class="kw-tabs" role="tablist" aria-label="Borrow a book"><button type="button" role="tab" id="borrow-roles-en-role-0-tab" aria-controls="borrow-roles-en-role-0" aria-selected="true" data-kw-tab data-kind="person">Member</button><button type="button" role="tab" id="borrow-roles-en-role-1-tab" aria-controls="borrow-roles-en-role-1" aria-selected="false" data-kw-tab data-kind="organisation">Lending desk</button></div>
+<div class="kw-role" role="tabpanel" id="borrow-roles-en-role-0" aria-labelledby="borrow-roles-en-role-0-tab" data-kw-panel>
+<h5>Member</h5>
+<p class="kw-role__k">Sees</p><ul><li>Due date</li></ul>
+<p class="kw-role__k">Does</p><ul><li>Asks for a book</li></ul>
+<p class="kw-role__link">Member <span aria-hidden="true">→</span> Lending desk: Asks for a book</p><p class="kw-role__link">Lending desk <span aria-hidden="true">→</span> Member: Loan</p></div><div class="kw-role" role="tabpanel" id="borrow-roles-en-role-1" aria-labelledby="borrow-roles-en-role-1-tab" data-kw-panel>
+<h5>Lending desk</h5>
+
+<p class="kw-role__k">Does</p><ul><li>Loan</li></ul>
+<p class="kw-role__link">Member <span aria-hidden="true">→</span> Lending desk: Asks for a book</p><p class="kw-role__link">Lending desk <span aria-hidden="true">→</span> Member: Loan</p></div>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown with every widget of the scenario.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--tour" id="w-borrow-tour-en" data-widget="tour" aria-labelledby="w-borrow-tour-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-borrow-tour-en-t">Guided tour</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<div class="kw-tour" data-kw-tour data-numerals="0123456789" data-continue="Continue" data-finish="Finish" data-next="Next">
+<nav class="kw-tour__list" aria-label="Tasks"><ol><li><a href="?task=borrow&amp;step=1#w-borrow-tour-en" data-kw-task="borrow"><b>Borrow</b><small>From the desk to the reminder.</small><span class="kw-tour__prog" data-kw-prog data-total="2" data-label="{n} of {total}">0 of 2</span><i class="kw-tour__bar" aria-hidden="true"><i></i></i></a></li></ol></nav>
+<div class="kw-tour__stage">
+<section class="kw-tour__task" data-kw-tour-task="borrow" aria-labelledby="borrow-tour-en-borrow-t"><h5 id="borrow-tour-en-borrow-t">Borrow</h5>
+<ol class="kw-tour__steps"><li class="kw-tour__step" data-tone="info" data-kw-tour-step="1" data-appearance="callout">
+<p class="kw-tour__n">Step 1 of 2</p>
+<figure class="kw-phone kw-tour__screen" aria-label="Loan desk"><figcaption><b>Loan desk</b><small>Lending desk</small></figcaption>
+<p class="kw-chips"><span class="kw-chip" data-anchor="1">Queue</span></p>
+<dl class="kw-kv"><div><dt>Member</dt><dd>m_7</dd></div><div><dt>Due</dt><dd>14</dd></div></dl>
+</figure>
+<div class="kw-tour__callout" role="note"><span class="kw-chip" data-beat="toast">Notification</span><p class="kw-tour__who"><b>Member</b> <span aria-hidden="true">→</span> Lending desk</p>
+<p class="kw-tour__what">Asks for a book</p></div></li><li class="kw-tour__step" data-tone="ok" data-kw-tour-step="2" data-appearance="modal">
+<p class="kw-tour__n">Step 2 of 2</p>
+<figure class="kw-phone kw-tour__screen" aria-label="Loan desk"><figcaption><b>Loan desk</b><small>Lending desk</small></figcaption>
+<p class="kw-chips"><span class="kw-chip">Queue</span></p>
+<dl class="kw-kv"><div><dt>Member</dt><dd>m_7</dd></div><div data-anchor="1"><dt>Due</dt><dd>14</dd></div></dl>
+</figure>
+<div class="kw-tour__callout" role="note"><span class="kw-chip" data-beat="seal">Sealed</span><p class="kw-tour__who"><b>Lending desk</b> <span aria-hidden="true">→</span> Member<span class="kw-decision" data-decision="allow">Allowed</span></p>
+<p class="kw-tour__what">Loan</p><p class="kw-tour__out">Due in 14 days</p><ul class="kw-rules"><li>Two renewals at most</li></ul></div></li></ol></section>
+<section class="kw-tour__finish" data-kw-tour-finish><h5>Done</h5><p class="">The member has the book.</p><a class="kw-btn" href="/catalogue/">Open the catalogue</a></section>
+</div>
+<div class="kw__bar kw__bar--end kw-tour__nav"><button type="button" class="kw-btn kw-btn--ghost" data-kw-back>Back</button><span class="kw-status" data-kw-status aria-live="polite">1 of 2</span><button type="button" class="kw-btn" data-kw-next>Next</button></div>
+</div>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown with every widget of the scenario.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--notify" id="w-borrow-notify-en" data-widget="notify" aria-labelledby="w-borrow-notify-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-borrow-notify-en-t">Notification centre</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<div class="kw-nc" data-kw-nc data-numerals="0123456789">
+<div class="kw__bar"><button type="button" class="kw-btn" data-kw-play aria-pressed="false" data-play="Replay" data-pause="Pause">Replay</button><span class="kw-status" data-kw-status aria-live="polite"></span></div>
+<div class="kw-nc__tabs" role="tablist" aria-label="Borrow a book"><button type="button" role="tab" aria-selected="true" aria-controls="borrow-notify-en-dev-phone" data-kw-devtab="phone">Member's phone <span class="kw-nc__badge" data-kw-badge>1</span></button><button type="button" role="tab" aria-selected="false" aria-controls="borrow-notify-en-dev-desk" data-kw-devtab="desk">Desk console <span class="kw-nc__badge" data-kw-badge>1</span></button></div>
+<div class="kw-nc__stage has-phone"><div class="kw-nc__main"><figure class="kw-dev kw-dev--phone" id="borrow-notify-en-dev-phone" data-kw-dev="phone" role="tabpanel" aria-label="Member's phone">
+<div class="kw-dev__lock" aria-hidden="true"><span class="kw-dev__notch"></span><p class="kw-dev__time" data-kw-clock></p><p class="kw-dev__date">1 October 2026</p></div>
+<figcaption class="kw-dev__bar"><span class="kw-dev__dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Member's phone</b><small>Member</small></figcaption>
+<ol class="kw-dev__stack" aria-live="polite"><li class="kw-nc__n" data-tone="ok" data-kw-n="1" data-device="phone">
+<div class="kw-nc__head"><span class="kw-nc__icon" aria-hidden="true"></span><p class="kw-nc__meta"><b>Lending desk</b><time>15 October 2026</time></p></div>
+<p class="kw-nc__title">Loan</p><p class="kw-nc__body">Due in 14 days</p>
+<p class="kw-nc__tags"><span class="kw-decision" data-decision="allow">Allowed</span></p>
+<button type="button" class="kw-nc__open" aria-expanded="true" aria-controls="borrow-notify-en-scene-1" data-kw-open>Details</button><div class="kw-scene kw-scene--seal" id="borrow-notify-en-scene-1" data-kw-scene="seal"><ol class="kw-scene__list"><li><span class="kw-scene__dot" aria-hidden="true"></span><b>Loan</b> <span>14</span></li></ol><p class="kw-scene__seal"><code dir="ltr" data-kw-hash>9f2c41aa</code><span class="kw-scene__stamp" aria-hidden="true">✓</span></p></div>
+<div class="kw-acts"><button type="button" class="kw-btn kw-btn--ghost" data-kw-act data-kind="approve" data-done="Done" data-result="Refused: the initiator cannot approve their own request." data-blocked="1" data-tone="err">Member tries to self-approve</button><button type="button" class="kw-btn kw-btn--ghost" data-kw-act data-kind="verify" data-done="Done" data-result="Seal verified" data-tone="ok">Verify <small>Lending desk</small></button><p class="kw-result" data-kw-result hidden></p></div>
+</li></ol></figure></div><div class="kw-nc__side"><div class="kw-nc__col"><figure class="kw-dev kw-dev--console" id="borrow-notify-en-dev-desk" data-kw-dev="desk" role="tabpanel" aria-label="Desk console">
+
+<figcaption class="kw-dev__bar"><span class="kw-dev__dots" aria-hidden="true"><i></i><i></i><i></i></span><b>Desk console</b><small>Lending desk</small></figcaption>
+<ol class="kw-dev__stack" aria-live="polite"><li class="kw-nc__n" data-tone="info" data-kw-n="0" data-device="desk">
+<div class="kw-nc__head"><span class="kw-nc__icon" aria-hidden="true"></span><p class="kw-nc__meta"><b>Member</b><time>now</time></p></div>
+<p class="kw-nc__title">Asks for a book</p>
+<p class="kw-nc__tags"></p>
+<button type="button" class="kw-nc__open" aria-expanded="true" aria-controls="borrow-notify-en-scene-0" data-kw-open>Details</button><div class="kw-scene kw-scene--checklist" id="borrow-notify-en-scene-0" data-kw-scene="checklist"><p class="kw-scene__title">Checks</p><ol class="kw-scene__list"><li><span class="kw-scene__dot" aria-hidden="true"></span><b>Two renewals at most</b></li><li><span class="kw-scene__dot" aria-hidden="true"></span><b>A reminder three days before</b></li></ol></div>
+
+</li></ol></figure></div></div></div>
+</div>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: The notification centre.</li></ul></dd>
+</dl></details>
+</section></div></article>
+<article class="kw-sc" id="sc-extras" data-audiences="members staff" aria-labelledby="sc-extras-t">
+<h3 id="sc-extras-t">Loan lifecycle</h3><p class="kw-sc__sum">A loan from request to return.</p>
+<p class="kw-sc__for">For: <span class="kw-chip">Members</span> <span class="kw-chip">Staff</span></p>
+<div class="kw-grid"><section class="kw kw--workflow" id="w-extras-workflow-en" data-widget="workflow" aria-labelledby="w-extras-workflow-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-extras-workflow-en-t">Step by step</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<ol class="kw-wf" data-kw-steps><li class="kw-wf__step" data-tone="info" data-kw-step>
+<p class="kw-wf__n">Step 1 of 3</p><p class="kw-wf__who"><b>Member</b> <span aria-hidden="true">→</span> Lending desk<span class="kw-decision" data-decision="allow">Allowed</span></p>
+<p class="kw-wf__what">Asks for a book</p><p class="kw-wf__detail">At the desk.</p><dl class="kw-kv"><div><dt>Days</dt><dd>14</dd></div></dl><p class="kw-wf__out">A loan opens.</p></li><li class="kw-wf__step" data-tone="ok" data-kw-step>
+<p class="kw-wf__n">Step 2 of 3</p><p class="kw-wf__who"><b>Lending desk</b></p>
+<p class="kw-wf__what">Checks the card</p></li><li class="kw-wf__step" data-tone="ok" data-kw-step>
+<p class="kw-wf__n">Step 3 of 3</p><p class="kw-wf__who"><b>Lending desk</b> <span aria-hidden="true">→</span> Member</p>
+<p class="kw-wf__what">Hands over</p><p class="kw-wf__out">Done.</p></li></ol>
+<div class="kw__bar kw__bar--end"><button type="button" class="kw-btn kw-btn--ghost" data-kw-back>Back</button><button type="button" class="kw-btn" data-kw-next>Next</button><button type="button" class="kw-btn kw-btn--ghost" data-kw-reset>Start again</button><span class="kw-status" data-kw-status aria-live="polite"></span></div>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown on the examples page.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--pipeline" id="w-extras-pipeline-en" data-widget="pipeline" aria-labelledby="w-extras-pipeline-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-extras-pipeline-en-t">Pipeline</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<div class="kw__bar"><button type="button" class="kw-btn" data-kw-run>Run</button><span class="kw-status" data-kw-status aria-live="polite"></span></div>
+<ol class="kw-pipe" data-kw-items><li class="kw-pipe__stage" data-tone="info" data-label="Stage 1 of 3: Asks for a book">
+<span class="kw-pipe__dot" aria-hidden="true"></span><p class="kw-pipe__what">Asks for a book</p><p class="kw-pipe__who">Member</p><p class="kw-pipe__out">A loan opens.</p></li><li class="kw-pipe__stage" data-tone="ok" data-label="Stage 2 of 3: Checks the card">
+<span class="kw-pipe__dot" aria-hidden="true"></span><p class="kw-pipe__what">Checks the card</p><p class="kw-pipe__who">Lending desk</p></li><li class="kw-pipe__stage" data-tone="ok" data-label="Stage 3 of 3: Hands over">
+<span class="kw-pipe__dot" aria-hidden="true"></span><p class="kw-pipe__what">Hands over</p><p class="kw-pipe__who">Lending desk</p><p class="kw-pipe__out">Done.</p></li></ol>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown on the examples page.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--comparison" id="w-extras-comparison-en" data-widget="comparison" aria-labelledby="w-extras-comparison-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-extras-comparison-en-t">Comparison</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<div class="kw-scroll" tabindex="0" role="region" aria-label="Loan lifecycle"><table class="kw-cmp"><thead><tr><td></td><th scope="col"><button type="button" class="kw-cmp__pick" data-kw-col="a" aria-pressed="false">Desk</button></th><th scope="col"><button type="button" class="kw-cmp__pick" data-kw-col="b" aria-pressed="false">Online</button></th></tr></thead>
+<tbody><tr><th scope="row">Renewals</th><td data-col="a">Two</td><td data-col="b"><span class="kw-yes" aria-label="Yes">✓</span></td></tr><tr><th scope="row">Fine</th><td data-col="a"><span class="kw-no" aria-label="No">—</span></td><td data-col="b">3</td></tr></tbody></table></div>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown on the examples page.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--screens" id="w-extras-screens-en" data-widget="screens" aria-labelledby="w-extras-screens-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-extras-screens-en-t">Screens</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<div class="kw-screens" data-kw-screens><figure class="kw-phone" data-kw-screen aria-label="Screen 1 of 1">
+<figcaption><b>My loans</b><small>Member</small></figcaption><dl class="kw-kv"><div data-tone="warn"><dt>Due</dt><dd>Soon</dd></div></dl><span class="kw-phone__cta">Renew</span></figure></div>
+
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown on the examples page.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--machine" id="w-extras-machine-en" data-widget="machine" aria-labelledby="w-extras-machine-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-extras-machine-en-t">State machines</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<div class="kw-tabs" role="tablist" aria-label="Loan lifecycle"><button type="button" role="tab" id="extras-machine-en-g-0-tab" aria-controls="extras-machine-en-g-0" aria-selected="true" data-kw-tab>Loans <small>1</small></button></div>
+<div class="kw-smg" role="tabpanel" id="extras-machine-en-g-0" aria-labelledby="extras-machine-en-g-0-tab" data-kw-panel>
+
+<article class="kw-sm" data-kw-machine data-path="open out back">
+<p class="kw-sm__title"><b>Loan</b> <small>Lending</small></p><p class="kw-sm__sum">Lifecycle.</p>
+<ol class="kw-sm__states"><li class="kw-sm__state" data-state="open" data-kind="initial"><b>Open</b><p class="kw-sm__detail">Started.</p></li><li class="kw-sm__state" data-state="out" data-kind=""><b>Out</b><ul class="kw-rules"><li>Two renewals at most</li></ul></li><li class="kw-sm__state" data-state="back" data-kind="final"><b>Returned</b></li></ol>
+<details class="kw-sm__tr"><summary>2 transitions</summary><ul><li><code dir="ltr">open</code> <span aria-hidden="true">→</span> <code dir="ltr">out</code> · hand over</li><li><code dir="ltr">out</code> <span aria-hidden="true">→</span> <code dir="ltr">back</code> · return</li></ul></details></article></div>
+<div class="kw__bar"><button type="button" class="kw-btn" data-kw-pulse>Play the lifecycle</button><span class="kw-status" data-kw-status aria-live="polite"></span></div>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown on the examples page.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--runs" id="w-extras-runs-en" data-widget="runs" aria-labelledby="w-extras-runs-en-t" data-reset-label="Start again">
+<header class="kw__head"><h4 id="w-extras-runs-en-t">Run the cases</h4><span class="kw-badge" data-honesty="sample">Sample</span></header>
+<p class="kw__lead"><b>You learn:</b> How a loan moves from the desk to the reminder. <b>You can:</b> Renew a loan.</p>
+<div class="kw-chips kw-runs__pick" role="group" aria-label="Cases"><button type="button" class="kw-chip" aria-pressed="true" data-kw-case="0" data-stop="-1" data-decision="allow">Fine</button><button type="button" class="kw-chip" aria-pressed="false" data-kw-case="1" data-stop="1" data-decision="deny">Stopped</button></div>
+<div class="kw-runs__case" data-kw-casebox="0">
+<p class="kw-runs__verdict" data-kw-verdict><span class="kw-decision" data-decision="allow">Allowed</span> <b>Passed every stage</b></p><p class="kw-runs__out">Passes.</p></div><div class="kw-runs__case" data-kw-casebox="1" hidden><p class="kw-runs__detail">No card.</p><dl class="kw-kv"><div><dt>Card</dt><dd>none</dd></div></dl>
+<p class="kw-runs__verdict" data-kw-verdict><span class="kw-decision" data-decision="deny">Denied</span> <b>Stopped at Checks the card</b> <code dir="ltr">card.expired</code></p><p class="kw-runs__out">Held.</p></div>
+<div class="kw__bar"><button type="button" class="kw-btn" data-kw-run>Run</button><span class="kw-status" data-kw-status aria-live="polite"></span></div>
+<ol class="kw-pipe kw-runs__stages" data-kw-items><li class="kw-pipe__stage" data-label="Stage 1 of 3: Asks for a book"><span class="kw-pipe__dot" aria-hidden="true"></span><p class="kw-pipe__what">Asks for a book</p><p class="kw-pipe__who">Member</p><p class="kw-pipe__out">At the desk.</p></li><li class="kw-pipe__stage" data-label="Stage 2 of 3: Checks the card"><span class="kw-pipe__dot" aria-hidden="true"></span><p class="kw-pipe__what">Checks the card</p><p class="kw-pipe__who">Lending desk</p></li><li class="kw-pipe__stage" data-label="Stage 3 of 3: Hands over"><span class="kw-pipe__dot" aria-hidden="true"></span><p class="kw-pipe__what">Hands over</p><p class="kw-pipe__who">Lending desk</p><p class="kw-pipe__out">Done.</p></li></ol>
+<details class="kw-about"><summary>How this widget is built</summary><dl>
+<dt>Demonstrates</dt><dd><a href="/lending/">Lending desk</a></dd>
+<dt>Components</dt><dd><ul><li>Lending API</li><li>Due-date engine</li></ul></dd>
+<dt>Flow</dt><dd>Request, loan, reminder. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">Architecture diagram</a></dd>
+<dt>Used on</dt><dd><ul><li><a href="/examples/">/examples/</a>: Shown on the examples page.</li></ul></dd>
+</dl></details>
+</section></div></article></section>
+</div>

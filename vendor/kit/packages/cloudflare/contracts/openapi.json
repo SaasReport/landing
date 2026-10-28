@@ -1,0 +1,1610 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "kit Worker HTTP API (@saasreport/cloudflare)",
+    "version": "1.0.0",
+    "description": "The contract of every HTTP route the kit's Worker serves under /api and /mcp. Routes are switched on by config.features; a project's own routes live in that project's contract. `kit check contracts` keeps this file and the route literals in packages/cloudflare/src in step, both ways (docs/CONSTITUTION.md §1)."
+  },
+  "jsonSchemaDialect": "https://json-schema.org/draft/2020-12/schema",
+  "paths": {
+    "/api/health": {
+      "get": {
+        "operationId": "health",
+        "summary": "Health derived from the site's monitor (kit.health.v1): ok only while the monitor reads passing",
+        "description": "Read from the monitor Worker's GET /status over the MONITOR service binding (bounded). Never a constant: 200 with ok true only when the latest run is passing and not stale; 503 with the monitor's state (failing, stale, unknown, unreachable, not-bound) and the names of the failed journeys otherwise. Contract: packages/core/schemas/health.schema.json.",
+        "tags": [
+          "ops"
+        ],
+        "responses": {
+          "200": {
+            "description": "The monitor reads passing",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/health.schema.json"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Not healthy: the monitor reads anything but passing, or cannot be read",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/health.schema.json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/build": {
+      "get": {
+        "operationId": "build",
+        "summary": "The commit this Worker was deployed from, and the Workers behind its service bindings (kit.build.v1)",
+        "description": "Served by every Worker a kit project deploys (withBuild, @saasreport/cloudflare/build). The commit is the Worker version's BUILD_COMMIT (wrangler deploy --var BUILD_COMMIT:<sha>, kit release ship); null when the version carries none (a drift); \"unreachable\" for a Worker behind a binding that did not answer. Read with no credential by kit release verify and the daily drift workflow. Contract: packages/core/schemas/build.schema.json.",
+        "tags": [
+          "ops"
+        ],
+        "responses": {
+          "200": {
+            "description": "The build",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/build.schema.json"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Only GET"
+          }
+        }
+      }
+    },
+    "/api/status": {
+      "get": {
+        "operationId": "monitorStatus",
+        "summary": "Monitor status (features.monitor)",
+        "description": "The monitor Worker's own GET /status (kit.monitor-status.v1, packages/monitor/contracts/status.schema.json), reached through the MONITOR service binding; the site never binds the monitor's D1. 503 with a reason code when the binding is missing or the monitor does not answer.",
+        "tags": [
+          "ops"
+        ],
+        "responses": {
+          "200": {
+            "description": "The monitor's status document (kit.monitor-status.v1).",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "ok",
+                    "status",
+                    "last",
+                    "recent",
+                    "routes"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": true
+                    },
+                    "status": {
+                      "enum": [
+                        "passing",
+                        "failing",
+                        "stale",
+                        "unknown"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "No monitor to ask: never a guess.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "ok",
+                    "status",
+                    "reason"
+                  ],
+                  "properties": {
+                    "ok": {
+                      "const": false
+                    },
+                    "status": {
+                      "const": "unknown"
+                    },
+                    "reason": {
+                      "enum": [
+                        "not-configured",
+                        "timeout",
+                        "unreachable",
+                        "failed"
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/meta": {
+      "get": {
+        "operationId": "meta",
+        "summary": "Forms and public APIs of the site (kit.api-meta.v1)",
+        "tags": [
+          "discovery"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://github.com/SaasReport/kit/blob/main/packages/cloudflare/contracts/api-meta.schema.json"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/blog/posts": {
+      "get": {
+        "operationId": "blogPosts",
+        "summary": "Published posts (?kind=&tag=&q=&limit=&offset=); each post carries tags (ids) and, with a tag vocabulary, tag_labels",
+        "tags": [
+          "blog"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "query",
+            "description": "A tag id of the project's vocabulary; repeat it (tag=a&tag=b) to require several (an item needs all of them). At most 8 are used, the rest are ignored.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "maxItems": 8,
+              "items": {
+                "type": "string",
+                "maxLength": 48,
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              }
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Search words: every word must occur in the title, the summary or a tag label (letter variants and ZWNJ folded).",
+            "schema": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        ]
+      }
+    },
+    "/api/events": {
+      "get": {
+        "operationId": "events",
+        "summary": "Events",
+        "tags": [
+          "events"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/forms/event-rsvp": {
+      "post": {
+        "operationId": "eventRsvp",
+        "summary": "RSVP to a scheduled event (config.events.rsvp)",
+        "tags": [
+          "events"
+        ],
+        "responses": {
+          "200": {
+            "description": "Accepted and recorded",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RsvpAccepted"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The body is not a JSON object",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "forbidden_origin, or drill_not_signed (a `test` without a valid, unused signed header)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "405": {
+            "description": "method_not_allowed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "411": {
+            "description": "length_required: the body is read bounded, so its length is declared",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "The body is too large",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "415": {
+            "description": "bad_content_type",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "consent_required, missing_field, invalid_email, invalid_field or event_unavailable",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "rate_limited",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "not_recorded: no ledger row exists for the submission, so nothing is accepted and the visitor can write again",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RsvpNotRecorded"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RsvpRequest"
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "x-kit-form-drill",
+            "in": "header",
+            "required": false,
+            "description": "<unix ms>.<hmac-sha256(FORMS_DRILL_KEY, \"<ms>.event-rsvp\")>, valid five minutes and once: required when the body carries `test`, signed by the monitor. Without it `test` is refused (403 drill_not_signed).",
+            "schema": {
+              "type": "string",
+              "pattern": "^[0-9]{1,16}\\.[0-9a-f]{64}$"
+            }
+          }
+        ]
+      }
+    },
+    "/api/forms/deliveries": {
+      "get": {
+        "operationId": "formDeliveries",
+        "summary": "The form-delivery ledger over the last 24 hours: submissions, owner notifications sent, failed and pending past 15 minutes (kit.form-notification.v1 summary; docs/FORMS.md). 503 when an owner delivery failed or is stale, so the monitor's form-deliveries journey fails.",
+        "tags": [
+          "forms"
+        ],
+        "responses": {
+          "200": {
+            "description": "Every owner delivery in the window went",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/form-notification.schema.json#/$defs/summary"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "An owner delivery failed or is pending past its window (the summary), or the ledger cannot be read (the error envelope)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "oneOf": [
+                    {
+                      "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/form-notification.schema.json#/$defs/summary"
+                    },
+                    {
+                      "$ref": "#/components/schemas/Error"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/forms/deliveries/{reference}": {
+      "get": {
+        "operationId": "formDelivery",
+        "summary": "One submission's two deliveries, the receipt and the owner's notification (kit.form-notification.v1): the ledger link in the owner's notification. Statuses only, no address.",
+        "tags": [
+          "forms"
+        ],
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/form-notification.schema.json#/$defs/reference"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The record",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/form-notification.schema.json"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "rate_limited: the lookup of references is limited per client",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/forms/{form}": {
+      "parameters": [
+        {
+          "name": "form",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9-]{0,63}$"
+          }
+        }
+      ],
+      "post": {
+        "operationId": "projectForm",
+        "summary": "A project form (described in GET /api/meta; handled by the project's Worker)",
+        "tags": [
+          "forms"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/glossary": {
+      "get": {
+        "operationId": "glossary",
+        "summary": "Glossary categories and terms",
+        "tags": [
+          "glossary"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/glossary/today": {
+      "get": {
+        "operationId": "glossaryToday",
+        "summary": "Today's term (and its episode)",
+        "tags": [
+          "glossary"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/podcasts": {
+      "get": {
+        "operationId": "podcasts",
+        "summary": "Podcast episodes (?show=&series=&tag=&q=&limit=); with a tag vocabulary each episode carries tags (ids) and tag_labels",
+        "tags": [
+          "podcasts"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "tag",
+            "in": "query",
+            "description": "A tag id of the project's vocabulary; repeat it (tag=a&tag=b) to require several (an item needs all of them). At most 8 are used, the rest are ignored.",
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "array",
+              "maxItems": 8,
+              "items": {
+                "type": "string",
+                "maxLength": 48,
+                "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+              }
+            }
+          },
+          {
+            "name": "q",
+            "in": "query",
+            "description": "Search words: every word must occur in the title, the summary or a tag label (letter variants and ZWNJ folded).",
+            "schema": {
+              "type": "string",
+              "maxLength": 100
+            }
+          }
+        ]
+      }
+    },
+    "/api/podcasts/generate": {
+      "post": {
+        "operationId": "podcastGenerate",
+        "summary": "Queue an episode (admin token)",
+        "tags": [
+          "podcasts"
+        ],
+        "responses": {
+          "202": {
+            "description": "Queued",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/podcasts/admin": {
+      "get": {
+        "operationId": "podcastAdmin",
+        "summary": "Episodes and their states (admin token)",
+        "tags": [
+          "podcasts"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/podcasts/admin/{slug}": {
+      "parameters": [
+        {
+          "name": "slug",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": "string"
+          }
+        }
+      ],
+      "get": {
+        "operationId": "podcastAdminEpisode",
+        "summary": "One episode's state (admin token)",
+        "tags": [
+          "podcasts"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reactions": {
+      "get": {
+        "operationId": "reactionsGet",
+        "summary": "Counts, average rating and this visitor's own reaction (?items=post:a,episode:b)",
+        "tags": [
+          "reactions"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "reactionsPost",
+        "summary": "Like or rate an item",
+        "tags": [
+          "reactions"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calendar": {
+      "get": {
+        "operationId": "calendarIndex",
+        "summary": "Calendar API index (features.calendar)",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calendar/today": {
+      "get": {
+        "operationId": "calendarToday",
+        "summary": "Today in the site's calendars",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calendar/day": {
+      "get": {
+        "operationId": "calendarDay",
+        "summary": "Describe a day (?date=)",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calendar/month": {
+      "get": {
+        "operationId": "calendarMonth",
+        "summary": "A month grid (?month=)",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calendar/holidays": {
+      "get": {
+        "operationId": "calendarHolidays",
+        "summary": "Holidays in a range",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calendar/business-days": {
+      "get": {
+        "operationId": "calendarBusinessDays",
+        "summary": "Business days between two dates",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calendar/add": {
+      "get": {
+        "operationId": "calendarAdd",
+        "summary": "Add calendar or business days",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calendar/adjust": {
+      "get": {
+        "operationId": "calendarAdjust",
+        "summary": "Adjust a date by a business-day convention",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calendar/settlement": {
+      "get": {
+        "operationId": "calendarSettlement",
+        "summary": "T+n settlement date",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calendar/openapi.json": {
+      "get": {
+        "operationId": "calendarOpenapi",
+        "summary": "The calendar API's own OpenAPI 3.1 document (generated per site; its paths are a subset of this contract)",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calendar/schedule": {
+      "get": {
+        "operationId": "calendarScheduleGet",
+        "summary": "Instalment schedule (query)",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "operationId": "calendarSchedulePost",
+        "summary": "Instalment schedule (JSON body)",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/mcp": {
+      "post": {
+        "operationId": "mcp",
+        "summary": "MCP server (stateless Streamable HTTP, JSON-RPC 2.0): read-only calendar tools, each conforming to kit.mcp-tool.v1",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "202": {
+            "description": "Notification accepted"
+          },
+          "400": {
+            "description": "Error envelope",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/calendar.ics": {
+      "get": {
+        "operationId": "calendarIcs",
+        "summary": "iCalendar feed of holidays (?from=&to=)",
+        "tags": [
+          "calendar"
+        ],
+        "responses": {
+          "200": {
+            "description": "text/calendar",
+            "content": {
+              "text/calendar": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tags": {
+      "get": {
+        "operationId": "tags",
+        "summary": "The content-tag vocabulary with its groups and the number of podcast episodes and posts of every tag",
+        "tags": [
+          "tags"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagIndex"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such tag, or the tag feature is off (the project declares no vocabulary)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/tags/{id}": {
+      "get": {
+        "operationId": "tag",
+        "summary": "One tag with its podcast episodes and posts (newest first)",
+        "tags": [
+          "tags"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TagDetail"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such tag, or the tag feature is off (the project declares no vocabulary)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Error": {
+        "type": "object",
+        "required": [
+          "ok",
+          "error"
+        ],
+        "properties": {
+          "ok": {
+            "const": false
+          },
+          "error": {},
+          "field": {
+            "type": "string"
+          }
+        }
+      },
+      "RsvpRequest": {
+        "type": "object",
+        "required": [
+          "event",
+          "name",
+          "email",
+          "consent"
+        ],
+        "properties": {
+          "event": {
+            "type": "string",
+            "maxLength": 90,
+            "description": "The event slug."
+          },
+          "name": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "email": {
+            "type": "string",
+            "maxLength": 200
+          },
+          "company": {
+            "type": "string",
+            "maxLength": 160
+          },
+          "role": {
+            "type": "string",
+            "maxLength": 120
+          },
+          "consent": {
+            "const": true
+          },
+          "website": {
+            "type": "string",
+            "description": "Honeypot: any value is answered as accepted and stored nowhere."
+          },
+          "test": {
+            "const": true,
+            "description": "A drill: accepted only with the signed header x-kit-form-drill, once; the receipt goes to the owner and both subjects are marked TEST."
+          }
+        }
+      },
+      "RsvpAccepted": {
+        "type": "object",
+        "required": [
+          "ok",
+          "reference"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ok": {
+            "const": true
+          },
+          "reference": {
+            "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/form-notification.schema.json#/$defs/reference"
+          },
+          "email_status": {
+            "enum": [
+              "pending",
+              "sent",
+              "suppressed",
+              "failed"
+            ],
+            "description": "The receipt's status; `failed` is still a 200: the submission is recorded and the owner is told (docs/FORMS.md)."
+          },
+          "recorded": {
+            "const": true,
+            "description": "A ledger row exists for the reference. The honeypot answer carries neither email_status nor recorded."
+          },
+          "outcome_recorded": {
+            "const": false,
+            "description": "Present only when the engine's final status write failed after the row existed: the submission is recorded (do not submit again); its row stays pending and the monitor counts it."
+          }
+        }
+      },
+      "RsvpNotRecorded": {
+        "type": "object",
+        "required": [
+          "ok",
+          "error",
+          "reference"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "ok": {
+            "const": false
+          },
+          "error": {
+            "const": "not_recorded"
+          },
+          "reference": {
+            "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/form-notification.schema.json#/$defs/reference"
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "description",
+          "group",
+          "group_label",
+          "colour",
+          "counts",
+          "url"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "group": {
+            "type": "string"
+          },
+          "group_label": {
+            "type": "string"
+          },
+          "colour": {
+            "enum": [
+              "chart1",
+              "chart2",
+              "chart3",
+              "chart4",
+              "chart5",
+              "chart6",
+              "accent",
+              "ok",
+              "warn",
+              "err"
+            ],
+            "description": "The colour role (a tone of the project's tokens); the page paints it, a client never needs a colour value."
+          },
+          "counts": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "podcasts",
+              "posts"
+            ],
+            "properties": {
+              "podcasts": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "posts": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "TagGroup": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          }
+        }
+      },
+      "TagIndex": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "groups",
+          "tags"
+        ],
+        "properties": {
+          "ok": {
+            "const": true
+          },
+          "groups": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TagGroup"
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          }
+        }
+      },
+      "TagItem": {
+        "type": "object",
+        "required": [
+          "slug",
+          "title",
+          "summary",
+          "published_at",
+          "url",
+          "tags"
+        ],
+        "properties": {
+          "slug": {
+            "type": "string"
+          },
+          "show": {
+            "type": "string"
+          },
+          "series": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "summary": {
+            "type": "string"
+          },
+          "published_at": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "format": "uri"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "TagDetail": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ok",
+          "tag",
+          "podcasts",
+          "posts"
+        ],
+        "properties": {
+          "ok": {
+            "const": true
+          },
+          "tag": {
+            "$ref": "#/components/schemas/Tag"
+          },
+          "podcasts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TagItem"
+            }
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/TagItem"
+            }
+          }
+        }
+      }
+    }
+  }
+}

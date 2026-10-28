@@ -1,0 +1,17 @@
+{
+  "name": "@saasreport/plugins",
+  "version": "0.1.0",
+  "description": "Agent plugins for kit projects: a scaffolder (kit plugin new), the run-folder and compile-report convention (kit.compile-report.v1 with confirmed / not_confirmed / flagged items and sources), the shared skill runtime and a validator for Claude Code plugins whose skills are plain Agent Skills files.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./runtime": "./runtime/kit-plugin-runtime.mjs",
+    "./schema/compile-report.schema.json": "./schema/compile-report.schema.json",
+    "./package.json": "./package.json"
+  },
+  "files": ["src", "runtime", "schema", "README.md"],
+  "engines": { "node": ">=20.17.0" },
+  "license": "Apache-2.0",
+  "sideEffects": false
+}

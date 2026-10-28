@@ -1,0 +1,21 @@
+{
+  "name": "@saasreport/broker",
+  "version": "0.1.0",
+  "description": "The agent credential broker for Workers: agents hold no GitHub credential; a signed, fresh, single-use request from a registered agent (kit agent id, Ed25519 key) gets a short-lived installation token scoped to one repository and the action's permissions, and a merge happens only through the broker after green checks on the exact head and a signed review by a different agent. Every allow and deny is a hash-chained evidence record.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./worker": "./src/worker.js",
+    "./migrations/*": "./migrations/*",
+    "./contracts/*": "./contracts/*",
+    "./package.json": "./package.json"
+  },
+  "dependencies": { "@saasreport/core": "*", "@saasreport/uploads": "*" },
+  "files": ["src", "migrations", "contracts", "README.md"],
+  "scripts": { "test": "node --test test/*.test.mjs" },
+  "engines": { "node": ">=20.17.0" },
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "private": true
+}

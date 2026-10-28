@@ -1,0 +1,459 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/concepts-config.schema.json",
+  "title": "kit.concepts-config.v1",
+  "description": "concepts.config.json: how a project's concept catalogue becomes a daily series (docs/CONCEPTS.md): the series and its show, the files, the episode format and its size (measured, with the basis), the spoken glue and labels, the gates (accuracy and, for Shariah content, a reviewer's ledger), the order and the runway. Pure data: the kit composes episodes, articles and the schedule from it and from the catalogue.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "series",
+    "locale",
+    "titleLocales",
+    "catalogue",
+    "schedule",
+    "minConcepts",
+    "verify",
+    "speakers",
+    "format",
+    "strings",
+    "gate",
+    "order",
+    "runwayDays"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "series": {
+      "type": "object",
+      "required": [
+        "id",
+        "show",
+        "title",
+        "at",
+        "start",
+        "maxSeconds"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+        },
+        "show": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "A key of kit.config.js shows."
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3
+        },
+        "at": {
+          "type": "string",
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+        },
+        "start": {
+          "type": "string",
+          "format": "date",
+          "description": "Day 1 of the series: the first schedule entry's date."
+        },
+        "maxSeconds": {
+          "type": "integer",
+          "minimum": 45,
+          "maximum": 150
+        },
+        "marginSeconds": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 30
+        }
+      }
+    },
+    "locale": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+    },
+    "titleLocales": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+      },
+      "description": "Locales every title and definition must carry (for example fa and en, or en-GB)."
+    },
+    "catalogue": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9/_.-]*\\.json$"
+    },
+    "schedule": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9/_.-]*\\.json$"
+    },
+    "speakers": {
+      "type": "object",
+      "required": [
+        "host",
+        "expert"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "host": {
+          "type": "string"
+        },
+        "expert": {
+          "type": "string"
+        }
+      },
+      "description": "The kit.config.js hosts keys that speak the host and expert lines."
+    },
+    "links": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "glossary": {
+          "type": "string",
+          "pattern": "^/.*\\{slug\\}.*$",
+          "description": "Path template of a glossary page, e.g. /glossary/{slug}."
+        },
+        "widget": {
+          "type": "string",
+          "pattern": "^/.*\\{scenario\\}.*$",
+          "description": "Path template of a widget scenario, e.g. /examples/#{scenario}."
+        }
+      }
+    },
+    "format": {
+      "type": "object",
+      "required": [
+        "unit",
+        "body",
+        "total",
+        "measured"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "unit": {
+          "enum": [
+            "words",
+            "chars"
+          ],
+          "description": "How the spoken size is counted: words for English, characters for Persian."
+        },
+        "body": {
+          "type": "object",
+          "required": [
+            "min",
+            "max"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "min": {
+              "type": "integer",
+              "minimum": 20
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 20
+            }
+          },
+          "description": "The size of the episode's beats and glue (the talk), without the intro and outro."
+        },
+        "total": {
+          "type": "object",
+          "required": [
+            "max"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "min": {
+              "type": "integer",
+              "minimum": 20
+            },
+            "max": {
+              "type": "integer",
+              "minimum": 20
+            }
+          },
+          "description": "The size of everything that is spoken, intro and outro included. This is what must fit in a minute."
+        },
+        "lineMax": {
+          "type": "integer",
+          "minimum": 60,
+          "maximum": 400
+        },
+        "articleMin": {
+          "type": "integer",
+          "minimum": 200
+        },
+        "articleMax": {
+          "type": "integer",
+          "maximum": 6000
+        },
+        "measured": {
+          "type": "string",
+          "minLength": 20,
+          "description": "The measured speaking rate this size rests on (the existing episodes it was measured from)."
+        },
+        "cps": {
+          "type": "number",
+          "minimum": 5,
+          "maximum": 40,
+          "description": "Characters per second measured for this series' voice (podcast.cps): `kit plan` and `kit render` estimate the length with it. Persian measured 13.6, British English 17.4 (docs/CONCEPTS.md)."
+        }
+      }
+    },
+    "strings": {
+      "type": "object",
+      "required": [
+        "intro",
+        "outro",
+        "title",
+        "glue",
+        "article"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "intro": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/line"
+          },
+          "description": "Spoken before the hook. Placeholders: {show} {number} {title}."
+        },
+        "outro": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/line"
+          }
+        },
+        "title": {
+          "type": "string",
+          "minLength": 3,
+          "description": "Episode and post title. Placeholders: {show} {number} {title}."
+        },
+        "glue": {
+          "type": "object",
+          "required": [
+            "why",
+            "example",
+            "takeaway"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "why": {
+              "$ref": "#/$defs/variants"
+            },
+            "example": {
+              "$ref": "#/$defs/variants"
+            },
+            "takeaway": {
+              "$ref": "#/$defs/variants"
+            },
+            "views": {
+              "$ref": "#/$defs/variants"
+            }
+          },
+          "description": "The host's short questions between the beats. Three or more variants each; the variant is chosen by the concept id, so the episode is stable and the series does not sound like a template."
+        },
+        "article": {
+          "type": "object",
+          "required": [
+            "why",
+            "example",
+            "takeaway",
+            "sources",
+            "asOf",
+            "glossary",
+            "widget"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "why": {
+              "type": "string"
+            },
+            "example": {
+              "type": "string"
+            },
+            "takeaway": {
+              "type": "string"
+            },
+            "views": {
+              "type": "string"
+            },
+            "sources": {
+              "type": "string"
+            },
+            "asOf": {
+              "type": "string",
+              "description": "Placeholder {date}."
+            },
+            "glossary": {
+              "type": "string",
+              "description": "Placeholders {title} {href}."
+            },
+            "widget": {
+              "type": "string",
+              "description": "Placeholders {label} {href}."
+            },
+            "disclaimer": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "lint": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "forbid": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "pattern",
+              "reason"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "pattern": {
+                "type": "string",
+                "minLength": 3
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 10
+              }
+            }
+          },
+          "description": "Case-insensitive patterns no episode text may contain (e.g. a school presented as universal)."
+        }
+      }
+    },
+    "gate": {
+      "type": "object",
+      "required": [
+        "accuracy"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "accuracy": {
+          "type": "object",
+          "required": [
+            "minVerifiedPrefix",
+            "unverified"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "minVerifiedPrefix": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 400,
+              "description": "The first N scheduled episodes must be verified."
+            },
+            "unverified": {
+              "enum": [
+                "never",
+                "after-prefix"
+              ],
+              "description": "never: an unverified concept is never scheduled. after-prefix: allowed after the verified prefix."
+            }
+          }
+        }
+      },
+      "description": "Gates. The REVIEW gate is not configurable here: the kit project registry (packages/core/registry/projects.json, approvals) says whether this project's series is Shariah (then only approved concepts are scheduled and published, against the registry's ledger, kind, anchor and roster) or general."
+    },
+    "order": {
+      "type": "object",
+      "required": [
+        "strategy"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "strategy": {
+          "enum": [
+            "theme-round-robin",
+            "catalogue"
+          ],
+          "description": "theme-round-robin: each round takes the next concept of every theme in themeOrder (easier first inside a theme); catalogue: the catalogue's own order. Both place prerequisites first."
+        },
+        "first": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          },
+          "description": "Concept ids that open the series, in this order (when eligible)."
+        },
+        "themeOrder": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "runwayDays": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 120,
+      "description": "`kit concepts status` and the deploy gate warn when fewer scheduled days than this remain after the reference day."
+    },
+    "minConcepts": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "The catalogue must hold at least this many concepts (for example 120 or 60); kit check concepts fails below it."
+    },
+    "verify": {
+      "type": "object",
+      "required": [
+        "texts"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "texts": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9/_.-]*$",
+          "description": "Directory of <document sha256>.txt, the extracted text of every document a verified concept cites. kit check concepts fails a verified source whose text is missing or does not contain its quote: `verified` is a mechanical fact, never an agent's assertion."
+        }
+      }
+    }
+  },
+  "$defs": {
+    "line": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "enum": [
+            "host",
+            "expert"
+          ]
+        },
+        {
+          "type": "string",
+          "minLength": 2
+        }
+      ],
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "variants": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 160
+      }
+    }
+  }
+}

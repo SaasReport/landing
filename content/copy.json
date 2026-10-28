@@ -1,0 +1,519 @@
+{
+  "$schema": "../schemas/copy.schema.json",
+  "meta": {
+    "asOf": "2026-10-28",
+    "title": "SaasReport: a Stripe report for every person who asks",
+    "description": "SaasReport will turn your Stripe data into a scheduled report for each person who asks about your numbers: CEO, CFO, board, sales, support. Pre-launch. Every figure on this page is sample data."
+  },
+  "hero": {
+    "eyebrow": "Pre-launch. Reports from Stripe data.",
+    "title": "Everyone who asks about your Stripe numbers gets their own report.",
+    "lead": "SaasReport builds a report for each person from the same Stripe data and sends it on a schedule. The CEO gets growth. The CFO gets retention. Support gets failing payments.",
+    "statusLabel": "Status",
+    "status": "Not launched. Not listed in the Stripe App Marketplace. Every figure on this page is made-up sample data, and it is labelled as sample.",
+    "primary": "Email us about early access",
+    "secondary": "Try the examples"
+  },
+  "problem": {
+    "eyebrow": "The problem",
+    "title": "The Stripe Dashboard serves one reader. Your company has many.",
+    "items": [
+      {
+        "title": "One screen, many readers",
+        "text": "The Dashboard is made for the person who runs Stripe. The board wants one page. Support wants the failed payments. Everyone else has to hunt for their own answer."
+      },
+      {
+        "title": "Reports are built by hand",
+        "text": "Someone exports the data, pastes it into a sheet, formats it and sends it. Next month they do it again."
+      },
+      {
+        "title": "Numbers drift between people",
+        "text": "Two people pull the same month with different filters and get two answers. Nobody can say which one is right."
+      }
+    ]
+  },
+  "how": {
+    "eyebrow": "How it will work",
+    "title": "One set of numbers. One report per reader.",
+    "lead": "SaasReport reads your Stripe data and computes every figure by the same written rules. Then it builds each reader's report in the order that reader cares about.",
+    "stepsLabel": "Four steps",
+    "steps": [
+      {
+        "title": "Connect Stripe",
+        "text": "You install the SaasReport app in your Stripe account. It asks for read access only."
+      },
+      {
+        "title": "Choose who gets what",
+        "text": "Pick a person, a report and a schedule: daily, weekly, monthly, quarterly or yearly, as that report allows."
+      },
+      {
+        "title": "We compute every figure",
+        "text": "Code computes each number from your Stripe data under published definitions. AI writes sentences, never numbers."
+      },
+      {
+        "title": "Each reader gets a link",
+        "text": "They receive an email with a link to their own report. The email carries no figures."
+      }
+    ],
+    "statusLabel": "Where this stands",
+    "status": "None of these four steps is built. What exists today is the registry of {stakeholders} stakeholders, {metrics} metrics and {reports} report types, and the engine that computes the numbers. The examples on this page run that engine on sample data."
+  },
+  "people": {
+    "eyebrow": "Start with the person",
+    "title": "Pick someone who asks about your numbers.",
+    "lead": "Each reader has their own questions, their own priority figures and their own schedule. Choose one to see what SaasReport would build for them, and what Stripe cannot tell them.",
+    "sampleNote": "The figures below are computed by the real engine from made-up sample data for the last complete month.",
+    "who": {
+      "title": "Who asks",
+      "summary": "Pick a person to see their questions, their priority figures and the findings that apply to them.",
+      "seesLabel": "Their priority figures",
+      "doesLabel": "What reaches them",
+      "reportLine": "Report: {report}, {cadences}",
+      "notInStripeLine": "Stripe cannot tell them: {items}",
+      "findingLine": "Finding ({severity}): {headline}",
+      "noFindingLine": "No finding fires for them on this sample month.",
+      "actionYou": "You"
+    },
+    "order": {
+      "title": "One report, three orders",
+      "text": "A report type can have several readers. Its sections are ordered by each reader's priority figures, and by nothing else.",
+      "summary": "Open the same report as three different readers.",
+      "report": "board-pack"
+    },
+    "findings": {
+      "title": "Findings come from written rules",
+      "text": "A finding is a published rule applied to computed figures. It shows the figures that triggered it. It is not an AI judgement, and it is not a benchmark against other companies.",
+      "summary": "Every rule that fires on the sample month, most urgent first.",
+      "systemName": "SaasReport",
+      "evidenceLabel": "Evidence",
+      "doNext": "What to look at"
+    }
+  },
+  "roi": {
+    "eyebrow": "What it costs you today",
+    "title": "Count the hours your reports take.",
+    "lead": "Enter your own numbers. The calculator adds up what hand-built reporting costs you each month. It makes no claim about what SaasReport would save you.",
+    "note": "The starting values are examples, not averages. Replace them with yours.",
+    "summary": "Reporting by hand, on your inputs.",
+    "you": "You",
+    "step": "Enter how many people ask, how often, and how long a report takes.",
+    "inputs": {
+      "people": {
+        "label": "People who ask for Stripe numbers",
+        "default": 4,
+        "min": 1,
+        "max": 200,
+        "step": 1
+      },
+      "reports": {
+        "label": "Reports each person gets per month",
+        "default": 2,
+        "min": 1,
+        "max": 60,
+        "step": 1
+      },
+      "minutes": {
+        "label": "Minutes to build one report by hand",
+        "unit": "minutes",
+        "default": 90,
+        "min": 5,
+        "max": 2400,
+        "step": 5
+      },
+      "rate": {
+        "label": "Cost of one hour of the builder's time",
+        "unit": "your currency",
+        "default": 50,
+        "min": 1,
+        "max": 1000,
+        "step": 1
+      }
+    },
+    "outputs": {
+      "hours": {
+        "label": "Hours spent each month",
+        "unit": "hours"
+      },
+      "month": {
+        "label": "Cost each month",
+        "unit": "your currency"
+      },
+      "year": {
+        "label": "Cost each year",
+        "unit": "your currency"
+      }
+    }
+  },
+  "sectors": {
+    "eyebrow": "Who it is for",
+    "title": "Subscription companies, merchants and platforms.",
+    "items": [
+      {
+        "id": "subscription",
+        "title": "Subscription businesses",
+        "text": "Recurring revenue, retention and churn for the CEO, CFO, board and investors, and new customers for sales and marketing. Reports: {reports}. These need Stripe Billing subscriptions."
+      },
+      {
+        "id": "merchant",
+        "title": "Merchants without subscriptions",
+        "text": "Payments, refunds and disputes for finance and support. Reports: {reports}. They read charges, refunds and disputes only, so no subscriptions are needed."
+      },
+      {
+        "id": "platform",
+        "title": "Marketplaces and platforms",
+        "text": "What the platform earns and how its refunds and disputes behave. Report: {reports}. It reads the platform's own account, including application fees."
+      }
+    ],
+    "platformNote": "Stripe lets an app installed by a platform read only the platform's own data, not the data of the merchants on it. So a platform cannot see its merchants' numbers through SaasReport. Each merchant installs SaasReport on its own account, and the platform can recommend it. That is a referral, not a data feed."
+  },
+  "delivery": {
+    "eyebrow": "How a report reaches a person",
+    "title": "A signed link, not an attachment.",
+    "lead": "Each report is stored as a PDF under your own tenant. The reader gets an email with a signed link that expires. The email shows no figures, and you can revoke a link.",
+    "why": "Why a link: a financial report is sensitive. An attachment is copied, forwarded and kept for ever. A link can expire, can be revoked, and shows when it was opened. This is the design. It is not built yet.",
+    "journey": {
+      "title": "From Stripe data to a signed link",
+      "summary": "The path of one report. Every stage is planned.",
+      "plannedLabel": "Planned",
+      "steps": [
+        {
+          "id": "ingest",
+          "title": "Stripe sends the data",
+          "text": "Charges, refunds, disputes and subscriptions arrive through the Stripe app, and are stored under your tenant only."
+        },
+        {
+          "id": "compute",
+          "title": "Code computes the figures",
+          "text": "A deterministic engine turns the data into integers under published definitions."
+        },
+        {
+          "id": "findings",
+          "title": "Rules write the findings",
+          "text": "Published rules read the figures and state what changed, with the evidence."
+        },
+        {
+          "id": "words",
+          "title": "AI words the summary",
+          "text": "The AI sees aggregates only. A number guard rejects any number the engine did not compute."
+        },
+        {
+          "id": "store",
+          "title": "The PDF is stored",
+          "text": "The report is saved under your tenant's own prefix."
+        },
+        {
+          "id": "send",
+          "title": "A signed link is emailed",
+          "text": "The reader gets a link that expires. The email carries no figures."
+        }
+      ]
+    },
+    "schedule": {
+      "title": "Which period each schedule covers",
+      "text": "A scheduled run reports on the last complete period, in UTC. This is what each cadence would cover on the date this page was built.",
+      "summary": "The five cadences and the period each one covers.",
+      "systemName": "The schedule",
+      "line": "{cadence}: covers {period} ({from} to {to})"
+    }
+  },
+  "trust": {
+    "eyebrow": "Security and trust",
+    "title": "What we commit to, and where each commitment stands.",
+    "lead": "These are written promises. The status of each one is read from the commitments register. A commitment moves from planned to implemented only when a test or a file proves it. Today they are all planned.",
+    "tableLabel": "Commitments and their status",
+    "columns": [
+      "Commitment",
+      "Status"
+    ],
+    "statusWords": {
+      "planned": "Planned",
+      "implemented": "Implemented"
+    },
+    "legal": {
+      "label": "Legal documents",
+      "text": "{count} documents are drafts and none is published: {titles}. Company facts that they need are not set yet: {missing}."
+    },
+    "access": {
+      "title": "Who sees which report",
+      "text": "A person sees a report only if their Stripe role already lets them see the data behind it. A role we do not know sees nothing.",
+      "summary": "Pick a group of Stripe roles to see which reports they could read.",
+      "seesLabel": "Reports they can read",
+      "heldLabel": "Held back, because their role cannot see the data",
+      "noneLabel": "No report: this role cannot see financial data.",
+      "more": "{first} and {count} more",
+      "you": "Stripe roles",
+      "step": "A person opens SaasReport. We read their Stripe roles and show only what those roles can see."
+    },
+    "guard": {
+      "title": "AI writes the words. Code owns the numbers.",
+      "text": "Every figure comes from the engine. A guard checks each sentence the AI drafts, and rejects it if it holds a number the engine did not compute. A rejected sentence is never repaired.",
+      "summary": "Run two drafted sentences through the guard.",
+      "stages": [
+        {
+          "id": "compute",
+          "actor": "Engine",
+          "action": "Computes the figures",
+          "detail": "Integers from your Stripe data."
+        },
+        {
+          "id": "draft",
+          "actor": "AI",
+          "action": "Drafts a sentence",
+          "detail": "It sees aggregates only."
+        },
+        {
+          "id": "guard",
+          "actor": "Number guard",
+          "action": "Checks every number",
+          "detail": "Each number must be one the engine computed."
+        },
+        {
+          "id": "report",
+          "actor": "Report",
+          "action": "Sentence enters the report",
+          "detail": "Only a sentence that passed."
+        }
+      ],
+      "cases": [
+        {
+          "id": "grounded",
+          "label": "A sentence with the engine's number",
+          "draft": "Net revenue retention came in at {nrr}, a little under full retention.",
+          "kind": "accepted"
+        },
+        {
+          "id": "invented",
+          "label": "A sentence with an invented number",
+          "draft": "Net revenue retention came in at 112.40%, well ahead of plan.",
+          "kind": "rejected",
+          "stopsAt": "guard"
+        }
+      ]
+    }
+  },
+  "faq": {
+    "eyebrow": "Questions",
+    "title": "Straight answers.",
+    "items": [
+      {
+        "q": "Can I use SaasReport today?",
+        "a": "No. It is not built yet. The engine that computes the numbers exists and is tested. The Stripe app, the report pages and the email delivery do not exist."
+      },
+      {
+        "q": "Is it in the Stripe App Marketplace?",
+        "a": "No. It is not listed there."
+      },
+      {
+        "q": "Are the figures on this page real?",
+        "a": "No. The real engine computes them from made-up sample data, and each widget says so. No customer data is shown anywhere on this page, and there are no customer counts, testimonials or benchmarks."
+      },
+      {
+        "q": "What will it cost?",
+        "a": "That is not decided. There are no plans or prices yet."
+      },
+      {
+        "q": "Which Stripe data will it read?",
+        "a": "Only what the reports need: {classes}. Nothing is read today."
+      },
+      {
+        "q": "Will AI write my numbers?",
+        "a": "No. Code computes every figure. The AI is meant to write only the sentences around them, and a guard rejects any sentence that holds a number the engine did not compute. The guard exists in code. The full pipeline does not."
+      },
+      {
+        "q": "What can SaasReport not tell me?",
+        "a": "Anything Stripe does not hold. Across the readers above that includes {gaps}. SaasReport will not pretend to know them."
+      },
+      {
+        "q": "I run a marketplace. Can I see my merchants' numbers?",
+        "a": "Not through SaasReport. Stripe lets an app installed by a platform read only the platform's own data. Merchants can install SaasReport on their own accounts, and you can recommend it."
+      },
+      {
+        "q": "Where will my data be kept?",
+        "a": "Nothing is stored yet, because nothing is built. The plan is Cloudflare only, under your own tenant identifier. Hosting regions are not decided."
+      },
+      {
+        "q": "Who is behind it?",
+        "a": "SaasReport. The legal entity is not set up on paper yet: {company}."
+      }
+    ]
+  },
+  "final": {
+    "eyebrow": "Next step",
+    "title": "Tell us who asks about your numbers.",
+    "text": "Email us the roles in your company that ask for Stripe figures, and the report each of them would read. Your answer helps decide what is built first.",
+    "action": "Email {email}",
+    "small": "There is no form yet. This opens your email app."
+  },
+  "nav": {
+    "links": [
+      {
+        "section": "people",
+        "label": "People"
+      },
+      {
+        "section": "how",
+        "label": "How it works"
+      },
+      {
+        "section": "cost",
+        "label": "Cost"
+      },
+      {
+        "section": "sectors",
+        "label": "Who it is for"
+      },
+      {
+        "section": "trust",
+        "label": "Trust"
+      },
+      {
+        "section": "faq",
+        "label": "Questions"
+      }
+    ],
+    "cta": "contact",
+    "ctaLabel": "Email us"
+  },
+  "footer": {
+    "text": "© {year} {holder}. Legal documents are drafts and are not published yet."
+  },
+  "widgets": {
+    "honesty": {
+      "live": "Live data",
+      "engine": "Engine on sample data",
+      "sample": "Sample"
+    },
+    "vocabulary": {
+      "forbidden": [
+        "revolutionize",
+        "revolutionise",
+        "seamless",
+        "empower",
+        "unlock",
+        "game-changing",
+        "cutting-edge",
+        "best-in-class",
+        "supercharge",
+        "leverage"
+      ]
+    },
+    "audiences": {
+      "subscription": "Subscription businesses",
+      "merchant": "Merchants without subscriptions",
+      "platform": "Marketplaces and platforms"
+    },
+    "useCases": {
+      "people": "Start with the person",
+      "reports": "Build the report for the reader",
+      "cost": "Count what reporting costs you",
+      "delivery": "Deliver it safely",
+      "trust": "Check what we promise"
+    },
+    "page": {
+      "title": "Examples",
+      "intro": "Every widget here runs the real SaasReport engine on made-up sample data, or on your own inputs. Each one says which.",
+      "metaDescription": "Interactive examples of SaasReport: pick a reader, see a report ordered for them, count the cost of hand-built reports, and follow a report from Stripe data to a signed link. Sample data only."
+    },
+    "notes": {
+      "who-asks": {
+        "how": "Pick a reader in the People section, and again in the gallery of examples.",
+        "application": "The reader reports of the SaasReport app",
+        "components": [
+          "Stakeholder registry",
+          "Metric engine",
+          "Findings rules"
+        ],
+        "flow": "The registry names the reader, the engine computes the priority figures from sample data, and the rules state the findings.",
+        "learns": "What each reader asks, which figures they follow, and what Stripe cannot tell them.",
+        "does": "Pick a reader and read their questions, figures and findings."
+      },
+      "report-order": {
+        "how": "Shown in the People section, below the reader picker.",
+        "application": "The report planner of the SaasReport app",
+        "components": [
+          "Report type registry",
+          "Stakeholder registry",
+          "Report planner",
+          "Metric engine"
+        ],
+        "flow": "The planner orders the sections of one report type by the reader's priority figures, and the engine fills in each figure.",
+        "learns": "That one report type is ordered differently for each of its readers.",
+        "does": "Open the same report as three readers and compare the order."
+      },
+      "findings": {
+        "how": "Shown in the People section, after the report order.",
+        "application": "The findings of the SaasReport reports",
+        "components": [
+          "Findings rule registry",
+          "Metric engine",
+          "Findings evaluator"
+        ],
+        "flow": "The engine computes the figures for this month and the month before, and each published rule that matches becomes a finding with its evidence.",
+        "learns": "That a finding is a written rule with evidence, and what to look at next.",
+        "does": "Read each finding and the figures behind it."
+      },
+      "cost": {
+        "how": "Shown in the Cost section.",
+        "application": "A calculator on the landing page",
+        "components": [
+          "Your own inputs",
+          "Plain arithmetic"
+        ],
+        "flow": "Your four inputs go through three sums: hours, cost each month and cost each year. Nothing leaves your browser.",
+        "learns": "What hand-built reporting costs you today, with no claim about savings.",
+        "does": "Change the four inputs and watch the three results."
+      },
+      "roles-access": {
+        "how": "Shown in the Trust section.",
+        "application": "Role-based access in the SaasReport app",
+        "components": [
+          "Stripe role registry",
+          "Metric registry",
+          "Report type registry",
+          "Access rules"
+        ],
+        "flow": "A report is offered only if every data class behind its figures is visible to at least one of the person's Stripe roles.",
+        "learns": "That access follows Stripe roles, and an unknown role sees nothing.",
+        "does": "Pick a group of Stripe roles and see the reports it could read."
+      },
+      "journey": {
+        "how": "Shown in the Delivery section.",
+        "application": "The report pipeline of the SaasReport app",
+        "components": [
+          "Stripe app",
+          "Metric engine",
+          "Findings rules",
+          "Number guard",
+          "Report storage",
+          "Mail engine"
+        ],
+        "flow": "Stripe data is stored per tenant, turned into figures and findings, worded, rendered to a PDF, stored, and sent as a signed link.",
+        "learns": "The path one report takes from Stripe data to a reader, and that every stage is still planned.",
+        "does": "Run the pipeline and read each stage."
+      },
+      "schedule": {
+        "how": "Shown in the Delivery section, after the pipeline.",
+        "application": "The schedule of the SaasReport app",
+        "components": [
+          "Cadence registry",
+          "Period calendar"
+        ],
+        "flow": "Each cadence reports on the last complete period before the run, in UTC, by integer calendar arithmetic.",
+        "learns": "Which period each cadence covers.",
+        "does": "Read the five cadences and their periods."
+      },
+      "number-guard": {
+        "how": "Shown in the Trust section, after the access example.",
+        "application": "The number guard of the SaasReport reports",
+        "components": [
+          "Metric engine",
+          "AI drafting step",
+          "Number guard"
+        ],
+        "flow": "The guard compares every number in a drafted sentence with the figures the engine computed, and rejects the sentence on any other number.",
+        "learns": "That AI writes the words and code owns the numbers.",
+        "does": "Run a grounded sentence and an invented one through the guard."
+      }
+    }
+  }
+}

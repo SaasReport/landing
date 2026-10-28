@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/health.schema.json",
+  "title": "kit.health.v1",
+  "description": "The answer of GET /api/health on a kit site Worker (@saasreport/cloudflare/health): derived from the site's own monitor (its MONITOR service binding, GET /status, kit.monitor-status.v1), never a constant. `ok` is true only when the monitor's latest run is passing and not stale; HTTP 200 then, 503 otherwise (failing, stale, unknown, a monitor that does not answer or is not bound). Facts the site adds (component, feature switches) ride along under their own keys and never decide `ok`.",
+  "type": "object",
+  "required": ["ok", "component", "monitor"],
+  "properties": {
+    "ok": { "type": "boolean" },
+    "component": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "monitor": {
+      "type": "object",
+      "required": ["status"],
+      "additionalProperties": false,
+      "properties": {
+        "status": { "enum": ["passing", "failing", "stale", "unknown", "unreachable", "not-bound"] },
+        "last": { "type": ["string", "null"], "description": "started_at of the monitor's latest run." },
+        "failed": { "type": "array", "items": { "type": "string" }, "description": "Names of the journeys that failed in the latest run." }
+      }
+    }
+  }
+}

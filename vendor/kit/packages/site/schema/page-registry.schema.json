@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/site/schema/page-registry.schema.json",
+  "title": "kit.page-registry.v1",
+  "description": "The canonical registry of a site's pages, generated (never hand-edited) by the kit's buildRegistry from the project's pages and its taxonomy (kit.taxonomy.v1). One entry per page: identity, labels, facets, place in the tree (section, group, parent, breadcrumbs), related and next pages, ranking weight and widgets. The menu, the hubs and facet pages, breadcrumbs, related links, the sitemap, llms.txt, the search index and the BreadcrumbList structured data are generated from it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "generated_by", "home", "browse", "sections", "facets", "pages"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schema": { "const": "kit.page-registry.v1" },
+    "generated_by": { "type": "string" },
+    "home": { "type": "string", "pattern": "^/" },
+    "browse": { "type": "string", "pattern": "^/" },
+    "synonyms": { "type": "array", "items": { "type": "array", "items": { "type": "string" } } },
+    "sections": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "label", "hub", "groups"], "properties": {
+      "id": { "type": "string" }, "label": { "type": "string" }, "hub": { "type": "string" },
+      "groups": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "label", "hub", "count"], "properties": {
+        "id": { "type": "string" }, "label": { "type": "string" }, "hub": { "type": "string" }, "count": { "type": "integer", "minimum": 0 } } } } } } },
+    "facets": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "label", "hub", "values"], "properties": {
+      "id": { "type": "string" }, "label": { "type": "string" }, "hub": { "type": "string" }, "single": { "type": "boolean" },
+      "values": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "label", "hub", "count"], "properties": {
+        "id": { "type": "string" }, "label": { "type": "string" }, "hub": { "type": "string" }, "count": { "type": "integer", "minimum": 0 },
+        "synonyms": { "type": "array", "items": { "type": "string" } }, "visual": { "type": "string" } } } } } } },
+    "pages": { "type": "array", "items": { "$ref": "#/$defs/page" } }
+  },
+  "$defs": {
+    "page": {
+      "type": "object", "additionalProperties": false,
+      "required": ["id", "url", "title", "label", "summary", "kind", "index", "facets", "crumbs", "related", "weight", "widgets"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9/._-]*$" },
+        "url": { "type": "string", "pattern": "^/" },
+        "title": { "type": "string", "minLength": 1 },
+        "label": { "type": "string", "minLength": 1, "description": "The short name every link to this page shows (menu, hubs, breadcrumbs, related)." },
+        "aliases": { "type": "array", "items": { "type": "string" }, "description": "Other names a link to this page may show (its heading, its legacy navigation label)." },
+        "summary": { "type": "string" },
+        "kind": { "enum": ["page", "home", "section", "group", "facet", "facet-value", "browse"], "description": "page, the home page, a section or group hub, or a facet page." },
+        "generated": { "type": "boolean", "description": "A hub or facet page the kit writes (it has no source page)." },
+        "index": { "type": "boolean", "description": "Indexable (in the sitemap, the search and the hubs)." },
+        "section": { "type": "string" },
+        "group": { "type": "string" },
+        "parent": { "type": "string", "pattern": "^/" },
+        "crumbs": { "type": "array", "items": { "type": "string", "pattern": "^/" }, "description": "Ancestors from the home page down, then this page." },
+        "facets": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } },
+        "contentType": { "type": "string" },
+        "related": { "type": "array", "items": { "type": "string", "pattern": "^/" } },
+        "prev": { "type": "string", "pattern": "^/" },
+        "next": { "type": "string", "pattern": "^/" },
+        "weight": { "type": "number" },
+        "widgets": { "type": "array", "items": { "type": "string" }, "description": "Ids of the generated widgets the page shows." },
+        "visual": { "type": "string", "description": "The archetype of the page's generated visual when it has no widget of its own." }
+      }
+    }
+  }
+}

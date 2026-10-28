@@ -1,0 +1,89 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/toolchain.schema.json",
+  "title": "kit.toolchain.v1",
+  "description": "packages/core/registry/toolchain.json: the ONE pin of the toolchain every machine that runs the kit uses (node, npm, git, docker), exact versions. `kit check staleness` compares each tool with its `--version` where the tool is required (`required_on`: a GitHub runner `ci`, a `codespace`, or any other `machine`; where each is decided by the environment variables of `host`); any other version is toolchain-drift. The workflows' node-version, the templates and the codespace definition are checked against it (or generated from it), never a second copy.",
+  "type": "object",
+  "required": [
+    "host",
+    "tools"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "tools": {
+      "type": "object",
+      "required": [
+        "node",
+        "npm",
+        "git",
+        "docker"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "node": {
+          "$ref": "#/$defs/tool"
+        },
+        "npm": {
+          "$ref": "#/$defs/tool"
+        },
+        "git": {
+          "$ref": "#/$defs/tool"
+        },
+        "docker": {
+          "$ref": "#/$defs/tool"
+        }
+      }
+    },
+    "host": {
+      "type": "object",
+      "required": [
+        "ci_env",
+        "codespace_env"
+      ],
+      "additionalProperties": false,
+      "description": "The environment variables that say where a run is: `ci_env` is \"true\" on a GitHub runner, `codespace_env` is \"true\" in a codespace; neither is a laptop or a bare host (`machine`).",
+      "properties": {
+        "ci_env": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$"
+        },
+        "codespace_env": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "tool": {
+      "type": "object",
+      "required": [
+        "exact",
+        "required_on"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "exact": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "The exact version every machine where the tool is required runs."
+        },
+        "required_on": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "ci",
+              "codespace",
+              "machine"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

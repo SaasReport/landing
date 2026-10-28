@@ -1,0 +1,1014 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/finding-class.schema.json",
+  "title": "kit.finding-class.v1",
+  "description": "The registry of finding classes (docs/CONSTITUTION.md §10, zero post-facto). Every review or CI finding belongs to a class; every class has a gate that refuses it at t=0, proven by a must-fail case taken from the real finding and a must-pass case. `kit check canon` (check `findings`) runs each gate on its cases and then on the repository. A finding whose class is missing here is a missing gate: the class and its gate are added before the fix. Each class's rule is declared here as data (`detect`), never as code: a tree-sitter query over parsed source (also over the shell scripts a workflow or package.json runs), a JSON Schema over a parsed config or over the facts git reports, or a pattern over text a canonical parser extracted. One generic engine (packages/cli/src/canon/engine.js) runs every contract with canonical parsers only (wo-0008).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "classes",
+    "grammars",
+    "sets",
+    "shell",
+    "templates",
+    "v"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "v": {
+      "const": 1
+    },
+    "classes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "rule",
+          "level",
+          "first_seen",
+          "cases",
+          "detect"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$"
+          },
+          "rule": {
+            "type": "string",
+            "minLength": 20,
+            "description": "What the gate refuses, in one sentence."
+          },
+          "level": {
+            "enum": [
+              "source",
+              "process"
+            ],
+            "description": "source: a gate over the repository's files, run by kit check canon. process: a gate over work itself (a work order, a commit range, a session), run by kit check work."
+          },
+          "first_seen": {
+            "type": "array",
+            "minItems": 1,
+            "description": "The real findings this class was cut from: owner/repo#n@sha or a short description with its date.",
+            "items": {
+              "type": "string",
+              "minLength": 5
+            }
+          },
+          "cases": {
+            "type": "string",
+            "pattern": "^[a-z0-9/_.-]+$",
+            "description": "Directory (repository path) holding must-fail/ and must-pass/ cases for the gate."
+          },
+          "detect": {
+            "type": "array",
+            "minItems": 1,
+            "description": "The rule as declared data, run by the engine: every detector's findings are the class's findings.",
+            "items": {
+              "oneOf": [
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "files",
+                    "query",
+                    "problem"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "query"
+                    },
+                    "files": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "include"
+                      ],
+                      "properties": {
+                        "include": {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "exclude": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "importing": {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "description": "Only the files that ARE one of these modules or import one of them (repository paths; static, dynamic, re-export and require, read from the parsed source, never matched as text). The one declaration of a file set that is defined by what its files import."
+                        },
+                        "not_importing": {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          },
+                          "description": "Not the files that are, or import, one of these modules."
+                        }
+                      },
+                      "description": "Repository-relative globs (** any depth, * one segment)."
+                    },
+                    "grammar": {
+                      "enum": [
+                        "javascript",
+                        "typescript",
+                        "tsx",
+                        "python",
+                        "bash"
+                      ],
+                      "description": "Required with embedded; otherwise the file's grammar by extension."
+                    },
+                    "embedded": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "format",
+                        "select"
+                      ],
+                      "description": "The source is a string inside a structured file: parse the file with its canonical parser, select the strings by path (* any key or index) and parse each with the detector's grammar.",
+                      "properties": {
+                        "format": {
+                          "enum": [
+                            "yaml",
+                            "json"
+                          ]
+                        },
+                        "select": {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "github_expressions": {
+                          "type": "boolean",
+                          "description": "replace each ${{ … }} expression with a placeholder word before the shell parses the string: GitHub evaluates expressions before the shell runs"
+                        }
+                      }
+                    },
+                    "query": {
+                      "type": "string",
+                      "minLength": 10,
+                      "description": "A tree-sitter query; the node captured as @finding is reported. Custom predicates the engine evaluates: (#any-of-set? @c \"set\") the capture's text is in a declared set; (#bound? @c \"name\") the capture's text is a name bound by a `bind` query of this detector. (#param-unused? @fn) a function or catch clause never uses its parameters in its body (or has none); (#has-descendant? / #not-has-descendant? @c \"type\" …), (#only-children? @c \"type\" …) over node types. (#permissive-verdict? @obj \"allow-set\" \"deny-set\") an object with a pair whose key (quoted or not) is in the first set with the value true, or in the second with false; (#guarded-by-missing? @n) @n sits in the branch taken when a dependency of its own enclosing function is absent (a parameter, or a name read off one; tested by !x, == null, === undefined, typeof x === \"undefined\", either side of || and &&, the absent arm of a ternary); (#within? @n \"type\" …) @n sits inside such a node, not crossing a function boundary."
+                    },
+                    "bind": {
+                      "type": "array",
+                      "description": "Queries whose @name captures bind names in the file (an import alias, a destructured name) for (#bound? @c \"as\").",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "query",
+                          "as"
+                        ],
+                        "properties": {
+                          "query": {
+                            "type": "string",
+                            "minLength": 10
+                          },
+                          "as": {
+                            "type": "string",
+                            "pattern": "^[a-z][a-z-]*$"
+                          },
+                          "default": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "unless": {
+                      "type": "array",
+                      "description": "Declared exceptions: a finding is excused when a node captured as @reason by the query stands in the relation to it. Nothing else excuses a finding.",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "query",
+                          "relation",
+                          "why"
+                        ],
+                        "properties": {
+                          "query": {
+                            "type": "string",
+                            "minLength": 10
+                          },
+                          "relation": {
+                            "enum": [
+                              "same-line",
+                              "first-line",
+                              "ancestor",
+                              "inside",
+                              "option-of"
+                            ],
+                            "description": "same-line: @reason starts on the line the finding ends on, after it; ancestor: @reason contains the finding; inside: @reason is inside the finding. first-line: @reason starts on the line the finding starts, after its start. option-of: @reason is a property of the one options object passed straight to the finding, and that object's last word on the key."
+                          },
+                          "min_length": {
+                            "type": "integer",
+                            "minimum": 0,
+                            "description": "for a comment reason: the least number of characters of text after the comment marker"
+                          },
+                          "why": {
+                            "type": "string",
+                            "minLength": 10
+                          }
+                        }
+                      }
+                    },
+                    "member": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "in",
+                        "key"
+                      ],
+                      "description": "A membership rule: the captures named in key, joined by a space, must be a member of the dataset; a capture that is absent is left out of the key.",
+                      "properties": {
+                        "in": {
+                          "enum": [
+                            "kit-commands",
+                            "package-scripts"
+                          ]
+                        },
+                        "key": {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "type": "string",
+                            "pattern": "^@[a-z][a-z-]*$"
+                          }
+                        }
+                      }
+                    },
+                    "problem": {
+                      "type": "string",
+                      "minLength": 20
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "files",
+                    "format",
+                    "schema",
+                    "problem"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "schema"
+                    },
+                    "files": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "include"
+                      ],
+                      "properties": {
+                        "include": {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "exclude": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      },
+                      "description": "Repository-relative globs (** any depth, * one segment)."
+                    },
+                    "format": {
+                      "enum": [
+                        "toml",
+                        "json",
+                        "jsonc",
+                        "yaml",
+                        "markdown-front-matter",
+                        "module"
+                      ],
+                      "description": "How the file is read: toml, json, jsonc and yaml as the format says; markdown-front-matter: the YAML block between the first two --- lines of a Markdown file (a file without one reads as an empty object); module: the named export of a JavaScript module, read as a literal from its syntax tree and never run (see `export`)."
+                    },
+                    "schema": {
+                      "type": "object",
+                      "description": "A JSON Schema 2020-12 over the parsed file. A value the repository's own config gives it is never written into the schema: declare it in `bind` and reference it as {\"$bind\": \"<name>\"} (anywhere a schema or a value may stand; a boolean fact stands where a schema does), or {\"$bind\": \"<name>\", \"as\": \"regex\", \"template\": \"@(?:{})$\"} for a pattern built from the value (an array becomes alternatives; every value is escaped; \"caseInsensitive\": true makes each letter match both cases). The engine substitutes the bound values before validating."
+                    },
+                    "bind": {
+                      "type": "object",
+                      "minProperties": 1,
+                      "propertyNames": {
+                        "pattern": "^[a-z][a-z0-9_]*$"
+                      },
+                      "description": "Values the schema reads from the repository, each named and declared (wo-0016): never hard-coded in the schema and never defaulted silently. A bound value that cannot be resolved (a missing file, a pointer that points at nothing and declares no default, a name the schema references but does not declare) is a finding, never a pass. Resolved only when the detector has a file to check.",
+                      "additionalProperties": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "pointer"
+                            ],
+                            "properties": {
+                              "pointer": {
+                                "type": "string",
+                                "pattern": "^/",
+                                "description": "A JSON Pointer (RFC 6901) into kit.canon.json, or into `file` when the bind names one, read with the parser of its format."
+                              },
+                              "default": {
+                                "description": "The value when the pointer points at nothing: declared here, so a missing optional value is a decision in the registry. Without it a missing value is a finding."
+                              },
+                              "valid": {
+                                "type": [
+                                  "object",
+                                  "boolean"
+                                ],
+                                "description": "A JSON Schema the bound value must satisfy (the value read, or the default): a value of another type or shape is a finding, never coerced into the schema it is substituted in."
+                              },
+                              "pick": {
+                                "type": "string",
+                                "minLength": 1,
+                                "description": "The value is a list of objects (each keeps its reason beside the fact); the schema is given one property of each, as a list. Needs a `valid` that makes the value a list of objects with that property."
+                              },
+                              "file": {
+                                "oneOf": [
+                                  {
+                                    "type": "string",
+                                    "minLength": 1
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "required": [
+                                      "pointer"
+                                    ],
+                                    "properties": {
+                                      "pointer": {
+                                        "type": "string",
+                                        "pattern": "^/"
+                                      }
+                                    }
+                                  }
+                                ],
+                                "description": "Read the pointer from this repository file instead of kit.canon.json: a path inside the repository (an absolute path, `..` or a link out is a finding), or {\"pointer\": \"/tags/vocabulary\"} for a path that kit.canon.json holds. A file that is missing, cannot be parsed or has nothing at the pointer (without a default) is a finding."
+                              },
+                              "format": {
+                                "enum": [
+                                  "toml",
+                                  "json",
+                                  "jsonc",
+                                  "yaml"
+                                ],
+                                "default": "json",
+                                "description": "With file: how the file is parsed."
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "builtin"
+                            ],
+                            "properties": {
+                              "builtin": {
+                                "enum": [
+                                  "today"
+                                ],
+                                "description": "today: the date the check runs, as YYYY-MM-DD (UTC)."
+                              }
+                            }
+                          },
+                          {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "exists"
+                            ],
+                            "properties": {
+                              "exists": {
+                                "type": "array",
+                                "minItems": 1,
+                                "items": {
+                                  "type": "string",
+                                  "minLength": 1
+                                },
+                                "description": "true when a file of the repository matches one of these globs, else false."
+                              }
+                            }
+                          }
+                        ]
+                      }
+                    },
+                    "problem": {
+                      "type": "string",
+                      "minLength": 20
+                    },
+                    "deref": {
+                      "const": "local",
+                      "description": "Replace the document's local $refs (\"#/...\") by what they point at before the schema runs, so the gate judges what a reader sees; a reference that cannot be followed stays a $ref."
+                    },
+                    "export": {
+                      "type": "string",
+                      "pattern": "^[A-Za-z_$][A-Za-z0-9_$]*$",
+                      "default": "default",
+                      "description": "With format module: the export whose value the schema validates. The module is read from its syntax tree and never imported or run: the export must be written as a literal (`export const NAME = <object, array, string, number, true, false or null built from literals>`, or `export default <literal>`), with no getter, method, spread, computed key, identifier, call or template substitution; anything else, a missing export or an unreadable file is a finding."
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "format": {
+                            "const": "module"
+                          }
+                        },
+                        "required": [
+                          "format"
+                        ]
+                      },
+                      "then": {
+                        "required": [
+                          "export"
+                        ]
+                      },
+                      "else": {
+                        "not": {
+                          "required": [
+                            "export"
+                          ]
+                        }
+                      }
+                    }
+                  ]
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "schema",
+                    "problem"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "git"
+                    },
+                    "schema": {
+                      "type": "object",
+                      "description": "Over the facts git reports: { gitlinks: [{ path, registered }], ignored: { <probe path>: boolean } }."
+                    },
+                    "probes": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "problem": {
+                      "type": "string",
+                      "minLength": 20
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "files",
+                    "pattern",
+                    "problem"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "text"
+                    },
+                    "files": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "include"
+                      ],
+                      "properties": {
+                        "include": {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "exclude": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      },
+                      "description": "Repository-relative globs (** any depth, * one segment)."
+                    },
+                    "extract": {
+                      "enum": [
+                        "whole",
+                        "markdown-code"
+                      ],
+                      "description": "whole: the file's text; markdown-code: the code blocks a CommonMark parser finds."
+                    },
+                    "lang": {
+                      "type": "string",
+                      "description": "with markdown-code: the code block language"
+                    },
+                    "pattern": {
+                      "type": "string",
+                      "minLength": 1,
+                      "description": "A regular expression (u flag, case-insensitive) over the extracted text: a content predicate, not a parser."
+                    },
+                    "problem": {
+                      "type": "string",
+                      "minLength": 20
+                    }
+                  }
+                },
+                {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "kind",
+                    "files",
+                    "problem"
+                  ],
+                  "properties": {
+                    "kind": {
+                      "const": "command"
+                    },
+                    "files": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "include"
+                      ],
+                      "properties": {
+                        "include": {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "exclude": {
+                          "type": "array",
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        }
+                      },
+                      "description": "Repository-relative globs (** any depth, * one segment)."
+                    },
+                    "embedded": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "format",
+                        "select"
+                      ],
+                      "description": "The source is a string inside a structured file: parse the file with its canonical parser, select the strings by path (* any key or index) and parse each with the detector's grammar.",
+                      "properties": {
+                        "format": {
+                          "enum": [
+                            "yaml",
+                            "json"
+                          ]
+                        },
+                        "select": {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "type": "string",
+                            "minLength": 1
+                          }
+                        },
+                        "github_expressions": {
+                          "type": "boolean",
+                          "description": "replace each ${{ … }} expression with a placeholder word before the shell parses the string: GitHub evaluates expressions before the shell runs"
+                        }
+                      }
+                    },
+                    "wrappers": {
+                      "type": "boolean",
+                      "description": "set aside the registry's declared wrappers (shell.wrappers)"
+                    },
+                    "shells": {
+                      "type": "boolean",
+                      "description": "read the script a declared shell runs (shell.shells) as commands too"
+                    },
+                    "refuse": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "additionalProperties": false,
+                        "required": [
+                          "argv"
+                        ],
+                        "properties": {
+                          "argv": {
+                            "type": "array",
+                            "minItems": 1,
+                            "items": {
+                              "oneOf": [
+                                {
+                                  "type": "string",
+                                  "minLength": 1,
+                                  "description": "this word exactly"
+                                },
+                                {
+                                  "type": "object",
+                                  "additionalProperties": false,
+                                  "required": [
+                                    "in"
+                                  ],
+                                  "properties": {
+                                    "in": {
+                                      "type": "string",
+                                      "description": "a declared set"
+                                    }
+                                  }
+                                },
+                                {
+                                  "type": "object",
+                                  "additionalProperties": false,
+                                  "required": [
+                                    "re"
+                                  ],
+                                  "properties": {
+                                    "re": {
+                                      "type": "string",
+                                      "minLength": 1
+                                    }
+                                  }
+                                }
+                              ]
+                            },
+                            "description": "the leading words of the command, after the declared wrappers are set aside"
+                          },
+                          "flag": {
+                            "type": "string",
+                            "description": "a regular expression one of its options (a word starting with -) must match, before its first operand"
+                          },
+                          "operand": {
+                            "type": "string",
+                            "description": "a regular expression its first operand must match"
+                          },
+                          "unless_flag": {
+                            "type": "string",
+                            "description": "a regular expression no option may match"
+                          },
+                          "no_operand": {
+                            "type": "boolean",
+                            "description": "the command has no operand (yarn alone installs)"
+                          }
+                        }
+                      },
+                      "description": "a command matching any pattern is a finding"
+                    },
+                    "member": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "in",
+                        "invocations"
+                      ],
+                      "properties": {
+                        "in": {
+                          "enum": [
+                            "kit-commands",
+                            "package-scripts"
+                          ],
+                          "description": "kit-commands: the words after the invocation are read by the CLI's own argument parser and its command and subcommand must be in the command table of the kit the repository runs; package-scripts: the script must be in the package.json the command runs against"
+                        },
+                        "invocations": {
+                          "type": "array",
+                          "minItems": 1,
+                          "items": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "required": [
+                              "argv"
+                            ],
+                            "properties": {
+                              "argv": {
+                                "type": "array",
+                                "minItems": 1,
+                                "items": {
+                                  "oneOf": [
+                                    {
+                                      "type": "string",
+                                      "minLength": 1,
+                                      "description": "this word exactly"
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": false,
+                                      "required": [
+                                        "in"
+                                      ],
+                                      "properties": {
+                                        "in": {
+                                          "type": "string",
+                                          "description": "a declared set"
+                                        }
+                                      }
+                                    },
+                                    {
+                                      "type": "object",
+                                      "additionalProperties": false,
+                                      "required": [
+                                        "re"
+                                      ],
+                                      "properties": {
+                                        "re": {
+                                          "type": "string",
+                                          "minLength": 1
+                                        }
+                                      }
+                                    }
+                                  ]
+                                },
+                                "description": "the leading words of the command, after the declared wrappers are set aside"
+                              },
+                              "flag": {
+                                "type": "string",
+                                "description": "a regular expression one of its options (a word starting with -) must match, before its first operand"
+                              },
+                              "operand": {
+                                "type": "string",
+                                "description": "a regular expression its first operand must match"
+                              },
+                              "unless_flag": {
+                                "type": "string",
+                                "description": "a regular expression no option may match"
+                              },
+                              "no_operand": {
+                                "type": "boolean",
+                                "description": "the command has no operand (yarn alone installs)"
+                              }
+                            }
+                          }
+                        },
+                        "unless_flag": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "problem": {
+                      "type": "string",
+                      "minLength": 20
+                    }
+                  }
+                }
+              ]
+            }
+          }
+        }
+      }
+    },
+    "grammars": {
+      "type": "object",
+      "description": "The grammar each source file is parsed with, by extension (tree-sitter grammars from @vscode/tree-sitter-wasm).",
+      "additionalProperties": {
+        "enum": [
+          "javascript",
+          "typescript",
+          "tsx",
+          "python",
+          "bash"
+        ]
+      },
+      "propertyNames": {
+        "pattern": "^\\.[a-z0-9]+$"
+      }
+    },
+    "sets": {
+      "type": "object",
+      "description": "Named lists of words a query refers to with (#any-of-set? @capture \"name\"): command wrappers, package runners, latency names. Declared once, used by any class.",
+      "additionalProperties": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "minLength": 1
+        },
+        "minItems": 1
+      }
+    },
+    "templates": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "include",
+        "why"
+      ],
+      "description": "Files that are templates of the site build (rendered by @saasreport/site renderTemplate before they are code): no grammar parses them as source; their rendered output is what the code contracts check (packages/cli/test/findings.test.mjs builds the sample site and runs them on it).",
+      "properties": {
+        "include": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "why": {
+          "type": "string",
+          "minLength": 20
+        }
+      }
+    },
+    "shell": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wrappers",
+        "shells",
+        "value_flags"
+      ],
+      "description": "How the engine reads a parsed shell command, declared once: the wrappers that run another command (with the options that take a value, whether VAR=value assignments follow, and how many operands precede the command), the shells whose script option carries a script, the options of a command that take a value (so their value is not read as its operand), and the commands that run another named in their arguments (find -exec).",
+      "properties": {
+        "wrappers": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "value_flags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "assignments": {
+                "type": "boolean"
+              },
+              "operands": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "split_flags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "options whose value is itself a command line, read by the shell grammar (env -S \"…\")"
+              },
+              "abbreviate": {
+                "type": "boolean",
+                "description": "the wrapper reads GNU long options abbreviated to a unique prefix (--kill for --kill-after)"
+              },
+              "lookup_flags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "options with which the wrapper only looks the command up and runs nothing (command -v)"
+              }
+            }
+          }
+        },
+        "shells": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "script_flag"
+            ],
+            "properties": {
+              "script_flag": {
+                "type": "string",
+                "pattern": "^[a-z]?$",
+                "description": "the letter of the option that carries the script (c for bash -c); empty for a shell whose operands are the script (eval)"
+              },
+              "script_long": {
+                "type": "string",
+                "pattern": "^--[a-z][a-z-]*$",
+                "description": "the long option that carries the script (--command for su, --call for npx)"
+              },
+              "also_command": {
+                "type": "boolean",
+                "description": "the command is a tool in its own right as well (npx -c): it is matched as a command too"
+              },
+              "stdin": {
+                "type": "boolean",
+                "description": "with no script operand the shell reads its script from stdin: a here-string or here-document is read, a pipe is refused"
+              },
+              "script_value": {
+                "type": "boolean",
+                "description": "the script option takes the script as its value, as getopt reads it (su -c \"…\" root, npx -c \"…\"), instead of the script being the first operand after the options (bash -c \"…\")"
+              },
+              "permute": {
+                "type": "boolean",
+                "description": "options may follow operands (GNU getopt permutes: su deploy -c \"…\")"
+              },
+              "after": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1,
+                "description": "the command is read this way only after one of these subcommands (npm exec, pnpm dlx)"
+              },
+              "stdin_flag": {
+                "type": "string",
+                "pattern": "^[a-z]$",
+                "description": "the letter of the option that makes the shell read its script from stdin even with operands (bash -s)"
+              },
+              "file_operand": {
+                "type": "boolean",
+                "description": "its operand is a file it runs in this shell (source f, . f); /dev/stdin reads a here-string or here-document"
+              },
+              "runs_command": {
+                "type": "boolean",
+                "description": "the command runs another named by its first operand after its own options (npx -y sh -c …, pnpm exec npm i …, npm exec -- …): that command is read as a command of its own"
+              },
+              "script_operands": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "how many leading operands are the script (trap 'cmd' EXIT: 1); default all"
+              },
+              "foreign": {
+                "type": "boolean",
+                "description": "its script is in a language the gate does not read (pwsh, cmd): a command running it is refused"
+              }
+            }
+          }
+        },
+        "value_flags": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "subcommands": {
+          "type": "object",
+          "description": "commands that run another command named in their arguments, between one of its flags and an end word (find -exec … ;)",
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "flags",
+              "ends"
+            ],
+            "properties": {
+              "flags": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              },
+              "ends": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "minItems": 1
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,161 @@
+# The ONE workflow that changes production for a kit project (docs/RELEASE.md). Copy it to .github/workflows/production.yml UNCHANGED:
+# `kit check release` holds it byte for byte to this template, so a step added after the tests, a
+# removed guard or a skipped drill cannot merge. Every project fact (the build, the D1 databases, the Workers in deploy order, their build
+# endpoints, the owner address's targets, the drills, the bootstrap state) is in release.json (kit.release.v1), read by `kit release`.
+#
+# Order is the contract: install → the ONE build, sealed (.release/seal.json) → npm test → ship: main only, main's HEAD only, the
+# environment deploys from main only → bootstrap receipt (state bootstrap: every Worker absent, read-only) → create-or-find every D1 and
+# R2 → for each Worker in order: migrate every D1 it binds, re-check the seal, deploy with --var BUILD_COMMIT → the owner address
+# (OPS_NOTIFY_TO, refused when empty, before any change) written to every target secret → every Worker's GET /api/build serves this commit
+# → the drills asked for (every one in bootstrap) → the records pull request. A rollback is a revert merged to main, which this deploys.
+#
+# One concurrency group, never cancelled: a newer pending run replaces an older pending one, and the main-HEAD guard stops any run whose
+# commit main has moved past before the first production change. The approval is the reviewed merge to main (the environment `production`
+# deploys from main only; it holds CLOUDFLARE_API_TOKEN, CLOUDFLARE_ACCOUNT_ID and OPS_NOTIFY_TO). An agent never runs this.
+name: production
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      drills:
+        description: "Drills to run after the deploy (every one in bootstrap)"
+        type: choice
+        options: [none, restore, alert, publish, all]
+        default: none
+        required: true
+concurrency:
+  # Each admission run is independently checked; the production job below serialises
+  # actual Cloudflare mutations without cancelling a migration in flight.
+  group: production-${{ github.run_id }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+jobs:
+  production:
+    name: build, test, ship, verify, drill
+    # One production writer across automatic and manually dispatched runs.
+    concurrency:
+      group: production-mutation
+      cancel-in-progress: false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    environment: production
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      records: ${{ steps.ship.outputs.records == 'true' || steps.drills.outputs.records == 'true' }}
+    steps:
+      - name: only from main (the reviewed code)
+        if: github.ref != 'refs/heads/main'
+        run: |
+          echo "::error::production changes only from main, so it runs reviewed code (ref: ${GITHUB_REF})"
+          exit 1
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      # the kit at its head (t=0, docs/FRESHNESS.md): scripts/kit.mjs fetches the published archive of the head with no credential, verifies it and runs it; nothing of the kit is checked out or committed
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: the browser the tests use, when the lockfile installs playwright
+        run: if [ -d node_modules/playwright ]; then npx --no-install playwright install --with-deps chromium; fi
+      - name: the one build, sealed before the tests (the seal's digest is this step's output)
+        id: build
+        run: node scripts/kit.mjs release build
+        env:
+          KIT_RELEASE_ENVIRONMENT: production
+      - name: tests
+        run: npm test
+      - name: ship (guard, bootstrap, provision, migrate, deploy, owner address, verify)
+        id: ship
+        run: node scripts/kit.mjs release ship
+        env:
+          GH_TOKEN: ${{ github.token }}
+          KIT_RELEASE_ENVIRONMENT: production
+          SEAL_SHA256: ${{ steps.build.outputs.sha256 }}
+          KIT_RELEASE_SECRETS: ${{ toJSON(secrets) }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          OPS_NOTIFY_TO: ${{ secrets.OPS_NOTIFY_TO }}
+      - name: drills (the ones asked for; every one in bootstrap)
+        id: drills
+        run: node scripts/kit.mjs release drills --requested "${DRILLS}"
+        env:
+          DRILLS: ${{ inputs.drills || 'none' }}
+          # Project-authored live bootstrap runs inside this same protected release
+          # before monitor and R2 restore. Optional for projects with no media.
+          PODCAST_ADMIN_TOKEN: ${{ secrets.PODCAST_ADMIN_TOKEN }}
+          GH_TOKEN: ${{ github.token }}
+          KIT_RELEASE_ENVIRONMENT: production
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      - name: the records files, from the one list of kit.canon.json workflows.ci.records.paths (what the records step commits and the pull_request trigger ignores)
+        id: records_paths
+        if: steps.ship.outputs.records == 'true' || steps.drills.outputs.records == 'true'
+        run: node scripts/kit.mjs release records paths --artifact >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        if: steps.ship.outputs.records == 'true' || steps.drills.outputs.records == 'true'
+        with:
+          name: release-records-${{ github.run_id }}
+          path: ${{ steps.records_paths.outputs.paths }}
+          if-no-files-found: error
+          retention-days: 90
+
+  records:
+    name: open the pull request with the records
+    needs: production
+    if: needs.production.outputs.records == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    # The environment holds RECORDS_DEPLOY_KEY: the repository's own write deploy key, the one credential this job pushes with. A push made
+    # with GITHUB_TOKEN starts no workflow, so the records branch would have no required check; a push by the deploy key does (the
+    # push trigger of the tested workflow lists the records branch). The pull request itself is opened with GITHUB_TOKEN.
+    environment: production
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: the deploy key exists
+        env:
+          RECORDS_DEPLOY_KEY: ${{ secrets.RECORDS_DEPLOY_KEY }}
+        run: |
+          if [ -z "${RECORDS_DEPLOY_KEY}" ]; then
+            echo "::error::the production environment has no RECORDS_DEPLOY_KEY (the repository write deploy key), so the records branch cannot be pushed with its checks running"
+            exit 1
+          fi
+      - uses: actions/checkout@v4
+        with:
+          ssh-key: ${{ secrets.RECORDS_DEPLOY_KEY }}
+      # the kit at its head (t=0, docs/FRESHNESS.md): scripts/kit.mjs fetches the published archive of the head with no credential, verifies it and runs it; nothing of the kit is checked out or committed
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-records-${{ github.run_id }}
+      - name: branch, commit, push the branch (never main) and open the pull request
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          set -eu
+          branch="$(node scripts/kit.mjs release records branch)"
+          case "${branch}" in main|master|refs/*) echo "::error::refusing to push ${branch}"; exit 1;; esac
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "${branch}"
+          # exactly the records files (`kit release records paths`, one list), never more
+          node scripts/kit.mjs release records paths > "${RUNNER_TEMP}/records-paths"
+          mapfile -t paths < "${RUNNER_TEMP}/records-paths"
+          git ls-files -m -o -d --exclude-standard -z -- "${paths[@]}" | xargs -0 -r git add -A --
+          git diff --cached --quiet && { echo "::error::the run produced no records"; exit 1; }
+          git commit -m "Release records from run ${GITHUB_RUN_ID}" -m "Written by kit release (provisioning, bootstrap receipt, drills) in ${RUN_URL}"
+          git push origin "HEAD:refs/heads/${branch}"   # over SSH with the deploy key: this push starts the tested workflow on the records branch
+          gh pr create --base main --head "${branch}" --title "Release records (run ${GITHUB_RUN_ID})" \
+            --body "Records written by ${RUN_URL} (workflow production, environment production, on main's HEAD): provisioned resource ids, the bootstrap receipt and state, drill records with their proofs. Merge to record them."

@@ -1,0 +1,3228 @@
+{
+  "asOf": "2026-10-28",
+  "calls": [
+    {
+      "args": {
+        "id": "ceo_founder",
+        "templates": {
+          "finding": "Finding ({severity}): {headline}",
+          "notInStripe": "Stripe cannot tell them: {items}",
+          "report": "Report: {report}, {cadences}"
+        }
+      },
+      "call": "stakeholder",
+      "locale": "en",
+      "result": {
+        "findings": [
+          "Finding (act): Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "Finding (watch): Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "Finding (watch): The refund rate rose to 6.83% from 3.90%.",
+          "Finding (info): Net new MRR was USD 100.00: more recurring revenue arrived than left."
+        ],
+        "metrics": [
+          "Monthly recurring revenue: USD 3,783.92",
+          "Net new MRR: USD 100.00",
+          "Net revenue retention: 81.08%",
+          "Churned MRR: USD 897.00",
+          "Annual recurring revenue: USD 45,407.04",
+          "Refund rate: 6.83%"
+        ],
+        "name": "CEO / Founder",
+        "notInStripe": "Stripe cannot tell them: profit, cash in the bank, burn and runway",
+        "questions": "Is recurring revenue growing, and is the growth healthy? Where is revenue leaking?",
+        "reports": [
+          "Report: Recurring revenue health, weekly, monthly, quarterly, annual",
+          "Report: Retention and churn, monthly, quarterly, annual",
+          "Report: Board pack, monthly, quarterly"
+        ]
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "cfo",
+        "templates": {
+          "finding": "Finding ({severity}): {headline}",
+          "notInStripe": "Stripe cannot tell them: {items}",
+          "report": "Report: {report}, {cadences}"
+        }
+      },
+      "call": "stakeholder",
+      "locale": "en",
+      "result": {
+        "findings": [
+          "Finding (act): Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "Finding (act): Refunds issued as fraudulent this period: 1.",
+          "Finding (act): Disputes opened rose 50.00% to 3, from 2.",
+          "Finding (watch): Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "Finding (watch): The payment failure rate rose to 11.67% from 6.00%.",
+          "Finding (watch): The refund rate rose to 6.83% from 3.90%.",
+          "Finding (info): Net new MRR was USD 100.00: more recurring revenue arrived than left."
+        ],
+        "metrics": [
+          "Monthly recurring revenue: USD 3,783.92",
+          "Annual recurring revenue: USD 45,407.04",
+          "Net new MRR: USD 100.00",
+          "Gross revenue retention: 72.94%",
+          "Net payment volume: USD 8,452.00",
+          "Refunded amount: USD 620.00",
+          "Disputed amount: USD 422.00",
+          "Churned MRR: USD 897.00",
+          "Contraction MRR: USD 100.00"
+        ],
+        "name": "CFO / Finance lead",
+        "notInStripe": "Stripe cannot tell them: costs and expenses, profit and loss, cash balance outside Stripe",
+        "questions": "What is the recurring revenue base and how did it move this period? How much of it is retained? How much leaks through refunds and disputes?",
+        "reports": [
+          "Report: Recurring revenue health, weekly, monthly, quarterly, annual",
+          "Report: Sales performance, weekly, monthly, quarterly",
+          "Report: Refunds and returns, daily, weekly, monthly",
+          "Report: Payment health, daily, weekly, monthly"
+        ]
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "board",
+        "templates": {
+          "finding": "Finding ({severity}): {headline}",
+          "notInStripe": "Stripe cannot tell them: {items}",
+          "report": "Report: {report}, {cadences}"
+        }
+      },
+      "call": "stakeholder",
+      "locale": "en",
+      "result": {
+        "findings": [
+          "Finding (act): Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "Finding (act): Disputes opened rose 50.00% to 3, from 2.",
+          "Finding (watch): Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "Finding (info): Net new MRR was USD 100.00: more recurring revenue arrived than left."
+        ],
+        "metrics": [
+          "Annual recurring revenue: USD 45,407.04",
+          "Net new MRR: USD 100.00",
+          "Net revenue retention: 81.08%",
+          "Gross revenue retention: 72.94%",
+          "Logo churn rate: 25.00%",
+          "Dispute rate: 5.66%"
+        ],
+        "name": "Board",
+        "notInStripe": "Stripe cannot tell them: burn and runway, headcount, pipeline",
+        "questions": "Is the business on track? What changed since the last meeting?",
+        "reports": [
+          "Report: Recurring revenue health, weekly, monthly, quarterly, annual",
+          "Report: Retention and churn, monthly, quarterly, annual",
+          "Report: Board pack, monthly, quarterly",
+          "Report: Investor quarterly, quarterly, annual"
+        ]
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "investors",
+        "templates": {
+          "finding": "Finding ({severity}): {headline}",
+          "notInStripe": "Stripe cannot tell them: {items}",
+          "report": "Report: {report}, {cadences}"
+        }
+      },
+      "call": "stakeholder",
+      "locale": "en",
+      "result": {
+        "findings": [
+          "Finding (act): Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "Finding (watch): Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "Finding (info): Net new MRR was USD 100.00: more recurring revenue arrived than left."
+        ],
+        "metrics": [
+          "Annual recurring revenue: USD 45,407.04",
+          "Net revenue retention: 81.08%",
+          "Gross revenue retention: 72.94%",
+          "Net new MRR: USD 100.00",
+          "New MRR: USD 698.00",
+          "Expansion MRR: USD 300.00"
+        ],
+        "name": "Investors",
+        "notInStripe": "Stripe cannot tell them: customer acquisition cost, burn multiple, benchmarks against other companies",
+        "questions": "How efficient and durable is the revenue growth?",
+        "reports": [
+          "Report: Recurring revenue health, weekly, monthly, quarterly, annual",
+          "Report: Sales performance, weekly, monthly, quarterly",
+          "Report: Board pack, monthly, quarterly",
+          "Report: Investor quarterly, quarterly, annual"
+        ]
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "sales",
+        "templates": {
+          "finding": "Finding ({severity}): {headline}",
+          "notInStripe": "Stripe cannot tell them: {items}",
+          "report": "Report: {report}, {cadences}"
+        }
+      },
+      "call": "stakeholder",
+      "locale": "en",
+      "result": {
+        "findings": [
+          "Finding (act): Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "Finding (info): Net new MRR was USD 100.00: more recurring revenue arrived than left."
+        ],
+        "metrics": [
+          "New MRR: USD 698.00",
+          "Expansion MRR: USD 300.00",
+          "New customers: 2",
+          "Net new MRR: USD 100.00",
+          "Average order value: USD 171.17",
+          "Average revenue per account: USD 315.33"
+        ],
+        "name": "Sales",
+        "notInStripe": "Stripe cannot tell them: pipeline, quota attainment, win rate, sales cycle length",
+        "questions": "How much new and expansion revenue did we add? How big is a typical deal?",
+        "reports": [
+          "Report: Sales performance, weekly, monthly, quarterly",
+          "Report: New customers, weekly, monthly, quarterly"
+        ]
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "marketing",
+        "templates": {
+          "finding": "Finding ({severity}): {headline}",
+          "notInStripe": "Stripe cannot tell them: {items}",
+          "report": "Report: {report}, {cadences}"
+        }
+      },
+      "call": "stakeholder",
+      "locale": "en",
+      "result": {
+        "findings": [],
+        "metrics": [
+          "New customers: 2",
+          "New MRR: USD 698.00",
+          "Average revenue per account: USD 315.33",
+          "Average order value: USD 171.17",
+          "Gross payment volume: USD 9,072.00"
+        ],
+        "name": "Marketing",
+        "notInStripe": "Stripe cannot tell them: marketing spend, channel attribution, customer acquisition cost, leads and funnel stages",
+        "questions": "How many new paying customers arrived, and how much revenue do they bring?",
+        "reports": [
+          "Report: New customers, weekly, monthly, quarterly"
+        ]
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "customer_success",
+        "templates": {
+          "finding": "Finding ({severity}): {headline}",
+          "notInStripe": "Stripe cannot tell them: {items}",
+          "report": "Report: {report}, {cadences}"
+        }
+      },
+      "call": "stakeholder",
+      "locale": "en",
+      "result": {
+        "findings": [
+          "Finding (act): Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "Finding (watch): Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "Finding (watch): The payment failure rate rose to 11.67% from 6.00%."
+        ],
+        "metrics": [
+          "Logo churn rate: 25.00%",
+          "Churned MRR: USD 897.00",
+          "Contraction MRR: USD 100.00",
+          "Gross revenue retention: 72.94%",
+          "Net revenue retention: 81.08%",
+          "Payment failure rate: 11.67%"
+        ],
+        "name": "Customer success",
+        "notInStripe": "Stripe cannot tell them: product usage, health scores, support satisfaction",
+        "questions": "Which parts of the base are shrinking or leaving? Are payment failures putting customers at risk?",
+        "reports": [
+          "Report: Retention and churn, monthly, quarterly, annual",
+          "Report: Payment health, daily, weekly, monthly"
+        ]
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "refunds_returns",
+        "templates": {
+          "finding": "Finding ({severity}): {headline}",
+          "notInStripe": "Stripe cannot tell them: {items}",
+          "report": "Report: {report}, {cadences}"
+        }
+      },
+      "call": "stakeholder",
+      "locale": "en",
+      "result": {
+        "findings": [
+          "Finding (act): Refunds issued as fraudulent this period: 1.",
+          "Finding (act): Disputes opened rose 50.00% to 3, from 2.",
+          "Finding (watch): The refund rate rose to 6.83% from 3.90%.",
+          "Finding (watch): Refunds for duplicate charges this period: 1."
+        ],
+        "metrics": [
+          "Refunded amount: USD 620.00",
+          "Refund rate: 6.83%",
+          "Refunds: 5",
+          "Refunds requested by the customer: 3",
+          "Refunds for duplicate charges: 1",
+          "Refunds for fraud: 1",
+          "Disputes: 3"
+        ],
+        "name": "Refunds and returns",
+        "notInStripe": "Stripe cannot tell them: returned goods and inventory, product-level return reasons, shipping",
+        "questions": "How much are we refunding, and why? Is the refund rate rising?",
+        "reports": [
+          "Report: Refunds and returns, daily, weekly, monthly"
+        ]
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "tech_support",
+        "templates": {
+          "finding": "Finding ({severity}): {headline}",
+          "notInStripe": "Stripe cannot tell them: {items}",
+          "report": "Report: {report}, {cadences}"
+        }
+      },
+      "call": "stakeholder",
+      "locale": "en",
+      "result": {
+        "findings": [
+          "Finding (act): Refunds issued as fraudulent this period: 1.",
+          "Finding (act): Disputes opened rose 50.00% to 3, from 2.",
+          "Finding (watch): The payment failure rate rose to 11.67% from 6.00%.",
+          "Finding (watch): Refunds for duplicate charges this period: 1."
+        ],
+        "metrics": [
+          "Payment failure rate: 11.67%",
+          "Failed payments: 7",
+          "Disputes: 3",
+          "Dispute rate: 5.66%",
+          "Refunds for duplicate charges: 1"
+        ],
+        "name": "Tech support",
+        "notInStripe": "Stripe cannot tell them: tickets and response times, error logs, product incidents",
+        "questions": "How many payments are failing, and is it getting worse? How many disputes need a response?",
+        "reports": [
+          "Report: Payment health, daily, weekly, monthly"
+        ]
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "marketplace_operator",
+        "templates": {
+          "finding": "Finding ({severity}): {headline}",
+          "notInStripe": "Stripe cannot tell them: {items}",
+          "report": "Report: {report}, {cadences}"
+        }
+      },
+      "call": "stakeholder",
+      "locale": "en",
+      "result": {
+        "findings": [
+          "Finding (act): Disputes opened rose 50.00% to 3, from 2.",
+          "Finding (watch): The payment failure rate rose to 11.67% from 6.00%.",
+          "Finding (watch): The refund rate rose to 6.83% from 3.90%.",
+          "Finding (watch): Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+          "Finding (watch): The take rate fell to 9.00%, from 10.00%."
+        ],
+        "metrics": [
+          "Platform fees (net): USD 263.97",
+          "Take rate: 9.00%",
+          "Gross payment volume: USD 9,072.00",
+          "Dispute rate: 5.66%",
+          "Refund rate: 6.83%",
+          "Payment failure rate: 11.67%"
+        ],
+        "name": "Marketplace / platform operator",
+        "notInStripe": "Stripe cannot tell them: seller-side revenue of connected accounts (not readable from the platform's install), listing quality and supply health, buyer and seller acquisition cost",
+        "questions": "What does the platform earn on the volume that flows through it? Is the take rate holding? Are disputes and refunds on the platform's payments under control?",
+        "reports": [
+          "Report: Marketplace health, weekly, monthly, quarterly"
+        ]
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "stakeholder": "board",
+        "type": "board-pack"
+      },
+      "call": "report",
+      "locale": "en",
+      "result": {
+        "lines": [
+          {
+            "label": "Where we stand: Annual recurring revenue",
+            "value": "USD 45,407.04"
+          },
+          {
+            "label": "Where we stand: Monthly recurring revenue",
+            "value": "USD 3,783.92"
+          },
+          {
+            "label": "How revenue moved: Net new MRR",
+            "value": "USD 100.00"
+          },
+          {
+            "label": "How revenue moved: New MRR",
+            "value": "USD 698.00"
+          },
+          {
+            "label": "How revenue moved: Reactivation MRR",
+            "value": "USD 99.00"
+          },
+          {
+            "label": "How revenue moved: Expansion MRR",
+            "value": "USD 300.00"
+          },
+          {
+            "label": "How revenue moved: Contraction MRR",
+            "value": "USD 100.00"
+          },
+          {
+            "label": "How revenue moved: Churned MRR",
+            "value": "USD 897.00"
+          },
+          {
+            "label": "How much we kept: Net revenue retention",
+            "value": "81.08%"
+          },
+          {
+            "label": "How much we kept: Gross revenue retention",
+            "value": "72.94%"
+          },
+          {
+            "label": "How much we kept: Logo churn rate",
+            "value": "25.00%"
+          },
+          {
+            "label": "Payment risk: Dispute rate",
+            "value": "5.66%"
+          },
+          {
+            "label": "Payment risk: Refund rate",
+            "value": "6.83%"
+          },
+          {
+            "label": "Who pays: Average revenue per account",
+            "value": "USD 315.33"
+          }
+        ],
+        "title": "Board pack: Board"
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "stakeholder": "ceo_founder",
+        "type": "board-pack"
+      },
+      "call": "report",
+      "locale": "en",
+      "result": {
+        "lines": [
+          {
+            "label": "Where we stand: Monthly recurring revenue",
+            "value": "USD 3,783.92"
+          },
+          {
+            "label": "Where we stand: Annual recurring revenue",
+            "value": "USD 45,407.04"
+          },
+          {
+            "label": "How revenue moved: Net new MRR",
+            "value": "USD 100.00"
+          },
+          {
+            "label": "How revenue moved: Churned MRR",
+            "value": "USD 897.00"
+          },
+          {
+            "label": "How revenue moved: New MRR",
+            "value": "USD 698.00"
+          },
+          {
+            "label": "How revenue moved: Reactivation MRR",
+            "value": "USD 99.00"
+          },
+          {
+            "label": "How revenue moved: Expansion MRR",
+            "value": "USD 300.00"
+          },
+          {
+            "label": "How revenue moved: Contraction MRR",
+            "value": "USD 100.00"
+          },
+          {
+            "label": "How much we kept: Net revenue retention",
+            "value": "81.08%"
+          },
+          {
+            "label": "How much we kept: Gross revenue retention",
+            "value": "72.94%"
+          },
+          {
+            "label": "How much we kept: Logo churn rate",
+            "value": "25.00%"
+          },
+          {
+            "label": "Payment risk: Refund rate",
+            "value": "6.83%"
+          },
+          {
+            "label": "Payment risk: Dispute rate",
+            "value": "5.66%"
+          },
+          {
+            "label": "Who pays: Average revenue per account",
+            "value": "USD 315.33"
+          }
+        ],
+        "title": "Board pack: CEO / Founder"
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "stakeholder": "investors",
+        "type": "board-pack"
+      },
+      "call": "report",
+      "locale": "en",
+      "result": {
+        "lines": [
+          {
+            "label": "Where we stand: Annual recurring revenue",
+            "value": "USD 45,407.04"
+          },
+          {
+            "label": "Where we stand: Monthly recurring revenue",
+            "value": "USD 3,783.92"
+          },
+          {
+            "label": "How much we kept: Net revenue retention",
+            "value": "81.08%"
+          },
+          {
+            "label": "How much we kept: Gross revenue retention",
+            "value": "72.94%"
+          },
+          {
+            "label": "How much we kept: Logo churn rate",
+            "value": "25.00%"
+          },
+          {
+            "label": "How revenue moved: Net new MRR",
+            "value": "USD 100.00"
+          },
+          {
+            "label": "How revenue moved: New MRR",
+            "value": "USD 698.00"
+          },
+          {
+            "label": "How revenue moved: Expansion MRR",
+            "value": "USD 300.00"
+          },
+          {
+            "label": "How revenue moved: Reactivation MRR",
+            "value": "USD 99.00"
+          },
+          {
+            "label": "How revenue moved: Contraction MRR",
+            "value": "USD 100.00"
+          },
+          {
+            "label": "How revenue moved: Churned MRR",
+            "value": "USD 897.00"
+          },
+          {
+            "label": "Who pays: Average revenue per account",
+            "value": "USD 315.33"
+          },
+          {
+            "label": "Payment risk: Refund rate",
+            "value": "6.83%"
+          },
+          {
+            "label": "Payment risk: Dispute rate",
+            "value": "5.66%"
+          }
+        ],
+        "title": "Board pack: Investors"
+      },
+      "source": "engine"
+    },
+    {
+      "args": {},
+      "call": "findings",
+      "locale": "en",
+      "result": [
+        {
+          "evidence": [
+            "Churned MRR: USD 897.00 (before: USD 299.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)"
+          ],
+          "headline": "Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "recommendation": "Compare what was added with what was lost this period and decide whether acquisition or retention needs attention first.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Refunds for fraud: 1 (before: 0)"
+          ],
+          "headline": "Refunds issued as fraudulent this period: 1.",
+          "recommendation": "Review the payments refunded as fraudulent and check whether your fraud rules, for example in Stripe Radar, need tightening.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Disputes: 3 (before: 2)",
+            "Dispute rate: 5.66% (before: 4.26%)",
+            "Disputed amount: USD 422.00 (before: USD 223.00)"
+          ],
+          "headline": "Disputes opened rose 50.00% to 3, from 2.",
+          "recommendation": "Open the disputes that still need a response in the Stripe Dashboard and submit evidence before each deadline.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Net revenue retention: 81.08% (before: 92.72%)"
+          ],
+          "headline": "Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "recommendation": "Look at the customers behind churned and contraction revenue and note the likely cause of each (price, fit, a failed payment, or a change on their side).",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Payment failure rate: 11.67% (before: 6.00%)",
+            "Failed payments: 7 (before: 3)"
+          ],
+          "headline": "The payment failure rate rose to 11.67% from 6.00%.",
+          "recommendation": "Check how failed subscription payments are retried and how customers are told about them, in your Stripe Billing settings.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refund rate: 6.83% (before: 3.90%)",
+            "Refunded amount: USD 620.00 (before: USD 322.00)",
+            "Refunds: 5 (before: 3)"
+          ],
+          "headline": "The refund rate rose to 6.83% from 3.90%.",
+          "recommendation": "Read a sample of this period's refunds, group them by reason, and act on the largest group first.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refunds for duplicate charges: 1 (before: 0)"
+          ],
+          "headline": "Refunds for duplicate charges this period: 1.",
+          "recommendation": "Check how checkout or your integration could create the same charge twice, for example double submits or retries without an idempotency key.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Platform fees (net): USD 263.97 (before: USD 266.00)"
+          ],
+          "headline": "Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Take rate: 9.00% (before: 10.00%)",
+            "Platform fees (net): USD 263.97 (before: USD 266.00)",
+            "Gross payment volume: USD 9,072.00 (before: USD 8,253.00)"
+          ],
+          "headline": "The take rate fell to 9.00%, from 10.00%.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Net new MRR: USD 100.00 (before: USD 248.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)",
+            "Churned MRR: USD 897.00 (before: USD 299.00)"
+          ],
+          "headline": "Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+          "recommendation": "Note what drove the gain (new, expansion or fewer losses) so it can be repeated.",
+          "severity": "info"
+        }
+      ],
+      "source": "engine"
+    },
+    {
+      "args": {},
+      "call": "findings",
+      "locale": "en",
+      "result": [
+        {
+          "evidence": [
+            "Churned MRR: USD 897.00 (before: USD 299.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)"
+          ],
+          "headline": "Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "recommendation": "Compare what was added with what was lost this period and decide whether acquisition or retention needs attention first.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Refunds for fraud: 1 (before: 0)"
+          ],
+          "headline": "Refunds issued as fraudulent this period: 1.",
+          "recommendation": "Review the payments refunded as fraudulent and check whether your fraud rules, for example in Stripe Radar, need tightening.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Disputes: 3 (before: 2)",
+            "Dispute rate: 5.66% (before: 4.26%)",
+            "Disputed amount: USD 422.00 (before: USD 223.00)"
+          ],
+          "headline": "Disputes opened rose 50.00% to 3, from 2.",
+          "recommendation": "Open the disputes that still need a response in the Stripe Dashboard and submit evidence before each deadline.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Net revenue retention: 81.08% (before: 92.72%)"
+          ],
+          "headline": "Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "recommendation": "Look at the customers behind churned and contraction revenue and note the likely cause of each (price, fit, a failed payment, or a change on their side).",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Payment failure rate: 11.67% (before: 6.00%)",
+            "Failed payments: 7 (before: 3)"
+          ],
+          "headline": "The payment failure rate rose to 11.67% from 6.00%.",
+          "recommendation": "Check how failed subscription payments are retried and how customers are told about them, in your Stripe Billing settings.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refund rate: 6.83% (before: 3.90%)",
+            "Refunded amount: USD 620.00 (before: USD 322.00)",
+            "Refunds: 5 (before: 3)"
+          ],
+          "headline": "The refund rate rose to 6.83% from 3.90%.",
+          "recommendation": "Read a sample of this period's refunds, group them by reason, and act on the largest group first.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refunds for duplicate charges: 1 (before: 0)"
+          ],
+          "headline": "Refunds for duplicate charges this period: 1.",
+          "recommendation": "Check how checkout or your integration could create the same charge twice, for example double submits or retries without an idempotency key.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Platform fees (net): USD 263.97 (before: USD 266.00)"
+          ],
+          "headline": "Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Take rate: 9.00% (before: 10.00%)",
+            "Platform fees (net): USD 263.97 (before: USD 266.00)",
+            "Gross payment volume: USD 9,072.00 (before: USD 8,253.00)"
+          ],
+          "headline": "The take rate fell to 9.00%, from 10.00%.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Net new MRR: USD 100.00 (before: USD 248.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)",
+            "Churned MRR: USD 897.00 (before: USD 299.00)"
+          ],
+          "headline": "Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+          "recommendation": "Note what drove the gain (new, expansion or fewer losses) so it can be repeated.",
+          "severity": "info"
+        }
+      ],
+      "source": "engine"
+    },
+    {
+      "args": {},
+      "call": "findings",
+      "locale": "en",
+      "result": [
+        {
+          "evidence": [
+            "Churned MRR: USD 897.00 (before: USD 299.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)"
+          ],
+          "headline": "Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "recommendation": "Compare what was added with what was lost this period and decide whether acquisition or retention needs attention first.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Refunds for fraud: 1 (before: 0)"
+          ],
+          "headline": "Refunds issued as fraudulent this period: 1.",
+          "recommendation": "Review the payments refunded as fraudulent and check whether your fraud rules, for example in Stripe Radar, need tightening.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Disputes: 3 (before: 2)",
+            "Dispute rate: 5.66% (before: 4.26%)",
+            "Disputed amount: USD 422.00 (before: USD 223.00)"
+          ],
+          "headline": "Disputes opened rose 50.00% to 3, from 2.",
+          "recommendation": "Open the disputes that still need a response in the Stripe Dashboard and submit evidence before each deadline.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Net revenue retention: 81.08% (before: 92.72%)"
+          ],
+          "headline": "Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "recommendation": "Look at the customers behind churned and contraction revenue and note the likely cause of each (price, fit, a failed payment, or a change on their side).",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Payment failure rate: 11.67% (before: 6.00%)",
+            "Failed payments: 7 (before: 3)"
+          ],
+          "headline": "The payment failure rate rose to 11.67% from 6.00%.",
+          "recommendation": "Check how failed subscription payments are retried and how customers are told about them, in your Stripe Billing settings.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refund rate: 6.83% (before: 3.90%)",
+            "Refunded amount: USD 620.00 (before: USD 322.00)",
+            "Refunds: 5 (before: 3)"
+          ],
+          "headline": "The refund rate rose to 6.83% from 3.90%.",
+          "recommendation": "Read a sample of this period's refunds, group them by reason, and act on the largest group first.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refunds for duplicate charges: 1 (before: 0)"
+          ],
+          "headline": "Refunds for duplicate charges this period: 1.",
+          "recommendation": "Check how checkout or your integration could create the same charge twice, for example double submits or retries without an idempotency key.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Platform fees (net): USD 263.97 (before: USD 266.00)"
+          ],
+          "headline": "Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Take rate: 9.00% (before: 10.00%)",
+            "Platform fees (net): USD 263.97 (before: USD 266.00)",
+            "Gross payment volume: USD 9,072.00 (before: USD 8,253.00)"
+          ],
+          "headline": "The take rate fell to 9.00%, from 10.00%.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Net new MRR: USD 100.00 (before: USD 248.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)",
+            "Churned MRR: USD 897.00 (before: USD 299.00)"
+          ],
+          "headline": "Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+          "recommendation": "Note what drove the gain (new, expansion or fewer losses) so it can be repeated.",
+          "severity": "info"
+        }
+      ],
+      "source": "engine"
+    },
+    {
+      "args": {},
+      "call": "findings",
+      "locale": "en",
+      "result": [
+        {
+          "evidence": [
+            "Churned MRR: USD 897.00 (before: USD 299.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)"
+          ],
+          "headline": "Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "recommendation": "Compare what was added with what was lost this period and decide whether acquisition or retention needs attention first.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Refunds for fraud: 1 (before: 0)"
+          ],
+          "headline": "Refunds issued as fraudulent this period: 1.",
+          "recommendation": "Review the payments refunded as fraudulent and check whether your fraud rules, for example in Stripe Radar, need tightening.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Disputes: 3 (before: 2)",
+            "Dispute rate: 5.66% (before: 4.26%)",
+            "Disputed amount: USD 422.00 (before: USD 223.00)"
+          ],
+          "headline": "Disputes opened rose 50.00% to 3, from 2.",
+          "recommendation": "Open the disputes that still need a response in the Stripe Dashboard and submit evidence before each deadline.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Net revenue retention: 81.08% (before: 92.72%)"
+          ],
+          "headline": "Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "recommendation": "Look at the customers behind churned and contraction revenue and note the likely cause of each (price, fit, a failed payment, or a change on their side).",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Payment failure rate: 11.67% (before: 6.00%)",
+            "Failed payments: 7 (before: 3)"
+          ],
+          "headline": "The payment failure rate rose to 11.67% from 6.00%.",
+          "recommendation": "Check how failed subscription payments are retried and how customers are told about them, in your Stripe Billing settings.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refund rate: 6.83% (before: 3.90%)",
+            "Refunded amount: USD 620.00 (before: USD 322.00)",
+            "Refunds: 5 (before: 3)"
+          ],
+          "headline": "The refund rate rose to 6.83% from 3.90%.",
+          "recommendation": "Read a sample of this period's refunds, group them by reason, and act on the largest group first.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refunds for duplicate charges: 1 (before: 0)"
+          ],
+          "headline": "Refunds for duplicate charges this period: 1.",
+          "recommendation": "Check how checkout or your integration could create the same charge twice, for example double submits or retries without an idempotency key.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Platform fees (net): USD 263.97 (before: USD 266.00)"
+          ],
+          "headline": "Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Take rate: 9.00% (before: 10.00%)",
+            "Platform fees (net): USD 263.97 (before: USD 266.00)",
+            "Gross payment volume: USD 9,072.00 (before: USD 8,253.00)"
+          ],
+          "headline": "The take rate fell to 9.00%, from 10.00%.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Net new MRR: USD 100.00 (before: USD 248.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)",
+            "Churned MRR: USD 897.00 (before: USD 299.00)"
+          ],
+          "headline": "Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+          "recommendation": "Note what drove the gain (new, expansion or fewer losses) so it can be repeated.",
+          "severity": "info"
+        }
+      ],
+      "source": "engine"
+    },
+    {
+      "args": {},
+      "call": "findings",
+      "locale": "en",
+      "result": [
+        {
+          "evidence": [
+            "Churned MRR: USD 897.00 (before: USD 299.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)"
+          ],
+          "headline": "Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "recommendation": "Compare what was added with what was lost this period and decide whether acquisition or retention needs attention first.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Refunds for fraud: 1 (before: 0)"
+          ],
+          "headline": "Refunds issued as fraudulent this period: 1.",
+          "recommendation": "Review the payments refunded as fraudulent and check whether your fraud rules, for example in Stripe Radar, need tightening.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Disputes: 3 (before: 2)",
+            "Dispute rate: 5.66% (before: 4.26%)",
+            "Disputed amount: USD 422.00 (before: USD 223.00)"
+          ],
+          "headline": "Disputes opened rose 50.00% to 3, from 2.",
+          "recommendation": "Open the disputes that still need a response in the Stripe Dashboard and submit evidence before each deadline.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Net revenue retention: 81.08% (before: 92.72%)"
+          ],
+          "headline": "Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "recommendation": "Look at the customers behind churned and contraction revenue and note the likely cause of each (price, fit, a failed payment, or a change on their side).",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Payment failure rate: 11.67% (before: 6.00%)",
+            "Failed payments: 7 (before: 3)"
+          ],
+          "headline": "The payment failure rate rose to 11.67% from 6.00%.",
+          "recommendation": "Check how failed subscription payments are retried and how customers are told about them, in your Stripe Billing settings.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refund rate: 6.83% (before: 3.90%)",
+            "Refunded amount: USD 620.00 (before: USD 322.00)",
+            "Refunds: 5 (before: 3)"
+          ],
+          "headline": "The refund rate rose to 6.83% from 3.90%.",
+          "recommendation": "Read a sample of this period's refunds, group them by reason, and act on the largest group first.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refunds for duplicate charges: 1 (before: 0)"
+          ],
+          "headline": "Refunds for duplicate charges this period: 1.",
+          "recommendation": "Check how checkout or your integration could create the same charge twice, for example double submits or retries without an idempotency key.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Platform fees (net): USD 263.97 (before: USD 266.00)"
+          ],
+          "headline": "Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Take rate: 9.00% (before: 10.00%)",
+            "Platform fees (net): USD 263.97 (before: USD 266.00)",
+            "Gross payment volume: USD 9,072.00 (before: USD 8,253.00)"
+          ],
+          "headline": "The take rate fell to 9.00%, from 10.00%.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Net new MRR: USD 100.00 (before: USD 248.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)",
+            "Churned MRR: USD 897.00 (before: USD 299.00)"
+          ],
+          "headline": "Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+          "recommendation": "Note what drove the gain (new, expansion or fewer losses) so it can be repeated.",
+          "severity": "info"
+        }
+      ],
+      "source": "engine"
+    },
+    {
+      "args": {},
+      "call": "findings",
+      "locale": "en",
+      "result": [
+        {
+          "evidence": [
+            "Churned MRR: USD 897.00 (before: USD 299.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)"
+          ],
+          "headline": "Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "recommendation": "Compare what was added with what was lost this period and decide whether acquisition or retention needs attention first.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Refunds for fraud: 1 (before: 0)"
+          ],
+          "headline": "Refunds issued as fraudulent this period: 1.",
+          "recommendation": "Review the payments refunded as fraudulent and check whether your fraud rules, for example in Stripe Radar, need tightening.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Disputes: 3 (before: 2)",
+            "Dispute rate: 5.66% (before: 4.26%)",
+            "Disputed amount: USD 422.00 (before: USD 223.00)"
+          ],
+          "headline": "Disputes opened rose 50.00% to 3, from 2.",
+          "recommendation": "Open the disputes that still need a response in the Stripe Dashboard and submit evidence before each deadline.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Net revenue retention: 81.08% (before: 92.72%)"
+          ],
+          "headline": "Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "recommendation": "Look at the customers behind churned and contraction revenue and note the likely cause of each (price, fit, a failed payment, or a change on their side).",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Payment failure rate: 11.67% (before: 6.00%)",
+            "Failed payments: 7 (before: 3)"
+          ],
+          "headline": "The payment failure rate rose to 11.67% from 6.00%.",
+          "recommendation": "Check how failed subscription payments are retried and how customers are told about them, in your Stripe Billing settings.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refund rate: 6.83% (before: 3.90%)",
+            "Refunded amount: USD 620.00 (before: USD 322.00)",
+            "Refunds: 5 (before: 3)"
+          ],
+          "headline": "The refund rate rose to 6.83% from 3.90%.",
+          "recommendation": "Read a sample of this period's refunds, group them by reason, and act on the largest group first.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refunds for duplicate charges: 1 (before: 0)"
+          ],
+          "headline": "Refunds for duplicate charges this period: 1.",
+          "recommendation": "Check how checkout or your integration could create the same charge twice, for example double submits or retries without an idempotency key.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Platform fees (net): USD 263.97 (before: USD 266.00)"
+          ],
+          "headline": "Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Take rate: 9.00% (before: 10.00%)",
+            "Platform fees (net): USD 263.97 (before: USD 266.00)",
+            "Gross payment volume: USD 9,072.00 (before: USD 8,253.00)"
+          ],
+          "headline": "The take rate fell to 9.00%, from 10.00%.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Net new MRR: USD 100.00 (before: USD 248.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)",
+            "Churned MRR: USD 897.00 (before: USD 299.00)"
+          ],
+          "headline": "Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+          "recommendation": "Note what drove the gain (new, expansion or fewer losses) so it can be repeated.",
+          "severity": "info"
+        }
+      ],
+      "source": "engine"
+    },
+    {
+      "args": {},
+      "call": "findings",
+      "locale": "en",
+      "result": [
+        {
+          "evidence": [
+            "Churned MRR: USD 897.00 (before: USD 299.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)"
+          ],
+          "headline": "Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "recommendation": "Compare what was added with what was lost this period and decide whether acquisition or retention needs attention first.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Refunds for fraud: 1 (before: 0)"
+          ],
+          "headline": "Refunds issued as fraudulent this period: 1.",
+          "recommendation": "Review the payments refunded as fraudulent and check whether your fraud rules, for example in Stripe Radar, need tightening.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Disputes: 3 (before: 2)",
+            "Dispute rate: 5.66% (before: 4.26%)",
+            "Disputed amount: USD 422.00 (before: USD 223.00)"
+          ],
+          "headline": "Disputes opened rose 50.00% to 3, from 2.",
+          "recommendation": "Open the disputes that still need a response in the Stripe Dashboard and submit evidence before each deadline.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Net revenue retention: 81.08% (before: 92.72%)"
+          ],
+          "headline": "Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "recommendation": "Look at the customers behind churned and contraction revenue and note the likely cause of each (price, fit, a failed payment, or a change on their side).",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Payment failure rate: 11.67% (before: 6.00%)",
+            "Failed payments: 7 (before: 3)"
+          ],
+          "headline": "The payment failure rate rose to 11.67% from 6.00%.",
+          "recommendation": "Check how failed subscription payments are retried and how customers are told about them, in your Stripe Billing settings.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refund rate: 6.83% (before: 3.90%)",
+            "Refunded amount: USD 620.00 (before: USD 322.00)",
+            "Refunds: 5 (before: 3)"
+          ],
+          "headline": "The refund rate rose to 6.83% from 3.90%.",
+          "recommendation": "Read a sample of this period's refunds, group them by reason, and act on the largest group first.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refunds for duplicate charges: 1 (before: 0)"
+          ],
+          "headline": "Refunds for duplicate charges this period: 1.",
+          "recommendation": "Check how checkout or your integration could create the same charge twice, for example double submits or retries without an idempotency key.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Platform fees (net): USD 263.97 (before: USD 266.00)"
+          ],
+          "headline": "Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Take rate: 9.00% (before: 10.00%)",
+            "Platform fees (net): USD 263.97 (before: USD 266.00)",
+            "Gross payment volume: USD 9,072.00 (before: USD 8,253.00)"
+          ],
+          "headline": "The take rate fell to 9.00%, from 10.00%.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Net new MRR: USD 100.00 (before: USD 248.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)",
+            "Churned MRR: USD 897.00 (before: USD 299.00)"
+          ],
+          "headline": "Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+          "recommendation": "Note what drove the gain (new, expansion or fewer losses) so it can be repeated.",
+          "severity": "info"
+        }
+      ],
+      "source": "engine"
+    },
+    {
+      "args": {},
+      "call": "findings",
+      "locale": "en",
+      "result": [
+        {
+          "evidence": [
+            "Churned MRR: USD 897.00 (before: USD 299.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)"
+          ],
+          "headline": "Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "recommendation": "Compare what was added with what was lost this period and decide whether acquisition or retention needs attention first.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Refunds for fraud: 1 (before: 0)"
+          ],
+          "headline": "Refunds issued as fraudulent this period: 1.",
+          "recommendation": "Review the payments refunded as fraudulent and check whether your fraud rules, for example in Stripe Radar, need tightening.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Disputes: 3 (before: 2)",
+            "Dispute rate: 5.66% (before: 4.26%)",
+            "Disputed amount: USD 422.00 (before: USD 223.00)"
+          ],
+          "headline": "Disputes opened rose 50.00% to 3, from 2.",
+          "recommendation": "Open the disputes that still need a response in the Stripe Dashboard and submit evidence before each deadline.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Net revenue retention: 81.08% (before: 92.72%)"
+          ],
+          "headline": "Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "recommendation": "Look at the customers behind churned and contraction revenue and note the likely cause of each (price, fit, a failed payment, or a change on their side).",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Payment failure rate: 11.67% (before: 6.00%)",
+            "Failed payments: 7 (before: 3)"
+          ],
+          "headline": "The payment failure rate rose to 11.67% from 6.00%.",
+          "recommendation": "Check how failed subscription payments are retried and how customers are told about them, in your Stripe Billing settings.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refund rate: 6.83% (before: 3.90%)",
+            "Refunded amount: USD 620.00 (before: USD 322.00)",
+            "Refunds: 5 (before: 3)"
+          ],
+          "headline": "The refund rate rose to 6.83% from 3.90%.",
+          "recommendation": "Read a sample of this period's refunds, group them by reason, and act on the largest group first.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refunds for duplicate charges: 1 (before: 0)"
+          ],
+          "headline": "Refunds for duplicate charges this period: 1.",
+          "recommendation": "Check how checkout or your integration could create the same charge twice, for example double submits or retries without an idempotency key.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Platform fees (net): USD 263.97 (before: USD 266.00)"
+          ],
+          "headline": "Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Take rate: 9.00% (before: 10.00%)",
+            "Platform fees (net): USD 263.97 (before: USD 266.00)",
+            "Gross payment volume: USD 9,072.00 (before: USD 8,253.00)"
+          ],
+          "headline": "The take rate fell to 9.00%, from 10.00%.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Net new MRR: USD 100.00 (before: USD 248.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)",
+            "Churned MRR: USD 897.00 (before: USD 299.00)"
+          ],
+          "headline": "Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+          "recommendation": "Note what drove the gain (new, expansion or fewer losses) so it can be repeated.",
+          "severity": "info"
+        }
+      ],
+      "source": "engine"
+    },
+    {
+      "args": {},
+      "call": "findings",
+      "locale": "en",
+      "result": [
+        {
+          "evidence": [
+            "Churned MRR: USD 897.00 (before: USD 299.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)"
+          ],
+          "headline": "Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "recommendation": "Compare what was added with what was lost this period and decide whether acquisition or retention needs attention first.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Refunds for fraud: 1 (before: 0)"
+          ],
+          "headline": "Refunds issued as fraudulent this period: 1.",
+          "recommendation": "Review the payments refunded as fraudulent and check whether your fraud rules, for example in Stripe Radar, need tightening.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Disputes: 3 (before: 2)",
+            "Dispute rate: 5.66% (before: 4.26%)",
+            "Disputed amount: USD 422.00 (before: USD 223.00)"
+          ],
+          "headline": "Disputes opened rose 50.00% to 3, from 2.",
+          "recommendation": "Open the disputes that still need a response in the Stripe Dashboard and submit evidence before each deadline.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Net revenue retention: 81.08% (before: 92.72%)"
+          ],
+          "headline": "Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "recommendation": "Look at the customers behind churned and contraction revenue and note the likely cause of each (price, fit, a failed payment, or a change on their side).",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Payment failure rate: 11.67% (before: 6.00%)",
+            "Failed payments: 7 (before: 3)"
+          ],
+          "headline": "The payment failure rate rose to 11.67% from 6.00%.",
+          "recommendation": "Check how failed subscription payments are retried and how customers are told about them, in your Stripe Billing settings.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refund rate: 6.83% (before: 3.90%)",
+            "Refunded amount: USD 620.00 (before: USD 322.00)",
+            "Refunds: 5 (before: 3)"
+          ],
+          "headline": "The refund rate rose to 6.83% from 3.90%.",
+          "recommendation": "Read a sample of this period's refunds, group them by reason, and act on the largest group first.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refunds for duplicate charges: 1 (before: 0)"
+          ],
+          "headline": "Refunds for duplicate charges this period: 1.",
+          "recommendation": "Check how checkout or your integration could create the same charge twice, for example double submits or retries without an idempotency key.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Platform fees (net): USD 263.97 (before: USD 266.00)"
+          ],
+          "headline": "Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Take rate: 9.00% (before: 10.00%)",
+            "Platform fees (net): USD 263.97 (before: USD 266.00)",
+            "Gross payment volume: USD 9,072.00 (before: USD 8,253.00)"
+          ],
+          "headline": "The take rate fell to 9.00%, from 10.00%.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Net new MRR: USD 100.00 (before: USD 248.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)",
+            "Churned MRR: USD 897.00 (before: USD 299.00)"
+          ],
+          "headline": "Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+          "recommendation": "Note what drove the gain (new, expansion or fewer losses) so it can be repeated.",
+          "severity": "info"
+        }
+      ],
+      "source": "engine"
+    },
+    {
+      "args": {},
+      "call": "findings",
+      "locale": "en",
+      "result": [
+        {
+          "evidence": [
+            "Churned MRR: USD 897.00 (before: USD 299.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)"
+          ],
+          "headline": "Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+          "recommendation": "Compare what was added with what was lost this period and decide whether acquisition or retention needs attention first.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Refunds for fraud: 1 (before: 0)"
+          ],
+          "headline": "Refunds issued as fraudulent this period: 1.",
+          "recommendation": "Review the payments refunded as fraudulent and check whether your fraud rules, for example in Stripe Radar, need tightening.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Disputes: 3 (before: 2)",
+            "Dispute rate: 5.66% (before: 4.26%)",
+            "Disputed amount: USD 422.00 (before: USD 223.00)"
+          ],
+          "headline": "Disputes opened rose 50.00% to 3, from 2.",
+          "recommendation": "Open the disputes that still need a response in the Stripe Dashboard and submit evidence before each deadline.",
+          "severity": "act"
+        },
+        {
+          "evidence": [
+            "Net revenue retention: 81.08% (before: 92.72%)"
+          ],
+          "headline": "Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+          "recommendation": "Look at the customers behind churned and contraction revenue and note the likely cause of each (price, fit, a failed payment, or a change on their side).",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Payment failure rate: 11.67% (before: 6.00%)",
+            "Failed payments: 7 (before: 3)"
+          ],
+          "headline": "The payment failure rate rose to 11.67% from 6.00%.",
+          "recommendation": "Check how failed subscription payments are retried and how customers are told about them, in your Stripe Billing settings.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refund rate: 6.83% (before: 3.90%)",
+            "Refunded amount: USD 620.00 (before: USD 322.00)",
+            "Refunds: 5 (before: 3)"
+          ],
+          "headline": "The refund rate rose to 6.83% from 3.90%.",
+          "recommendation": "Read a sample of this period's refunds, group them by reason, and act on the largest group first.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Refunds for duplicate charges: 1 (before: 0)"
+          ],
+          "headline": "Refunds for duplicate charges this period: 1.",
+          "recommendation": "Check how checkout or your integration could create the same charge twice, for example double submits or retries without an idempotency key.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Platform fees (net): USD 263.97 (before: USD 266.00)"
+          ],
+          "headline": "Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Take rate: 9.00% (before: 10.00%)",
+            "Platform fees (net): USD 263.97 (before: USD 266.00)",
+            "Gross payment volume: USD 9,072.00 (before: USD 8,253.00)"
+          ],
+          "headline": "The take rate fell to 9.00%, from 10.00%.",
+          "recommendation": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+          "severity": "watch"
+        },
+        {
+          "evidence": [
+            "Net new MRR: USD 100.00 (before: USD 248.00)",
+            "New MRR: USD 698.00 (before: USD 498.00)",
+            "Churned MRR: USD 897.00 (before: USD 299.00)"
+          ],
+          "headline": "Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+          "recommendation": "Note what drove the gain (new, expansion or fewer losses) so it can be repeated.",
+          "severity": "info"
+        }
+      ],
+      "source": "engine"
+    },
+    {
+      "args": {
+        "index": 0,
+        "more": "{first} and {count} more"
+      },
+      "call": "roleGroup",
+      "locale": "en",
+      "result": {
+        "allowed": [
+          "Recurring revenue health",
+          "Retention and churn",
+          "Sales performance",
+          "New customers",
+          "Board pack",
+          "Investor quarterly",
+          "Refunds and returns",
+          "Payment health",
+          "Marketplace health"
+        ],
+        "held": [],
+        "label": "Super Administrator, Administrator and 5 more",
+        "members": "Super Administrator, Administrator, Developer, Analyst, View Only, Accountant, Tax Analyst"
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "index": 1,
+        "more": "{first} and {count} more"
+      },
+      "call": "roleGroup",
+      "locale": "en",
+      "result": {
+        "allowed": [
+          "Refunds and returns",
+          "Payment health"
+        ],
+        "held": [
+          "Recurring revenue health",
+          "Retention and churn",
+          "Sales performance",
+          "New customers",
+          "Board pack",
+          "Investor quarterly",
+          "Marketplace health"
+        ],
+        "label": "Refund Analyst, Support Associate, Support Specialist",
+        "members": "Refund Analyst, Support Associate, Support Specialist"
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "index": 2,
+        "more": "{first} and {count} more"
+      },
+      "call": "roleGroup",
+      "locale": "en",
+      "result": {
+        "allowed": [
+          "Payment health"
+        ],
+        "held": [
+          "Recurring revenue health",
+          "Retention and churn",
+          "Sales performance",
+          "New customers",
+          "Board pack",
+          "Investor quarterly",
+          "Refunds and returns",
+          "Marketplace health"
+        ],
+        "label": "Dispute Analyst, Transfer Analyst",
+        "members": "Dispute Analyst, Transfer Analyst"
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "index": 3,
+        "more": "{first} and {count} more"
+      },
+      "call": "roleGroup",
+      "locale": "en",
+      "result": {
+        "allowed": [],
+        "held": [
+          "Recurring revenue health",
+          "Retention and churn",
+          "Sales performance",
+          "New customers",
+          "Board pack",
+          "Investor quarterly",
+          "Refunds and returns",
+          "Payment health",
+          "Marketplace health"
+        ],
+        "label": "IAM Administrator, Support Communications and 11 more",
+        "members": "IAM Administrator, Support Communications, Terminal Specialist, Data Migration Specialist, Connect Onboarding Analyst, Connect Risk Analyst, Sandbox Admin, Sandbox User, Identity Analyst, Identity View Only, Top-up Specialist, Financial Connections Specialist, Data Engineer"
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "day",
+        "line": "{cadence}: covers {period} ({from} to {to})"
+      },
+      "call": "cadence",
+      "locale": "en",
+      "result": {
+        "date": "2026-10-28",
+        "line": "Daily: covers 2026-10-27 (2026-10-27 to 2026-10-27)"
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "week",
+        "line": "{cadence}: covers {period} ({from} to {to})"
+      },
+      "call": "cadence",
+      "locale": "en",
+      "result": {
+        "date": "2026-10-26",
+        "line": "Weekly: covers 2026-W43 (2026-10-19 to 2026-10-25)"
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "month",
+        "line": "{cadence}: covers {period} ({from} to {to})"
+      },
+      "call": "cadence",
+      "locale": "en",
+      "result": {
+        "date": "2026-10-01",
+        "line": "Monthly: covers 2026-09 (2026-09-01 to 2026-09-30)"
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "quarter",
+        "line": "{cadence}: covers {period} ({from} to {to})"
+      },
+      "call": "cadence",
+      "locale": "en",
+      "result": {
+        "date": "2026-10-01",
+        "line": "Quarterly: covers 2026-Q3 (2026-07-01 to 2026-09-30)"
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "id": "year",
+        "line": "{cadence}: covers {period} ({from} to {to})"
+      },
+      "call": "cadence",
+      "locale": "en",
+      "result": {
+        "date": "2026-01-01",
+        "line": "Annual: covers 2025 (2025-01-01 to 2025-12-31)"
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "draft": "Net revenue retention came in at {nrr}, a little under full retention."
+      },
+      "call": "guard",
+      "locale": "en",
+      "result": {
+        "decision": "allow",
+        "ok": true,
+        "reason": "every number was computed by the engine",
+        "text": "Net revenue retention came in at 81.08%, a little under full retention."
+      },
+      "source": "engine"
+    },
+    {
+      "args": {
+        "draft": "Net revenue retention came in at 112.40%, well ahead of plan."
+      },
+      "call": "guard",
+      "locale": "en",
+      "result": {
+        "decision": "deny",
+        "ok": false,
+        "reason": "not computed by the engine: 112.40%",
+        "text": "Net revenue retention came in at 112.40%, well ahead of plan."
+      },
+      "source": "engine"
+    }
+  ],
+  "generator": "kit widgets build",
+  "inputs": {
+    "engine": "@saasreport/widgets 0.2.0",
+    "sources": {
+      "commitments": "8090053df1146cea",
+      "copy": "0bc515da7c518c37",
+      "engine": "c2e0d12b12a599d2",
+      "stakeholders": "70f6034218cd5601"
+    },
+    "spec": "7914c093c60a2356"
+  },
+  "labels": {
+    "en": {
+      "engine": "Engine on sample data",
+      "live": "Live data",
+      "sample": "Sample"
+    }
+  },
+  "locales": [
+    {
+      "code": "en",
+      "digits": "latn",
+      "dir": "ltr",
+      "intl": "en"
+    }
+  ],
+  "notice": "Generated by `kit widgets build` from widgets.spec.json and its sources. Do not edit: change the spec or a source and rebuild; `kit widgets check` fails when this file is stale.",
+  "page": {
+    "en": {
+      "audiences": [
+        {
+          "id": "subscription",
+          "label": "Subscription businesses"
+        },
+        {
+          "id": "merchant",
+          "label": "Merchants without subscriptions"
+        },
+        {
+          "id": "platform",
+          "label": "Marketplaces and platforms"
+        }
+      ],
+      "intro": "Every widget here runs the real SaasReport engine on made-up sample data, or on your own inputs. Each one says which.",
+      "path": "/examples/",
+      "scenarios": [
+        {
+          "id": "who-asks",
+          "summary": "Pick a person to see their questions, their priority figures and the findings that apply to them.",
+          "title": "Who asks"
+        },
+        {
+          "id": "report-order",
+          "summary": "Open the same report as three different readers.",
+          "title": "One report, three orders"
+        },
+        {
+          "id": "findings",
+          "summary": "Every rule that fires on the sample month, most urgent first.",
+          "title": "Findings come from written rules"
+        },
+        {
+          "id": "cost",
+          "summary": "Reporting by hand, on your inputs.",
+          "title": "Count the hours your reports take."
+        },
+        {
+          "id": "roles-access",
+          "summary": "Pick a group of Stripe roles to see which reports they could read.",
+          "title": "Who sees which report"
+        },
+        {
+          "id": "journey",
+          "summary": "The path of one report. Every stage is planned.",
+          "title": "From Stripe data to a signed link"
+        },
+        {
+          "id": "schedule",
+          "summary": "The five cadences and the period each one covers.",
+          "title": "Which period each schedule covers"
+        },
+        {
+          "id": "number-guard",
+          "summary": "Run two drafted sentences through the guard.",
+          "title": "AI writes the words. Code owns the numbers."
+        }
+      ],
+      "title": "Examples",
+      "useCases": [
+        {
+          "id": "people",
+          "label": "Start with the person"
+        },
+        {
+          "id": "reports",
+          "label": "Build the report for the reader"
+        },
+        {
+          "id": "cost",
+          "label": "Count what reporting costs you"
+        },
+        {
+          "id": "delivery",
+          "label": "Deliver it safely"
+        },
+        {
+          "id": "trust",
+          "label": "Check what we promise"
+        }
+      ]
+    }
+  },
+  "project": "saasreport",
+  "schema": "kit.widgets-generated.v1",
+  "widgets": [
+    {
+      "application": {
+        "href": "/",
+        "surface": "The reader reports of the SaasReport app"
+      },
+      "archetype": "roles",
+      "architecture": {
+        "components": [
+          "Stakeholder registry",
+          "Metric engine",
+          "Findings rules"
+        ],
+        "diagram": "docs/diagrams/landing-widgets.mmd",
+        "flow": "The registry names the reader, the engine computes the priority figures from sample data, and the rules state the findings.",
+        "url": "https://github.com/SaasReport/landing/blob/main/docs/diagrams/landing-widgets.png"
+      },
+      "audiences": [
+        "subscription",
+        "merchant",
+        "platform"
+      ],
+      "data": {
+        "links": [],
+        "roles": [
+          {
+            "does": [
+              "Report: Recurring revenue health, weekly, monthly, quarterly, annual",
+              "Report: Retention and churn, monthly, quarterly, annual",
+              "Report: Board pack, monthly, quarterly",
+              "Finding (act): Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+              "Finding (watch): Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+              "Finding (watch): The refund rate rose to 6.83% from 3.90%.",
+              "Finding (info): Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+              "Stripe cannot tell them: profit, cash in the bank, burn and runway"
+            ],
+            "id": "ceo-founder",
+            "kind": "person",
+            "label": "CEO / Founder",
+            "role": "Is recurring revenue growing, and is the growth healthy? Where is revenue leaking?",
+            "sees": [
+              "Monthly recurring revenue: USD 3,783.92",
+              "Net new MRR: USD 100.00",
+              "Net revenue retention: 81.08%",
+              "Churned MRR: USD 897.00",
+              "Annual recurring revenue: USD 45,407.04",
+              "Refund rate: 6.83%"
+            ]
+          },
+          {
+            "does": [
+              "Report: Recurring revenue health, weekly, monthly, quarterly, annual",
+              "Report: Sales performance, weekly, monthly, quarterly",
+              "Report: Refunds and returns, daily, weekly, monthly",
+              "Report: Payment health, daily, weekly, monthly",
+              "Finding (act): Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+              "Finding (act): Refunds issued as fraudulent this period: 1.",
+              "Finding (act): Disputes opened rose 50.00% to 3, from 2.",
+              "Finding (watch): Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+              "Finding (watch): The payment failure rate rose to 11.67% from 6.00%.",
+              "Finding (watch): The refund rate rose to 6.83% from 3.90%.",
+              "Finding (info): Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+              "Stripe cannot tell them: costs and expenses, profit and loss, cash balance outside Stripe"
+            ],
+            "id": "cfo",
+            "kind": "person",
+            "label": "CFO / Finance lead",
+            "role": "What is the recurring revenue base and how did it move this period? How much of it is retained? How much leaks through refunds and disputes?",
+            "sees": [
+              "Monthly recurring revenue: USD 3,783.92",
+              "Annual recurring revenue: USD 45,407.04",
+              "Net new MRR: USD 100.00",
+              "Gross revenue retention: 72.94%",
+              "Net payment volume: USD 8,452.00",
+              "Refunded amount: USD 620.00",
+              "Disputed amount: USD 422.00",
+              "Churned MRR: USD 897.00",
+              "Contraction MRR: USD 100.00"
+            ]
+          },
+          {
+            "does": [
+              "Report: Recurring revenue health, weekly, monthly, quarterly, annual",
+              "Report: Retention and churn, monthly, quarterly, annual",
+              "Report: Board pack, monthly, quarterly",
+              "Report: Investor quarterly, quarterly, annual",
+              "Finding (act): Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+              "Finding (act): Disputes opened rose 50.00% to 3, from 2.",
+              "Finding (watch): Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+              "Finding (info): Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+              "Stripe cannot tell them: burn and runway, headcount, pipeline"
+            ],
+            "id": "board",
+            "kind": "person",
+            "label": "Board",
+            "role": "Is the business on track? What changed since the last meeting?",
+            "sees": [
+              "Annual recurring revenue: USD 45,407.04",
+              "Net new MRR: USD 100.00",
+              "Net revenue retention: 81.08%",
+              "Gross revenue retention: 72.94%",
+              "Logo churn rate: 25.00%",
+              "Dispute rate: 5.66%"
+            ]
+          },
+          {
+            "does": [
+              "Report: Recurring revenue health, weekly, monthly, quarterly, annual",
+              "Report: Sales performance, weekly, monthly, quarterly",
+              "Report: Board pack, monthly, quarterly",
+              "Report: Investor quarterly, quarterly, annual",
+              "Finding (act): Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+              "Finding (watch): Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+              "Finding (info): Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+              "Stripe cannot tell them: customer acquisition cost, burn multiple, benchmarks against other companies"
+            ],
+            "id": "investors",
+            "kind": "person",
+            "label": "Investors",
+            "role": "How efficient and durable is the revenue growth?",
+            "sees": [
+              "Annual recurring revenue: USD 45,407.04",
+              "Net revenue retention: 81.08%",
+              "Gross revenue retention: 72.94%",
+              "Net new MRR: USD 100.00",
+              "New MRR: USD 698.00",
+              "Expansion MRR: USD 300.00"
+            ]
+          },
+          {
+            "does": [
+              "Report: Sales performance, weekly, monthly, quarterly",
+              "Report: New customers, weekly, monthly, quarterly",
+              "Finding (act): Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+              "Finding (info): Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+              "Stripe cannot tell them: pipeline, quota attainment, win rate, sales cycle length"
+            ],
+            "id": "sales",
+            "kind": "person",
+            "label": "Sales",
+            "role": "How much new and expansion revenue did we add? How big is a typical deal?",
+            "sees": [
+              "New MRR: USD 698.00",
+              "Expansion MRR: USD 300.00",
+              "New customers: 2",
+              "Net new MRR: USD 100.00",
+              "Average order value: USD 171.17",
+              "Average revenue per account: USD 315.33"
+            ]
+          },
+          {
+            "does": [
+              "Report: New customers, weekly, monthly, quarterly",
+              "No finding fires for them on this sample month.",
+              "Stripe cannot tell them: marketing spend, channel attribution, customer acquisition cost, leads and funnel stages"
+            ],
+            "id": "marketing",
+            "kind": "person",
+            "label": "Marketing",
+            "role": "How many new paying customers arrived, and how much revenue do they bring?",
+            "sees": [
+              "New customers: 2",
+              "New MRR: USD 698.00",
+              "Average revenue per account: USD 315.33",
+              "Average order value: USD 171.17",
+              "Gross payment volume: USD 9,072.00"
+            ]
+          },
+          {
+            "does": [
+              "Report: Retention and churn, monthly, quarterly, annual",
+              "Report: Payment health, daily, weekly, monthly",
+              "Finding (act): Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+              "Finding (watch): Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+              "Finding (watch): The payment failure rate rose to 11.67% from 6.00%.",
+              "Stripe cannot tell them: product usage, health scores, support satisfaction"
+            ],
+            "id": "customer-success",
+            "kind": "person",
+            "label": "Customer success",
+            "role": "Which parts of the base are shrinking or leaving? Are payment failures putting customers at risk?",
+            "sees": [
+              "Logo churn rate: 25.00%",
+              "Churned MRR: USD 897.00",
+              "Contraction MRR: USD 100.00",
+              "Gross revenue retention: 72.94%",
+              "Net revenue retention: 81.08%",
+              "Payment failure rate: 11.67%"
+            ]
+          },
+          {
+            "does": [
+              "Report: Refunds and returns, daily, weekly, monthly",
+              "Finding (act): Refunds issued as fraudulent this period: 1.",
+              "Finding (act): Disputes opened rose 50.00% to 3, from 2.",
+              "Finding (watch): The refund rate rose to 6.83% from 3.90%.",
+              "Finding (watch): Refunds for duplicate charges this period: 1.",
+              "Stripe cannot tell them: returned goods and inventory, product-level return reasons, shipping"
+            ],
+            "id": "refunds-returns",
+            "kind": "person",
+            "label": "Refunds and returns",
+            "role": "How much are we refunding, and why? Is the refund rate rising?",
+            "sees": [
+              "Refunded amount: USD 620.00",
+              "Refund rate: 6.83%",
+              "Refunds: 5",
+              "Refunds requested by the customer: 3",
+              "Refunds for duplicate charges: 1",
+              "Refunds for fraud: 1",
+              "Disputes: 3"
+            ]
+          },
+          {
+            "does": [
+              "Report: Payment health, daily, weekly, monthly",
+              "Finding (act): Refunds issued as fraudulent this period: 1.",
+              "Finding (act): Disputes opened rose 50.00% to 3, from 2.",
+              "Finding (watch): The payment failure rate rose to 11.67% from 6.00%.",
+              "Finding (watch): Refunds for duplicate charges this period: 1.",
+              "Stripe cannot tell them: tickets and response times, error logs, product incidents"
+            ],
+            "id": "tech-support",
+            "kind": "person",
+            "label": "Tech support",
+            "role": "How many payments are failing, and is it getting worse? How many disputes need a response?",
+            "sees": [
+              "Payment failure rate: 11.67%",
+              "Failed payments: 7",
+              "Disputes: 3",
+              "Dispute rate: 5.66%",
+              "Refunds for duplicate charges: 1"
+            ]
+          },
+          {
+            "does": [
+              "Report: Marketplace health, weekly, monthly, quarterly",
+              "Finding (act): Disputes opened rose 50.00% to 3, from 2.",
+              "Finding (watch): The payment failure rate rose to 11.67% from 6.00%.",
+              "Finding (watch): The refund rate rose to 6.83% from 3.90%.",
+              "Finding (watch): Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+              "Finding (watch): The take rate fell to 9.00%, from 10.00%.",
+              "Stripe cannot tell them: seller-side revenue of connected accounts (not readable from the platform's install), listing quality and supply health, buyer and seller acquisition cost"
+            ],
+            "id": "marketplace-operator",
+            "kind": "person",
+            "label": "Marketplace / platform operator",
+            "role": "What does the platform earn on the volume that flows through it? Is the take rate holding? Are disputes and refunds on the platform's payments under control?",
+            "sees": [
+              "Platform fees (net): USD 263.97",
+              "Take rate: 9.00%",
+              "Gross payment volume: USD 9,072.00",
+              "Dispute rate: 5.66%",
+              "Refund rate: 6.83%",
+              "Payment failure rate: 11.67%"
+            ]
+          }
+        ]
+      },
+      "honesty": "engine",
+      "id": "who-asks",
+      "locale": "en",
+      "scenario": "who-asks",
+      "summary": "Pick a person to see their questions, their priority figures and the findings that apply to them.",
+      "title": "Who asks",
+      "trace": [
+        "spec#/scenarios/0",
+        "spec#/scenarios/0/widgets/0",
+        "copy#/people/who/title",
+        "copy#/people/who/summary",
+        "stakeholders#/stakeholders/0/name",
+        "engine#/stakeholder",
+        "stakeholders#/stakeholders/1/name",
+        "stakeholders#/stakeholders/2/name",
+        "stakeholders#/stakeholders/3/name",
+        "stakeholders#/stakeholders/4/name",
+        "stakeholders#/stakeholders/5/name",
+        "stakeholders#/stakeholders/6/name",
+        "stakeholders#/stakeholders/7/name",
+        "stakeholders#/stakeholders/8/name",
+        "stakeholders#/stakeholders/9/name",
+        "copy#/people/who/noFindingLine"
+      ],
+      "usage": {
+        "surfaces": [
+          {
+            "how": "Pick a reader in the People section, and again in the gallery of examples.",
+            "path": "/",
+            "placement": "section"
+          },
+          {
+            "how": "Pick a reader in the People section, and again in the gallery of examples.",
+            "path": "/examples/",
+            "placement": "page"
+          }
+        ]
+      },
+      "useCase": "people",
+      "utility": {
+        "does": "Pick a reader and read their questions, figures and findings.",
+        "learns": "What each reader asks, which figures they follow, and what Stripe cannot tell them."
+      }
+    },
+    {
+      "application": {
+        "href": "/",
+        "surface": "The report planner of the SaasReport app"
+      },
+      "archetype": "screens",
+      "architecture": {
+        "components": [
+          "Report type registry",
+          "Stakeholder registry",
+          "Report planner",
+          "Metric engine"
+        ],
+        "diagram": "docs/diagrams/landing-widgets.mmd",
+        "flow": "The planner orders the sections of one report type by the reader's priority figures, and the engine fills in each figure.",
+        "url": "https://github.com/SaasReport/landing/blob/main/docs/diagrams/landing-widgets.png"
+      },
+      "audiences": [
+        "subscription",
+        "merchant",
+        "platform"
+      ],
+      "data": {
+        "screens": [
+          {
+            "actor": "Board",
+            "id": "board",
+            "lines": [
+              {
+                "label": "Where we stand: Annual recurring revenue",
+                "value": "USD 45,407.04"
+              },
+              {
+                "label": "Where we stand: Monthly recurring revenue",
+                "value": "USD 3,783.92"
+              },
+              {
+                "label": "How revenue moved: Net new MRR",
+                "value": "USD 100.00"
+              },
+              {
+                "label": "How revenue moved: New MRR",
+                "value": "USD 698.00"
+              },
+              {
+                "label": "How revenue moved: Reactivation MRR",
+                "value": "USD 99.00"
+              },
+              {
+                "label": "How revenue moved: Expansion MRR",
+                "value": "USD 300.00"
+              },
+              {
+                "label": "How revenue moved: Contraction MRR",
+                "value": "USD 100.00"
+              },
+              {
+                "label": "How revenue moved: Churned MRR",
+                "value": "USD 897.00"
+              },
+              {
+                "label": "How much we kept: Net revenue retention",
+                "value": "81.08%"
+              },
+              {
+                "label": "How much we kept: Gross revenue retention",
+                "value": "72.94%"
+              },
+              {
+                "label": "How much we kept: Logo churn rate",
+                "value": "25.00%"
+              },
+              {
+                "label": "Payment risk: Dispute rate",
+                "value": "5.66%"
+              },
+              {
+                "label": "Payment risk: Refund rate",
+                "value": "6.83%"
+              },
+              {
+                "label": "Who pays: Average revenue per account",
+                "value": "USD 315.33"
+              }
+            ],
+            "title": "Board pack: Board"
+          },
+          {
+            "actor": "CEO / Founder",
+            "id": "ceo-founder",
+            "lines": [
+              {
+                "label": "Where we stand: Monthly recurring revenue",
+                "value": "USD 3,783.92"
+              },
+              {
+                "label": "Where we stand: Annual recurring revenue",
+                "value": "USD 45,407.04"
+              },
+              {
+                "label": "How revenue moved: Net new MRR",
+                "value": "USD 100.00"
+              },
+              {
+                "label": "How revenue moved: Churned MRR",
+                "value": "USD 897.00"
+              },
+              {
+                "label": "How revenue moved: New MRR",
+                "value": "USD 698.00"
+              },
+              {
+                "label": "How revenue moved: Reactivation MRR",
+                "value": "USD 99.00"
+              },
+              {
+                "label": "How revenue moved: Expansion MRR",
+                "value": "USD 300.00"
+              },
+              {
+                "label": "How revenue moved: Contraction MRR",
+                "value": "USD 100.00"
+              },
+              {
+                "label": "How much we kept: Net revenue retention",
+                "value": "81.08%"
+              },
+              {
+                "label": "How much we kept: Gross revenue retention",
+                "value": "72.94%"
+              },
+              {
+                "label": "How much we kept: Logo churn rate",
+                "value": "25.00%"
+              },
+              {
+                "label": "Payment risk: Refund rate",
+                "value": "6.83%"
+              },
+              {
+                "label": "Payment risk: Dispute rate",
+                "value": "5.66%"
+              },
+              {
+                "label": "Who pays: Average revenue per account",
+                "value": "USD 315.33"
+              }
+            ],
+            "title": "Board pack: CEO / Founder"
+          },
+          {
+            "actor": "Investors",
+            "id": "investors",
+            "lines": [
+              {
+                "label": "Where we stand: Annual recurring revenue",
+                "value": "USD 45,407.04"
+              },
+              {
+                "label": "Where we stand: Monthly recurring revenue",
+                "value": "USD 3,783.92"
+              },
+              {
+                "label": "How much we kept: Net revenue retention",
+                "value": "81.08%"
+              },
+              {
+                "label": "How much we kept: Gross revenue retention",
+                "value": "72.94%"
+              },
+              {
+                "label": "How much we kept: Logo churn rate",
+                "value": "25.00%"
+              },
+              {
+                "label": "How revenue moved: Net new MRR",
+                "value": "USD 100.00"
+              },
+              {
+                "label": "How revenue moved: New MRR",
+                "value": "USD 698.00"
+              },
+              {
+                "label": "How revenue moved: Expansion MRR",
+                "value": "USD 300.00"
+              },
+              {
+                "label": "How revenue moved: Reactivation MRR",
+                "value": "USD 99.00"
+              },
+              {
+                "label": "How revenue moved: Contraction MRR",
+                "value": "USD 100.00"
+              },
+              {
+                "label": "How revenue moved: Churned MRR",
+                "value": "USD 897.00"
+              },
+              {
+                "label": "Who pays: Average revenue per account",
+                "value": "USD 315.33"
+              },
+              {
+                "label": "Payment risk: Refund rate",
+                "value": "6.83%"
+              },
+              {
+                "label": "Payment risk: Dispute rate",
+                "value": "5.66%"
+              }
+            ],
+            "title": "Board pack: Investors"
+          }
+        ]
+      },
+      "honesty": "engine",
+      "id": "report-order",
+      "locale": "en",
+      "scenario": "report-order",
+      "summary": "Open the same report as three different readers.",
+      "title": "Open the same report as three different readers.",
+      "trace": [
+        "spec#/scenarios/1",
+        "spec#/scenarios/1/widgets/0",
+        "copy#/people/order/title",
+        "copy#/people/order/summary",
+        "stakeholders#/stakeholders/2/name",
+        "stakeholders#/stakeholders/0/name",
+        "stakeholders#/stakeholders/3/name",
+        "engine#/report"
+      ],
+      "usage": {
+        "surfaces": [
+          {
+            "how": "Shown in the People section, below the reader picker.",
+            "path": "/",
+            "placement": "section"
+          },
+          {
+            "how": "Shown in the People section, below the reader picker.",
+            "path": "/examples/",
+            "placement": "page"
+          }
+        ]
+      },
+      "useCase": "reports",
+      "utility": {
+        "does": "Open the same report as three readers and compare the order.",
+        "learns": "That one report type is ordered differently for each of its readers."
+      }
+    },
+    {
+      "application": {
+        "href": "/",
+        "surface": "The findings of the SaasReport reports"
+      },
+      "archetype": "feed",
+      "architecture": {
+        "components": [
+          "Findings rule registry",
+          "Metric engine",
+          "Findings evaluator"
+        ],
+        "diagram": "docs/diagrams/landing-widgets.mmd",
+        "flow": "The engine computes the figures for this month and the month before, and each published rule that matches becomes a finding with its evidence.",
+        "url": "https://github.com/SaasReport/landing/blob/main/docs/diagrams/landing-widgets.png"
+      },
+      "audiences": [
+        "subscription",
+        "merchant",
+        "platform"
+      ],
+      "data": {
+        "items": [
+          {
+            "action": "Churned MRR of USD 897.00 was larger than new MRR in the same period.",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "icon": "A",
+            "id": "finding-0",
+            "outcome": "Compare what was added with what was lost this period and decide whether acquisition or retention needs attention first.",
+            "rules": [
+              "Churned MRR: USD 897.00 (before: USD 299.00)",
+              "New MRR: USD 698.00 (before: USD 498.00)"
+            ],
+            "tone": "err"
+          },
+          {
+            "action": "Refunds issued as fraudulent this period: 1.",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "icon": "A",
+            "id": "finding-1",
+            "outcome": "Review the payments refunded as fraudulent and check whether your fraud rules, for example in Stripe Radar, need tightening.",
+            "rules": [
+              "Refunds for fraud: 1 (before: 0)"
+            ],
+            "tone": "err"
+          },
+          {
+            "action": "Disputes opened rose 50.00% to 3, from 2.",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "icon": "A",
+            "id": "finding-2",
+            "outcome": "Open the disputes that still need a response in the Stripe Dashboard and submit evidence before each deadline.",
+            "rules": [
+              "Disputes: 3 (before: 2)",
+              "Dispute rate: 5.66% (before: 4.26%)",
+              "Disputed amount: USD 422.00 (before: USD 223.00)"
+            ],
+            "tone": "err"
+          },
+          {
+            "action": "Net revenue retention was 81.08%: existing customers brought in less revenue than they did at the start of the period.",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "icon": "W",
+            "id": "finding-3",
+            "outcome": "Look at the customers behind churned and contraction revenue and note the likely cause of each (price, fit, a failed payment, or a change on their side).",
+            "rules": [
+              "Net revenue retention: 81.08% (before: 92.72%)"
+            ],
+            "tone": "warn"
+          },
+          {
+            "action": "The payment failure rate rose to 11.67% from 6.00%.",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "icon": "W",
+            "id": "finding-4",
+            "outcome": "Check how failed subscription payments are retried and how customers are told about them, in your Stripe Billing settings.",
+            "rules": [
+              "Payment failure rate: 11.67% (before: 6.00%)",
+              "Failed payments: 7 (before: 3)"
+            ],
+            "tone": "warn"
+          },
+          {
+            "action": "The refund rate rose to 6.83% from 3.90%.",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "icon": "W",
+            "id": "finding-5",
+            "outcome": "Read a sample of this period's refunds, group them by reason, and act on the largest group first.",
+            "rules": [
+              "Refund rate: 6.83% (before: 3.90%)",
+              "Refunded amount: USD 620.00 (before: USD 322.00)",
+              "Refunds: 5 (before: 3)"
+            ],
+            "tone": "warn"
+          },
+          {
+            "action": "Refunds for duplicate charges this period: 1.",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "icon": "W",
+            "id": "finding-6",
+            "outcome": "Check how checkout or your integration could create the same charge twice, for example double submits or retries without an idempotency key.",
+            "rules": [
+              "Refunds for duplicate charges: 1 (before: 0)"
+            ],
+            "tone": "warn"
+          },
+          {
+            "action": "Net platform fees fell 0.76% to USD 263.97, from USD 266.00.",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "icon": "W",
+            "id": "finding-7",
+            "outcome": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+            "rules": [
+              "Platform fees (net): USD 263.97 (before: USD 266.00)"
+            ],
+            "tone": "warn"
+          },
+          {
+            "action": "The take rate fell to 9.00%, from 10.00%.",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "icon": "W",
+            "id": "finding-8",
+            "outcome": "Check whether fee settings, pricing tiers or the mix of sellers and categories changed during the period, and compare the fee earned per payment against the prior period.",
+            "rules": [
+              "Take rate: 9.00% (before: 10.00%)",
+              "Platform fees (net): USD 263.97 (before: USD 266.00)",
+              "Gross payment volume: USD 9,072.00 (before: USD 8,253.00)"
+            ],
+            "tone": "warn"
+          },
+          {
+            "action": "Net new MRR was USD 100.00: more recurring revenue arrived than left.",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "icon": "I",
+            "id": "finding-9",
+            "outcome": "Note what drove the gain (new, expansion or fewer losses) so it can be repeated.",
+            "rules": [
+              "Net new MRR: USD 100.00 (before: USD 248.00)",
+              "New MRR: USD 698.00 (before: USD 498.00)",
+              "Churned MRR: USD 897.00 (before: USD 299.00)"
+            ],
+            "tone": "info"
+          }
+        ]
+      },
+      "honesty": "engine",
+      "id": "findings",
+      "locale": "en",
+      "scenario": "findings",
+      "summary": "Every rule that fires on the sample month, most urgent first.",
+      "title": "Every rule that fires on the sample month, most urgent first.",
+      "trace": [
+        "spec#/scenarios/2",
+        "spec#/scenarios/2/widgets/0",
+        "copy#/people/findings/title",
+        "copy#/people/findings/summary",
+        "copy#/people/findings/systemName",
+        "engine#/findings"
+      ],
+      "usage": {
+        "surfaces": [
+          {
+            "how": "Shown in the People section, after the report order.",
+            "path": "/",
+            "placement": "section"
+          },
+          {
+            "how": "Shown in the People section, after the report order.",
+            "path": "/examples/",
+            "placement": "page"
+          }
+        ]
+      },
+      "useCase": "reports",
+      "utility": {
+        "does": "Read each finding and the figures behind it.",
+        "learns": "That a finding is a written rule with evidence, and what to look at next."
+      }
+    },
+    {
+      "application": {
+        "href": "/",
+        "surface": "A calculator on the landing page"
+      },
+      "archetype": "calculator",
+      "architecture": {
+        "components": [
+          "Your own inputs",
+          "Plain arithmetic"
+        ],
+        "diagram": "docs/diagrams/landing-widgets.mmd",
+        "flow": "Your four inputs go through three sums: hours, cost each month and cost each year. Nothing leaves your browser.",
+        "url": "https://github.com/SaasReport/landing/blob/main/docs/diagrams/landing-widgets.png"
+      },
+      "audiences": [
+        "subscription",
+        "merchant",
+        "platform"
+      ],
+      "data": {
+        "expected": [],
+        "inputs": [
+          {
+            "default": 4,
+            "id": "people",
+            "label": "People who ask for Stripe numbers",
+            "max": 200,
+            "min": 1,
+            "step": 1,
+            "type": "number"
+          },
+          {
+            "default": 2,
+            "id": "reports",
+            "label": "Reports each person gets per month",
+            "max": 60,
+            "min": 1,
+            "step": 1,
+            "type": "number"
+          },
+          {
+            "default": 90,
+            "id": "minutes",
+            "label": "Minutes to build one report by hand",
+            "max": 2400,
+            "min": 5,
+            "step": 5,
+            "type": "number",
+            "unit": "minutes"
+          },
+          {
+            "default": 50,
+            "id": "rate",
+            "label": "Cost of one hour of the builder's time",
+            "max": 1000,
+            "min": 1,
+            "step": 1,
+            "type": "number",
+            "unit": "your currency"
+          }
+        ],
+        "outputs": [
+          {
+            "decimals": 1,
+            "expr": "people * reports * minutes / 60",
+            "id": "hours",
+            "label": "Hours spent each month",
+            "unit": "hours"
+          },
+          {
+            "decimals": 0,
+            "expr": "people * reports * minutes / 60 * rate",
+            "id": "month",
+            "label": "Cost each month",
+            "unit": "your currency"
+          },
+          {
+            "decimals": 0,
+            "expr": "people * reports * minutes / 60 * rate * 12",
+            "id": "year",
+            "label": "Cost each year",
+            "unit": "your currency"
+          }
+        ]
+      },
+      "honesty": "sample",
+      "id": "cost",
+      "locale": "en",
+      "scenario": "cost",
+      "summary": "Reporting by hand, on your inputs.",
+      "title": "Reporting by hand, on your inputs.",
+      "trace": [
+        "spec#/scenarios/3",
+        "spec#/scenarios/3/widgets/0",
+        "copy#/roi/title",
+        "copy#/roi/summary",
+        "copy#/roi/you",
+        "copy#/roi/inputs/people/label",
+        "copy#/roi/inputs/reports/label",
+        "copy#/roi/inputs/minutes/label",
+        "copy#/roi/inputs/minutes/unit",
+        "copy#/roi/inputs/rate/label",
+        "copy#/roi/inputs/rate/unit",
+        "copy#/roi/step",
+        "copy#/roi/outputs/hours/label",
+        "copy#/roi/outputs/hours/unit",
+        "copy#/roi/outputs/month/label",
+        "copy#/roi/outputs/month/unit",
+        "copy#/roi/outputs/year/label",
+        "copy#/roi/outputs/year/unit"
+      ],
+      "usage": {
+        "surfaces": [
+          {
+            "how": "Shown in the Cost section.",
+            "path": "/",
+            "placement": "section"
+          },
+          {
+            "how": "Shown in the Cost section.",
+            "path": "/examples/",
+            "placement": "page"
+          }
+        ]
+      },
+      "useCase": "cost",
+      "utility": {
+        "does": "Change the four inputs and watch the three results.",
+        "learns": "What hand-built reporting costs you today, with no claim about savings."
+      }
+    },
+    {
+      "application": {
+        "href": "/",
+        "surface": "Role-based access in the SaasReport app"
+      },
+      "archetype": "roles",
+      "architecture": {
+        "components": [
+          "Stripe role registry",
+          "Metric registry",
+          "Report type registry",
+          "Access rules"
+        ],
+        "diagram": "docs/diagrams/landing-widgets.mmd",
+        "flow": "A report is offered only if every data class behind its figures is visible to at least one of the person's Stripe roles.",
+        "url": "https://github.com/SaasReport/landing/blob/main/docs/diagrams/landing-widgets.png"
+      },
+      "audiences": [
+        "subscription",
+        "merchant",
+        "platform"
+      ],
+      "data": {
+        "links": [],
+        "roles": [
+          {
+            "does": [],
+            "id": "group-1",
+            "kind": "person",
+            "label": "Super Administrator, Administrator and 5 more",
+            "role": "Super Administrator, Administrator, Developer, Analyst, View Only, Accountant, Tax Analyst",
+            "sees": [
+              "Recurring revenue health",
+              "Retention and churn",
+              "Sales performance",
+              "New customers",
+              "Board pack",
+              "Investor quarterly",
+              "Refunds and returns",
+              "Payment health",
+              "Marketplace health"
+            ]
+          },
+          {
+            "does": [
+              "Recurring revenue health",
+              "Retention and churn",
+              "Sales performance",
+              "New customers",
+              "Board pack",
+              "Investor quarterly",
+              "Marketplace health"
+            ],
+            "id": "group-2",
+            "kind": "person",
+            "label": "Refund Analyst, Support Associate, Support Specialist",
+            "role": "Refund Analyst, Support Associate, Support Specialist",
+            "sees": [
+              "Refunds and returns",
+              "Payment health"
+            ]
+          },
+          {
+            "does": [
+              "Recurring revenue health",
+              "Retention and churn",
+              "Sales performance",
+              "New customers",
+              "Board pack",
+              "Investor quarterly",
+              "Refunds and returns",
+              "Marketplace health"
+            ],
+            "id": "group-3",
+            "kind": "person",
+            "label": "Dispute Analyst, Transfer Analyst",
+            "role": "Dispute Analyst, Transfer Analyst",
+            "sees": [
+              "Payment health"
+            ]
+          },
+          {
+            "does": [
+              "Recurring revenue health",
+              "Retention and churn",
+              "Sales performance",
+              "New customers",
+              "Board pack",
+              "Investor quarterly",
+              "Refunds and returns",
+              "Payment health",
+              "Marketplace health"
+            ],
+            "id": "group-4",
+            "kind": "person",
+            "label": "IAM Administrator, Support Communications and 11 more",
+            "role": "IAM Administrator, Support Communications, Terminal Specialist, Data Migration Specialist, Connect Onboarding Analyst, Connect Risk Analyst, Sandbox Admin, Sandbox User, Identity Analyst, Identity View Only, Top-up Specialist, Financial Connections Specialist, Data Engineer",
+            "sees": [
+              "No report: this role cannot see financial data."
+            ]
+          }
+        ]
+      },
+      "honesty": "engine",
+      "id": "roles-access",
+      "locale": "en",
+      "scenario": "roles-access",
+      "summary": "Pick a group of Stripe roles to see which reports they could read.",
+      "title": "Pick a group of Stripe roles to see which reports they could read.",
+      "trace": [
+        "spec#/scenarios/4",
+        "spec#/scenarios/4/widgets/0",
+        "copy#/trust/access/title",
+        "copy#/trust/access/summary",
+        "engine#/roleGroup",
+        "copy#/trust/access/noneLabel"
+      ],
+      "usage": {
+        "surfaces": [
+          {
+            "how": "Shown in the Trust section.",
+            "path": "/",
+            "placement": "section"
+          },
+          {
+            "how": "Shown in the Trust section.",
+            "path": "/examples/",
+            "placement": "page"
+          }
+        ]
+      },
+      "useCase": "trust",
+      "utility": {
+        "does": "Pick a group of Stripe roles and see the reports it could read.",
+        "learns": "That access follows Stripe roles, and an unknown role sees nothing."
+      }
+    },
+    {
+      "application": {
+        "href": "/",
+        "surface": "The report pipeline of the SaasReport app"
+      },
+      "archetype": "pipeline",
+      "architecture": {
+        "components": [
+          "Stripe app",
+          "Metric engine",
+          "Findings rules",
+          "Number guard",
+          "Report storage",
+          "Mail engine"
+        ],
+        "diagram": "docs/diagrams/landing-widgets.mmd",
+        "flow": "Stripe data is stored per tenant, turned into figures and findings, worded, rendered to a PDF, stored, and sent as a signed link.",
+        "url": "https://github.com/SaasReport/landing/blob/main/docs/diagrams/landing-widgets.png"
+      },
+      "audiences": [
+        "subscription",
+        "merchant",
+        "platform"
+      ],
+      "data": {
+        "expected": [],
+        "stages": [
+          {
+            "action": "Stripe sends the data",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "chip": "Planned",
+            "id": "ingest",
+            "outcome": "Charges, refunds, disputes and subscriptions arrive through the Stripe app, and are stored under your tenant only.",
+            "tone": "pending"
+          },
+          {
+            "action": "Code computes the figures",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "chip": "Planned",
+            "id": "compute",
+            "outcome": "A deterministic engine turns the data into integers under published definitions.",
+            "tone": "pending"
+          },
+          {
+            "action": "Rules write the findings",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "chip": "Planned",
+            "id": "findings",
+            "outcome": "Published rules read the figures and state what changed, with the evidence.",
+            "tone": "pending"
+          },
+          {
+            "action": "AI words the summary",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "chip": "Planned",
+            "id": "words",
+            "outcome": "The AI sees aggregates only. A number guard rejects any number the engine did not compute.",
+            "tone": "pending"
+          },
+          {
+            "action": "The PDF is stored",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "chip": "Planned",
+            "id": "store",
+            "outcome": "The report is saved under your tenant's own prefix.",
+            "tone": "pending"
+          },
+          {
+            "action": "A signed link is emailed",
+            "actor": "SaasReport",
+            "actorKind": "system",
+            "chip": "Planned",
+            "id": "send",
+            "outcome": "The reader gets a link that expires. The email carries no figures.",
+            "tone": "pending"
+          }
+        ]
+      },
+      "honesty": "sample",
+      "id": "journey",
+      "locale": "en",
+      "scenario": "journey",
+      "summary": "The path of one report. Every stage is planned.",
+      "title": "The path of one report. Every stage is planned.",
+      "trace": [
+        "spec#/scenarios/5",
+        "spec#/scenarios/5/widgets/0",
+        "copy#/delivery/journey/title",
+        "copy#/delivery/journey/summary",
+        "copy#/people/findings/systemName",
+        "copy#/delivery/journey/steps/0/title",
+        "copy#/delivery/journey/steps/0/text",
+        "copy#/delivery/journey/plannedLabel",
+        "copy#/delivery/journey/steps/1/title",
+        "copy#/delivery/journey/steps/1/text",
+        "copy#/delivery/journey/steps/2/title",
+        "copy#/delivery/journey/steps/2/text",
+        "copy#/delivery/journey/steps/3/title",
+        "copy#/delivery/journey/steps/3/text",
+        "copy#/delivery/journey/steps/4/title",
+        "copy#/delivery/journey/steps/4/text",
+        "copy#/delivery/journey/steps/5/title",
+        "copy#/delivery/journey/steps/5/text"
+      ],
+      "usage": {
+        "surfaces": [
+          {
+            "how": "Shown in the Delivery section.",
+            "path": "/",
+            "placement": "section"
+          },
+          {
+            "how": "Shown in the Delivery section.",
+            "path": "/examples/",
+            "placement": "page"
+          }
+        ]
+      },
+      "useCase": "delivery",
+      "utility": {
+        "does": "Run the pipeline and read each stage.",
+        "learns": "The path one report takes from Stripe data to a reader, and that every stage is still planned."
+      }
+    },
+    {
+      "application": {
+        "href": "/",
+        "surface": "The schedule of the SaasReport app"
+      },
+      "archetype": "timeline",
+      "architecture": {
+        "components": [
+          "Cadence registry",
+          "Period calendar"
+        ],
+        "diagram": "docs/diagrams/landing-widgets.mmd",
+        "flow": "Each cadence reports on the last complete period before the run, in UTC, by integer calendar arithmetic.",
+        "url": "https://github.com/SaasReport/landing/blob/main/docs/diagrams/landing-widgets.png"
+      },
+      "audiences": [
+        "subscription",
+        "merchant",
+        "platform"
+      ],
+      "data": {
+        "asOf": "2026-10-28",
+        "events": [
+          {
+            "action": "Annual: covers 2025 (2025-01-01 to 2025-12-31)",
+            "actor": "The schedule",
+            "actorKind": "system",
+            "at": "2026-01-01",
+            "id": "cadence-year",
+            "tone": "info"
+          },
+          {
+            "action": "Monthly: covers 2026-09 (2026-09-01 to 2026-09-30)",
+            "actor": "The schedule",
+            "actorKind": "system",
+            "at": "2026-10-01",
+            "id": "cadence-month",
+            "tone": "info"
+          },
+          {
+            "action": "Quarterly: covers 2026-Q3 (2026-07-01 to 2026-09-30)",
+            "actor": "The schedule",
+            "actorKind": "system",
+            "at": "2026-10-01",
+            "id": "cadence-quarter",
+            "tone": "info"
+          },
+          {
+            "action": "Weekly: covers 2026-W43 (2026-10-19 to 2026-10-25)",
+            "actor": "The schedule",
+            "actorKind": "system",
+            "at": "2026-10-26",
+            "id": "cadence-week",
+            "tone": "info"
+          },
+          {
+            "action": "Daily: covers 2026-10-27 (2026-10-27 to 2026-10-27)",
+            "actor": "The schedule",
+            "actorKind": "system",
+            "at": "2026-10-28",
+            "id": "cadence-day",
+            "tone": "info"
+          }
+        ]
+      },
+      "honesty": "engine",
+      "id": "schedule",
+      "locale": "en",
+      "scenario": "schedule",
+      "summary": "The five cadences and the period each one covers.",
+      "title": "The five cadences and the period each one covers.",
+      "trace": [
+        "spec#/scenarios/6",
+        "spec#/scenarios/6/widgets/0",
+        "copy#/delivery/schedule/title",
+        "copy#/delivery/schedule/summary",
+        "copy#/delivery/schedule/systemName",
+        "engine#/cadence"
+      ],
+      "usage": {
+        "surfaces": [
+          {
+            "how": "Shown in the Delivery section, after the pipeline.",
+            "path": "/",
+            "placement": "section"
+          },
+          {
+            "how": "Shown in the Delivery section, after the pipeline.",
+            "path": "/examples/",
+            "placement": "page"
+          }
+        ]
+      },
+      "useCase": "delivery",
+      "utility": {
+        "does": "Read the five cadences and their periods.",
+        "learns": "Which period each cadence covers."
+      }
+    },
+    {
+      "application": {
+        "href": "/",
+        "surface": "The number guard of the SaasReport reports"
+      },
+      "archetype": "runs",
+      "architecture": {
+        "components": [
+          "Metric engine",
+          "AI drafting step",
+          "Number guard"
+        ],
+        "diagram": "docs/diagrams/landing-widgets.mmd",
+        "flow": "The guard compares every number in a drafted sentence with the figures the engine computed, and rejects the sentence on any other number.",
+        "url": "https://github.com/SaasReport/landing/blob/main/docs/diagrams/landing-widgets.png"
+      },
+      "audiences": [
+        "subscription",
+        "merchant",
+        "platform"
+      ],
+      "data": {
+        "cases": [
+          {
+            "decision": "allow",
+            "detail": "Net revenue retention came in at 81.08%, a little under full retention.",
+            "id": "grounded",
+            "label": "A sentence with the engine's number",
+            "outcome": "Only a sentence that passed.",
+            "reason": "every number was computed by the engine",
+            "stop": -1
+          },
+          {
+            "decision": "deny",
+            "detail": "Net revenue retention came in at 112.40%, well ahead of plan.",
+            "id": "invented",
+            "label": "A sentence with an invented number",
+            "reason": "not computed by the engine: 112.40%",
+            "stop": 2
+          }
+        ],
+        "stages": [
+          {
+            "action": "Computes the figures",
+            "actor": "Engine",
+            "actorKind": "system",
+            "detail": "Integers from your Stripe data.",
+            "id": "compute",
+            "tone": "info"
+          },
+          {
+            "action": "Drafts a sentence",
+            "actor": "AI",
+            "actorKind": "agent",
+            "detail": "It sees aggregates only.",
+            "id": "draft",
+            "tone": "info"
+          },
+          {
+            "action": "Checks every number",
+            "actor": "Number guard",
+            "actorKind": "system",
+            "detail": "Each number must be one the engine computed.",
+            "id": "guard",
+            "tone": "info"
+          },
+          {
+            "action": "Sentence enters the report",
+            "actor": "Report",
+            "actorKind": "system",
+            "detail": "Only a sentence that passed.",
+            "id": "report",
+            "tone": "info"
+          }
+        ]
+      },
+      "honesty": "engine",
+      "id": "number-guard",
+      "locale": "en",
+      "scenario": "number-guard",
+      "summary": "Run two drafted sentences through the guard.",
+      "title": "Run two drafted sentences through the guard.",
+      "trace": [
+        "spec#/scenarios/7",
+        "spec#/scenarios/7/widgets/0",
+        "copy#/trust/guard/title",
+        "copy#/trust/guard/summary",
+        "copy#/trust/guard/stages/0/actor",
+        "copy#/trust/guard/stages/1/actor",
+        "copy#/trust/guard/stages/2/actor",
+        "copy#/trust/guard/stages/3/actor",
+        "copy#/trust/guard/stages/0/action",
+        "copy#/trust/guard/stages/0/detail",
+        "copy#/trust/guard/stages/1/action",
+        "copy#/trust/guard/stages/1/detail",
+        "copy#/trust/guard/stages/2/action",
+        "copy#/trust/guard/stages/2/detail",
+        "copy#/trust/guard/stages/3/action",
+        "copy#/trust/guard/stages/3/detail",
+        "copy#/trust/guard/cases/0/label",
+        "engine#/guard",
+        "copy#/trust/guard/cases/1/label"
+      ],
+      "usage": {
+        "surfaces": [
+          {
+            "how": "Shown in the Trust section, after the access example.",
+            "path": "/",
+            "placement": "section"
+          },
+          {
+            "how": "Shown in the Trust section, after the access example.",
+            "path": "/examples/",
+            "placement": "page"
+          }
+        ]
+      },
+      "useCase": "trust",
+      "utility": {
+        "does": "Run a grounded sentence and an invented one through the guard.",
+        "learns": "That AI writes the words and code owns the numbers."
+      }
+    }
+  ]
+}

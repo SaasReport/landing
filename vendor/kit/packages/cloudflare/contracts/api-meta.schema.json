@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/cloudflare/contracts/api-meta.schema.json",
+  "title": "kit.api-meta.v1",
+  "description": "The body of GET /api/meta (handlers/meta.js): the site, every form it accepts with its fields, and the public APIs. Test: packages/cloudflare/test/twins-meta.test.mjs.",
+  "type": "object",
+  "required": ["schema", "site", "forms", "apis"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "kit.api-meta.v1" },
+    "site": { "type": "object", "required": ["url"], "properties": { "id": { "type": "string" }, "url": { "type": "string", "format": "uri" }, "locale": { "type": "string" } } },
+    "forms": { "type": "array", "items": { "$ref": "#/$defs/form" } },
+    "apis": { "type": "array", "items": { "type": "object", "required": ["path", "url", "description"], "additionalProperties": false,
+      "properties": { "path": { "type": "string", "pattern": "^/" }, "url": { "type": "string", "format": "uri" }, "description": { "type": "string", "minLength": 1 } } } }
+  },
+  "$defs": {
+    "field": {
+      "type": "object", "required": ["name", "type", "required"], "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "type": { "enum": ["string", "email", "text", "url", "tel", "number", "boolean", "select", "multiselect", "date"] },
+        "required": { "type": "boolean" },
+        "max": { "type": "integer", "minimum": 1 },
+        "label": { "type": "string" },
+        "options": { "type": "array", "items": { "type": "string" } },
+        "description": { "type": "string" }
+      }
+    },
+    "form": {
+      "type": "object", "required": ["id", "endpoint", "method", "content_type", "fields", "required", "consent", "honeypot", "errors"], "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" },
+        "endpoint": { "type": "string", "pattern": "^/api/forms/[a-z0-9][a-z0-9-]*$" },
+        "method": { "const": "POST" },
+        "content_type": { "const": "application/json" },
+        "description": { "type": "string" },
+        "fields": { "type": "array", "items": { "$ref": "#/$defs/field" } },
+        "required": { "type": "array", "items": { "type": "string" } },
+        "consent": { "anyOf": [ { "type": "null" }, { "type": "object", "required": ["field", "type", "required", "value"] } ] },
+        "honeypot": { "type": ["string", "null"] },
+        "errors": { "type": "object", "required": ["status", "body"] }
+      }
+    }
+  }
+}

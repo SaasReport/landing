@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/concept-schedule.schema.json",
+  "title": "kit.concept-schedule.v1",
+  "description": "The append-only order of a concept series (`kit concepts schedule`, docs/CONCEPTS.md): which concept is voiced on which day. The scheduler only ever APPENDS the next eligible concepts (verified, approved by the review ledger when the series has one, prerequisites placed earlier), so a day never changes meaning and an episode that exists is never re-pointed. `kit check concepts` fails when an entry before the last one changed, a date repeats or goes backwards, a day is skipped without a recorded gap, or an entry names a concept the catalogue does not have. Written by the CLI, never by hand.",
+  "type": "object",
+  "required": ["$schema", "series", "entries"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "series": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "date", "order", "sha256", "assigned_on"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" },
+          "date": { "type": "string", "format": "date", "description": "The site-local day of the episode." },
+          "order": { "type": "integer", "minimum": 1, "description": "1-based position: the episode number." },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$", "description": "The reviewed-fields hash of the concept when it was scheduled (an audit trail; the review ledger is what gates publishing)." },
+          "assigned_on": { "type": "string", "format": "date", "description": "The day `kit concepts schedule` appended it." }
+        }
+      }
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["from", "to", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "from": { "type": "string", "format": "date" },
+          "to": { "type": "string", "format": "date" },
+          "reason": { "type": "string", "minLength": 10 }
+        }
+      },
+      "description": "Days with no episode on purpose (the runway ran out and approvals came later). The planner reports them; they are never filled by hand."
+    }
+  }
+}

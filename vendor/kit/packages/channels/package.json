@@ -1,0 +1,19 @@
+{
+  "name": "@saasreport/channels",
+  "version": "0.1.0",
+  "description": "Announce posts, events and podcast episodes on Telegram, Bale (Bot API compatible), email (service binding) and webhooks, once per item, with idempotent state in D1.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": { "types": "./src/index.d.ts", "default": "./src/index.js" },
+    "./webhooks": "./src/webhooks.js",
+    "./contracts/*": "./contracts/*"
+  },
+  "dependencies": { "@saasreport/calendar": "*", "@saasreport/core": "*", "@saasreport/format": "*" },
+  "files": ["src", "contracts", "README.md"],
+  "scripts": { "test": "node --test test/*.test.mjs" },
+  "engines": { "node": ">=20.17.0" },
+  "license": "Apache-2.0",
+  "private": true
+}

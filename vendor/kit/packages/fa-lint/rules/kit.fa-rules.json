@@ -1,0 +1,1111 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/fa-rules.schema.json",
+  "pack": "kit",
+  "version": 3,
+  "description": "The kit's Persian rule pack: typography (ZWNJ, ی/ک, digits, punctuation, bidi) and the owner's corrections of wording, word order and government, each with the examples that must fail and must pass (docs/PERSIAN.md). Add a rule for every correction; never weaken an example to make content pass.",
+  "classes": {
+    "biVerbal": ["پاسخ", "جواب", "ارجاع", "مراجعه", "استناد", "اشاره", "دسترسی", "توجه", "بررسی", "ثبت", "تأیید"],
+    "payObject": ["خسارت", "حق بیمه", "قسط", "اقساط", "وام", "بدهی", "جریمه", "مالیات", "یارانه", "دستمزد", "تسهیلات", "دیه", "مهریه", "اجاره", "بیمه‌نامه"],
+    "payNoun": ["پرداخت", "واریز", "تسویه", "بازپرداخت", "استرداد", "صدور", "تمدید"],
+    "brand": [],
+    "commonHead": ["پروتکل", "پلتفرم", "سامانه", "شبکه", "شرکت", "بانک", "پروژه", "استاندارد", "کیت", "نرم‌افزار", "سرور", "اپلیکیشن", "بنیاد", "مؤسسه", "موسسه", "گروه", "تیم", "مخزن", "رابط", "سرویس", "برنامه"],
+    "numeral": ["یک", "دو", "سه", "چهار", "پنج", "شش", "هفت", "هشت", "ده", "یازده", "دوازده", "پانزده", "بیست", "سی", "پنجاه", "صد", "هزار"],
+    "verb": ["است", "هست", "نیست", "بود", "بودند", "باشد", "باشند", "شد", "شدند", "شود", "شوند", "شده", "کرد", "کردند", "کند", "کنند", "دارد", "دارند", "داشت", "خواهد", "گیرد", "رسد", "ماند", "آید", "رود", "دهد", "دهند", "داد", "دادند", "گذرد", "گردد", "افتد", "یابد", "دانند", "ایم", "اند", "ام", "اید"],
+    "zeroOk": ["درصد", "تا", "و", "یا", "است", "بود", "شد", "شده", "نیز", "هم", "را", "که", "از", "به", "در", "با", "برای", "یعنی", "رسید", "رسیده", "شود", "باشد", "کیلومتر", "ساعت", "روز", "دقیقه", "ثانیه", "ریال", "تومان", "واحد", "امتیاز", "نیست", "می‌رسد", "می‌شود"],
+    "redup": ["کم", "آرام", "تک", "جدا", "گاه", "دسته", "ذره", "قطره", "دانه", "لحظه", "روز", "سال", "ماه", "هفته", "مرحله", "قدم", "پله", "ردیف", "لایه", "موج", "رنگ", "جور", "تکه", "خط", "نفر", "بار", "پاره", "خرده", "یواش", "تند", "زود", "دیر", "کیلو", "گروه", "خوشه", "نوبت", "سطر", "یکی", "تیکه", "آروم", "کم‌کم", "دونه"],
+    "actionObject": ["خسارت", "پرونده", "ادعا", "حق بیمه", "حق‌بیمه", "مبلغ"],
+    "actionNoun": ["پرداخت", "ارجاع", "ابطال", "تعدیل", "ارزیابی"],
+    "interjection": ["آها", "آهان", "آره", "آری", "بله", "خب", "خوب", "نه", "اوه", "وای", "عجب", "ببین", "راستی", "خلاصه", "ها", "هان", "اِ", "اه", "آخ", "آفرین", "باشه", "دقیقاً", "دقیقا", "البته"],
+    "verbColloq": ["داره", "دارن", "داری", "داریم", "نداره", "باشه", "باشن", "میشه", "نمیشه", "شده", "شدن", "بود", "بودن", "نیست", "نیستن", "هست", "هستن", "هستش", "کرده", "کردن", "داد", "دادن", "گفت", "گفتن", "رفت", "اومد", "اومدن", "کن", "کنه", "کنن", "بکن", "بده", "بگیر", "نکن", "دادی", "کردی", "گفتی", "رفتی", "خریدی", "گرفتی", "داشتی", "زدی", "شدی", "اومدی", "دیدی", "نگه دار", "نگه داری", "نگه دارید", "لازمه", "کافیه", "مهمه", "درسته", "همینه", "اینه", "اونه", "سودمه", "بدن", "بری", "بدی", "بگی", "نیار", "نشو", "نده", "نگیر", "نزن", "نرو", "نذار", "نخور", "نبر", "نبره", "نره"],
+    "parenthetical": ["مثل", "مثلاً", "یعنی", "به‌ویژه", "به‌خصوص", "از جمله", "برای نمونه", "همچون", "نظیر", "مانند", "نه"],
+    "subordinator": ["اگه", "اگر", "وقتی", "تا", "چون", "که", "چنانچه", "هرچند", "درحالی‌که"]
+  },
+  "exampleClasses": {
+    "brand": ["اکمی", "ساس‌ریپورت", "ساس ریپورت"]
+  },
+  "rules": [
+    {
+      "id": "fa-arabic-yeh",
+      "title": "Arabic yeh instead of Persian ی",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "[\u064a\u0649]",
+      "fix": "ی",
+      "autofix": true,
+      "reason": "در متن فارسی «ی» فارسی (U+06CC) به کار می‌رود، نه «ي» یا «ى» عربی؛ وگرنه جست‌وجو و خواندن ماشینی خراب می‌شود.",
+      "why": "Arabic yeh (U+064A/U+0649) breaks search, sorting and TTS; Persian uses U+06CC.",
+      "source": {
+        "kind": "style-guide",
+        "ref": "Virastar fix_misc_non_persian_chars; Academy of Persian Language and Literature orthography"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["بانك مركزي"],
+        "pass": ["بانک مرکزی"]
+      }
+    },
+    {
+      "id": "fa-arabic-kaf",
+      "title": "Arabic kaf instead of Persian ک",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "\u0643",
+      "fix": "ک",
+      "autofix": true,
+      "reason": "در متن فارسی «ک» فارسی (U+06A9) به کار می‌رود، نه «ك» عربی.",
+      "why": "Arabic kaf (U+0643) breaks search and TTS; Persian uses U+06A9.",
+      "source": {
+        "kind": "style-guide",
+        "ref": "Virastar fix_misc_non_persian_chars"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["كارمزد"],
+        "pass": ["کارمزد"]
+      }
+    },
+    {
+      "id": "fa-arabic-digits",
+      "title": "Arabic-Indic digits",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "[٠-٩]+",
+      "fix": "همین عدد با رقم فارسی (۰–۹)",
+      "reason": "رقم‌های عربی (٤، ٥، ٦) با رقم‌های فارسی (۴، ۵، ۶) فرق دارند؛ در متن فارسی فقط رقم فارسی می‌آید.",
+      "why": "Arabic-Indic digits differ from Persian digits; the constitution allows Persian digits only.",
+      "source": {
+        "kind": "constitution",
+        "ref": "docs/CONSTITUTION.md §7 (Persian digits)"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["سال ١٤٠٥"],
+        "pass": ["سال ۱۴۰۵"]
+      }
+    },
+    {
+      "id": "fa-mixed-digits",
+      "title": "Latin and Persian digits in one number",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "[0-9][۰-۹]|[۰-۹][0-9]",
+      "fix": "همه رقم\u200cهای عدد فارسی",
+      "reason": "عددی که نیمی از آن رقم لاتین و نیمی رقم فارسی است در متن راست‌به‌چپ جابه‌جا نمایش داده می‌شود.",
+      "why": "A number mixing Latin and Persian digits reorders in right-to-left text (bidi).",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread glossary.md: Persian digits everywhere; bidi",
+        "date": "2026-10-06"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["مبلغ ۱۲3 هزار ریال"],
+        "pass": ["مبلغ ۱۲۳ هزار ریال", "نسخه v1.2"]
+      }
+    },
+    {
+      "id": "fa-middot-digit",
+      "title": "«·» next to a Persian digit",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": " +· +(?=[۰-۹])|(?<=[۰-۹]) +· +",
+      "fix": "، ",
+      "autofix": true,
+      "reason": "«·» کنار رقم فارسی در متن راست‌به‌چپ جابه‌جا می‌شود؛ به جای آن «،» بگذارید.",
+      "why": "A middle dot next to a Persian digit reorders in right-to-left text.",
+      "source": {
+        "kind": "constitution",
+        "ref": "docs/CONSTITUTION.md §7; CLAUDE.md (no «·» next to Persian digits)"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["قسمت ۳ · ۱۲ دقیقه"],
+        "pass": ["قسمت ۳، ۱۲ دقیقه", "نقشه · تقویم", "۲·۵", "v1.2·3"]
+      }
+    },
+    {
+      "id": "fa-mi-space",
+      "title": "«می» written apart",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "{{<}}(?<!ماه )(ن?می) +(?={{fa}})",
+      "fix": "$1\u200c",
+      "autofix": true,
+      "reason": "پیشوند «می» و «نمی» با نیم‌فاصله به فعل می‌چسبد: «می‌شود»، نه «می شود».",
+      "why": "The verbal prefix mi-/nemi- joins its verb with a ZWNJ.",
+      "source": {
+        "kind": "proofread",
+        "ref": "owner proofread glossary.md: ZWNJ in «می‌»",
+        "date": "2026-10-06"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["این کار انجام می شود", "نمی توان گفت"],
+        "pass": ["این کار انجام می‌شود", "نمی‌توان گفت", "ماه می گذشته"]
+      }
+    },
+    {
+      "id": "fa-mi-joined",
+      "title": "«می» glued without ZWNJ",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "{{<}}(ن?می)(?=(?:شو|کن|ده|توان|گیر|رس|آی|رو|خواه|دان|بین|ساز|گذار|یاب|خوان|نویس|گوی|گرد|پذیر|دار|کش|زن|آور|شناس|پرداز|فرست|بخش|گذر|سپار|ماند)(?:د|ند|م|یم|ید){{>}})",
+      "fix": "$1\u200c",
+      "autofix": true,
+      "reason": "«میشود» و «میکند» باید با نیم‌فاصله نوشته شوند: «می‌شود»، «می‌کند».",
+      "why": "mi- glued to the verb without ZWNJ.",
+      "source": {
+        "kind": "proofread",
+        "ref": "owner proofread glossary.md: ZWNJ in «می‌»",
+        "date": "2026-10-06"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["پرداخت میشود", "نمیکنند"],
+        "pass": ["پرداخت می‌شود", "بررسی میدانی", "میدان آزادی"]
+      }
+    },
+    {
+      "id": "fa-plural-space",
+      "title": "«ها» written apart",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "({{fa}}) +(ها(?! *(?:[.!؟?،؛…»)\\n]|$))|های|هایی|هایم|هایت|هایش|هایمان|هایتان|هایشان){{>}}",
+      "fix": "$1\u200c$2",
+      "autofix": true,
+      "reason": "نشانه جمع «ها» با نیم‌فاصله به واژه می‌چسبد: «تصمیم‌ها»، نه «تصمیم ها». «ها»ی پایان جمله در گفتار («یادت نره ها») صوت است، نه نشانه جمع.",
+      "why": "The plural -hā joins its noun with a ZWNJ.",
+      "source": {
+        "kind": "proofread",
+        "ref": "owner proofread glossary.md: ZWNJ in «\u200cها»",
+        "date": "2026-10-06"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["تصمیم ها گرفته شد", "پرونده های باز"],
+        "pass": ["تصمیم‌ها", "پرونده‌های باز", "یادت نره ها", "یادت نره ها!"]
+      }
+    },
+    {
+      "id": "fa-heh-suffix-space",
+      "title": "Ending after silent «ه» written apart",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "{{<}}(?!(?:که|چه|نه|به) )((?:{{fa}}|\u200c)*ه) +(ای|ام|ات|اش|اند|ایم|اید|ی){{>}}",
+      "fix": "$1\u200c$2",
+      "autofix": true,
+      "reason": "پس از «ه» ناملفوظ، «ای»، «ی» و شناسه‌ها با نیم‌فاصله می‌آیند: «پرونده‌ای»، «رفته‌اند».",
+      "why": "Endings after a silent h join with a ZWNJ.",
+      "source": {
+        "kind": "proofread",
+        "ref": "owner proofread glossary.md: ZWNJ in «\u200cای»",
+        "date": "2026-10-06"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["پرونده ای که", "ثبت شده اند", "خانه ی ما"],
+        "pass": ["پرونده‌ای که", "ثبت شده‌اند", "که ای کاش", "نه ای کاش"]
+      }
+    },
+    {
+      "id": "fa-tar-space",
+      "title": "«تر» / «ترین» written apart",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "({{fa}})(?<!{{<}}و) +(تر|تری|ترین){{>}}",
+      "fix": "$1\u200c$2",
+      "autofix": true,
+      "reason": "پسوند صفت تفضیلی با نیم‌فاصله می‌آید: «بیش‌تر»، «مهم‌ترین».",
+      "why": "Comparative/superlative suffixes join with a ZWNJ.",
+      "source": {
+        "kind": "style-guide",
+        "ref": "Virastar fix_suffix_spacing"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["مهم ترین بخش"],
+        "pass": ["مهم‌ترین بخش", "خشک و تر"]
+      }
+    },
+    {
+      "id": "fa-zwnj-double",
+      "title": "Two ZWNJs in a row",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "\u200c{2,}",
+      "fix": "\u200c",
+      "autofix": true,
+      "reason": "دو نیم‌فاصله پشت سر هم یک نیم‌فاصله است.",
+      "why": "Repeated ZWNJ.",
+      "source": {
+        "kind": "style-guide",
+        "ref": "Virastar cleanup_zwnj"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["می\u200c\u200cشود"],
+        "pass": ["می‌شود"]
+      }
+    },
+    {
+      "id": "fa-zwnj-stray",
+      "title": "ZWNJ next to a space, punctuation or digit",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "\u200c(?=[\\s0-9۰-۹.,:;!?،؛؟«»()\\[\\]]|$)|(?<=^|[\\s«(\\[])\u200c",
+      "fix": "",
+      "autofix": true,
+      "reason": "نیم‌فاصله فقط میان دو بخش یک واژه می‌آید؛ کنار فاصله، نشانه یا رقم زائد است.",
+      "why": "A ZWNJ at a word edge is invisible noise that breaks search and hashing.",
+      "source": {
+        "kind": "style-guide",
+        "ref": "Virastar cleanup_zwnj"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["تصمیم\u200c ها", "پایان\u200c."],
+        "pass": ["تصمیم‌ها"]
+      }
+    },
+    {
+      "id": "fa-space-before-punct",
+      "title": "Space before a punctuation mark",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "({{fa}}) +([،؛!؟:]|\\.(?!\\.))",
+      "fix": "$1$2",
+      "autofix": true,
+      "reason": "پیش از «،» «؛» «:» «.» «؟» فاصله نمی‌آید.",
+      "why": "No space before punctuation.",
+      "source": {
+        "kind": "style-guide",
+        "ref": "Virastar fix_spacing_for_punctuations"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["پرداخت ، رد", "پایان ."],
+        "pass": ["پرداخت، رد", "پایان.", "و ..."]
+      }
+    },
+    {
+      "id": "fa-space-after-punct",
+      "title": "No space after «،» or «؛»",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "([،؛])(?={{fa}})",
+      "fix": "$1 ",
+      "autofix": true,
+      "reason": "پس از «،» و «؛» یک فاصله می‌آید.",
+      "why": "A space follows a comma or semicolon.",
+      "source": {
+        "kind": "style-guide",
+        "ref": "Virastar fix_spacing_for_punctuations"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["پرداخت،رد"],
+        "pass": ["پرداخت، رد"]
+      }
+    },
+    {
+      "id": "fa-latin-comma",
+      "title": "Latin comma between Persian words",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "({{fa}}) *, *(?={{fa}})",
+      "fix": "$1، ",
+      "autofix": true,
+      "reason": "ویرگول فارسی «،» است، نه «,».",
+      "why": "Persian uses the Arabic comma.",
+      "source": {
+        "kind": "proofread",
+        "ref": "owner proofread glossary.md: Persian marks «،» «؛»",
+        "date": "2026-10-06"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["پرداخت, رد"],
+        "pass": ["پرداخت، رد", "a, b"]
+      }
+    },
+    {
+      "id": "fa-latin-semicolon",
+      "title": "Latin semicolon between Persian words",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "({{fa}}) *; *(?={{fa}})",
+      "fix": "$1؛ ",
+      "autofix": true,
+      "reason": "نقطه‌ویرگول فارسی «؛» است، نه «;».",
+      "why": "Persian uses the Arabic semicolon.",
+      "source": {
+        "kind": "proofread",
+        "ref": "owner proofread glossary.md: Persian marks «،» «؛»",
+        "date": "2026-10-06"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["پرداخت; رد"],
+        "pass": ["پرداخت؛ رد"]
+      }
+    },
+    {
+      "id": "fa-latin-question",
+      "title": "Latin question mark after Persian",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "({{fa}}) *\\?",
+      "fix": "$1؟",
+      "autofix": true,
+      "reason": "علامت پرسش فارسی «؟» است.",
+      "why": "Persian uses the Arabic question mark.",
+      "source": {
+        "kind": "style-guide",
+        "ref": "Virastar fix_question_mark"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["چطور حساب می‌شود?"],
+        "pass": ["چطور حساب می‌شود؟", "?q=1"]
+      }
+    },
+    {
+      "id": "fa-comma-before-conj",
+      "title": "Comma before «و» / «یا» closing a list («A، B، و C»)",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "(?<=[،,][^،,.!؟؛:\\n«»]+?)(?<!{{<}}یا [^.!؟؛\\n]*) *[،,] *(?=(?:و(?! +(?:هم|نه|چه){{>}})|یا){{>}})",
+      "fix": " ",
+      "autofix": true,
+      "reason": "در فهرست («الف، ب، و ج») پیش از «و» و «یا» ویرگول نمی‌آید؛ ویرگول آکسفورد گرته‌برداری از انگلیسی است. فقط وقتی خطاست که پیش از ویرگول تکه‌ای بی‌فعل از همان فهرست باشد و در همان جمله ویرگول دیگری آمده باشد؛ جمله‌های هم‌پایه، صوت‌ها («آها، و…») و ساخت‌های جفتی («یا…، یا»، «هم…، و هم»، «نه…، و نه») را نمی‌گیرد.",
+      "why": "Persian puts no serial comma before the last item of a list. Error only for the list case: the part before the comma has no verb and the same sentence has an earlier comma; clause commas, interjections and paired forms are left to the warning fa-comma-before-conj-clause.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread changes.md proposal-fa.md #97, #99, #101, #102; narration/script.json #1, #3, #4, #7–#9",
+        "date": "2026-10-06",
+        "before": "اختلاف بیمه‌گذار با ارزیابی، خسارت بدنی، یا شکست احراز هویت.",
+        "after": "اختلاف بیمه‌گذار با ارزیابی، خسارت بدنی یا شکست احراز هویت."
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["اختلاف بیمه‌گذار با ارزیابی، خسارت بدنی، یا شکست احراز هویت.", "پرداخت، رد، یا ارجاع خسارت", "مثلاً قسط ماشین، چک، یا سپرده", "هزینه‌ها شامل کپی‌رایت، نشان تجاری، و حق اختراع است.", "بیمه‌نامه را از نظر سقف تعهدات، فرانشیز، و مهم‌تر از همه استثنائات بخوانید."],
+        "pass": ["اختلاف بیمه‌گذار با ارزیابی، خسارت بدنی یا شکست احراز هویت.", "صورت‌ها باید قابل مقایسه، دقیق و قابل اتکا باشند، و معمولاً حسابرس مستقل درباره آن‌ها نظر می‌دهد.", "خب، آها، و پولش رو کی می‌گیرم؟", "ببین، یا خودت پای قرارداد امضا می‌کنی، یا اون رو به وکیلت می‌سپاری.", "خانواده، یعنی همسر و بچه‌ها، و گاهی پدر و مادر", "هم سود می‌برد، هم ریسک می‌کند، و هم مسئول است.", "**کدام الگو** فعال شده است، و **بازبین کجا را باید بررسی کند**", "یه محیط که بتونی سناریوهای عجیب بسازی، مثل پرداخت ناموفق، و هر چند بار خواستی تکرارش کنی.", "شرکت تضامنی در قالب یک شخص حقوقی، یعنی شرکت، و معمولاً برای مدتی طولانی‌تر", "نشت داده ممکنه چه با حمله خارجی، چه با خطای کارکنان، و چه با تنظیم نادرست یک سرور رخ بده.", "باید اسم صاحب اثر رو نگه داری، متن مجوز رو بذاری، اگه تغییرش دادی بگی، و طوری ننویسی که انگار صاحب اثری.", "سه راه داری: روی نسخه قدیمی بمونی، بری سراغ فورک باز، یا شرایط جدید رو بپذیری.", "آهسته بخون، بار سرور مقصد رو کم نگه دار، و با تیم حقوقی هماهنگ کن.", "باید گزارش‌های لازم مثل معاملات مشکوک رو بدن، و سوابق رو حداقل پنج سال نگه دارن.", "بعضی تعطیلات بر پایه تقویم خورشیدی تکرار می‌شوند، مثل تعطیلات نوروز، و بخشی بر پایه تقویم هجری قمری.", "باید فقط آدمای مجاز ببینن، کسی بی‌اجازه دست نبره، و هر وقت لازم شد داده سر جاش باشه.", "قسطت رو سر وقت بده، بیشتر از توانت بدهی بالا نیار، و بی‌حساب ضامن نشو.", "عدد رو از ابزار بگیر، نه از حافظه مدل، و نامطمئن بودن رو هم به کاربر بگو.", "دقیقاً، یه‌کم ارزون‌تر، و بانک سر موعد طلب رو وصول می‌کنه."]
+      },
+      "unlessBefore": "[،,][^،,.!؟؛:\\n]*(?:ن?می[\u200c ]{{fa}}+|ن?می(?:شو|شه|کن|ده|ره|گیر|دون|تون|خوا|یاد|گ){{fa}}*|{{<}}ن?(?:{{verb}}|{{verbColloq}}){{>}}|{{fa}}{2,}(?:ند|ید|یم|ست|نن|ین){{>}}|{{fa}}\u200c?(?:اند|است|ایم|اید|ام){{>}}|{{<}}ن?ب{{fa}}+(?:د|ند|ه|ن|ین|ید|یم){{>}})[^،,.!؟؛:\\n]*|[،,][^،,.!؟؛:\\n]* و [^،,.!؟؛:\\n]*|[،,.!؟؛:\\n] *(?:{{interjection}})|[،,] *(?:{{parenthetical}}){{>}}[^،,.!؟؛:\\n]*|[،,][^،,.!؟؛:\\n]*{{<}}(?:{{subordinator}}){{>}}[^،,.!؟؛:\\n]*|(?:^|[.!؟؛:\\n]) *(?:{{interjection}}) *[،,][^.!؟؛:\\n]*"
+    },
+    {
+      "id": "fa-comma-before-conj-clause",
+      "title": "Comma before «و» / «یا» between clauses",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "(?<!{{<}}یا [^.!؟؛\\n]*) *[،,] *(?=(?:و(?! +(?:هم|نه|چه){{>}})|یا){{>}})",
+      "unlessBefore": "(?:^|[،,.!؟؛:\\n]) *(?:{{interjection}}) *|[،,] *(?:{{parenthetical}}|که){{>}}(?:[^.!؟؛:\\n]|(?<=\\d)\\.(?=\\d))*|{{<}}(?:مانند|مثل|همچون|نظیر|از جمله){{>}}(?:[^.!؟؛:\\n]|(?<=\\d)\\.(?=\\d)){0,70}|(?:^|[،,.!؟؛:\\n])[^،,.!؟؛:\\n]* و [^،,.!؟؛:\\n]*",
+      "unless": "(?:و|یا) +(?:(?:گاه|گاهی|معمولاً|معمولا|حتی|در عمل|در نتیجه|به‌ویژه|به‌خصوص|ضمناً){{>}}[^،,.!؟؛:\\n]{0,60}[،,]|«[^»\\n]{1,80}»[،,]|(?:(?!(?:ن?می[\u200c ]{{fa}}+|ن?می(?:شو|شه|کن|ده|ره|گیر|دون|تون|خوا|یاد|گ){{fa}}*|{{<}}ن?(?:{{verb}}|{{verbColloq}}){{>}}|{{fa}}{2,}(?:ند|ید|یم|ست|نن|ین){{>}}|{{fa}}\u200c?(?:اند|است|ایم|اید|ام){{>}}|{{<}}ن?ب{{fa}}+(?:د|ند|ه|ن|ین|ید|یم){{>}}))[^،,.!؟؛:\\n]){1,60}[،,])",
+      "fix": " ",
+      "autofix": true,
+      "reason": "مالک ویرگول پیش از «و» و «یا» را در متن و گفتار برداشته است، چه میان اقلام فهرست و چه میان دو جمله («فعال شده است، و بازبین» → «فعال شده است و بازبین»). ویرگولی که بند توضیحی («مانند…،»، «یعنی…،»، «و گاه…،») را می‌بندد یا باز می‌کند، صوت‌ها («آها، و…») و ساخت‌های جفتی («یا…، یا»، «هم…، و هم»، «نه…، و نه») را نمی‌گیرد، چون برداشتن ویرگول معنا را عوض می‌کند.",
+      "why": "The owner removed the comma before «و»/«یا» between list items and between clauses alike (the recorded correction is a clause pair with a new subject). Excluded because removing the comma would change the meaning: the comma that closes an apposition («X، مانند Y، و Z»), one that opens an aside closed by the next comma («فرد، و گاه کارفرما، مبالغی»), interjections and paired forms.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread changes.md proposal-fa.md #99, #101; narration/script.json #3, #4, #7–#9",
+        "date": "2026-10-06",
+        "before": "**کدام الگو** فعال شده است، و **بازبین کجا را باید بررسی کند**",
+        "after": "**کدام الگو** فعال شده است و **بازبین کجا را باید بررسی کند**"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["**کدام الگو** فعال شده است، و **بازبین کجا را باید بررسی کند**", "یه لایه‌ی اختیار، و یه ردپای شواهد.", "مثلاً قسط ماشین، یا چکی که دادی، یا سپرده‌ای که موعدش می‌رسه."],
+        "pass": ["**کدام الگو** فعال شده است و **بازبین کجا را باید بررسی کند**", "آها، و پولش رو کی می‌گیرم؟", "یا امضا می‌کنی، یا اون رو می‌سپاری.", "خط مستقیم، یعنی تقسیم یکنواخت، و روش نزولی، یعنی استهلاک بیشتر در سال‌های اول.", "شخص حقیقی، مانند یک فرد عادی، یا شخص حقوقی، مانند یک شرکت.", "در این طرح‌ها فرد، و گاه کارفرمای او، مبالغی را پرداخت می‌کند.", "هم سود می‌برد، هم ریسک می‌کند، و هم مسئول است."]
+      }
+    },
+    {
+      "id": "fa-double-space",
+      "title": "Two spaces between Persian words",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "({{fa}})  +(?={{fa}})",
+      "fix": "$1 ",
+      "autofix": true,
+      "reason": "میان دو واژه یک فاصله بس است.",
+      "why": "Repeated spaces.",
+      "source": {
+        "kind": "style-guide",
+        "ref": "Virastar cleanup_spacing"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["پرداخت  خسارت"],
+        "pass": ["پرداخت خسارت"]
+      }
+    },
+    {
+      "id": "fa-kashida",
+      "title": "Kashida (tatweel) inside a word",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "({{fa}})\u0640+(?={{fa}})",
+      "fix": "$1",
+      "autofix": true,
+      "reason": "کشیده «ـ» تزئین است، نه نوشته؛ جست‌وجو و خواندن ماشینی را خراب می‌کند.",
+      "why": "Kashida is decoration; it breaks search and TTS.",
+      "source": {
+        "kind": "style-guide",
+        "ref": "Virastar cleanup_kashidas"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["بـانک"],
+        "pass": ["بانک"]
+      },
+      "registers": ["written"]
+    },
+    {
+      "id": "fa-bidi-controls",
+      "title": "Bidi embedding control characters",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "[\u202a-\u202e\u2066-\u2069]",
+      "fix": "جهت را در نشانه\u200cگذاری (bdi یا dir) تعیین کنید، نه با نویسه کنترلی",
+      "reason": "نویسه‌های نامرئی جهت متن، اگر بسته نشوند، ترتیب بقیه سطر را به هم می‌ریزند.",
+      "why": "Invisible bidi embeddings reorder the rest of the line when left open; set direction in markup.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread: bidi hazards",
+        "date": "2026-10-06"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["نسخه \u202aACME\u202c"],
+        "pass": ["نسخه <bdi>ACME</bdi>"]
+      }
+    },
+    {
+      "id": "fa-bi-calque",
+      "title": "«بی‌X به …» as a calque of «without doing X to …»",
+      "layer": "grammar",
+      "on": "normalized",
+      "pattern": "{{<}}بی(?:\u200c| )({{biVerbal}})(?= +به{{>}})",
+      "fix": "بدون $1 دادن (یا کردن)",
+      "reason": "«بی‌X» صفت است («پرسش بی‌پاسخ»)، نه گروه فعلی؛ وقتی مفعول با «به» می‌آید باید فعل داشت: «بدون پاسخ دادن به یک پرسش».",
+      "why": "«بی‌X» makes an adjective; with an object («به …») Persian needs the verb: «بدون … دادن/کردن». Owner: «بی‌X به Y» used for English \"without X-ing Y\" → «بدون X دادن/کردن به Y». Lexicalised adjectives stay (بی‌نام، بی‌درنگ).",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread record.mjs card 1 title",
+        "date": "2026-10-06",
+        "before": "تصمیم‌های اثرگذار بی‌پاسخ به یک پرسش ساده",
+        "after": "تصمیم‌های اثرگذار بدون پاسخ دادن به یک پرسش ساده"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["تصمیم‌های اثرگذار بی‌پاسخ به یک پرسش ساده", "هر رویداد پیامددار، بی‌پاسخ به یک پرسش", "اجرا بی‌دسترسی به اینترنت", "تصمیم‌های اثرگذار، بی‌پاسخ به یک پرسش ساده", "تصمیم‌ها بی پاسخ به یک پرسش ساده"],
+        "pass": ["تصمیم‌های اثرگذار بدون پاسخ دادن به یک پرسش ساده", "این پرسش بی‌پاسخ ماند.", "بی‌نام", "بی‌درنگ به کار افتاد", "بی‌طرف"]
+      },
+      "ownerId": "FA-BI-CALQUE"
+    },
+    {
+      "id": "fa-object-before-verbal-noun",
+      "title": "Object before the verbal noun («خسارت پرداخت»)",
+      "layer": "grammar",
+      "on": "normalized",
+      "pattern": "{{<}}({{payObject}}) +({{payNoun}}){{>}}",
+      "unless": " *(?:ن?می[\u200c ]|ن(?=[شکگ])|ب(?=[شک]))?(?:شد|شو|شه|شن|کرد|کن|گرد|گشت)| *(?:ن?خواه(?:د|ند|یم|ید|م|ی)) +(?:شد|کرد|گشت)| +و +(?!(?:{{payNoun}}|{{actionNoun}}){{>}})[^.،؛!؟\\n]*?(?:شده|شد{{>}}|ن?می[\u200c ]?(?:شود|شوند|شه|شن)|گردید)",
+      "fix": "$2 $1",
+      "reason": "در گروه اسمی، مصدر یا اسم‌مصدر پیش از مفعولش می‌آید: «پرداخت خسارت»؛ «خسارت پرداخت» ترکیب اسمی انگلیسی (claim payment) است. فقط وقتی فعل بلافاصله می‌آید («خسارت پرداخت شد») درست است.",
+      "why": "In a Persian noun phrase the verbal noun precedes its object («پرداخت خسارت»); «خسارت پرداخت» is an English noun-noun compound unless a light verb follows at once.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread record.mjs card 1 body",
+        "date": "2026-10-06",
+        "before": "خسارت پرداخت",
+        "after": "پرداخت خسارت"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["خسارت پرداخت", "خسارت پرداخت، رد یا ارجاع می‌شود", "سامانه قسط پرداخت را نشان می‌دهد"],
+        "pass": ["پرداخت خسارت", "پرداخت، رد یا ارجاع خسارت انجام می‌شود", "خسارت پرداخت شد.", "خسارت پرداخت‌شده", "کارت پرداخت", "مبلغ پرداخت را وارد کنید", "خسارت پرداختی", "حق بیمه پرداخت می‌شه", "قسط پرداخت کنید", "وام پرداخت نمی‌کنن", "خسارت پرداخت نکرده‌اند", "خسارت پرداخت خواهد شد", "مدت زمانی که برای فرد حق بیمه پرداخت و در صندوق ثبت شده است"]
+      },
+      "ownerId": "FA-VERBAL-NOUN-FIRST"
+    },
+    {
+      "id": "fa-verbal-noun-first-list",
+      "ownerId": "FA-VERBAL-NOUN-FIRST",
+      "title": "Object before the verbal noun in a list of actions («خسارت پرداخت، رد یا ارجاع»)",
+      "layer": "grammar",
+      "on": "normalized",
+      "pattern": "{{<}}({{actionObject}}) +({{actionNoun}})(،| +یا{{>}}| +و{{>}}(?= +(?:{{payNoun}}|{{actionNoun}}){{>}}))",
+      "fix": "$2 $1$3",
+      "reason": "در فهرست کارها اسم‌مصدر پیش می‌آید و مفعولش با اضافه پس از آن: «پرداخت خسارت، رد یا ارجاع»؛ «خسارت پرداخت، رد یا ارجاع می‌شود» مجهول شکسته خوانده می‌شود.",
+      "why": "«خسارت پرداخت، رد یا ارجاع می‌شود» reads as a broken passive; «پرداخت خسارت، رد یا ارجاع» is the natural noun phrase. Owner: <object> <verbal noun>, <verbal noun> … → <verbal noun> <object>, …: in a list of actions the verbal noun (اسم مصدر) heads and its object follows via ezafe.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner's correction list (owner proofread rules.json) FA-VERBAL-NOUN-FIRST",
+        "date": "2026-10-06",
+        "before": "خسارت پرداخت، رد یا ارجاع می‌شود",
+        "after": "پرداخت خسارت، رد یا ارجاع می‌شود"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["خسارت پرداخت، رد یا ارجاع می‌شود", "پرونده ارجاع یا ابطال شد"],
+        "pass": ["پرداخت خسارت، رد یا ارجاع می‌شود", "خسارت پرداخت شد.", "مدت زمانی که برای فرد حق بیمه پرداخت و در صندوق ثبت شده است"]
+      }
+    },
+    {
+      "id": "fa-brand-before-head",
+      "title": "Proper name before its common noun («اکمی پروتکل»)",
+      "layer": "grammar",
+      "on": "normalized",
+      "pattern": "{{<}}({{brand}}) +({{commonHead}}){{>}}",
+      "fix": "$2 $1",
+      "reason": "در اضافه فارسی اسم عام پیش از اسم خاص می‌آید: «پروتکل اکمی»، «سامانه اکمی»؛ ترتیب انگلیسی (ACME Protocol) نادرست است. اگر پس از اسم عام «را» بیاید، اسم خاص نهاد جمله است و ترتیب درست است.",
+      "why": "Persian ezafe puts the common noun before the proper name («پروتکل اکمی»), the opposite of English «ACME Protocol». Owner: <brand> <common noun> → <common noun> <brand> (ezafe order): the head noun comes first, the proper name follows as its modifier. A project lists the spoken spellings of its brand in its brand class too («ساس ریپورت»، «ساس‌ریپورت»); the rule then catches them in scripts.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread proposal-fa.md #88",
+        "date": "2026-10-06",
+        "before": "اکمی پروتکل",
+        "after": "پروتکل اکمی"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["اکمی پروتکل", "اثر اصلی اکمی پروتکل که به‌طور کامل نوشته شده است", "اکمی پلتفرم", "پیشنهاد اکمی پروتکل", "اکمی پروتکل: ستون فقرات", "ساس ریپورت پروتکل", "ساس‌ریپورت پروتکل"],
+        "pass": ["پروتکل اکمی", "اکمی پروتکلی باز است", "پلتفرم اکمی", "اکمی پروژه را با داده‌های ساختگی می‌سازد.", "پیشنهاد پروتکل اکمی (ACME Protocol)", "مخزن کد اکمی", "اکمی ستون فقرات این سامانه‌ها است.", "راهکار اکمی", "اکمی پروژه رو با داده ساختگی می‌سازه.", "اکمی پلتفرم می‌سازد.", "پروتکل ساس ریپورت", "پروتکل ساس‌ریپورت"]
+      },
+      "unless": " *(?:را|رو){{>}}| +(?:ن?می[\u200c ]{{fa}}+|ن?(?:{{verb}}|{{verbColloq}}){{>}})",
+      "ownerId": "FA-ORDER-NOUN-NAME"
+    },
+    {
+      "id": "fa-numeral-noun-stack",
+      "title": "Numeral + noun + noun stack («ده چالش فراخوان»)",
+      "layer": "grammar",
+      "on": "normalized",
+      "pattern": "{{<}}((?:{{numeral}}|[۰-۹]+) +چالش)(?:\u200cها)? +(فراخوان){{>}}",
+      "fix": "$2 برای … $1 (با فعل بازنویسی کنید)",
+      "reason": "«ده چالش فراخوان» ترجمه واژه‌به‌واژه انبوه اسم انگلیسی است؛ فارسی آن را با حرف اضافه یا فعل می‌گوید: «فراخوان برای حل ده چالش». (فقط همین ساخت؛ «سه محور طرح» با اضافه درست است.)",
+      "why": "An English noun stack translated word for word; Persian says it with a preposition or a verb.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread record.mjs card 1 body",
+        "date": "2026-10-06",
+        "before": "ده چالش فراخوان",
+        "after": "فراخوان برای حل ده چالش"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["ده چالش فراخوان", "ده چالش فراخوان، ده سامانه جدا."],
+        "pass": ["فراخوان برای حل ده چالش", "فراخوان برای حل ده چالش است: ده چالش و ده سامانه جداگانه.", "برای هر ده چالش و اجرای آزمایشی", "سه محور طرح"]
+      }
+    },
+    {
+      "id": "fa-verbless-parallel-fragment",
+      "title": "Verbless parallel fragments («ده X، ده Y.»)",
+      "layer": "grammar",
+      "on": "normalized",
+      "pattern": "(?<=^|[.!؟؛:\\n«(] *)((?:{{numeral}}|[۰-۹]+) +{{fa}}+(?: +{{fa}}+)?)، *((?:{{numeral}}|[۰-۹]+) +{{fa}}+(?: +{{fa}}+)?)(?= *[.!؟؛\\n»)]|$)",
+      "fix": "جمله را با فعل بنویسید (مثلاً «… است: $1 و $2»)",
+      "reason": "دو تکه بی‌فعل با عدد («ده چالش، ده سامانه جدا.») شعار انگلیسی است، نه جمله فارسی.",
+      "why": "Two verbless numeral fragments are an English slogan pattern, not a Persian sentence.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread record.mjs card 1 body: «ده چالش فراخوان، ده سامانه جدا» نامأنوس بود",
+        "date": "2026-10-06"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["ده چالش، ده سامانه جدا.", "سه پرسش، سه پاسخ"],
+        "pass": ["فراخوان برای حل ده چالش است: ده چالش و ده سامانه جداگانه.", "ده روز کاری بعد، تسویه انجام می‌شود."]
+      }
+    },
+    {
+      "id": "fa-ra-pasokh",
+      "title": "«X را پاسخ دادن» (the verb takes «به»)",
+      "layer": "grammar",
+      "on": "normalized",
+      "registers": ["written"],
+      "pattern": "{{<}}را +(?:پاسخ|جواب) +(?:ن?می\u200c)?(?:ده|داد|بده)",
+      "fix": "«به …» + پاسخ … (متمم با «به»)",
+      "reason": "فعل «پاسخ دادن» متمم با «به» می‌گیرد، نه مفعول با «را»: «به سه پرسش پاسخ می‌دهد».",
+      "why": "«پاسخ دادن» governs «به», not «را».",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread changes.md proposal-fa.md #5",
+        "date": "2026-10-06",
+        "before": "که پیش از هر اقدام پیامددار سه پرسش را پاسخ می‌دهد",
+        "after": "که پیش از هر اقدام اثرگذار به سه پرسش پاسخ می‌دهد"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["که پیش از هر اقدام پیامددار سه پرسش را پاسخ می‌دهد", "این پرسش‌ها را پاسخ داد."],
+        "pass": ["که پیش از هر اقدام اثرگذار به سه پرسش پاسخ می‌دهد", "پاسخ را می‌دهد"]
+      }
+    },
+    {
+      "id": "fa-passive-tavassot",
+      "title": "Passive with «توسط»",
+      "layer": "grammar",
+      "on": "normalized",
+      "pattern": "{{<}}توسط{{>}}",
+      "fix": "جمله معلوم («X آن را تعیین می\u200cکند») یا «به دست X» / «از سوی X»",
+      "reason": "مجهول با «توسط» گرته‌برداری از by انگلیسی است؛ فاعل را بیاورید و جمله را معلوم کنید.",
+      "why": "The «توسط» passive is a calque of English «by»; name the agent and use the active voice.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread changes.md proposal-fa.md #42, #96; glossary.md (پرهیز از مجهول با «توسط»)",
+        "date": "2026-10-06",
+        "before": "[فرض: سرویس مشخص توسط بیمه مرکزی یا بیمه‌گر خریدار تعیین می‌شود]",
+        "after": "[فرض: سرویس مشخص را بیمه مرکزی یا بیمه‌گر خریدار تعیین می‌کند]"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["[فرض: سرویس مشخص توسط بیمه مرکزی یا بیمه‌گر خریدار تعیین می‌شود]", "پیش از اجرا باید توسط انسان مشخص بازبینی شود؛"],
+        "pass": ["[فرض: سرویس مشخص را بیمه مرکزی یا بیمه‌گر خریدار تعیین می‌کند]", "پیش از اجرا باید به دست یک بازبین مشخص بررسی شود؛", "در قانون آمده: «این مجوز توسط بانک مرکزی صادر می‌شود» و ما همان را نقل می‌کنیم."]
+      },
+      "unlessBefore": "«[^»]*"
+    },
+    {
+      "id": "fa-zero-noun",
+      "title": "«صفر X» as a calque of «zero X»",
+      "layer": "wording",
+      "on": "normalized",
+      "pattern": "(?<=^|[.!؟؛:\\n«(•*\\-–—] *)صفر +(?!(?:{{zeroOk}}){{>}}|ن?می\u200c|بی[\u200c ]?اس[\u200c ]?دی)((?:{{fa}}|\u200c)+)",
+      "fix": "«هیچ $1ی» یا «بدون $1» یا «تعداد $1 (هدف: صفر)»",
+      "reason": "«صفر پرداخت» در آغاز عبارت ترجمه zero payments است؛ فارسی می‌گوید «هیچ پرداختی» یا «تعداد پرداخت‌ها (هدف: صفر)». «صفر» در میان جمله («موجودی صفر باشد»، «یک صفر اضافه») درست است.",
+      "why": "«صفر X» calques English «zero X»; Persian says «هیچ X‌ی», «بدون X», or states the count with a target of zero.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread changes.md proposal-fa.md #95",
+        "date": "2026-10-06",
+        "before": "صفر پرداخت خارج از قواعد پوشش.",
+        "after": "تعداد پرداخت‌های خارج از قواعد پوشش (هدف: صفر)."
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["صفر پرداخت خارج از قواعد پوشش.", "صفر خطا در تسویه"],
+        "pass": ["تعداد پرداخت‌های خارج از قواعد پوشش (هدف: صفر).", "کارمزد صفر", "از صفر تا صد", "صفر درصد", "اگه موجودی حسابم صفر باشه، باز می‌تونم خرید کنم.", "کارمندی که یه صفر اضافه تایپ می‌کنه", "محصول دوباره از صفر ساخته می‌شود.", "درآمد و هزینه‌ها صفر می‌شن", "صفر بی‌اس‌دی هنوز یه مجوزه."]
+      }
+    },
+    {
+      "id": "fa-from-scratch",
+      "title": "«از صفر نوشته‌شده» (from scratch)",
+      "layer": "wording",
+      "on": "normalized",
+      "pattern": "(?:نوشته|ساخته|طراحی)[\u200c ]?شده +از +صفر|{{<}}از +صفر +(?:نوشته|ساخته)",
+      "fix": "«به\u200cطور کامل … نوشته شده است»",
+      "reason": "«نوشته‌شده از صفر» گرته‌برداری از from scratch است؛ «به‌طور کامل … نوشته شده است» طبیعی است.",
+      "why": "Calque of «written from scratch».",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread changes.md proposal-fa.md #88",
+        "date": "2026-10-06",
+        "before": "اثر اصلی اکمی پروتکل، نوشته‌شده از صفر برای این فراخوان",
+        "after": "اثر اصلی پروتکل اکمی که به‌طور کامل برای این فراخوان نوشته شده است"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["اثر اصلی اکمی پروتکل، نوشته‌شده از صفر برای این فراخوان"],
+        "pass": ["اثر اصلی پروتکل اکمی که به‌طور کامل برای این فراخوان نوشته شده است", "از صفر شروع کردیم"]
+      }
+    },
+    {
+      "id": "fa-calque-consequential",
+      "title": "«پیامددار» (consequential)",
+      "layer": "glossary",
+      "on": "normalized",
+      "pattern": "{{<}}پیامد\u200c?دار{{>}}",
+      "fix": "اثرگذار",
+      "reason": "«پیامددار» گرته‌برداری از consequential است؛ «اثرگذار» به کار ببرید.",
+      "why": "Calque of «consequential»; use «اثرگذار».",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread glossary.md (consequential action → اقدام اثرگذار); changes.md #3",
+        "date": "2026-10-06",
+        "before": "به یک اقدام پیامددار منجر می‌شود",
+        "after": "به اقدامی اثرگذار می‌انجامد"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["به یک اقدام پیامددار منجر می‌شود"],
+        "pass": ["به اقدامی اثرگذار می‌انجامد", "پیامدهای این اقدام"]
+      }
+    },
+    {
+      "id": "fa-calque-governed",
+      "title": "«حاکمیت‌شده» (governed)",
+      "layer": "glossary",
+      "on": "normalized",
+      "pattern": "{{<}}حاکمیت\u200c?شده{{>}}",
+      "fix": "تحت حاکمیت",
+      "reason": "«حاکمیت‌شده» گرته‌برداری از governed است؛ «تحت حاکمیت» به کار ببرید.",
+      "why": "Calque of «governed»; use «تحت حاکمیت».",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread glossary.md; changes.md #7",
+        "date": "2026-10-06",
+        "before": "رابط کاربری حاکمیت‌شده",
+        "after": "رابط کاربری تحت حاکمیت"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["رابط کاربری حاکمیت‌شده"],
+        "pass": ["رابط کاربری تحت حاکمیت"]
+      }
+    },
+    {
+      "id": "fa-calque-self-hosted",
+      "title": "«خودمیزبان» (self-hosted)",
+      "layer": "glossary",
+      "on": "normalized",
+      "pattern": "{{<}}خود\u200c?میزبان{{>}}",
+      "fix": "با میزبانی داخلی",
+      "reason": "«خودمیزبان» گرته‌برداری از self-hosted است؛ «با میزبانی داخلی» (یا «روی زیرساخت خودتان») به کار ببرید.",
+      "why": "Calque of «self-hosted».",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread glossary.md; changes.md #10",
+        "date": "2026-10-06",
+        "before": "مدل تصمیم خودمیزبان",
+        "after": "مدل تصمیم با میزبانی داخلی"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["مدل تصمیم خودمیزبان"],
+        "pass": ["مدل تصمیم با میزبانی داخلی"]
+      }
+    },
+    {
+      "id": "fa-calque-typed",
+      "title": "«نوع‌دار» (typed)",
+      "layer": "glossary",
+      "on": "normalized",
+      "pattern": "{{<}}نوع\u200c?دار{{>}}",
+      "fix": "ساخت\u200cیافته",
+      "reason": "«نوع‌دار» گرته‌برداری از typed است؛ «ساخت‌یافته» به کار ببرید.",
+      "why": "Calque of «typed».",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread glossary.md; changes.md #22",
+        "date": "2026-10-06",
+        "before": "مدل تصمیم نوع‌دار",
+        "after": "مدل تصمیم ساخت‌یافته"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["مدل تصمیم نوع‌دار"],
+        "pass": ["مدل تصمیم ساخت‌یافته"]
+      }
+    },
+    {
+      "id": "fa-calque-cascade",
+      "title": "«آبشار ابطال» (revocation cascade)",
+      "layer": "glossary",
+      "on": "normalized",
+      "pattern": "{{<}}آبشار +ابطال{{>}}",
+      "fix": "ابطال زنجیره\u200cای",
+      "reason": "«آبشار ابطال» گرته‌برداری از revocation cascade است.",
+      "why": "Calque of «revocation cascade».",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread glossary.md; record.mjs #12",
+        "date": "2026-10-06",
+        "before": "آبشار ابطال:",
+        "after": "ابطال زنجیره‌ای:"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["آبشار ابطال:"],
+        "pass": ["ابطال زنجیره‌ای:"]
+      }
+    },
+    {
+      "id": "fa-term-dual-control",
+      "title": "«امضای دونفره» (dual control)",
+      "layer": "glossary",
+      "on": "normalized",
+      "pattern": "{{<}}امضای +دو[ \u200c]?نفره{{>}}",
+      "fix": "تأیید دونفره",
+      "reason": "اصطلاح مصوب dual control (کنترل دونفره در تصمیم) «تأیید دونفره» است؛ امضای دو نفر پای چک حساب مشترک همان «امضای دو نفره» است.",
+      "why": "The agreed term for dual control is «تأیید دونفره».",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread glossary.md (dual control)",
+        "date": "2026-10-06",
+        "before": "تصمیم نامطلوب تا امضای دونفره",
+        "after": "تصمیم نامطلوب تا تأیید دونفره"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["تصمیم نامطلوب تا امضای دونفره"],
+        "pass": ["تصمیم نامطلوب تا تأیید دونفره", "برای چک‌های درشت، امضای دو نفره خیال همه را راحت می‌کند."]
+      },
+      "unlessBefore": "چک[^.؛!؟\\n]*"
+    },
+    {
+      "id": "fa-calque-human-escalation",
+      "title": "«ارجاع انسانی» (human escalation)",
+      "layer": "glossary",
+      "on": "normalized",
+      "pattern": "{{<}}ارجاع +انسانی{{>}}",
+      "fix": "ارجاع به انسان",
+      "reason": "«ارجاع انسانی» گرته‌برداری از human escalation است؛ «ارجاع به انسان» درست است.",
+      "why": "Calque of «human escalation».",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread glossary.md; data.js #16, #18",
+        "date": "2026-10-06",
+        "before": "چالش‌های ۲، ۵ و ۷ با ارجاع انسانی",
+        "after": "چالش‌های ۲، ۵ و ۷ با ارجاع به انسان"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["چالش‌های ۲، ۵ و ۷ با ارجاع انسانی"],
+        "pass": ["چالش‌های ۲، ۵ و ۷ با ارجاع به انسان"]
+      }
+    },
+    {
+      "id": "fa-calque-retrieval-grounded",
+      "title": "«بازیابی‌محور» (retrieval-grounded)",
+      "layer": "glossary",
+      "on": "normalized",
+      "pattern": "{{<}}بازیابی\u200c?محور{{>}}",
+      "fix": "مستند",
+      "reason": "«بازیابی‌محور» گرته‌برداری از retrieval-grounded است؛ «مستند» یا «مبتنی بر سند» به کار ببرید.",
+      "why": "Calque of «retrieval-grounded».",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread glossary.md; changes.md #17",
+        "date": "2026-10-06",
+        "before": "اختیار خروجی بازیابی‌محور",
+        "after": "اختیار پاسخ مستند"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["اختیار خروجی بازیابی‌محور"],
+        "pass": ["اختیار پاسخ مستند"]
+      }
+    },
+    {
+      "id": "fa-calque-append-only",
+      "title": "«فقط‌افزودنی» (append-only)",
+      "layer": "glossary",
+      "on": "normalized",
+      "pattern": "{{<}}فقط[\u200c ]?افزودنی{{>}}",
+      "fix": "«… که از آن چیزی پاک نمی\u200cشود»",
+      "reason": "«فقط‌افزودنی» گرته‌برداری از append-only است؛ معنا را با جمله بگویید.",
+      "why": "Calque of «append-only»; say what it means.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread changes.md proposals #11",
+        "date": "2026-10-06",
+        "before": "پذیرش شما در دفتر ثبت پذیرش (فقط‌افزودنی) ذخیره شد.",
+        "after": "پذیرش شما در دفتر ثبت پذیرش‌ها ذخیره شد؛ از این دفتر چیزی پاک نمی‌شود."
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["پذیرش شما در دفتر ثبت پذیرش (فقط‌افزودنی) ذخیره شد."],
+        "pass": ["پذیرش شما در دفتر ثبت پذیرش‌ها ذخیره شد؛ از این دفتر چیزی پاک نمی‌شود."]
+      }
+    },
+    {
+      "id": "fa-calque-distribution",
+      "title": "«خارج از توزیع آموزش» (out of training distribution)",
+      "layer": "glossary",
+      "on": "normalized",
+      "pattern": "(?:خارج از|در) +توزیع +آموزش(?:ی)?(?: +مدل)?",
+      "fix": "«که در داده آموزشی مدل نبوده است»",
+      "reason": "«خارج از توزیع آموزش» گرته‌برداری از out of training distribution است.",
+      "why": "Calque of «out of the training distribution».",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread changes.md #40; data.js #4, #5",
+        "date": "2026-10-06",
+        "before": "قطعه یا نوع خودرو خارج از توزیع آموزش، مبلغ بالای سقف.",
+        "after": "قطعه یا نوع خودرویی که در داده آموزشی مدل نبوده است، مبلغ بالاتر از سقف."
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["قطعه یا نوع خودرو خارج از توزیع آموزش، مبلغ بالای سقف."],
+        "pass": ["قطعه یا نوع خودرویی که در داده آموزشی مدل نبوده است، مبلغ بالاتر از سقف."]
+      }
+    },
+    {
+      "id": "fa-calque-dictionary",
+      "title": "«فرهنگ لغت قواعد» (rule dictionary)",
+      "layer": "glossary",
+      "on": "normalized",
+      "pattern": "{{<}}فرهنگ +لغت +(قواعد|قوانین|اصطلاحات)",
+      "fix": "واژگان $1",
+      "reason": "«فرهنگ لغت» برای فهرست قواعد گرته‌برداری از dictionary است؛ «واژگان» به کار ببرید.",
+      "why": "Calque of «dictionary» for a rule vocabulary.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread glossary.md; changes.md #33, #69",
+        "date": "2026-10-06",
+        "before": "فرهنگ لغت قواعد قرارداد درمان تکمیلی ایران",
+        "after": "واژگان قواعد قرارداد درمان تکمیلی ایران"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["فرهنگ لغت قواعد قرارداد درمان تکمیلی ایران"],
+        "pass": ["واژگان قواعد قرارداد درمان تکمیلی ایران"]
+      }
+    },
+    {
+      "id": "fa-term-encrypted-digest",
+      "title": "«چکیده رمزنگاری‌شده» (a digest is not encrypted)",
+      "layer": "glossary",
+      "on": "normalized",
+      "pattern": "{{<}}چکیده +رمزنگاری[\u200c ]?شده{{>}}",
+      "fix": "چکیده کلیددار",
+      "reason": "چکیده (هش) رمزنگاری نمی‌شود؛ اصطلاح درست «چکیده کلیددار» است.",
+      "why": "A digest is not encrypted; the term is «چکیده کلیددار» (keyed digest).",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread glossary.md; changes.md #94",
+        "date": "2026-10-06",
+        "before": "شماره حساب فقط به‌صورت چکیده رمزنگاری‌شده در شواهد ثبت می‌شود.",
+        "after": "شماره حساب فقط به‌صورت چکیده کلیددار در شواهد ثبت می‌شود."
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["شماره حساب فقط به‌صورت چکیده رمزنگاری‌شده در شواهد ثبت می‌شود."],
+        "pass": ["شماره حساب فقط به‌صورت چکیده کلیددار در شواهد ثبت می‌شود."]
+      }
+    },
+    {
+      "id": "fa-restart-from-zero",
+      "title": "«دوباره از صفر» (restart idiom) → «دوباره از نو»",
+      "layer": "wording",
+      "on": "raw",
+      "pattern": "(?<!(?:شمارنده|شمارش|شماره|عدد|ردیف|ایندکس)[^.!؟؛\\n]*){{<}}دوباره +از +صفر{{>}}",
+      "fix": "دوباره از نو",
+      "autofix": true,
+      "reason": "«دوباره از صفر» در معنای «از اول» گرته‌برداری از start from zero است؛ فارسی می‌گوید «دوباره از نو» («از اول» و «دوباره از ابتدا» هم درست است). فقط همین اصطلاح را می‌گیرد، نه «از صفر شروع می‌شود» در معنای عددی و فنی (شمارنده، شماره‌گذاری، ایندکس) و نه «از صفر تا صد».",
+      "why": "«دوباره از صفر» is the calque of the English restart idiom; Persian says «دوباره از نو» (also «از اول», «دوباره از ابتدا»). Scoped to the idiom «دوباره از صفر»: a literal numeric reset (a counter, numbering or index in the same sentence), «از صفر تا صد» and a bare «از صفر شروع شد» are not touched. Autofix is safe because the replacement is a fixed phrase of the same meaning.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner correction 2026-10-06: «دوباره از صفر» must be «دوباره از نو»",
+        "date": "2026-10-06",
+        "before": "اگر کسی بخواهد دوباره از صفر شروع کند، همه‌چیز را باید دوباره بنویسد.",
+        "after": "اگر کسی بخواهد دوباره از نو شروع کند، همه‌چیز را باید دوباره بنویسد."
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["اگر کسی بخواهد دوباره از صفر شروع کند، همه‌چیز را باید دوباره بنویسد.", "محصول دوباره از صفر ساخته می‌شود."],
+        "pass": ["اگر کسی بخواهد دوباره از نو شروع کند، همه‌چیز را باید دوباره بنویسد.", "دوباره از ابتدا شروع می‌کنیم.", "شمارنده هر شب دوباره از صفر شروع می‌شود.", "از صفر تا صد بیمه را یاد می‌گیریم.", "ما از صفر شروع کردیم."]
+      }
+    },
+    {
+      "id": "fa-colloquial-az-jib",
+      "title": "«از جیب (خود)» in formal written copy",
+      "layer": "wording",
+      "on": "normalized",
+      "pattern": "{{<}}از +جیب{{>}}",
+      "fix": "«با پول (یا حق بیمه‌ای) که خود فرد می‌پردازد» / «از محل دارایی خود»",
+      "reason": "«از جیب (خودش)» محاوره‌ای است و در متن رسمی (واژه‌نامه، حقوقی، راهنما) نمی‌آید؛ بنویسید «با حق بیمه‌ای که خود فرد می‌پردازد»، «از محل دارایی خود» یا «با هزینه شخصی». فقط در متن نوشتاری (register: written) بررسی می‌شود؛ گفتار و پادکست (spoken) آزاد است. در متن نوشتاری غیررسمی با فهرست مجاز پروژه (allow) استثنا شود.",
+      "why": "«از جیب» (out of one's own pocket) is colloquial; formal glossary, legal and guide copy uses «با … که خود فرد می‌پردازد» or «از محل دارایی خود». Scoped to the written register (the kit has only written and spoken, so podcast and colloquial scripts are exempt); a project may allow-list a deliberately informal written page. No autofix: the right wording depends on the sentence.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner correction 2026-10-06: «از جیب خودش» must not appear in a pension/insurance glossary entry (formal register)",
+        "date": "2026-10-06",
+        "before": "فرد از جیب خودش برای دوران بازنشستگی پس‌انداز می‌کند.",
+        "after": "فرد با حق بیمه‌ای که خود می‌پردازد برای دوران بازنشستگی پس‌انداز می‌کند."
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["فرد از جیب خودش برای دوران بازنشستگی پس‌انداز می‌کند.", "هزینه را از جیب پرداخت می‌کند."],
+        "pass": ["فرد با حق بیمه‌ای که خود می‌پردازد برای دوران بازنشستگی پس‌انداز می‌کند.", "هزینه را از محل دارایی خود پرداخت می‌کند.", "از جیب‌بری جلوگیری کنید."]
+      },
+      "registers": ["written"]
+    },
+    {
+      "id": "fa-doubled-word",
+      "title": "The same word twice («بیمه بیمه»)",
+      "layer": "wording",
+      "on": "normalized",
+      "pattern": "{{<}}(?!(?:{{redup}}) )({{fa}}{2,}) +\\1{{>}}",
+      "fix": "یکی را بردارید یا جمله را بازنویسی کنید («…، به میزبانی …»)",
+      "reason": "تکرار پشت‌سرهم یک واژه («بیمه بیمه مرکزی») نامطبوع و مبهم است.",
+      "why": "A word repeated back to back reads as a typo or an unparsed noun stack.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread changes.md #2, #86; glossary.md (the call)",
+        "date": "2026-10-06",
+        "before": "فراخوان نوآوری فناوری بیمه بیمه مرکزی",
+        "after": "فراخوان نوآوری فناوری بیمه، به میزبانی بیمه مرکزی"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["فراخوان نوآوری فناوری بیمه بیمه مرکزی"],
+        "pass": ["فراخوان نوآوری فناوری بیمه، به میزبانی بیمه مرکزی", "کم کم", "روز به روز"]
+      },
+      "registers": ["written"]
+    },
+    {
+      "id": "fa-above-cap",
+      "title": "«بالای سقف» for «more than the cap»",
+      "layer": "wording",
+      "on": "normalized",
+      "pattern": "{{<}}بالای +(سقف|حد|آستانه){{>}}",
+      "fix": "بالاتر از $1",
+      "reason": "برای مقدار «بالاتر از سقف» درست است؛ «بالای سقف» جای مکانی است.",
+      "why": "«بالای» is spatial; an amount is «بالاتر از» the cap.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread changes.md #35, #40, #100",
+        "date": "2026-10-06",
+        "before": "هر مبلغ بالای سقف اختیار",
+        "after": "هر مبلغ بالاتر از سقف اختیار"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["هر مبلغ بالای سقف اختیار"],
+        "pass": ["هر مبلغ بالاتر از سقف اختیار"]
+      }
+    },
+    {
+      "id": "fa-in-ke-zwnj",
+      "title": "«اینکه» / «آنها» without ZWNJ",
+      "layer": "typography",
+      "on": "raw",
+      "pattern": "{{<}}(این|آن)(که|ها|های|هایی){{>}}",
+      "fix": "$1\u200c$2",
+      "autofix": true,
+      "reason": "«این‌که»، «آن‌ها» با نیم‌فاصله نوشته می‌شوند.",
+      "why": "«این‌که», «آن‌ها» take a ZWNJ.",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread changes.md #81",
+        "date": "2026-10-06",
+        "before": "بررسی اینکه داده و اقدام فقط برای هدف اعلام‌شده استفاده می‌شود",
+        "after": "بررسی این‌که داده و اقدام فقط برای هدف اعلام‌شده به کار می‌روند"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["بررسی اینکه داده و اقدام فقط برای هدف اعلام‌شده استفاده می‌شود", "آنها"],
+        "pass": ["بررسی این‌که داده و اقدام فقط برای هدف اعلام‌شده به کار می‌روند", "آن‌ها", "آنکارا"]
+      }
+    },
+    {
+      "id": "fa-negahdari",
+      "title": "«نگهداری» → «نگه‌داری»",
+      "layer": "glossary",
+      "on": "raw",
+      "pattern": "{{<}}نگهدار(ی|ند|د|یم)?{{>}}",
+      "fix": "نگه\u200cدار$1",
+      "autofix": true,
+      "reason": "واژه‌نامه: «نگه‌داری» با نیم‌فاصله.",
+      "why": "Glossary spelling «نگه‌داری».",
+      "source": {
+        "kind": "owner-correction",
+        "ref": "owner proofread glossary.md (retention); proposals #6",
+        "date": "2026-10-06",
+        "before": "این موارد ثبت و نگهداری می‌شود",
+        "after": "این موارد ثبت و نگه‌داری می‌شوند"
+      },
+      "severity": "error",
+      "examples": {
+        "fail": ["این موارد ثبت و نگهداری می‌شود"],
+        "pass": ["این موارد ثبت و نگه‌داری می‌شوند"]
+      }
+    }
+  ]
+}

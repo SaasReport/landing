@@ -1,0 +1,221 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/comms-config.schema.json",
+  "title": "kit.comms-config.v1",
+  "description": "comms.config.js (default export) for @saasreport/comms: project and id prefixes, brand, sender, legal footer, links and every email template (the contract of each email: key, form, copy per locale). checkConfig adds the cross-field checks. Projects may add their own top-level keys (e.g. owner).",
+  "type": "object",
+  "required": [
+    "project",
+    "idPrefix",
+    "site",
+    "locales",
+    "brand",
+    "sender",
+    "manifest",
+    "templates",
+    "forms"
+  ],
+  "properties": {
+    "project": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Full project prefix without the dash (Worker names <project>-comms-engine …)."
+    },
+    "idPrefix": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+$",
+      "description": "Short prefix: template ids <idPrefix>.<form>.ack.v1, audit events <idPrefix>.comms.*."
+    },
+    "site": {
+      "type": "string",
+      "pattern": "^https://[^/\\s]+"
+    },
+    "locales": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string"
+      }
+    },
+    "timeZone": {
+      "type": "string"
+    },
+    "brand": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "name": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "domain": {
+          "type": "string"
+        },
+        "logo": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "src"
+              ],
+              "properties": {
+                "src": {
+                  "type": "string"
+                },
+                "width": {
+                  "type": "integer"
+                },
+                "height": {
+                  "type": "integer"
+                }
+              }
+            }
+          ]
+        },
+        "colors": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "format": "hex-color"
+          }
+        },
+        "fonts": {
+          "type": "object"
+        }
+      }
+    },
+    "sender": {
+      "type": "object",
+      "required": [
+        "address"
+      ],
+      "properties": {
+        "address": {
+          "type": "string",
+          "format": "email"
+        },
+        "replyTo": {
+          "anyOf": [
+            {
+              "type": "string",
+              "format": "email"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "name": {}
+      }
+    },
+    "signature": {},
+    "legal": {
+      "type": "object",
+      "properties": {
+        "notices": {
+          "$ref": "legal-notices.schema.json"
+        },
+        "entity": {
+          "type": "object"
+        }
+      }
+    },
+    "links": {
+      "type": "object"
+    },
+    "manifest": {
+      "type": "object",
+      "required": [
+        "adopted"
+      ],
+      "properties": {
+        "adopted": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "workers": {
+      "type": "object",
+      "properties": {
+        "namePrefix": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]{1,30}$",
+          "description": "Optional Cloudflare Worker namespace; preserves project, tenant and existing template IDs. Defaults to project."
+        }
+      }
+    },
+    "ops": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "key"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          }
+        }
+      }
+    },
+    "preview": {},
+    "packs": {
+      "type": "object"
+    },
+    "templates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "key",
+          "copy"
+        ],
+        "properties": {
+          "key": {
+            "type": "string",
+            "pattern": "^[a-z0-9-]+$"
+          },
+          "copy": {
+            "type": "object",
+            "minProperties": 1,
+            "additionalProperties": {
+              "type": "object",
+              "required": [
+                "subject",
+                "preheader",
+                "title",
+                "intro",
+                "steps"
+              ],
+              "properties": {
+                "intro": {
+                  "type": "array",
+                  "minItems": 1
+                },
+                "steps": {
+                  "type": "array",
+                  "minItems": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "forms": {
+      "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/forms-config.schema.json",
+      "description": "The forms the project declares and their owner (kit.forms-config.v1): every form is delivered twice, the submitter's receipt and the owner's notification."
+    }
+  }
+}

@@ -1,0 +1,24 @@
+/* ---------- builder: step selections compose a live network preview (plugin styles, from the project's tokens) ---------- */
+.kw-bld{container:kwbld/inline-size}
+.kw-bld__grid{display:grid;grid-template-columns:minmax(200px,300px) minmax(0,1fr);gap:18px;align-items:start}
+.kw-bld__form{display:grid;gap:14px;min-width:0}
+.kw-bld__step{margin:0;padding:0;border:0;min-width:0}
+.kw-bld__step legend{padding:0;margin:0 0 8px;font-size:13px;font-weight:700;color:var(--kw-ink)}
+.kw-bld__opts{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.kw-bld__opt{position:relative;display:inline-flex;cursor:pointer}
+.kw-bld__opt input{position:absolute;opacity:0;inset:0;margin:0;cursor:pointer}
+.kw-bld__opt span{display:inline-flex;align-items:center;gap:8px;padding:7px 13px;border-radius:999px;border:1px solid var(--kw-control);background:var(--kw-surface);font-size:13.5px;font-weight:600;min-height:38px;transition:background var(--kw-motion),border-color var(--kw-motion),color var(--kw-motion)}
+.kw-bld__opt span::before{content:"";width:9px;height:9px;border-radius:50%;border:2px solid var(--kw-control);flex:none}
+.kw-bld__opt:has(input:checked) span{border-color:var(--kw-ink);background:var(--kw-ink);color:var(--kw-surface)}
+.kw-bld__opt:has(input:checked) span::before{background:var(--kw-surface);border-color:var(--kw-surface)}
+.kw-bld__opt:has(input:focus-visible) span{outline:3px solid var(--kw-focus);outline-offset:2px}
+.kw-bld__preview{display:grid;gap:12px;min-width:0}
+.kw-bld__out{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:8px;margin:0}
+.kw-bld__out>div{padding:10px 12px;border-radius:var(--kw-rb);background:var(--kw-surface);border:1px solid var(--kw-line)}
+.kw-bld__out dt{font-size:12px;color:var(--kw-muted);order:2}
+.kw-bld__out dd{margin:0;font-size:22px;font-weight:700;font-variant-numeric:tabular-nums}
+.kw-bld__out>div{display:flex;flex-direction:column}
+.kw-bld .kw-net__body{grid-template-columns:1fr}
+.kw-bld .kw-net__side:empty,.kw-bld .kw-net__side:not(:has(:not([hidden]):not(.kw-net__counters))){display:none}
+@container kwbld (max-width:640px){.kw-bld__grid{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.kw-bld *,.kw-bld{transition:none!important;animation:none!important}}

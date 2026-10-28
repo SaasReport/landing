@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/diagram.schema.json",
+  "title": "kit.diagram.v1",
+  "description": "The machine-readable header of every diagram source: the first-class `%% kit:diagram {...}` comment on the line after the theme's init line, in every docs/diagrams/*.mmd and every ```mermaid block in Markdown (docs/DIAGRAMS.md, the lineage rule). It gives the diagram a stable project-prefixed id, its lineage (what it derives from, what it supersedes, its version), its relationships to other diagrams, and the things it depicts (each with a path that must exist). `kit diagrams check` validates it; the index and the lineage graph are generated from it.",
+  "type": "object",
+  "required": [
+    "id",
+    "title",
+    "project",
+    "kind",
+    "lineage",
+    "relates_to",
+    "depicts"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^(saasreport|kit)\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$",
+      "maxLength": 120,
+      "description": "Stable, project-prefixed, dot-namespaced, unique across the repository, e.g. saasreport.terminal.arch. The prefix is the project code."
+    },
+    "title": {
+      "type": "string",
+      "minLength": 3,
+      "maxLength": 160
+    },
+    "project": {
+      "enum": [
+        "saasreport",
+        "kit"
+      ],
+      "description": "The project the diagram belongs to: the short code of its registry entry (packages/core/registry/projects.json, the `short` without the dash, or the key when there is none), or kit."
+    },
+    "kind": {
+      "enum": [
+        "architecture",
+        "flow",
+        "sequence",
+        "er",
+        "state",
+        "other"
+      ]
+    },
+    "summary": {
+      "type": "string",
+      "maxLength": 600,
+      "description": "One or two sentences for the generated index."
+    },
+    "lineage": {
+      "type": "object",
+      "required": [
+        "derives_from",
+        "supersedes",
+        "version"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "derives_from": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/ref"
+          },
+          "description": "Diagram ids this one is derived from (in this repository or declared in docs/diagrams/externals.json), or https URLs of external sources. Empty when it derives from nothing."
+        },
+        "supersedes": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "description": "Diagram ids this one replaces."
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[1-9][0-9]*(\\.[0-9]+)*$"
+        }
+      }
+    },
+    "relates_to": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "relation"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "relation": {
+            "enum": [
+              "depicts-part-of",
+              "zooms-into",
+              "sibling",
+              "depends-on",
+              "implemented-by"
+            ]
+          }
+        }
+      }
+    },
+    "depicts": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "ref",
+          "path"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "kind": {
+            "enum": [
+              "contract",
+              "file",
+              "worker",
+              "migration",
+              "package",
+              "doc",
+              "other"
+            ]
+          },
+          "ref": {
+            "type": "string",
+            "minLength": 1,
+            "description": "What is shown: a contract id, a worker name, a migration name, a package name, a file."
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "pattern": "^(?!/)(?!.*\\.\\.)[^\\s]+$",
+            "description": "Repository-relative path that must exist."
+          }
+        }
+      }
+    },
+    "reviewed": {
+      "type": "string",
+      "format": "date",
+      "description": "The date a person last checked the header against what the diagram shows. Every header is complete: there is no stub or needs-review state, and a diagram whose header is not complete fails `kit diagrams check`. The one exception is the generated lineage graph, which carries `generated` instead."
+    },
+    "generated": {
+      "const": true,
+      "description": "Only the generated lineage graph (docs/diagrams/lineage.mmd) carries this: it is derived from the other headers by `kit diagrams render` and never edited by hand."
+    }
+  },
+  "oneOf": [
+    {
+      "required": [
+        "reviewed"
+      ]
+    },
+    {
+      "required": [
+        "generated"
+      ]
+    }
+  ],
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^(saasreport|kit)\\.[a-z0-9]+(?:[.-][a-z0-9]+)*$"
+    },
+    "ref": {
+      "type": "string",
+      "pattern": "^(?:(saasreport|kit)\\.[a-z0-9]+(?:[.-][a-z0-9]+)*|https://\\S+)$"
+    }
+  }
+}

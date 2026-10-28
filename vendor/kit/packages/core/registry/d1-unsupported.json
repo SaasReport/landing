@@ -1,0 +1,54 @@
+{
+  "about": "What remote Cloudflare D1 refuses that stock SQLite runs (kit.d1-unsupported.v1). ONE table, read by @saasreport/core/d1-limits and enforced wherever statements run locally (withD1Limits: exec and prepare) and by `kit check migrations`. Every entry names the Cloudflare page that states it; a pragma is allowed only when it is listed under pragmas.supported (an allow-list of what D1 supports), never denied one by one.",
+  "statements": [
+    {
+      "id": "explicit-transaction",
+      "starts": ["BEGIN", "COMMIT", "END", "ROLLBACK", "SAVEPOINT", "RELEASE"],
+      "why": "D1 runs a migration or a batch as one transaction itself and refuses explicit BEGIN, COMMIT, END, ROLLBACK, SAVEPOINT and RELEASE",
+      "source": "https://developers.cloudflare.com/d1/worker-api/d1-database/#batch"
+    },
+    {
+      "id": "attach-detach",
+      "starts": ["ATTACH", "DETACH"],
+      "why": "D1 is one database per binding; ATTACH and DETACH of another database file are not available",
+      "source": "https://developers.cloudflare.com/d1/sql-api/sql-statements/"
+    },
+    {
+      "id": "vacuum",
+      "starts": ["VACUUM"],
+      "why": "D1 manages storage itself and does not run VACUUM",
+      "source": "https://developers.cloudflare.com/d1/sql-api/sql-statements/"
+    }
+  ],
+  "functions": [
+    {
+      "id": "load-extension",
+      "name": "load_extension",
+      "why": "D1 cannot load SQLite extensions; only its bundled FTS5, JSON and math functions exist",
+      "source": "https://developers.cloudflare.com/d1/sql-api/sql-statements/#supported-sqlite-extensions"
+    }
+  ],
+  "virtualTables": {
+    "allowedModules": ["fts5"],
+    "why": "D1 supports FTS5 virtual tables and no other virtual table module",
+    "source": "https://developers.cloudflare.com/d1/sql-api/sql-statements/#supported-sqlite-extensions"
+  },
+  "pragmas": {
+    "supported": [
+      "case_sensitive_like", "defer_foreign_keys", "foreign_key_check", "foreign_key_list", "foreign_keys",
+      "ignore_check_constraints", "index_info", "index_list", "index_xinfo", "integrity_check", "legacy_alter_table",
+      "optimize", "quick_check", "recursive_triggers", "table_info", "table_list", "table_xinfo"
+    ],
+    "why": "D1 runs only these PRAGMAs; any other one (writable_schema, journal_mode, synchronous, user_version, ...) is refused",
+    "source": "https://developers.cloudflare.com/d1/sql-api/sql-statements/#supported-pragmas",
+    "valueRefusals": [
+      {
+        "id": "foreign-keys-off",
+        "pragma": "foreign_keys",
+        "values": ["OFF", "0", "FALSE", "NO"],
+        "why": "D1 keeps foreign keys on; use PRAGMA defer_foreign_keys instead of switching them off",
+        "source": "https://developers.cloudflare.com/d1/sql-api/foreign-keys/"
+      }
+    ]
+  }
+}

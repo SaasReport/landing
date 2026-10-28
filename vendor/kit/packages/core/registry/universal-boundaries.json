@@ -1,0 +1,588 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/universal-boundaries.schema.json",
+  "schema": "kit.universal-boundaries.v1",
+  "description": "T=0 canonical cross-project boundary registry. A category is a supported envelope kind, NOT proof that any project has integrated it.",
+  "phases": [
+    "declare",
+    "contract-validate",
+    "source-verify",
+    "policy-gate",
+    "sandbox-execute",
+    "observe",
+    "independent-review",
+    "production-promote",
+    "live-reconcile"
+  ],
+  "levels": [
+    {
+      "id": "experience",
+      "description": "Human-facing interfaces and workspaces"
+    },
+    {
+      "id": "identity",
+      "description": "Tenants and the stakeholders that own obligations"
+    },
+    {
+      "id": "commerce",
+      "description": "Customer products, entitlements and subscriptions"
+    },
+    {
+      "id": "interface",
+      "description": "Wire and developer interfaces, event delivery and notifications"
+    },
+    {
+      "id": "execution",
+      "description": "Agents, engines, routines, daemons and durable execution rails"
+    },
+    {
+      "id": "data",
+      "description": "Catalogued stores, datasets, records and knowledge"
+    },
+    {
+      "id": "media",
+      "description": "Content derivations and channel-native publications"
+    },
+    {
+      "id": "governance",
+      "description": "Contract, registry, policy, provenance, consent and evidence"
+    },
+    {
+      "id": "infrastructure",
+      "description": "Isolated runtime and Cloudflare environment boundaries"
+    },
+    {
+      "id": "release",
+      "description": "Schema migration, promotion, deployment and live attestation"
+    }
+  ],
+  "boundaries": [
+    {
+      "kind": "surface",
+      "level": "experience",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "widget",
+      "level": "experience",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "app",
+      "level": "experience",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "page",
+      "level": "experience",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "workspace",
+      "level": "experience",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "environment",
+      "level": "infrastructure",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "tenant",
+      "level": "identity",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "customer",
+      "level": "identity",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "stakeholder",
+      "level": "identity",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "user",
+      "level": "identity",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "product",
+      "level": "commerce",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "subscription",
+      "level": "commerce",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "api",
+      "level": "interface",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "sdk",
+      "level": "interface",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "mcp",
+      "level": "interface",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "integration",
+      "level": "interface",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "webhook",
+      "level": "interface",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "routine",
+      "level": "execution",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "daemon",
+      "level": "execution",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "rail",
+      "level": "execution",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "engine",
+      "level": "execution",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "agent",
+      "level": "execution",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "workflow",
+      "level": "execution",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "job",
+      "level": "execution",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "queue",
+      "level": "execution",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "dataset",
+      "level": "data",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "database",
+      "level": "data",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "record",
+      "level": "data",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "document",
+      "level": "data",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "event",
+      "level": "data",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "search-index",
+      "level": "data",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "media",
+      "level": "media",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "podcast",
+      "level": "media",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "infographic",
+      "level": "media",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "blog",
+      "level": "media",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "clip",
+      "level": "media",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "schema",
+      "level": "governance",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "contract",
+      "level": "governance",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "registry",
+      "level": "governance",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "policy",
+      "level": "governance",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "approval",
+      "level": "governance",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "evidence",
+      "level": "governance",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "migration",
+      "level": "release",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "deployment",
+      "level": "release",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "release",
+      "level": "release",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "secret",
+      "level": "release",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    },
+    {
+      "kind": "notification",
+      "level": "interface",
+      "required_evidence": [
+        "contract-validated",
+        "policy-evaluated",
+        "sandbox-smoke",
+        "production-observed"
+      ],
+      "state": "declared-not-integrated"
+    }
+  ],
+  "invariants": {
+    "one_envelope": "kit.universal-envelope.v1",
+    "schema_authority": "packages/core/schemas/universal-envelope.schema.json",
+    "policy": "fail-closed",
+    "publication_requires": "independent external promotion verification",
+    "version_transition": "additive-with-explicit-adapter",
+    "tenant_isolation": "required",
+    "idempotency": "canonical source/content hash",
+    "cross_boundary_trace": "causation and correlation",
+    "legacy_record_policy": "do-not-rewrite"
+  }
+}

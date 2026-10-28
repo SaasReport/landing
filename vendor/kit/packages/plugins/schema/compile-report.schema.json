@@ -1,0 +1,412 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/plugins/schema/compile-report.schema.json",
+  "title": "kit.compile-report.v1",
+  "description": "The compile report every agent-plugin skill writes next to its outputs in ./<prefix>-out/<skill>/<run-id>/compile-report.json. Each item carries an honest status: confirmed (backed by the engine or a cited source, nothing predicted), not_confirmed (computed but depends on a prediction or an unverified source, or has no source) or flagged (needs a person: a known gap, a conflict between sources, an unverified citation). Optional: a critic stage (a second pass that tries to falsify every confirmed item; a verdict can only lower a status), a 1-10 risk on flagged items, and the learnings this run appended to ./<prefix>-out/learnings.jsonl (kit.plugin-learning.v1).",
+  "type": "object",
+  "required": [
+    "schema",
+    "plugin",
+    "skill",
+    "run_id",
+    "generated_at",
+    "inputs",
+    "engine",
+    "outputs",
+    "items",
+    "summary",
+    "status"
+  ],
+  "properties": {
+    "schema": {
+      "const": "kit.compile-report.v1"
+    },
+    "plugin": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "description": "The plugin name, which is the project code from the registry (packages/core/registry/projects.json)."
+    },
+    "skill": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)+$",
+      "description": "The skill name; starts with \"<plugin>-\"."
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^\\d{8}T\\d{6}Z-[0-9a-f]{8}$"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "inputs": {
+      "type": "object",
+      "description": "The inputs exactly as the skill read them."
+    },
+    "engine": {
+      "type": "object",
+      "description": "What computed the answers: the engine package and version, and whether it ran in-process (engine), over the project's MCP server (mcp) or its public API (api), or read project content (content).",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "version": {
+          "type": "string"
+        },
+        "via": {
+          "enum": [
+            "engine",
+            "mcp",
+            "api",
+            "content"
+          ]
+        },
+        "endpoint": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "via"
+      ]
+    },
+    "outputs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "bytes",
+          "sha256"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "description": "Relative to the run folder."
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "label",
+          "value",
+          "status",
+          "sources"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "value": {},
+          "status": {
+            "enum": [
+              "confirmed",
+              "not_confirmed",
+              "flagged"
+            ]
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "title"
+              ],
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "url": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "ref": {
+                  "type": "string",
+                  "description": "A file, tool or data version inside the project (e.g. mcp:calendar_settlement, iran-2026.10.01)."
+                },
+                "checked": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "description": "The day the source was read, or null when it was not."
+                },
+                "quote": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "note": {
+            "type": "string",
+            "description": "Required unless status is confirmed: why it is not confirmed or what to check."
+          },
+          "risk": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "description": "Flagged items only: what happens if someone acts on the item unchecked. 1-2 cosmetic, 3-4 low (unlikely to change an answer), 5-6 medium (may change an answer; check before use), 7-8 high (likely wrong; do not use before review), 9-10 critical (acting on it could cost money or break a legal duty)."
+          },
+          "critic": {
+            "type": "object",
+            "description": "The critic's verdict on this item. refuted → status flagged; inconclusive or unchecked → never confirmed; upheld → unchanged. previous_status is the status before the critic lowered it.",
+            "required": [
+              "verdict",
+              "by"
+            ],
+            "properties": {
+              "verdict": {
+                "enum": [
+                  "upheld",
+                  "refuted",
+                  "inconclusive",
+                  "unchecked"
+                ]
+              },
+              "by": {
+                "type": "string"
+              },
+              "note": {
+                "type": "string"
+              },
+              "sources": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "title"
+                  ]
+                }
+              },
+              "previous_status": {
+                "enum": [
+                  "confirmed",
+                  "not_confirmed"
+                ]
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "verdict": {
+                      "enum": [
+                        "refuted",
+                        "inconclusive"
+                      ]
+                    }
+                  }
+                },
+                "then": {
+                  "required": [
+                    "note"
+                  ]
+                }
+              }
+            ]
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "confirmed"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "sources": {
+                  "minItems": 1
+                }
+              }
+            },
+            "else": {
+              "required": [
+                "note"
+              ]
+            }
+          },
+          {
+            "if": {
+              "required": [
+                "risk"
+              ]
+            },
+            "then": {
+              "properties": {
+                "status": {
+                  "const": "flagged"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "required": [
+                "critic"
+              ],
+              "properties": {
+                "critic": {
+                  "properties": {
+                    "verdict": {
+                      "const": "refuted"
+                    }
+                  }
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "status": {
+                  "const": "flagged"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "required": [
+                "critic"
+              ],
+              "properties": {
+                "critic": {
+                  "properties": {
+                    "verdict": {
+                      "enum": [
+                        "inconclusive",
+                        "unchecked"
+                      ]
+                    }
+                  }
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "status": {
+                  "not": {
+                    "const": "confirmed"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "confirmed",
+        "not_confirmed",
+        "flagged"
+      ],
+      "properties": {
+        "confirmed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "not_confirmed": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "flagged": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "max_risk": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 10,
+          "description": "The highest risk of any flagged item; absent when none has one."
+        }
+      }
+    },
+    "status": {
+      "enum": [
+        "confirmed",
+        "not_confirmed",
+        "flagged"
+      ],
+      "description": "The worst item status (flagged > not_confirmed > confirmed)."
+    },
+    "critic": {
+      "type": "object",
+      "description": "Present when the critic stage ran: counts of its verdicts. With it, every confirmed item carries an upheld verdict.",
+      "required": [
+        "enabled",
+        "by",
+        "checked",
+        "upheld",
+        "refuted",
+        "inconclusive",
+        "unchecked"
+      ],
+      "properties": {
+        "enabled": {
+          "const": true
+        },
+        "by": {
+          "type": "string"
+        },
+        "checked": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "upheld": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "refuted": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "inconclusive": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "unchecked": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "learnings": {
+      "type": "object",
+      "description": "The learnings this run appended to learnings.jsonl.",
+      "required": [
+        "file",
+        "added"
+      ],
+      "properties": {
+        "file": {
+          "type": "string"
+        },
+        "added": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

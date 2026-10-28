@@ -1,0 +1,8 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-profile.schema.json",
+  "schema": "kit.sim-profile.v1",
+  "id": "baseline",
+  "label": "Basel baseline: the standards' own values, no national discretion exercised",
+  "extends": null,
+  "overrides": []
+}

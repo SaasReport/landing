@@ -1,0 +1,1 @@
+{ "terms": { "loan": { "en": "Loan", "fa": "امانت" } }, "rules": ["Two renewals at most", "A reminder three days before"] }

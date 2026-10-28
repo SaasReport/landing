@@ -1,0 +1,39 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/claude-policy.schema.json",
+  "model": "sonnet",
+  "effort": "medium",
+  "claudeMd": { "maxLines": 200 },
+  "subagents": { "model": "sonnet", "searchModel": "haiku", "maxConcurrent": 4, "promptCacheTtl": "5m" },
+  "agents": {
+    "maxTurnsCeiling": 50,
+    "allowedModels": ["haiku", "sonnet", "inherit"],
+    "standard": {
+      "kit-explore": {
+        "description": "Read-only search and exploration: find files, symbols and usages, then report paths and short findings. Use before reading many files yourself.",
+        "model": "search",
+        "maxTurns": 8,
+        "tools": ["Read", "Grep", "Glob"],
+        "omitClaudeMd": true,
+        "prompt": "You search the repository and report. Never edit. Return file paths with line numbers and at most ten lines of findings; do not paste file contents."
+      },
+      "kit-review": {
+        "description": "Read-only review of a diff or file set for correctness, contract and constitution rules. Returns findings only.",
+        "model": "subagent",
+        "maxTurns": 15,
+        "tools": ["Read", "Grep", "Glob"],
+        "prompt": "You review the change you are given. Never edit. Report concrete problems with file and line, most serious first, and say what is fine in one line."
+      },
+      "kit-implement": {
+        "description": "Implements one well-specified change end to end in the working tree, then reports what changed and what was tested.",
+        "model": "subagent",
+        "maxTurns": 40,
+        "prompt": "You implement exactly the change you are given, follow the repository's CLAUDE.md, run the tests the change needs, and report the files changed and the test result. Do not widen the scope."
+      }
+    }
+  },
+  "loops": { "maxIterations": 20, "wallClockMinutes": 60, "paths": ["scripts", "bin", ".claude"] },
+  "managed": {
+    "maxEffortLevel": "xhigh",
+    "spendLimitsUsd": { "member": 150, "organization": 3000, "workspace": 3000 }
+  }
+}

@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/media-bundle.schema.json",
+  "title": "kit.media-bundle.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "contract",
+    "project",
+    "tenant",
+    "content_id",
+    "edition",
+    "title",
+    "locale",
+    "regulated",
+    "idempotency_key",
+    "source",
+    "required_kinds",
+    "slots",
+    "state"
+  ],
+  "properties": {
+    "contract": {
+      "const": "kit.media-bundle.v1"
+    },
+    "project": {
+      "$ref": "#/$defs/slug"
+    },
+    "tenant": {
+      "$ref": "#/$defs/slug"
+    },
+    "content_id": {
+      "$ref": "#/$defs/slug"
+    },
+    "edition": {
+      "$ref": "#/$defs/slug"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "locale": {
+      "type": "string",
+      "pattern": "^[a-z]{2,3}(-[A-Za-z]{2,4})?$"
+    },
+    "regulated": {
+      "type": "boolean"
+    },
+    "idempotency_key": {
+      "type": "string",
+      "minLength": 70
+    },
+    "state": {
+      "const": "planned-not-published"
+    },
+    "source": {
+      "$ref": "#/$defs/source"
+    },
+    "required_kinds": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/kind"
+      }
+    },
+    "slots": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/slot"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "regulated": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "source": {
+            "required": [
+              "review"
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,99}$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "kind": {
+      "enum": [
+        "podcast",
+        "infographic",
+        "blog",
+        "clip"
+      ]
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "sha256",
+        "verified_at",
+        "citations"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "verified_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "citations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "ref",
+              "url",
+              "verified"
+            ],
+            "properties": {
+              "ref": {
+                "type": "string",
+                "minLength": 1
+              },
+              "url": {
+                "type": "string",
+                "format": "uri",
+                "pattern": "^https://"
+              },
+              "verified": {
+                "const": true
+              }
+            }
+          }
+        },
+        "review": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "reviewer",
+            "at"
+          ],
+          "properties": {
+            "state": {
+              "const": "approved"
+            },
+            "reviewer": {
+              "type": "string",
+              "minLength": 1
+            },
+            "at": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        }
+      }
+    },
+    "slot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "slot_id",
+        "prefix",
+        "accepted_media_types",
+        "state"
+      ],
+      "properties": {
+        "kind": {
+          "$ref": "#/$defs/kind"
+        },
+        "slot_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "prefix": {
+          "type": "string",
+          "minLength": 1
+        },
+        "accepted_media_types": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "enum": [
+              "audio/mpeg",
+              "image/svg+xml",
+              "image/png",
+              "text/html",
+              "text/markdown",
+              "video/mp4",
+              "video/webm"
+            ]
+          }
+        },
+        "state": {
+          "const": "planned-not-rendered"
+        }
+      }
+    }
+  },
+  "description": "Single native payload contract for all podcast, infographic, blog and clip derived artifacts; wraps in kit.universal-envelope.v1 before any side effects and never asserts publication."
+}

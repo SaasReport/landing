@@ -1,3 +1,9 @@
 node_modules
+.claude/worktrees/
+.visual-qa/
 dist
 qa
+# the decision daemon's runtime files (kit agent-guard)
+.claude/guard.addr
+.claude/guard.daemon.json
+.claude/guard.evidence.jsonl

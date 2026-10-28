@@ -1,0 +1,782 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/constitution-rules.schema.json",
+  "title": "kit.constitution-rules.v1",
+  "description": "The ONE registry of a project's constitutional rules (docs/AGENT-GUARD.md). Every enforcement layer reads this file and nothing else: the SessionStart/SubagentStart context, the PreToolUse hooks, `kit check canon`, the CI required checks, the branch ruleset and the deploy gates. Two files have this shape. The kit's rules (packages/core/registry/constitution.rules.json) have no `extends`. A project's own constitution.rules.json (repository root) has `extends: \"kit\"` and only ADDS: rules, patterns, globs and agent scopes. A project can never remove or loosen a kit rule, because the schema offers no way to say so (t=0: no waiver, no baseline, no ratchet). Each rule states which layers enforce it; `kit check canon` (the `enforcement` check) proves every stated layer exists, and a rule with no mechanical layer must say so in `instructionOnly`, which `kit agent-guard coverage` lists.",
+  "type": "object",
+  "required": [
+    "$schema"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "extends": {
+      "const": "kit",
+      "description": "Present in a project's file: the kit's rules and engine data apply first; this file only adds. Absent in the kit's own registry, which must be complete."
+    },
+    "rules": {
+      "type": "array",
+      "uniqueItems": false,
+      "items": {
+        "$ref": "#/$defs/rule"
+      }
+    },
+    "generated": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Files an agent never edits by hand (rule hook `generated-hand-edit`).",
+      "properties": {
+        "globs": {
+          "$ref": "#/$defs/globs",
+          "description": "Repository-relative globs of generated files."
+        },
+        "markers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 3
+          },
+          "description": "A file whose first lines carry one of these (in a comment line, or as a JSON key) declares itself generated."
+        },
+        "markerLines": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        }
+      }
+    },
+    "diagrams": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "imageGlobs": {
+          "$ref": "#/$defs/globs",
+          "description": "Image files only `kit diagrams render` writes (hook `diagram-image-handwritten`)."
+        },
+        "sourceExtensions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^\\.[a-z0-9]+$"
+          },
+          "description": "Text files whose Mermaid must carry a kit:diagram header (hook `diagram-headerless-source`)."
+        },
+        "foreignRenderers": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 2
+          },
+          "description": "Words in a shell command that name a renderer other than `kit diagrams render` (hook `diagram-foreign-renderer`)."
+        },
+        "fixtureGlobs": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Paths of finding-class cases (findings/<class>/must-fail|must-pass): deliberately broken inputs of the gates, never the repository's own diagrams, so the header rule does not apply to them."
+        }
+      }
+    },
+    "secrets": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "patterns": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "regex"
+            ],
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              "regex": {
+                "type": "string",
+                "minLength": 6
+              }
+            }
+          },
+          "description": "Literals that are secrets (hook `secret-literal`)."
+        },
+        "fileNames": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Regular expressions over a file's base name: files that hold secrets (hook `secret-file-read`)."
+        },
+        "fileExceptions": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Regular expressions over a base name that are templates, not secrets (.env.example)."
+        },
+        "envNames": {
+          "type": "string",
+          "minLength": 3,
+          "description": "A regular expression over environment-variable names whose value is a secret (hook `secret-env-print`)."
+        }
+      }
+    },
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "protectedBranches": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        },
+        "skipHookEnv": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Environment variables that switch git hooks off (HUSKY=0)."
+        }
+      }
+    },
+    "guardPaths": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "Paths (a trailing / is a directory) that carry the rules, engine, hooks and workflows: CODEOWNERS covers every one, and a change needs the owner's signed approval (checked by the base-branch audit). A path file#/pointer (kit.canon.json#/vendor) guards one value of a JSON file: a change of that value needs the approval, the file's other keys stay ordinary."
+    },
+    "protected": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Paths that carry the enforcement itself (hook `guard-tamper`).",
+      "properties": {
+        "globs": {
+          "$ref": "#/$defs/globs"
+        },
+        "bypassFlags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "`claude` flags that switch project hooks off (--bare, --safe-mode, --setting-sources, --settings)."
+        },
+        "bypassEnv": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Environment variables that switch hooks off (CLAUDE_CODE_SIMPLE)."
+        },
+        "approvalGlobs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Ledgers of human approvals (fa-review.json): an agent never writes them (hook `agent-approval-write`)."
+        },
+        "approvalCommands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Commands that record an approval (`persian approve`): never run by an agent."
+        }
+      }
+    },
+    "scopes": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Subagents' declared write scope by agent type (hook `subagent-scope`). An agent type that is not listed may not write at all.",
+      "properties": {
+        "agents": {
+          "type": "object",
+          "propertyNames": {
+            "pattern": "^[A-Za-z][A-Za-z0-9:_-]*$"
+          },
+          "additionalProperties": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "write"
+            ],
+            "properties": {
+              "write": {
+                "$ref": "#/$defs/globs",
+                "description": "Repository-relative globs the agent may write; [] is read-only."
+              },
+              "why": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "separation": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Separation of duties and operational facts the canon check proves from a repository's files (class `separation` and `resilience` rules).",
+      "properties": {
+        "deployCommands": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Words in a package script or workflow step that deploy or purge production."
+        },
+        "gates": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Text that proves tests ran first (npm test, kit check canon)."
+        },
+        "recipientVars": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Environment variables that hold who is told when a monitor fires; set to an empty string in a wrangler config they fail the check."
+        },
+        "requiredApprovals": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
+          "description": "Approving reviews the generated ruleset requires before merge (the author never counts). Whether a second human exists is the owner's."
+        },
+        "ciEnvironmentFor": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Command words that, in a workflow job, require `environment:` on that job (so GitHub environment reviewers gate the deploy)."
+        }
+      }
+    },
+    "advisors": {
+      "type": "array",
+      "description": "Tighten-only advisors consulted by the hook AFTER the deterministic rules allow a PreToolUse (docs/AGENT-GUARD.md: where an advisor plugs in). An advisor's `allow` changes nothing; `hold` or `deny` blocks. Reached by HTTP at a resident daemon, never loaded per call.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "url",
+          "mode"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^http://(127\\.0\\.0\\.1|localhost)(:[0-9]+)?/"
+          },
+          "timeoutMs": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 500
+          },
+          "mode": {
+            "enum": [
+              "shadow",
+              "enforce"
+            ]
+          },
+          "onUnavailable": {
+            "enum": [
+              "continue",
+              "hold"
+            ]
+          }
+        }
+      }
+    },
+    "daemon": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The resident decision daemon behind every boundary (docs/AGENT-GUARD.md): loopback TCP with a per-daemon key; every process is bounded: idle, age and request limits.",
+      "properties": {
+        "state": {
+          "type": "string"
+        },
+        "maxBodyBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 16777216
+        },
+        "requestTimeoutMs": {
+          "type": "integer",
+          "minimum": 100,
+          "maximum": 10000
+        },
+        "idleMinutes": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 240
+        },
+        "maxAgeMinutes": {
+          "type": "integer",
+          "minimum": 10,
+          "maximum": 2880
+        },
+        "hookTimeoutSeconds": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 30
+        },
+        "evidence": {
+          "type": "string"
+        },
+        "addr": {
+          "type": "string",
+          "description": "Loopback address file (port and per-daemon key, mode 0600)."
+        }
+      }
+    },
+    "budgets": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The latency budget of every boundary an action passes. `kit agent-guard bench --check` measures p50 and p99 at each: p50 is enforced always, except for the process-spawning boundaries on a loaded host; p99 is enforced on an unloaded host. Anything not evaluated is reported as NOT EVALUATED, never as a pass: on a shared or loaded host a p99 is the neighbours' tail.",
+      "required": [
+        "boundaries",
+        "measurement"
+      ],
+      "properties": {
+        "measurement": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "When a latency number may be judged (kit agent-guard bench). The share of CPU time busy over a window, minus the bench's own, is compared with loadLimit; a busy host is waited for, bounded per boundary and over the whole run; a host whose CPU cannot be measured, or that never settles, is NOT EVALUATED (exit 3), never a pass.",
+          "required": [
+            "loadLimit",
+            "windowMs",
+            "maxWaitMs",
+            "maxTotalWaitMs",
+            "spawnTimeoutMs",
+            "ownCpuTolerance"
+          ],
+          "properties": {
+            "loadLimit": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1,
+              "default": 0.7,
+              "description": "Share of all CPU time busy (by processes other than the bench) above which the host is loaded."
+            },
+            "windowMs": {
+              "type": "integer",
+              "minimum": 50,
+              "default": 500,
+              "description": "Length of one CPU sampling window."
+            },
+            "maxWaitMs": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 30000,
+              "description": "Longest wait for the host to settle before one boundary."
+            },
+            "maxTotalWaitMs": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 90000,
+              "description": "Longest wait over every boundary of one run."
+            },
+            "spawnTimeoutMs": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 10000,
+              "description": "Longest a spawned hook, pre-commit or launcher may run in the bench; a timeout is a failed row."
+            },
+            "ownCpuTolerance": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.1,
+              "default": 0.05,
+              "description": "Slack, as a share of the window's total CPU time, for the bench's own CPU to exceed the host's busy counters before the accounting is called inconsistent and the load unmeasurable. It only covers the two clocks' read skew when the host source is the kernel's tick-sampled per-CPU counters; with the cgroup's cpu.stat (the same precise clock as the bench's own CPU) none is needed. Capped at 0.1. A window with no busy time at all and own CPU above zero is unmeasurable whatever this says."
+            }
+          }
+        },
+        "boundaries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "p50Ms",
+              "samples",
+              "warmup",
+              "what"
+            ],
+            "properties": {
+              "id": {
+                "enum": [
+                  "decision",
+                  "egress",
+                  "audit-per-file",
+                  "daemon-call",
+                  "command-hook",
+                  "git-hook",
+                  "managed-launcher"
+                ]
+              },
+              "p99Ms": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "The tail budget at the 99th percentile (fast boundaries). Exactly one of p99Ms and p95Ms."
+              },
+              "what": {
+                "type": "string"
+              },
+              "p50Ms": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "Always enforced: the design property (a curl hook is several times faster than a node process)."
+              },
+              "p95Ms": {
+                "type": "number",
+                "exclusiveMinimum": 0,
+                "description": "The tail budget at the 95th percentile, for slow boundaries (a process start) whose sample count cannot carry a p99. Exactly one of p99Ms and p95Ms."
+              },
+              "samples": {
+                "type": "integer",
+                "minimum": 1,
+                "description": "Measured runs. At least 100 for a p99 budget and 20 for a p95 budget: a percentile of fewer runs is the maximum."
+              },
+              "warmup": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Runs before the measurement, not counted."
+              }
+            },
+            "oneOf": [
+              {
+                "required": [
+                  "p99Ms"
+                ],
+                "not": {
+                  "required": [
+                    "p95Ms"
+                  ]
+                },
+                "properties": {
+                  "samples": {
+                    "minimum": 100
+                  }
+                }
+              },
+              {
+                "required": [
+                  "p95Ms"
+                ],
+                "not": {
+                  "required": [
+                    "p99Ms"
+                  ]
+                },
+                "properties": {
+                  "samples": {
+                    "minimum": 20
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    },
+    "orphans": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "What counts as an orphan (rule class `orphans`).",
+      "properties": {
+        "processMarkers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "branchPatterns": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "staleDays": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 365
+        }
+      }
+    },
+    "actions": {
+      "type": "array",
+      "description": "Declared action classes: the external or infrastructure mutations an agent never performs directly. Each is decided BEFORE it happens by the same decision path (the listed engine rules), and every refusal leaves a hash-chained evidence record (kit.guard-evidence.v1) tagged with the class. A project may add classes.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "description",
+          "rules"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "description": {
+            "type": "string",
+            "minLength": 10
+          },
+          "rules": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            },
+            "description": "Guard-engine rule ids that decide this class."
+          }
+        }
+      }
+    },
+    "tools": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "The ALLOW-LIST of tool classes (hook rule `undeclared-tool`): a tool in no class, or an MCP tool of a server not listed, is held. A deny-list of tool names cannot keep up with new tools; an allow-list fails closed.",
+      "properties": {
+        "classes": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "read": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "exec": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "write": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "network": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "agent": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "meta": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "mcp": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "allowServers": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "description": "MCP servers whose tools may be called (the part between mcp__ and the next __)."
+            }
+          }
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "not": {
+          "required": [
+            "extends"
+          ]
+        }
+      },
+      "then": {
+        "required": [
+          "actions",
+          "budgets",
+          "daemon",
+          "diagrams",
+          "generated",
+          "git",
+          "orphans",
+          "protected",
+          "rules",
+          "scopes",
+          "secrets",
+          "separation",
+          "tools"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "globs": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "layer": {
+      "enum": [
+        "hook",
+        "canon",
+        "ci",
+        "deploy",
+        "ruleset"
+      ]
+    },
+    "rule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "class",
+        "title",
+        "text",
+        "source",
+        "enforce"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9-]*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 8,
+          "maxLength": 90
+        },
+        "text": {
+          "type": "string",
+          "minLength": 30,
+          "maxLength": 420,
+          "description": "What an agent is told, verbatim, at SessionStart and SubagentStart and in CLAUDE.md. Short: it is paid for in every session."
+        },
+        "source": {
+          "type": "string",
+          "minLength": 3,
+          "description": "Where the rule is written in full (a docs/ file, CLAUDE.md, a constitution section)."
+        },
+        "enforce": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "hook": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$"
+              },
+              "description": "Guard-engine rule ids that deny the act at t=0 (packages/cli/src/agent-guard/rules.js ENGINE_RULES). Each must exist."
+            },
+            "canon": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "type": "string"
+              },
+              "description": "`kit check canon` checks that fail on a violation. Each must exist in CHECKS."
+            },
+            "ci": {
+              "const": true,
+              "description": "The rule is checked by the workflow that runs npm test (and so kit check canon) on every pull request."
+            },
+            "deploy": {
+              "const": true,
+              "description": "Every deploy script runs the gate first."
+            },
+            "ruleset": {
+              "const": true,
+              "description": "The default branch's ruleset requires the CI checks, so a red run cannot merge."
+            },
+            "reconcile": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {
+                "enum": [
+                  "process",
+                  "git",
+                  "pr",
+                  "object",
+                  "generated"
+                ]
+              },
+              "description": "Reconcilers (kit agent-guard reconcile) that compare what exists with what is recorded and fail on the difference. Each must exist."
+            }
+          }
+        },
+        "instructionOnly": {
+          "type": "string",
+          "minLength": 20,
+          "description": "Required when the rule has no hook, canon, ci, deploy or ruleset layer, and allowed to state what part of an enforced rule nothing can observe. The text is context only; `kit agent-guard coverage` lists it, and nothing claims it is enforced."
+        },
+        "class": {
+          "enum": [
+            "constitution",
+            "conduct",
+            "separation",
+            "resilience",
+            "orphans"
+          ],
+          "description": "constitution: a rule of the project's own constitution; conduct: how an agent acts (guard); separation: who may do what (author, reviewer, deployer, operator, key-holder); resilience: what must survive a failure and be proven."
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "enforce": {
+                "maxProperties": 0
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "instructionOnly"
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

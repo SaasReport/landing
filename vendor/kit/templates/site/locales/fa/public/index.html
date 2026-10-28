@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>سایت نمونه کیت</title>
+<meta name="description" content="یک سایت نمونه با کیت: موضوع هفته، گزارش ماه و هر روز یک واژه، به‌صورت نوشته و پادکست کوتاه.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;700;900&display=swap">
+<link rel="stylesheet" href="/kit/kit.css">
+<style>:root{--c-accent:#0F766E;--c-ink:#141414;--c-bg:#FAFAF8;--font-body:Vazirmatn,Tahoma,sans-serif}</style>
+<link rel="alternate" type="application/rss+xml" title="بلاگ" href="/blog/feed.xml">
+<link rel="alternate" type="application/rss+xml" title="دو دقیقه پول" href="/podcasts/feed.xml">
+<script type="module" src="/kit/datepicker.js"></script>
+</head>
+<body class="kit">
+<a class="skip" href="#main">رفتن به محتوا</a>
+<header class="kbar"><div class="wrap kbar__in">
+  <a class="kbar__brand" href="/"><span class="kbar__name">سایت نمونه کیت</span></a>
+  <nav class="kbar__nav" aria-label="منو"><a href="/blog/">بلاگ</a><a href="/podcasts/">پادکست</a><a href="/glossary/">واژه‌نامه</a><a href="/events/">رویدادها</a></nav>
+</div></header>
+<main id="main" class="wrap">
+  <section class="hero">
+    <p class="eyebrow">سایت نمونه ساخته‌شده با کیت</p>
+    <h1>پول و بازار، هر روز کمی ساده‌تر</h1>
+    <p>هر هفته یک موضوع، هر ماه یک گزارش و هر روز یک واژه؛ طبق برنامه، به‌صورت نوشته و پادکست کوتاه دونفره.
+       همه چیز این صفحه نمونه است: <code>public/index.html</code>، <code>kit.config.js</code> و <code>content/</code> را ویرایش کنید.</p>
+    <div class="hero__act"><a class="btn btn--primary" href="/blog/">خواندن بلاگ</a><a class="btn btn--ghost" href="/podcasts/">شنیدن</a></div>
+  </section>
+
+  <section id="glossary" aria-labelledby="glossary-title">
+    <h2 class="sec" id="glossary-title">واژه امروز</h2>
+    <div class="gtoday" data-glossary-today hidden></div>
+    <div class="gtoday" data-glossary-empty hidden><p>امروز واژه‌ای نداریم. <a href="/glossary/">واژه‌نامه</a> را ببینید.</p></div>
+  </section>
+
+  <section id="podcasts" aria-labelledby="podcasts-title">
+    <h2 class="sec" id="podcasts-title">پادکست</h2>
+    <div class="grid grid--2">
+      <article class="pcard"><a href="/podcasts/#weekly"><h3>دو دقیقه پول</h3><p>هر هفته یک موضوع، در حدود دو دقیقه.</p></a></article>
+      <article class="pcard"><a href="/podcasts/#daily"><h3>یک واژه در روز</h3><p>هر روز یک واژه مالی، در حدود یک دقیقه.</p></a></article>
+    </div>
+  </section>
+
+  <section id="calendar" aria-labelledby="calendar-title">
+    <h2 class="sec" id="calendar-title">تقویم کاری</h2>
+    <p class="lead">روزهای کاری بانک، تعطیلات رسمی و تاریخ تسویه تی پلاس یک.</p>
+    <kit-date-picker settlement="1" profile="bank" theme="auto"></kit-date-picker>
+  </section>
+</main>
+<footer class="kfoot"><div class="wrap kfoot__in">
+  <nav class="kfoot__links"><a href="/blog/feed.xml">خوراک</a><a href="/sitemap.xml">نقشه سایت</a><a href="/llms.txt">llms.txt</a></nav>
+  <p>ساخته‌شده با کیت. محتوای نمونه.</p>
+</div></footer>
+<script type="module">
+  // Term of the day from the glossary API (the monitor's landing journey looks for [data-glossary-today]).
+  const box = document.querySelector("[data-glossary-today]"), empty = document.querySelector("[data-glossary-empty]");
+  const esc = (s) => String(s ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" })[c]);
+  fetch("/api/glossary/today").then((r) => r.json()).then((d) => {
+    if (!d.term) { empty.hidden = false; return; }
+    box.innerHTML = `<span class="kb">واژه امروز</span><h2><a href="/glossary/${esc(d.term.slug)}">${esc(d.term.term)}</a>${d.term.en ? ` <small dir="ltr">${esc(d.term.en)}</small>` : ""}</h2><p>${esc(d.term.short)}</p>`;
+    box.hidden = false;
+  }).catch(() => { empty.hidden = false; });
+</script>
+</body>
+</html>

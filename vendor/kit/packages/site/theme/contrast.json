@@ -1,0 +1,305 @@
+{
+  "$schema": "../../core/schemas/canon-allow.schema.json",
+  "entries": [
+    {
+      "file": "styles.css",
+      "category": "contrast",
+      "match": ".btn:disabled",
+      "context": "base",
+      "reason": "An inactive control: WCAG 1.4.3 exempts text of inactive user-interface components, and the disabled colour role is held to 3:1 as a non-text mark."
+    },
+    {
+      "file": "styles.css",
+      "category": "contrast",
+      "match": ".btn[aria-disabled=\"true\"]",
+      "context": "base",
+      "reason": "An inactive control: WCAG 1.4.3 exempts text of inactive user-interface components, and the disabled colour role is held to 3:1 as a non-text mark."
+    },
+    {
+      "file": "styles.css",
+      "category": "contrast",
+      "match": ".f input:disabled",
+      "context": "base",
+      "reason": "An inactive control: WCAG 1.4.3 exempts text of inactive user-interface components, and the disabled colour role is held to 3:1 as a non-text mark."
+    },
+    {
+      "file": "styles.css",
+      "category": "contrast",
+      "match": ".f textarea:disabled",
+      "context": "base",
+      "reason": "An inactive control: WCAG 1.4.3 exempts text of inactive user-interface components, and the disabled colour role is held to 3:1 as a non-text mark."
+    },
+    {
+      "file": "styles.css",
+      "category": "contrast",
+      "match": ".f select:disabled",
+      "context": "base",
+      "reason": "An inactive control: WCAG 1.4.3 exempts text of inactive user-interface components, and the disabled colour role is held to 3:1 as a non-text mark."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".phone__status",
+      "context": "base",
+      "in": ".phone .phone__display",
+      "reason": "The phone mockup's status bar is drawn on the device display (.phone__display, the warm surface) inside the black frame."
+    },
+    {
+      "file": "lab.css",
+      "category": "contrast",
+      "match": ".lab-json .j-k",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "lab.css",
+      "category": "contrast",
+      "match": ".lab-json .j-s",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "lab.css",
+      "category": "contrast",
+      "match": ".lab-json .j-n",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "lab.css",
+      "category": "contrast",
+      "match": ".lab-json .j-m",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "notify.css",
+      "category": "contrast",
+      "match": ".ntf__body p",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".ucase__log code",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".ucase__log span",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".ucase__end b",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pv-list--mono li code",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pv-sdk code",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pv-sch summary code",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pv-sch pre",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pg__pipe li.on",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pg__pipe li.bad",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pg__tag",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pg__out .k",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pg__out .s",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pg__out .n",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pg__out .b",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pg__events code",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pg__del",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pg__langs button",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".s-steps li",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "terminal.css",
+      "category": "contrast",
+      "match": ".lock-d",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark console surface; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "notify.css",
+      "category": "contrast",
+      "match": ".ntf__btn--ghost",
+      "context": "base",
+      "on": "ink",
+      "reason": "Used on the dark notification toast; measured on ink, ink-raised and ink-deep (it reads on all three)."
+    },
+    {
+      "file": "terminal.css",
+      "category": "contrast",
+      "match": ".rn.off .lg",
+      "context": "base",
+      "reason": "A route switched off is drawn at 55% opacity: an inactive component, whose text WCAG 1.4.3 exempts. The live state (.rn .lg) is measured and reads."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".app.is-auto [data-app-play]",
+      "context": "base",
+      "reason": "The play control is inactive while the demo plays itself (opacity .55, pointer-events none): an inactive component, exempt under WCAG 1.4.3. Its live state is measured and reads."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".wd__code",
+      "context": "base",
+      "reason": "A dark container for code lines: it sets a background and never its own text. Each line is a child with its own colour rule (.k, .s, .n, .b), measured on its own selector; the text the neutral page invents here inherits the page ink."
+    },
+    {
+      "file": "styles.css",
+      "category": "contrast",
+      "match": ".ep",
+      "context": "base",
+      "reason": "A dark endpoint bar: it sets the background; its text is the child span, which has its own rule (.ep span) and is measured. The text the neutral page invents in the bar itself inherits the page ink."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".w-tl li",
+      "context": "base",
+      "reason": "A timeline row: the real markup is an icon (i) then a div, laid beside the rail drawn by .w-tl::before; the neutral page puts the invented text over the rail line. In the real row the text never sits on the rail."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".w-tl li.bad",
+      "context": "base",
+      "reason": "A timeline row: the real markup is an icon (i) then a div, laid beside the rail drawn by .w-tl::before; the neutral page puts the invented text over the rail line. In the real row the text never sits on the rail."
+    },
+    {
+      "file": "styles.css",
+      "category": "contrast",
+      "match": ".cmp tr.us",
+      "context": "base",
+      "reason": "At narrow widths the highlighted comparison row becomes a block with the black background; its text is set by its cells (th, td, td[data-l]::before), each measured by its own selector on the page."
+    },
+    {
+      "file": "showcase.css",
+      "category": "contrast",
+      "match": ".pg__events time",
+      "context": "base",
+      "reason": "Used inside the dark API result panel (.pg__res), which gives the dim role its on-black value (--dim is dimOnDark there); measured in that container, where it reads.",
+      "in": ".pg__res"
+    }
+  ]
+}

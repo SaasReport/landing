@@ -1,0 +1,96 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kit:schema:source-envelope:v1",
+  "title": "SourceEnvelope (kit.source-envelope.v1)",
+  "description": "What every workbench pane receives instead of bare data: the data, who it came from, when it was true and fetched, under which licence, how fresh it must be and whether the source is reachable. The pane shows the badge, the source name, the as-of time and the licence line from this object; the badge is derived from `source.kind` (and `source.origin`), never stored.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "source", "asOf", "fetchedAt", "licence", "freshness", "reach", "provenance", "data"],
+  "properties": {
+    "schema": { "const": "kit.source-envelope.v1" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "kind"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,63}$" },
+        "name": { "type": "object", "minProperties": 1, "additionalProperties": { "type": "string", "minLength": 1 }, "propertyNames": { "pattern": "^[a-z]{2}(-[A-Za-z]+)?$" } },
+        "kind": { "enum": ["sandbox-mock", "customer-endpoint", "customer-dataset", "public-feed"] },
+        "origin": { "enum": ["generated", "sandbox-api", "computed"], "description": "sandbox-mock only: generated in the browser from a seed (badge SYNTHETIC) or answered by the project's sandbox API (badge SANDBOX)." },
+        "homepage": { "type": "string", "format": "uri" }
+      }
+    },
+    "asOf": { "type": "string", "format": "date-time", "description": "When the value was true at the source, UTC." },
+    "asOfLocal": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["gregorian", "jalali", "tz"],
+      "properties": {
+        "gregorian": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}( \\d{2}:\\d{2}(:\\d{2})?)?$" },
+        "jalali": { "type": "string", "pattern": "^\\d{4}/\\d{2}/\\d{2}( \\d{2}:\\d{2}(:\\d{2})?)?$", "description": "Solar Hijri by arithmetic (@saasreport/calendar), never the browser's ICU calendar." },
+        "tz": { "type": "string", "minLength": 1 }
+      }
+    },
+    "fetchedAt": { "type": "string", "format": "date-time" },
+    "licence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["line", "redistribution"],
+      "properties": {
+        "line": { "type": "string", "minLength": 1, "description": "One line of terms, shown in the pane." },
+        "url": { "type": "string", "format": "uri" },
+        "redistribution": { "enum": ["allowed", "attribution-required", "cache-only", "display-only", "not-allowed", "unverified", "not-applicable"] },
+        "verifiedOn": { "type": "string", "format": "date" },
+        "max_age_days": { "type": "integer", "minimum": 1, "maximum": 400, "description": "Re-verify the licence within this many days; 90: terms change by quarter." }
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["slaSeconds", "status"],
+      "properties": {
+        "slaSeconds": { "type": "integer", "minimum": 0 },
+        "marketHours": { "type": "string" },
+        "status": { "enum": ["live", "delayed", "stale", "closed", "mock"] }
+      }
+    },
+    "reach": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fromBrowser", "testedOn"],
+      "properties": {
+        "fromBrowser": { "enum": ["ok", "blocked", "needs-relay", "unverified", "not-applicable"] },
+        "fromWorker": { "enum": ["ok", "blocked", "needs-relay", "unverified", "not-applicable"] },
+        "testedOn": { "type": "string", "format": "date" },
+        "max_age_days": { "type": "integer", "minimum": 1, "maximum": 400, "description": "Re-test the reach within this many days; 30: reachability changes by month." }
+      }
+    },
+    "units": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "currency": { "enum": ["IRR", "IRT", "USD", "none"] },
+        "note": { "type": "string", "description": "IRT (Toman) = 10 IRR; always converted explicitly." }
+      }
+    },
+    "compliance": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": { "ownerDecisionRef": { "type": "string" }, "sanctionsNote": { "type": "string" } }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["adapter", "adapterVersion"],
+      "properties": {
+        "adapter": { "type": "string", "minLength": 1 },
+        "adapterVersion": { "type": "string", "minLength": 1 },
+        "upstreamUrl": { "type": "string" },
+        "asOfBasis": { "enum": ["source", "fetch-time", "build", "seed"], "description": "Where asOf comes from: the source's own stamp, the moment of the fetch, the build date of the definition, or the date a seeded series ends." },
+        "seed": { "type": "integer" },
+        "rawHash": { "type": "string" }
+      }
+    },
+    "data": { "description": "The payload; its shape is the pane's contract." }
+  }
+}

@@ -1,0 +1,727 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/canon.schema.json",
+  "title": "kit.canon.v1",
+  "description": "kit.canon.json at a repository root: what `kit check canon` enforces there (docs/CONSTITUTION.md §5). Declares the project (a registry key), which data files are validated against which schema, which handlers have which contract, where package code is scanned for hardcoding, and which generated artefacts are checked for freshness. Paths are relative to the repository root.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "project"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "The $id of this schema (or a path to it)."
+    },
+    "project": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "The project key in the kit's project registry (packages/core/registry/projects.json), e.g. saasreport; \"kit\" for the kit itself."
+    },
+    "schemas": {
+      "type": "array",
+      "description": "Data files and module exports validated against a schema.",
+      "items": {
+        "$ref": "#/$defs/schemaRule"
+      }
+    },
+    "contracts": {
+      "type": "array",
+      "description": "Machine-readable contracts and the source code they must match.",
+      "items": {
+        "$ref": "#/$defs/contract"
+      }
+    },
+    "hardcoding": {
+      "$ref": "#/$defs/hardcoding"
+    },
+    "freshness": {
+      "type": "array",
+      "description": "Generated artefacts: each command exits non-zero when its output is stale.",
+      "items": {
+        "$ref": "#/$defs/freshness"
+      }
+    },
+    "diagrams": {
+      "type": "string",
+      "description": "Directory of Mermaid sources (*.mmd): every source has a PNG, an index entry and a valid theme line."
+    },
+    "digits": {
+      "$ref": "#/$defs/digits"
+    },
+    "workflows": {
+      "$ref": "#/$defs/workflows"
+    },
+    "vendor": {
+      "$ref": "#/$defs/vendor"
+    },
+    "spelling": {
+      "$ref": "#/$defs/spelling"
+    },
+    "tags": {
+      "$ref": "#/$defs/tags"
+    },
+    "tokens": {
+      "$ref": "#/$defs/tokens"
+    },
+    "claude": {
+      "$ref": "#/$defs/claude"
+    },
+    "resilience": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "file": {
+          "type": "string",
+          "default": "resilience.json",
+          "description": "The repository's resilience.json (kit.resilience.v1): monitors, alert routes, backups, drills."
+        }
+      },
+      "description": "kit check resilience (docs/RESILIENCE.md). Required in every repository that deploys a Worker; a repository without one declares notApplicable.resilience (predicate no-deployed-workers)."
+    },
+    "release": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "file": {
+          "type": "string",
+          "default": "release.json",
+          "description": "The repository's release.json (kit.release.v1): build, databases, Workers in deploy order, owner address, drills, bootstrap state."
+        }
+      },
+      "description": "kit check release (docs/RELEASE.md): one production workflow (the kit template) in environment production, the tested artefact is the deployed one, every D1 migrated before its Workers, every Worker serves its commit on /api/build, a daily drift check, /api/health derived from the monitor, one owner address, no shell deploy. Required in every repository that deploys a Worker; a repository without one declares notApplicable.release (predicate no-deployed-workers)."
+    },
+    "notApplicable": {
+      "$ref": "#/$defs/notApplicable"
+    },
+    "persian": {
+      "type": "string",
+      "description": "kit check persian (docs/PERSIAN.md): the project's persian.config.json (schema persian-config), whose sources are linted with the kit's Persian rule pack. Required when digits.locale is fa."
+    }
+  },
+  "$defs": {
+    "notApplicable": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Checks that do not apply to this repository, each by a PREDICATE the kit proves from the repository's files (packages/cli/src/canon/facts.js): a free-text reason waives nothing. A check that is neither configured nor declared here fails as NOT CONFIGURED; a declaration whose predicate does not hold fails; a declaration for a check that is configured is stale and fails; `claude` cannot be declared. A configured check that checked nothing (checked = 0) fails. kit.canon.json is covered by CODEOWNERS, so a declaration cannot merge without the owner.",
+      "properties": {
+        "schemas": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "contracts": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "sdk": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "hardcoding": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "freshness": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "diagrams": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "digits": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "persian": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "workflows": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "vendor": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "spelling": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "tokens": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "resilience": {
+          "$ref": "#/$defs/notApplicableEntry"
+        },
+        "release": {
+          "$ref": "#/$defs/notApplicableEntry"
+        }
+      }
+    },
+    "notApplicableEntry": {
+      "type": "object",
+      "required": [
+        "predicate"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "predicate": {
+          "enum": [
+            "no-colour-sources",
+            "no-data-files",
+            "no-diagrams",
+            "no-english-content",
+            "no-generated-artefacts",
+            "no-http-surface",
+            "no-openapi-contract",
+            "no-persian-content",
+            "no-persian-site",
+            "no-deployed-workers",
+            "no-source-code",
+            "no-vendored-kit",
+            "no-workflows"
+          ],
+          "description": "The fact that makes the check not apply; the kit verifies it from the files and only lets the check it belongs to name it."
+        }
+      }
+    },
+    "tags": {
+      "type": "object",
+      "required": [
+        "vocabulary"
+      ],
+      "additionalProperties": false,
+      "description": "The project's tag vocabulary (docs/TAGS.md), the one place a tag is defined. Required in a repository with podcasts, a blog or a vocabulary file (finding class tags-undeclared); the finding classes tag-colour-role and tag-not-in-vocabulary then check the vocabulary and every series, item and post against it.",
+      "properties": {
+        "vocabulary": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The vocabulary file (kit.content-tags.v1), e.g. tags.config.json."
+        }
+      }
+    },
+    "claude": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "kit check claude (docs/COST.md): the Claude Code token-cost standard. It runs in every repository whether or not this block exists (the standard is the default); the block only moves the project's override file or leaves files out of the CLAUDE.md length scan.",
+      "properties": {
+        "policy": {
+          "type": "string",
+          "description": "The project's override file (kit.claude-policy.v1 with `extends: \"kit\"`); default claude.policy.json, optional."
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Globs of CLAUDE.md files left out of the length scan (generated or third-party copies)."
+        }
+      }
+    },
+    "spelling": {
+      "type": "object",
+      "required": [
+        "variant",
+        "paths",
+        "exceptions"
+      ],
+      "additionalProperties": false,
+      "description": "kit check spelling: a British English project's content carries no American spelling (@saasreport/core/spelling), outside code, URLs and the project's reviewed exceptions.",
+      "properties": {
+        "variant": {
+          "const": "en-GB",
+          "description": "The spelling the project writes in: en-GB (the site's locale)."
+        },
+        "paths": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "description": "Content to scan: directories or globs (content packs, landing and page copy, widget specs). In .js/.mjs files only string literals are read; Markdown and HTML outside code; JSON string values."
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Globs left out (fixtures, generated files)."
+        },
+        "exceptions": {
+          "type": "string",
+          "description": "The project's one exceptions file (kit.spelling-exceptions.v1), e.g. spelling.exceptions.json; podcast.config.json spelling.exceptions names the same file."
+        }
+      }
+    },
+    "tokens": {
+      "type": "object",
+      "required": [
+        "module",
+        "sources",
+        "paths"
+      ],
+      "additionalProperties": false,
+      "description": "kit check tokens, the colour canon (docs/COLOUR.md): no colour of the design tokens appears as a literal outside the token sources, and no colour literal at all (hex, rgb(), hsl(), a named colour on a colour property) appears in source or generated output except as a --c-<role> declaration; everything paints with var(--c-<role>). Exceptions are per-instance entries of canon.allow.json (category colour-literal). White and black are tokens like any other colour: there is no ignore list.",
+      "properties": {
+        "module": {
+          "type": "string",
+          "description": "The tokens module: its default export (or `export`) is { color: { name: \"#RRGGBB\" } }."
+        },
+        "export": {
+          "type": "string",
+          "default": "default"
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "description": "The files that hold the colour values (tokens.js, brand.json): the only places a token's hex may be written."
+        },
+        "paths": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "description": "Where to look: source directories or globs (content, pages, scripts, config)."
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Globs left out (generated output, vendored code, fixtures)."
+        },
+        "generated": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Built output the colour canon scans too (the site's CSS, HTML, SVG and scripts): no colour literal there either, except as the value of a --c-<role> property."
+        },
+        "allow": {
+          "type": "string",
+          "default": "canon.allow.json",
+          "description": "The reviewed allow-list that holds the colour-literal exceptions."
+        }
+      }
+    },
+    "schemaRule": {
+      "type": "object",
+      "required": [
+        "schema"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "description": "JSON files or globs (* within a path segment, ** across segments)."
+        },
+        "module": {
+          "type": "string",
+          "description": "A JavaScript module whose export is validated (run with the repo's own Node conditions)."
+        },
+        "export": {
+          "type": "string",
+          "default": "default",
+          "description": "The export of `module` to validate."
+        },
+        "call": {
+          "type": "boolean",
+          "default": false,
+          "description": "The export is a function: validate what it returns (no arguments)."
+        },
+        "each": {
+          "type": "boolean",
+          "default": false,
+          "description": "Validate every item of the (array) value instead of the value itself."
+        },
+        "schema": {
+          "type": "string",
+          "description": "A bundled schema name (e.g. kit-config), a schema $id, or a path to a schema file in the repo."
+        }
+      },
+      "oneOf": [
+        {
+          "required": [
+            "files"
+          ]
+        },
+        {
+          "required": [
+            "module"
+          ]
+        }
+      ]
+    },
+    "contract": {
+      "type": "object",
+      "required": [
+        "name",
+        "type",
+        "contract"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "enum": [
+            "openapi",
+            "json-schema"
+          ],
+          "description": "openapi: an OpenAPI 3.1 document whose paths must match the routes in `sources`; json-schema: a JSON Schema the named `handlers` are tested against."
+        },
+        "contract": {
+          "type": "string",
+          "description": "Path of the contract file."
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Files or directories whose route literals must all be in the contract (openapi)."
+        },
+        "routes": {
+          "type": "string",
+          "description": "Regular expression for route literals in `sources` (default: /api/… and /mcp)."
+        },
+        "ignore": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Route literals that are not endpoints (prefixes used for matching, e.g. /api/)."
+        },
+        "handlers": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Handler modules covered by this contract (json-schema): each must exist."
+        }
+      }
+    },
+    "hardcoding": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "kit check hardcoding (docs/CONSTITUTION.md §4): string literals in code that carry a fact owned by config, the content pack, the theme or the environment. There is no directory-wide exclusion: test files are out of scope as a rule of the scan (they assert behaviour and do not ship), a pure data declaration exported from a module is content and must be validated by a `schemas` rule, and every other finding is fixed or is one per-instance entry of the allow-list.",
+      "properties": {
+        "paths": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Code directories or globs to scan (package code, Workers, scripts)."
+        },
+        "categories": {
+          "type": "array",
+          "items": {
+            "enum": [
+              "project-name",
+              "hex-colour",
+              "project-url",
+              "copy-literal",
+              "secret"
+            ]
+          },
+          "description": "Categories to enforce (default: all)."
+        },
+        "allow": {
+          "type": "string",
+          "description": "The reviewed allow-list (kit.canon-allow.v1), e.g. canon.allow.json: per-instance entries only, no wildcard, no expiry."
+        }
+      }
+    },
+    "vendor": {
+      "type": "object",
+      "required": [],
+      "additionalProperties": false,
+      "description": "How this repository holds the kit (docs/FRESHNESS.md). mode \"source\" (t=0): the kit is brought to `path` (default .kit, ignored by git) at its published head before every use, as the published archive (transport \"archive\", no credential) or as a checkout of its main (transport \"git\"), verified against the published head object by the committed bootstrap scripts/kit.mjs (`kit source init`); nothing of the kit is committed and nothing can go stale. mode \"snapshot\" (post-facto, refused by finding class kit-source-t0): a plain copy at one commit, written by `kit vendor sync` with a manifest, which goes stale and is re-vendored later.",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "snapshot",
+            "source"
+          ],
+          "default": "snapshot",
+          "description": "\"source\": the kit at its head, verified before every use (t=0). \"snapshot\": a copy at one commit with a manifest (post-facto)."
+        },
+        "path": {
+          "type": "string",
+          "pattern": "^(?!\\.{0,2}/*$)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$",
+          "description": "Where the kit lives inside the project: the checkout in source mode (default .kit), the snapshot in snapshot mode (default vendor/kit); never the project root, an absolute path or one that climbs out with .."
+        },
+        "repository": {
+          "type": "string",
+          "format": "uri",
+          "description": "The kit repository (default https://github.com/SaasReport/kit): what the bootstrap clones in source mode, what the manifest records in snapshot mode."
+        },
+        "include": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          },
+          "description": "Kit paths (files or directories) the repository uses (default: packages, templates, LICENSE, NOTICE)."
+        },
+        "exclude": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Kit paths left out of the include list."
+        },
+        "manifest": {
+          "type": "string",
+          "pattern": "^(?!\\.{0,2}/*$)(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$",
+          "description": "Snapshot mode only: path of the manifest inside the project (default: <path>.manifest.json)."
+        },
+        "stale": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "How far the snapshot may lag the kit's main (vendor-stale, docs/RELEASE.md): the check fails when main has more than max_commits commits the snapshot lacks, or when the oldest of them is more than max_days days old. Read from the kit repository's compare API with KIT_READ_TOKEN (or GH_TOKEN); an unreadable kit fails, never passes.",
+          "properties": {
+            "max_commits": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 30
+            },
+            "max_days": {
+              "type": "integer",
+              "minimum": 0,
+              "default": 14
+            }
+          }
+        },
+        "transport": {
+          "type": "string",
+          "enum": [
+            "archive",
+            "git"
+          ],
+          "default": "archive",
+          "description": "Source mode only: how the bootstrap brings the kit to `path`. \"archive\" (default): the published archive of the head, fetched over https with no credential and verified by sha256 against the head object (a site's CI holds no key). \"git\": a checkout of `repository` fetched to origin/main, for a machine that can read it."
+        },
+        "head": {
+          "type": "string",
+          "format": "uri",
+          "description": "Source mode, archive transport only: the published head object to read (default: the kit's, DEFAULT_HEAD_URL in the bootstrap, one source packages/core/registry/kit-head.json). The unpacked kit's registry must name the same URL. A test's file: URL is allowed."
+        }
+      }
+    },
+    "workflows": {
+      "type": "object",
+      "required": [
+        "runner"
+      ],
+      "additionalProperties": false,
+      "description": "CI runner policy: the one place the runner image is declared. Every job in .github/workflows runs on it; floating labels (ubuntu-latest) and actions pinned to a branch fail.",
+      "properties": {
+        "runner": {
+          "type": "string",
+          "pattern": "^[a-z]+-[0-9]+\\.[0-9]+$",
+          "description": "An explicit, versioned runner image, e.g. ubuntu-24.04."
+        },
+        "canary": {
+          "type": "object",
+          "required": [
+            "runner",
+            "review_by"
+          ],
+          "additionalProperties": false,
+          "description": "The next image, run beside `runner` with continue-on-error. Past review_by the check fails: promote it to `runner` or move the date with a reason.",
+          "properties": {
+            "runner": {
+              "type": "string",
+              "pattern": "^[a-z]+-[0-9]+\\.[0-9]+$"
+            },
+            "review_by": {
+              "type": "string",
+              "format": "date"
+            }
+          }
+        },
+        "required": {
+          "type": "boolean",
+          "default": true,
+          "description": "The repository must have at least one workflow (no CI fails)."
+        },
+        "ci": {
+          "type": "object",
+          "additionalProperties": false,
+          "description": "The CI run budget (finding class ci-run-budget): full CI runs once per commit that matters, inside the Actions minutes the account includes.",
+          "properties": {
+            "branches": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9._/-]+$"
+              },
+              "description": "The only branches a push may run CI for, written literally (no wildcard): the default branch (default: main). Every other commit is tested on its pull_request (not a draft), and a branch push is gated by the local pre-push hook."
+            },
+            "records": {
+              "type": "object",
+              "additionalProperties": false,
+              "description": "The pull request that automation opens for the resilience records (the production workflow's records step, GITHUB_TOKEN, author github-actions[bot]): GitHub holds a pull_request run for that author until a person approves it, so no pull_request run may start for it (default: the values below).",
+              "properties": {
+                "branch_prefix": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z0-9._-]+/$",
+                  "description": "The prefix of the records branch, written once: `<prefix><run id>-<attempt>` (default: resilience-records/). The records step takes it from `kit release records branch`; no workflow writes it."
+                },
+                "paths": {
+                  "type": "array",
+                  "minItems": 1,
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "string",
+                    "minLength": 1
+                  },
+                  "description": "The files only a records pull request changes; default: the registry's `records_paths`. The records step commits exactly these (`kit release records paths`) and uploads them as the artifact; no workflow lists them as a path filter (a required check that a path filter skips stays pending)."
+                },
+                "workflow": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "The name of the workflow the records step dispatches on the records branch (default: test): its `name:`; it has a workflow_dispatch trigger and a job named `check`."
+                },
+                "check": {
+                  "type": "string",
+                  "minLength": 1,
+                  "description": "The required check that dispatched run reports on the records head commit, equal to the name of a job of that workflow (default: test (ubuntu-24.04))."
+                }
+              }
+            },
+            "schedule_exceptions": {
+              "type": "array",
+              "uniqueItems": true,
+              "description": "Schedules that run more often than weekly, each reviewed: the cron exactly as the workflow writes it, and why it must run that often (default: none).",
+              "items": {
+                "type": "object",
+                "required": [
+                  "cron",
+                  "reason"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "cron": {
+                    "type": "string",
+                    "minLength": 9
+                  },
+                  "reason": {
+                    "type": "string",
+                    "minLength": 30
+                  }
+                }
+              }
+            }
+          }
+        },
+        "branch_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Refs that count as branches for `uses:` (default: main, master, HEAD, latest, dev, develop, trunk). A list of at least one non-empty, distinct name: the finding class ci-action-pinned reads it by this declaration and checks its shape again where it binds it."
+        }
+      }
+    },
+    "digits": {
+      "type": "object",
+      "description": "kit check digits (docs/CONSTITUTION.md §7): the rendered Persian output in which every number a reader sees must be in Persian digits (۰–۹).",
+      "required": [
+        "locale"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "locale": {
+          "const": "fa",
+          "description": "The locale whose digits are enforced (Persian)."
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Rendered files or globs to scan: .html (pages with <html lang=\"fa…\"> and fragments), .svg, .md (Markdown twins) and .txt (llms.txt: the lines in Persian)."
+        },
+        "render": {
+          "type": "object",
+          "required": [
+            "command",
+            "dir"
+          ],
+          "additionalProperties": false,
+          "description": "A command that renders pages the static files do not hold (Worker routes, emails) into dir; run before the scan, its output scanned too.",
+          "properties": {
+            "command": {
+              "type": "string"
+            },
+            "dir": {
+              "type": "string"
+            }
+          }
+        },
+        "exclude": {
+          "type": "array",
+          "description": "Files that are not Persian copy, each with the reviewer's reason (an entry that matches nothing is stale and fails).",
+          "items": {
+            "type": "object",
+            "required": [
+              "files",
+              "reason"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "files": {
+                "type": "string"
+              },
+              "reason": {
+                "type": "string",
+                "minLength": 10
+              }
+            }
+          }
+        }
+      }
+    },
+    "freshness": {
+      "type": "object",
+      "required": [
+        "name",
+        "command"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "command": {
+          "type": "string",
+          "description": "Shell command run at the repo root; exit 0 = fresh."
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "The generated paths (documentation; never hand-edited)."
+        },
+        "blocks": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "description": "The generated:<name> blocks this command owns inside its outputs: the value scan of packages/core/scripts/naming-families.mjs skips exactly these blocks in exactly those files, and fails on any other block."
+        }
+      }
+    }
+  }
+}

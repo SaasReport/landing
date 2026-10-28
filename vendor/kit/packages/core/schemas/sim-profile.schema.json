@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-profile.schema.json",
+  "title": "kit.sim-profile.v1",
+  "description": "A jurisdiction profile for @saasreport/sim: which national options of the standard it exercises, as overrides of table rows. An override outside the row's min and max (the standard's bounds), or of a row with no bounds, is refused; adding a profile needs no code change.",
+  "type": "object",
+  "required": ["$schema", "schema", "id", "label", "extends", "overrides"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "schema": { "const": "kit.sim-profile.v1" },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{1,63}$" },
+    "label": { "type": "string", "minLength": 1 },
+    "extends": { "type": ["string", "null"], "description": "Reserved: the profile this one refines; the baseline extends nothing." },
+    "overrides": {
+      "type": "array",
+      "items": {
+        "type": "object", "required": ["table", "factor", "value", "ref", "reason"], "additionalProperties": false,
+        "properties": {
+          "table": { "type": "string", "minLength": 1 },
+          "factor": { "type": "string", "minLength": 1 },
+          "value": { "type": "integer", "minimum": 0 },
+          "ref": { "type": "string", "minLength": 1, "description": "Where the national option is granted (a paragraph of the standard)." },
+          "reason": { "type": "string", "minLength": 1, "description": "Why this profile exercises it (the supervisor's rule or decision)." }
+        }
+      }
+    }
+  }
+}

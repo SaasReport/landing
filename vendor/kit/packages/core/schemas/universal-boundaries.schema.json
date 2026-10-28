@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/universal-boundaries.schema.json",
+  "title": "kit.universal-boundaries.v1",
+  "description": "Mandatory T=0 domain taxonomy covering all interfaces, execution layers, data/media and release boundaries with explicit fail-closed evidence obligations. State declared-not-integrated is never acceptance of production.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "$schema",
+    "schema",
+    "description",
+    "phases",
+    "levels",
+    "boundaries",
+    "invariants"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "format": "uri"
+    },
+    "schema": {
+      "const": "kit.universal-boundaries.v1"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 30
+    },
+    "phases": {
+      "type": "array",
+      "minItems": 9,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "declare",
+          "contract-validate",
+          "source-verify",
+          "policy-gate",
+          "sandbox-execute",
+          "observe",
+          "independent-review",
+          "production-promote",
+          "live-reconcile"
+        ]
+      }
+    },
+    "levels": {
+      "type": "array",
+      "minItems": 10,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "description"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "experience",
+              "identity",
+              "commerce",
+              "interface",
+              "execution",
+              "data",
+              "media",
+              "governance",
+              "infrastructure",
+              "release"
+            ]
+          },
+          "description": {
+            "type": "string",
+            "minLength": 12
+          }
+        }
+      }
+    },
+    "boundaries": {
+      "type": "array",
+      "minItems": 40,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "kind",
+          "level",
+          "required_evidence",
+          "state"
+        ],
+        "properties": {
+          "kind": {
+            "$ref": "#/$defs/slug"
+          },
+          "level": {
+            "enum": [
+              "experience",
+              "identity",
+              "commerce",
+              "interface",
+              "execution",
+              "data",
+              "media",
+              "governance",
+              "infrastructure",
+              "release"
+            ]
+          },
+          "required_evidence": {
+            "type": "array",
+            "minItems": 4,
+            "uniqueItems": true,
+            "items": {
+              "enum": [
+                "contract-validated",
+                "policy-evaluated",
+                "sandbox-smoke",
+                "production-observed"
+              ]
+            }
+          },
+          "state": {
+            "const": "declared-not-integrated"
+          }
+        }
+      }
+    },
+    "invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "one_envelope",
+        "schema_authority",
+        "policy",
+        "publication_requires",
+        "version_transition",
+        "tenant_isolation",
+        "idempotency",
+        "cross_boundary_trace",
+        "legacy_record_policy"
+      ],
+      "properties": {
+        "one_envelope": {
+          "const": "kit.universal-envelope.v1"
+        },
+        "schema_authority": {
+          "const": "packages/core/schemas/universal-envelope.schema.json"
+        },
+        "policy": {
+          "const": "fail-closed"
+        },
+        "publication_requires": {
+          "type": "string",
+          "minLength": 12
+        },
+        "version_transition": {
+          "const": "additive-with-explicit-adapter"
+        },
+        "tenant_isolation": {
+          "const": "required"
+        },
+        "idempotency": {
+          "type": "string",
+          "minLength": 8
+        },
+        "cross_boundary_trace": {
+          "type": "string",
+          "minLength": 8
+        },
+        "legacy_record_policy": {
+          "const": "do-not-rewrite"
+        }
+      }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+    }
+  }
+}

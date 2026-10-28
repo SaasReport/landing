@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="{{locale.lang}}" dir="{{locale.dir}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>{{c.meta.title}}</title>
+<meta name="description" content="{{c.meta.description|attr}}">
+<meta name="theme-color" content="{{colorHex.accent}}">
+<link rel="canonical" href="{{page.url}}"><meta name="robots" content="index, follow, max-image-preview:large">{{page.alternates}}
+<meta property="og:type" content="website"><meta property="og:locale" content="{{locale.og}}">{{page.ogAlternates}}<meta property="og:site_name" content="{{name|attr}}">
+<meta property="og:title" content="{{c.meta.ogTitle|attr}}"><meta property="og:description" content="{{c.meta.ogDescription|attr}}">
+<meta property="og:url" content="{{page.url}}"><meta property="og:image" content="{{page.ogImage}}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{{c.meta.ogImageAlt|attr}}">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{{c.meta.ogTitle|attr}}"><meta name="twitter:description" content="{{c.meta.ogDescription|attr}}"><meta name="twitter:image" content="{{page.ogImage}}">
+{{page.ld}}
+{{chrome.icons}}
+{{chrome.preload}}
+<link rel="stylesheet" href="{{a.styles.css}}">
+<link rel="stylesheet" href="{{a.notify.css}}">
+<link rel="stylesheet" href="{{a.terminal.css}}">
+</head>
+<body class="tpage">
+{{chrome.bar}}
+<main>
+  <section class="hero-t wrap">
+    <p class="eyebrow">{{c.hero.eyebrow}}</p>
+    <h1>{{c.hero.title}}</h1>
+    <p>{{c.hero.lead}}</p>
+{{#if c.hero.notice}}    <p class="demo-banner" role="note"><b>{{c.hero.notice.label}}</b><span>{{c.hero.notice.text}}</span></p>
+{{/if}}  </section>
+  <section class="wrap"><div data-terminal="full"></div></section>
+
+  <section class="section" id="modules">
+    <div class="wrap">
+      <header class="sec-head"><p class="eyebrow">{{c.modules.eyebrow}}</p><h2>{{c.modules.title}}</h2><p>{{c.modules.lead}}</p></header>
+      <div class="tmods">
+{{#each c.modules.items}}        <button data-open-view="{{.view}}"><b>{{.title}}</b><small>{{.text}}</small></button>
+{{/each}}      </div>
+      <div class="actions actions--center">{{#each c.actions}}<a class="btn btn--{{.style}} btn--lg" href="{{.href|attr}}">{{.label}}</a>{{/each}}</div>
+    </div>
+  </section>
+</main>
+{{chrome.footer}}
+<script src="{{a.notify.js}}" defer></script>
+<script src="{{a.terminal.js}}" defer></script>
+<script src="{{a.totop.js}}" defer></script>
+</body>
+</html>

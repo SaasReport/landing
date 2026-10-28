@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="{{locale.lang}}" dir="{{locale.dir}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="{{colorHex.accent}}">
+<title>{{c.meta.title}}</title>
+<meta name="description" content="{{c.meta.description|attr}}">
+<link rel="canonical" href="{{page.url}}"><meta name="robots" content="index, follow">{{page.alternates}}
+<meta property="og:type" content="website"><meta property="og:title" content="{{c.meta.title|attr}}"><meta property="og:description" content="{{c.meta.description|attr}}">
+<meta property="og:url" content="{{page.url}}"><meta property="og:image" content="{{page.ogImage}}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{{c.meta.title|attr}}"><meta name="twitter:description" content="{{c.meta.description|attr}}"><meta name="twitter:image" content="{{page.ogImage}}">
+{{page.ld}}
+{{chrome.icons}}
+{{chrome.preload}}
+<link rel="stylesheet" href="{{a.styles.css}}">
+<link rel="stylesheet" href="{{a.terminal.css}}">
+<link rel="stylesheet" href="{{a.surfaces.css}}">
+</head>
+<body class="tpage">
+{{chrome.bar}}
+<main class="wrap st-page sb-page">
+  <section class="hero-t" style="text-align:start;padding-bottom:18px">
+    <p class="eyebrow">{{c.hero.eyebrow}}</p>
+    <h1 data-st-head>{{c.hero.title}}</h1>
+    <p>{{c.hero.lead}}</p>
+  </section>
+  <div class="st-sum" data-st-sum></div>
+  <h2 class="st-h">{{c.components}}</h2>
+  <div class="st-grid" data-st-components></div>
+  <h2 class="st-h">{{c.monitor}}</h2>
+  <div class="st-grid" data-st-monitor></div>
+  <h2 class="st-h">{{c.checks}}</h2>
+  <div class="st-grid" data-st-checks></div>
+  <h2 class="st-h">{{c.runs}}</h2>
+  <ol class="st-runs" data-st-runs></ol>
+</main>
+{{chrome.footer}}
+<script src="{{a.statusboard.js}}" defer></script>
+<script src="{{a.totop.js}}" defer></script>
+</body>
+</html>

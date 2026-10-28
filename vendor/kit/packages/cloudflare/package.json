@@ -1,0 +1,51 @@
+{
+  "name": "@saasreport/cloudflare",
+  "version": "0.1.0",
+  "description": "Cloudflare Workers runtime for kit: router, server-rendered pages, feeds, APIs, reactions, discovery and the daily publishing cron.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./kit": "./src/kit.js",
+    "./build": "./src/build.js",
+    "./health": "./src/health.js",
+    "./config": "./src/config.js",
+    "./assets-manifest": "./src/assets.js",
+    "./webhooks": "./src/webhooks.js",
+    "./webhooks-workflow": "./src/webhooks-workflow.js",
+    "./csp": "./src/csp.js",
+    "./body": "./src/body.js",
+    "./forms-intake": "./src/forms-intake.js",
+    "./schema/*": "./schema/*",
+    "./assets/*": "./assets/*",
+    "./migrations/*": "./migrations/*",
+    "./package.json": "./package.json",
+    "./contracts/*": "./contracts/*",
+    "./universal-ledger": "./src/universal-ledger.js"
+  },
+  "files": [
+    "src",
+    "schema",
+    "assets",
+    "migrations",
+    "README.md",
+    "contracts"
+  ],
+  "dependencies": {
+    "@saasreport/format": "*",
+    "@saasreport/calendar": "*",
+    "@saasreport/core": "*",
+    "@saasreport/podcast": "*",
+    "@saasreport/speech": "*",
+    "@saasreport/channels": "*",
+    "@saasreport/uploads": "*"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "license": "Apache-2.0",
+  "private": true
+}

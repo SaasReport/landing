@@ -1,0 +1,164 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/curve-input.schema.json",
+  "title": "kit.curve-input.v1",
+  "description": "A rate curve given to the simulation engines (@saasreport/sim): zero rates, par yields (bootstrapped to zero rates, never read as zero rates) or Nelson-Siegel-Svensson parameters. Rates are decimals (0.05 is 5%), tenors are years.",
+  "type": "object",
+  "required": [
+    "kind"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "kind": {
+      "enum": [
+        "zero",
+        "par",
+        "nss"
+      ]
+    },
+    "label": {
+      "type": "string",
+      "minLength": 1,
+      "description": "What the curve is called in the pane (a rate curve, or a profit-rate curve for the profit-rate pricing analogue)."
+    },
+    "compounding": {
+      "enum": [
+        "continuous",
+        "annual",
+        "semiannual"
+      ],
+      "description": "kind zero only."
+    },
+    "frequency": {
+      "enum": [
+        1,
+        2,
+        4,
+        12
+      ],
+      "description": "kind par only: coupon payments a year of the par bonds."
+    },
+    "tenors": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 200,
+      "items": {
+        "type": "number",
+        "exclusiveMinimum": 0,
+        "maximum": 100
+      },
+      "uniqueItems": true,
+      "description": "Strictly increasing years. JSON Schema cannot compare two arrays: equal length with rates and increasing order are enforced by the engine (refusal bad-curve) and covered by the contract tests."
+    },
+    "rates": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 200,
+      "items": {
+        "type": "number",
+        "minimum": -0.1,
+        "maximum": 1
+      }
+    },
+    "nss": {
+      "type": "object",
+      "required": [
+        "beta0",
+        "beta1",
+        "beta2",
+        "beta3",
+        "tau1",
+        "tau2"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "beta0": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "beta1": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "beta2": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "beta3": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "tau1": {
+          "type": "number",
+          "minimum": 0.1,
+          "maximum": 5
+        },
+        "tau2": {
+          "type": "number",
+          "minimum": 0.5,
+          "maximum": 30
+        }
+      },
+      "x-minTau2OverTau1": 1.2
+    },
+    "maxTenor": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "maximum": 100,
+      "description": "kind nss only: the last maturity the curve may be asked for."
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "zero"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "compounding",
+          "tenors",
+          "rates"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "par"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "frequency",
+          "tenors",
+          "rates"
+        ]
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "kind": {
+            "const": "nss"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "nss",
+          "maxTenor"
+        ]
+      }
+    }
+  ]
+}

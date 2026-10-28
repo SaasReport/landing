@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/plugins/schema/learnings.schema.json",
+  "title": "kit.plugin-learning.v1",
+  "description": "One line of ./<prefix>-out/learnings.jsonl, the append-only log of what plugin runs learnt: a false positive to avoid next time, a pattern in the data, the trajectory a run took, a gap in the sources, or a correction a person made. Structured so a later run (or a person) can read it back instead of free text.",
+  "type": "object",
+  "required": [
+    "schema",
+    "at",
+    "plugin",
+    "skill",
+    "run_id",
+    "kind",
+    "text"
+  ],
+  "properties": {
+    "schema": {
+      "const": "kit.plugin-learning.v1"
+    },
+    "at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "plugin": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$"
+    },
+    "skill": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)+$"
+    },
+    "run_id": {
+      "type": "string",
+      "pattern": "^\\d{8}T\\d{6}Z-[0-9a-f]{8}$"
+    },
+    "kind": {
+      "enum": [
+        "false_positive",
+        "pattern",
+        "trajectory",
+        "gap",
+        "correction"
+      ]
+    },
+    "text": {
+      "type": "string",
+      "minLength": 1
+    },
+    "item_id": {
+      "type": "string"
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "ref": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "additionalProperties": false
+}

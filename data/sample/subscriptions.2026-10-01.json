@@ -1,0 +1,226 @@
+[
+  {
+    "id": "sub_01",
+    "customer": "cus_01",
+    "currency": "usd",
+    "status": "active",
+    "items": [
+      {
+        "unit_amount": 39900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_02",
+    "customer": "cus_02",
+    "currency": "usd",
+    "status": "canceled",
+    "items": [
+      {
+        "unit_amount": 29900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_03",
+    "customer": "cus_03",
+    "currency": "usd",
+    "status": "canceled",
+    "items": [
+      {
+        "unit_amount": 29900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_04",
+    "customer": "cus_04",
+    "currency": "usd",
+    "status": "active",
+    "items": [
+      {
+        "unit_amount": 9900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_05",
+    "customer": "cus_05",
+    "currency": "usd",
+    "status": "canceled",
+    "items": [
+      {
+        "unit_amount": 9900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_06",
+    "customer": "cus_06",
+    "currency": "usd",
+    "status": "active",
+    "items": [
+      {
+        "unit_amount": 129900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_07",
+    "customer": "cus_07",
+    "currency": "usd",
+    "status": "active",
+    "items": [
+      {
+        "unit_amount": 4900,
+        "quantity": 6,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_08",
+    "customer": "cus_08",
+    "currency": "usd",
+    "status": "active",
+    "items": [
+      {
+        "unit_amount": 119900,
+        "quantity": 1,
+        "interval": "year",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_09",
+    "customer": "cus_09",
+    "currency": "usd",
+    "status": "active",
+    "items": [
+      {
+        "unit_amount": 19900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_10",
+    "customer": "cus_10",
+    "currency": "usd",
+    "status": "active",
+    "items": [
+      {
+        "unit_amount": 19900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_11",
+    "customer": "cus_11",
+    "currency": "usd",
+    "status": "canceled",
+    "items": [
+      {
+        "unit_amount": 49900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_12",
+    "customer": "cus_12",
+    "currency": "usd",
+    "status": "active",
+    "items": [
+      {
+        "unit_amount": 9900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_13",
+    "customer": "cus_13",
+    "currency": "usd",
+    "status": "active",
+    "items": [
+      {
+        "unit_amount": 29900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_14",
+    "customer": "cus_14",
+    "currency": "usd",
+    "status": "active",
+    "items": [
+      {
+        "unit_amount": 49900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_15",
+    "customer": "cus_15",
+    "currency": "usd",
+    "status": "active",
+    "items": [
+      {
+        "unit_amount": 19900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  },
+  {
+    "id": "sub_16",
+    "customer": "cus_16",
+    "currency": "usd",
+    "status": "active",
+    "items": [
+      {
+        "unit_amount": 9900,
+        "quantity": 1,
+        "interval": "month",
+        "interval_count": 1
+      }
+    ]
+  }
+]

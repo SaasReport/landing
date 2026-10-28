@@ -1,0 +1,160 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/canon.schema.json",
+  "project": "saasreport",
+  "vendor": {
+    "path": "vendor/kit",
+    "include": [
+      "packages",
+      "templates",
+      "LICENSE",
+      "NOTICE"
+    ]
+  },
+  "schemas": [
+    {
+      "files": [
+        "content/copy.json"
+      ],
+      "schema": "schemas/copy.schema.json"
+    },
+    {
+      "files": [
+        "data/sample/meta.json"
+      ],
+      "schema": "schemas/sample-meta.schema.json"
+    },
+    {
+      "files": [
+        "data/sample/subscriptions.*.json"
+      ],
+      "schema": "vendor/core/schemas/subscription-snapshot.schema.json",
+      "each": true
+    },
+    {
+      "files": [
+        "data/sample/charges.json"
+      ],
+      "schema": "vendor/core/schemas/charge-snapshot.schema.json",
+      "each": true
+    },
+    {
+      "files": [
+        "data/sample/refunds.json"
+      ],
+      "schema": "vendor/core/schemas/refund-snapshot.schema.json",
+      "each": true
+    },
+    {
+      "files": [
+        "data/sample/disputes.json"
+      ],
+      "schema": "vendor/core/schemas/dispute-snapshot.schema.json",
+      "each": true
+    },
+    {
+      "files": [
+        "data/sample/application-fees.json"
+      ],
+      "schema": "vendor/core/schemas/application-fee-snapshot.schema.json",
+      "each": true
+    }
+  ],
+  "hardcoding": {
+    "paths": [
+      "scripts/**",
+      "engine/**"
+    ],
+    "allow": "canon.allow.json"
+  },
+  "freshness": [
+    {
+      "name": "the landing's generated content, scenarios and brand files (scripts/generate.mjs)",
+      "command": "node scripts/generate.mjs --check",
+      "outputs": [
+        "content/generated/pages.en.json",
+        "content/generated/chrome.en.json",
+        "content/generated/scenarios.json",
+        "public/brand/logo.svg",
+        "public/brand/icon.svg"
+      ]
+    },
+    {
+      "name": "the generated widgets (kit widgets build)",
+      "command": "node vendor/kit/packages/cli/bin/kit.js widgets build --check",
+      "outputs": [
+        "content/generated/widgets.generated.json"
+      ]
+    }
+  ],
+  "diagrams": "docs/diagrams",
+  "spelling": {
+    "variant": "en-GB",
+    "paths": [
+      "content/copy.json",
+      "docs/*.md"
+    ],
+    "exclude": [
+      "docs/diagrams/**"
+    ],
+    "exceptions": "spelling.exceptions.json"
+  },
+  "tokens": {
+    "module": "site.config.js",
+    "export": "brand",
+    "sources": [
+      "tokens.json"
+    ],
+    "paths": [
+      "scripts",
+      "engine",
+      "content",
+      "site.config.js",
+      "docs/diagrams/brand.config.js"
+    ],
+    "exclude": [
+      "content/generated/**"
+    ],
+    "generated": [
+      "dist/**/*.css",
+      "dist/**/*.html"
+    ]
+  },
+  "workflows": {
+    "runner": "ubuntu-24.04",
+    "canary": {
+      "runner": "ubuntu-26.04",
+      "review_by": "2026-11-19"
+    },
+    "ci": {
+      "branches": [
+        "main"
+      ],
+      "schedule_exceptions": [
+        {
+          "cron": "41 5 * * *",
+          "reason": "the daily staleness verifier (docs/FRESHNESS.md): staleness is measured against the live remote head, so a weekly run would leave a stale branch, vendor or deploy undetected for up to six days"
+        }
+      ]
+    }
+  },
+  "notApplicable": {
+    "contracts": {
+      "predicate": "no-http-surface"
+    },
+    "sdk": {
+      "predicate": "no-openapi-contract"
+    },
+    "digits": {
+      "predicate": "no-persian-site"
+    },
+    "persian": {
+      "predicate": "no-persian-content"
+    },
+    "resilience": {
+      "predicate": "no-deployed-workers"
+    },
+    "release": {
+      "predicate": "no-deployed-workers"
+    }
+  }
+}

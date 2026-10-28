@@ -1,0 +1,1001 @@
+{
+  "$schema": "../../../widgets/schemas/widgets-spec.schema.json",
+  "project": {
+    "key": "example",
+    "name": "Example Library",
+    "url": "https://example.org",
+    "repo": "https://github.com/example/library"
+  },
+  "locales": [
+    {
+      "code": "fa",
+      "dir": "rtl",
+      "digits": "arabext",
+      "intl": "fa-IR"
+    },
+    {
+      "code": "en",
+      "dir": "ltr",
+      "intl": "en-GB"
+    }
+  ],
+  "tone": {
+    "register": "formal-plain"
+  },
+  "theme": {
+    "values": {}
+  },
+  "honesty": {
+    "default": "sample",
+    "labels": {
+      "live": {
+        "en": "Live",
+        "fa": "زنده"
+      },
+      "engine": {
+        "en": "Computed",
+        "fa": "محاسبه‌شده"
+      },
+      "sample": {
+        "en": "Sample",
+        "fa": "نمونه"
+      }
+    }
+  },
+  "sources": {
+    "content": {
+      "kind": "content",
+      "path": "content.json",
+      "describes": "terms"
+    }
+  },
+  "vocabulary": {
+    "owned": [
+      "Example Library"
+    ],
+    "forbidden": []
+  },
+  "audiences": [
+    {
+      "id": "staff",
+      "label": {
+        "en": "Staff",
+        "fa": "کارکنان"
+      }
+    }
+  ],
+  "useCases": [
+    {
+      "id": "desk",
+      "label": {
+        "en": "Desk work",
+        "fa": "کار میز"
+      },
+      "audiences": [
+        "staff"
+      ],
+      "sources": [
+        "content"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "desk-workbench",
+      "useCase": "desk",
+      "audiences": [
+        "staff"
+      ],
+      "title": {
+        "en": "Library desk workbench",
+        "fa": "میزکار میز امانت"
+      },
+      "summary": {
+        "en": "Check loans, the calendar and the sandbox from one command line.",
+        "fa": "امانت‌ها، تقویم و سندباکس را از یک خط فرمان ببینید."
+      },
+      "actors": [
+        {
+          "id": "clerk",
+          "label": {
+            "en": "Clerk",
+            "fa": "کارمند"
+          },
+          "kind": "person"
+        }
+      ],
+      "steps": [
+        {
+          "id": "open",
+          "actor": "clerk",
+          "action": {
+            "en": "Types a command",
+            "fa": "فرمانی می‌نویسد"
+          },
+          "status": "info"
+        }
+      ],
+      "widgets": [
+        {
+          "archetype": "workbench",
+          "id": "library-workbench",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "A launcher card with the panes and a link.",
+                  "fa": "کارت راه‌انداز با پنل‌ها و پیوند."
+                }
+              },
+              {
+                "path": "/workbench/",
+                "placement": "app",
+                "how": {
+                  "en": "The workbench page itself.",
+                  "fa": "خود صفحه‌ی میزکار."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Library workbench",
+              "fa": "میزکار کتابخانه"
+            },
+            "href": "/workbench/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Command registry",
+                "fa": "ثبت فرمان‌ها"
+              },
+              {
+                "en": "Pane layout",
+                "fa": "چیدمان پنل‌ها"
+              },
+              {
+                "en": "Source envelope",
+                "fa": "پاکت منبع"
+              }
+            ],
+            "flow": {
+              "en": "Command, pane, source envelope, badge.",
+              "fa": "فرمان، پنل، پاکت منبع، برچسب."
+            },
+            "diagram": "docs/diagrams/workbench.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "Where every figure comes from.",
+              "fa": "هر عدد از کجا آمده است."
+            },
+            "does": {
+              "en": "Run a command and read a pane.",
+              "fa": "فرمانی اجرا کنید و پنلی بخوانید."
+            }
+          }
+        }
+      ],
+      "workbench": {
+        "id": "library",
+        "tz": "UTC",
+        "title": {
+          "en": "Library workbench",
+          "fa": "میزکار کتابخانه"
+        },
+        "intro": {
+          "en": "Commands and panes over the library's own data.",
+          "fa": "فرمان و پنل روی داده‌ی خود کتابخانه."
+        },
+        "sources": [
+          {
+            "id": "lib.series",
+            "name": {
+              "en": "Loan volumes (synthetic)",
+              "fa": "حجم امانت (ساختگی)"
+            },
+            "kind": "sandbox-mock",
+            "origin": "generated",
+            "enabled": true,
+            "licence": {
+              "line": {
+                "en": "Generated in your browser from a fixed seed.",
+                "fa": "در مرورگر شما از یک بذر ثابت ساخته می‌شود."
+              },
+              "redistribution": "not-applicable"
+            },
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "mock"
+            },
+            "reach": {
+              "fromBrowser": "not-applicable",
+              "testedOn": "2026-10-01"
+            },
+            "units": {
+              "currency": "IRR",
+              "note": "IRT is 10 IRR"
+            },
+            "provenance": {
+              "adapter": "seeded-series",
+              "adapterVersion": "1"
+            },
+            "adapter": {
+              "type": "seeded-series",
+              "seed": 42,
+              "points": 120,
+              "series": [
+                {
+                  "id": "loans",
+                  "label": {
+                    "en": "Loans a day",
+                    "fa": "امانت در روز"
+                  },
+                  "base": 120,
+                  "vol": 0.03,
+                  "decimals": 0
+                },
+                {
+                  "id": "fees",
+                  "label": {
+                    "en": "Late fees",
+                    "fa": "جریمه‌ی تأخیر"
+                  },
+                  "base": 250000,
+                  "vol": 0.02,
+                  "drift": 0.0005,
+                  "decimals": 0,
+                  "unit": "IRR"
+                }
+              ]
+            }
+          },
+          {
+            "id": "lib.sandbox",
+            "name": {
+              "en": "Lending sandbox",
+              "fa": "سندباکس امانت"
+            },
+            "kind": "sandbox-mock",
+            "origin": "sandbox-api",
+            "enabled": true,
+            "licence": {
+              "line": {
+                "en": "A test sandbox; nothing is real.",
+                "fa": "سندباکس آزمایشی؛ هیچ‌چیز واقعی نیست."
+              },
+              "redistribution": "not-applicable"
+            },
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "mock"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-01"
+            },
+            "provenance": {
+              "adapter": "lab-engine",
+              "adapterVersion": "1"
+            },
+            "adapter": {
+              "type": "lab-engine",
+              "scripts": [
+                "/lab-data.js",
+                "/lab.js"
+              ],
+              "factory": "createLabEngine"
+            }
+          },
+          {
+            "id": "lib.local",
+            "name": {
+              "en": "Local arithmetic",
+              "fa": "محاسبه‌ی محلی"
+            },
+            "kind": "sandbox-mock",
+            "origin": "computed",
+            "enabled": true,
+            "licence": {
+              "line": {
+                "en": "Computed in your browser.",
+                "fa": "در مرورگر شما محاسبه می‌شود."
+              },
+              "redistribution": "not-applicable"
+            },
+            "freshness": {
+              "slaSeconds": 0,
+              "status": "mock"
+            },
+            "reach": {
+              "fromBrowser": "not-applicable",
+              "testedOn": "2026-10-01"
+            },
+            "provenance": {
+              "adapter": "local",
+              "adapterVersion": "1"
+            },
+            "adapter": {
+              "type": "local"
+            }
+          },
+          {
+            "id": "lib.calendar",
+            "name": {
+              "en": "Library calendar API",
+              "fa": "API تقویم کتابخانه"
+            },
+            "kind": "public-feed",
+            "homepage": "https://example.org",
+            "enabled": true,
+            "licence": {
+              "line": {
+                "en": "Public, attribution required.",
+                "fa": "عمومی، با ذکر منبع."
+              },
+              "redistribution": "attribution-required"
+            },
+            "freshness": {
+              "slaSeconds": 300,
+              "status": "live"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-01"
+            },
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1"
+            },
+            "adapter": {
+              "type": "http-json",
+              "url": "/api/calendar/month",
+              "query": {
+                "year": "$year",
+                "month": "$month",
+                "profile": "$profile"
+              },
+              "rows": "/data/days"
+            }
+          },
+          {
+            "id": "lib.holidays",
+            "name": {
+              "en": "Library holidays API",
+              "fa": "API تعطیلات کتابخانه"
+            },
+            "kind": "public-feed",
+            "homepage": "https://example.org",
+            "enabled": true,
+            "licence": {
+              "line": {
+                "en": "Public, attribution required.",
+                "fa": "عمومی، با ذکر منبع."
+              },
+              "redistribution": "attribution-required"
+            },
+            "freshness": {
+              "slaSeconds": 300,
+              "status": "live"
+            },
+            "reach": {
+              "fromBrowser": "ok",
+              "testedOn": "2026-10-01"
+            },
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1"
+            },
+            "adapter": {
+              "type": "http-json",
+              "url": "/api/calendar/holidays",
+              "query": {
+                "year": "$year"
+              },
+              "rows": "/data/holidays"
+            }
+          },
+          {
+            "id": "lib.partner",
+            "name": {
+              "en": "Partner feed (disabled)",
+              "fa": "خوراک شریک (غیرفعال)"
+            },
+            "kind": "public-feed",
+            "homepage": "https://example.org",
+            "enabled": false,
+            "disabledReason": {
+              "en": "The owner has not approved this feed.",
+              "fa": "مالک این خوراک را تأیید نکرده است."
+            },
+            "licence": {
+              "line": {
+                "en": "Terms not verified.",
+                "fa": "شرایط بررسی نشده است."
+              },
+              "redistribution": "unverified"
+            },
+            "freshness": {
+              "slaSeconds": 60,
+              "status": "stale"
+            },
+            "reach": {
+              "fromBrowser": "unverified",
+              "testedOn": "2026-10-01"
+            },
+            "compliance": {
+              "ownerDecisionRef": "fixture-1",
+              "sanctionsNote": {
+                "en": "Screen the counterparty first.",
+                "fa": "ابتدا طرف معامله را بررسی کنید."
+              }
+            },
+            "provenance": {
+              "adapter": "http-json",
+              "adapterVersion": "1",
+              "upstreamUrl": "https://example.org/feed.json"
+            },
+            "adapter": {
+              "type": "http-json",
+              "url": "https://example.org/feed.json",
+              "rows": "/items"
+            },
+            "contract": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "price"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "price": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "fixture": [
+              {
+                "id": "a",
+                "price": 1.5
+              }
+            ]
+          }
+        ],
+        "panes": [
+          {
+            "id": "loans",
+            "kind": "series",
+            "title": {
+              "en": "Loans",
+              "fa": "امانت‌ها"
+            },
+            "source": "lib.series"
+          },
+          {
+            "id": "calendar",
+            "kind": "calendar",
+            "title": {
+              "en": "Calendar",
+              "fa": "تقویم"
+            },
+            "source": "lib.calendar",
+            "params": {
+              "defaults": {
+                "year": "$jy",
+                "month": "$jm",
+                "profile": "bank"
+              },
+              "fields": {
+                "date": "iso",
+                "jalali": "jalali",
+                "holiday": "holiday",
+                "weekend": "weekend",
+                "events": "events"
+              },
+              "detail": [
+                "jalali_long",
+                "gregorian"
+              ]
+            }
+          },
+          {
+            "id": "holidays",
+            "kind": "table",
+            "title": {
+              "en": "Holidays",
+              "fa": "تعطیلات"
+            },
+            "source": "lib.holidays",
+            "params": {
+              "defaults": {
+                "year": "$jy"
+              }
+            },
+            "columns": [
+              {
+                "key": "jalali",
+                "label": {
+                  "en": "Date",
+                  "fa": "تاریخ"
+                }
+              },
+              {
+                "key": "title",
+                "label": {
+                  "en": "Holiday",
+                  "fa": "مناسبت"
+                }
+              },
+              {
+                "key": "weekday",
+                "label": {
+                  "en": "Weekday",
+                  "fa": "روز"
+                }
+              }
+            ]
+          },
+          {
+            "id": "calc",
+            "kind": "calculator",
+            "title": {
+              "en": "Calculators",
+              "fa": "محاسبه‌گرها"
+            },
+            "source": "lib.local",
+            "calcs": [
+              {
+                "id": "j2g",
+                "op": "jalali-to-gregorian",
+                "label": {
+                  "en": "Jalali to Gregorian",
+                  "fa": "شمسی به میلادی"
+                },
+                "inputs": [
+                  {
+                    "id": "date",
+                    "label": {
+                      "en": "Jalali date",
+                      "fa": "تاریخ شمسی"
+                    },
+                    "type": "text",
+                    "default": "1405/07/15"
+                  }
+                ],
+                "outputs": [
+                  {
+                    "id": "gregorian",
+                    "label": {
+                      "en": "Gregorian",
+                      "fa": "میلادی"
+                    }
+                  },
+                  {
+                    "id": "weekday",
+                    "label": {
+                      "en": "Weekday",
+                      "fa": "روز هفته"
+                    }
+                  }
+                ]
+              },
+              {
+                "id": "rt",
+                "op": "rial-toman",
+                "label": {
+                  "en": "Rial and Toman",
+                  "fa": "ریال و تومان"
+                },
+                "inputs": [
+                  {
+                    "id": "amount",
+                    "label": {
+                      "en": "Amount",
+                      "fa": "مبلغ"
+                    },
+                    "type": "number",
+                    "default": "250000"
+                  }
+                ],
+                "outputs": [
+                  {
+                    "id": "toman",
+                    "label": {
+                      "en": "Toman",
+                      "fa": "تومان"
+                    }
+                  },
+                  {
+                    "id": "rial",
+                    "label": {
+                      "en": "Rial",
+                      "fa": "ریال"
+                    }
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "sandbox",
+            "kind": "sandbox",
+            "title": {
+              "en": "Sandbox",
+              "fa": "سندباکس"
+            },
+            "source": "lib.sandbox",
+            "params": {
+              "scenarios": [
+                "ratelimit",
+                "timeout"
+              ]
+            },
+            "ops": [
+              {
+                "id": "accounts.list",
+                "method": "GET",
+                "path": "/v1/accounts",
+                "title": {
+                  "en": "List accounts",
+                  "fa": "فهرست حساب‌ها"
+                },
+                "params": {
+                  "limit": 3
+                }
+              },
+              {
+                "id": "payments.create",
+                "method": "POST",
+                "path": "/v1/payments",
+                "title": {
+                  "en": "Create payment",
+                  "fa": "ساخت پرداخت"
+                },
+                "idempotent": true,
+                "params": {
+                  "from_account": "acc_mel01",
+                  "to_sheba": "IR062960000000100324200001",
+                  "amount": 100000
+                }
+              }
+            ]
+          },
+          {
+            "id": "sources",
+            "kind": "sources",
+            "title": {
+              "en": "Sources",
+              "fa": "منبع‌ها"
+            },
+            "source": "lib.local"
+          },
+          {
+            "id": "help",
+            "kind": "help",
+            "title": {
+              "en": "Help",
+              "fa": "راهنما"
+            },
+            "source": "lib.local"
+          },
+          {
+            "id": "watch",
+            "kind": "watchlist",
+            "title": {
+              "en": "Watchlist",
+              "fa": "دیده‌بان"
+            },
+            "source": "lib.local",
+            "alternates": []
+          },
+          {
+            "id": "mydata",
+            "kind": "table",
+            "title": {
+              "en": "My data",
+              "fa": "داده‌ی من"
+            },
+            "source": "byo"
+          }
+        ],
+        "commands": [
+          {
+            "id": "loan",
+            "verb": "LOAN",
+            "aliases": [
+              "loans",
+              "امانت",
+              "کتاب امانتی"
+            ],
+            "summary": {
+              "en": "Loan volumes",
+              "fa": "حجم امانت"
+            },
+            "args": [
+              {
+                "name": "series",
+                "type": "enum",
+                "enum": [
+                  "loans",
+                  "fees"
+                ],
+                "default": "loans"
+              },
+              {
+                "name": "days",
+                "type": "integer",
+                "min": 5,
+                "max": 365,
+                "default": 90
+              }
+            ],
+            "opens": "loans",
+            "source": "lib.series",
+            "example": "LOAN fees days=30"
+          },
+          {
+            "id": "cal",
+            "verb": "CAL",
+            "aliases": [
+              "calendar",
+              "تقویم"
+            ],
+            "summary": {
+              "en": "Month calendar",
+              "fa": "تقویم ماه"
+            },
+            "args": [
+              {
+                "name": "year",
+                "type": "integer",
+                "min": 1300,
+                "max": 1600
+              },
+              {
+                "name": "month",
+                "type": "integer",
+                "min": 1,
+                "max": 12
+              },
+              {
+                "name": "profile",
+                "type": "enum",
+                "enum": [
+                  "bank",
+                  "government",
+                  "market"
+                ],
+                "default": "bank"
+              }
+            ],
+            "opens": "calendar",
+            "source": "lib.calendar",
+            "example": "CAL 1405 7"
+          },
+          {
+            "id": "hol",
+            "verb": "HOL",
+            "aliases": [
+              "holidays",
+              "تعطیلات"
+            ],
+            "summary": {
+              "en": "Holidays of a year",
+              "fa": "تعطیلات یک سال"
+            },
+            "args": [
+              {
+                "name": "year",
+                "type": "integer",
+                "min": 1300,
+                "max": 1600
+              }
+            ],
+            "opens": "holidays",
+            "source": "lib.holidays",
+            "example": "HOL 1405"
+          },
+          {
+            "id": "calc",
+            "verb": "CALC",
+            "aliases": [
+              "محاسبه",
+              "calculator"
+            ],
+            "summary": {
+              "en": "Calculators",
+              "fa": "محاسبه‌گرها"
+            },
+            "args": [
+              {
+                "name": "calc",
+                "type": "enum",
+                "enum": [
+                  "j2g",
+                  "rt"
+                ],
+                "default": "j2g"
+              }
+            ],
+            "opens": "calc",
+            "source": "lib.local",
+            "example": "CALC rt"
+          },
+          {
+            "id": "api",
+            "verb": "API",
+            "aliases": [
+              "sandbox",
+              "سندباکس"
+            ],
+            "summary": {
+              "en": "Sandbox calls",
+              "fa": "فراخوانی سندباکس"
+            },
+            "args": [
+              {
+                "name": "op",
+                "type": "enum",
+                "enum": [
+                  "accounts.list",
+                  "payments.create"
+                ],
+                "default": "accounts.list"
+              }
+            ],
+            "opens": "sandbox",
+            "source": "lib.sandbox",
+            "example": "API payments.create"
+          },
+          {
+            "id": "src",
+            "verb": "SRC",
+            "aliases": [
+              "sources",
+              "منبع",
+              "منبع‌ها"
+            ],
+            "summary": {
+              "en": "Sources and licences",
+              "fa": "منبع‌ها و مجوزها"
+            },
+            "args": [],
+            "opens": "sources",
+            "source": "lib.local",
+            "example": "SRC"
+          },
+          {
+            "id": "help",
+            "verb": "HELP",
+            "aliases": [
+              "راهنما"
+            ],
+            "summary": {
+              "en": "Commands and keys",
+              "fa": "فرمان‌ها و کلیدها"
+            },
+            "args": [],
+            "opens": "help",
+            "source": "lib.local",
+            "example": "HELP"
+          },
+          {
+            "id": "wl",
+            "verb": "WL",
+            "aliases": [
+              "watchlist",
+              "دیده‌بان"
+            ],
+            "summary": {
+              "en": "Watchlist",
+              "fa": "دیده‌بان"
+            },
+            "args": [],
+            "opens": "watch",
+            "source": "lib.local",
+            "example": "WL"
+          },
+          {
+            "id": "my",
+            "verb": "MY",
+            "aliases": [
+              "mydata",
+              "داده‌ی من"
+            ],
+            "summary": {
+              "en": "My own data",
+              "fa": "داده‌ی خودم"
+            },
+            "args": [],
+            "opens": "mydata",
+            "source": "byo",
+            "example": "MY"
+          }
+        ],
+        "layouts": [
+          {
+            "id": "main",
+            "title": {
+              "en": "Main",
+              "fa": "اصلی"
+            },
+            "groups": [
+              [
+                {
+                  "pane": "loans"
+                },
+                {
+                  "pane": "watch"
+                }
+              ],
+              [
+                {
+                  "pane": "calendar"
+                },
+                {
+                  "pane": "calc"
+                }
+              ]
+            ]
+          },
+          {
+            "id": "ops",
+            "title": {
+              "en": "Operations",
+              "fa": "عملیات"
+            },
+            "groups": [
+              [
+                {
+                  "pane": "sandbox"
+                },
+                {
+                  "pane": "sources"
+                }
+              ]
+            ]
+          }
+        ],
+        "defaultLayout": "main",
+        "byo": {
+          "enabled": true,
+          "maxResponseBytes": 1048576,
+          "maxDatasetBytes": 2097152,
+          "maxRows": 20000,
+          "timeoutMs": 8000
+        },
+        "watchlist": {
+          "max": 20
+        }
+      }
+    }
+  ],
+  "archetypes": [
+    "workbench"
+  ],
+  "build": {
+    "asOf": "2026-10-01",
+    "out": "widgets.generated.json",
+    "page": {
+      "path": "/examples/",
+      "title": {
+        "en": "Examples",
+        "fa": "نمونه‌ها"
+      }
+    },
+    "exports": [
+      {
+        "as": "workbench",
+        "widget": "library-workbench"
+      }
+    ]
+  }
+}

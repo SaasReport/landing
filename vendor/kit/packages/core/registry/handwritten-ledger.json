@@ -1,0 +1,94 @@
+{
+  "$schema": "../schemas/handwritten-ledger.schema.json",
+  "v": 1,
+  "scope": [
+    "packages/cli/src/canon/"
+  ],
+  "frozen_on": "2026-10-07",
+  "modules": [
+    {
+      "path": "packages/cli/src/canon/engine.js",
+      "role": "engine",
+      "why": "the engine: runs every finding class's declared contract on canonical parsers (tree-sitter, yaml, smol-toml, jsonc-parser, git); two small readers remain in code because no canonical library exists in the repository for them: the RFC 6901 decoding of a bind pointer (~1, ~0: two replacements; node_modules holds jsonc-parser, yaml and smol-toml, whose paths are key arrays, not pointer strings, and no JSON Pointer package; @saasreport/core stays dependency-free for Workers) and the ${{ }} expressions of a workflow, which are not parsed at all: the contracts name the one declared form as an exact const (${{ matrix.runner }}, ${{ matrix.canary }}) and refuse every other expression, and a single containment pattern routes the message (no GitHub expression parser or actionlint in the repository)"
+    },
+    {
+      "path": "packages/cli/src/canon/findings.js",
+      "role": "engine",
+      "why": "runs a class's detectors and proves its cases; the git facts it hands the engine are read by git itself"
+    },
+    {
+      "path": "packages/cli/src/canon/index.js",
+      "role": "engine",
+      "why": "the canon runner: validates kit.canon.json against its schema and dispatches the declared checks"
+    },
+    {
+      "path": "packages/cli/src/canon/capabilities.js",
+      "role": "engine",
+      "why": "A generic evaluator for the machine-readable kit.capability-manifest.v1 contract, invoked by the existing check contracts engine: contract-described paths, OpenAPI operation IDs, generated Forge SDK and Widget parity, failure evidence, and promotion gates. No project-specific hand-written rule is allowed; rules live in JSON Schema and the capability registry."
+    },
+    {
+      "path": "packages/cli/src/canon/files.js",
+      "role": "engine",
+      "why": "file walking and globs (node:path matchesGlob) for every check"
+    },
+    {
+      "path": "packages/cli/src/canon/facts.js",
+      "role": "engine",
+      "why": "the declared applicability predicates (kit.canon.json notApplicable), each a fact about the repository"
+    },
+    {
+      "path": "packages/cli/src/canon/hardcoding.js",
+      "role": "handwritten",
+      "why": "a hand-written check from before 2026-10-07; frozen, migrates onto the engine",
+      "parses": "JavaScript string literals by a hand scanner",
+      "migrate_to": "query detectors (tree-sitter javascript string nodes) with the categories as declared sets",
+      "work_order": "wo-0016-every-check-a-contract",
+      "frozen": "2026-10-07"
+    },
+    {
+      "path": "packages/cli/src/canon/spelling.js",
+      "role": "handwritten",
+      "why": "a hand-written check from before 2026-10-07; frozen, migrates onto the engine",
+      "parses": "prose words by regex over Markdown and sources",
+      "migrate_to": "text detectors over marked tokens with the spelling map as a declared set",
+      "work_order": "wo-0016-every-check-a-contract",
+      "frozen": "2026-10-07"
+    },
+    {
+      "path": "packages/cli/src/canon/tokens.js",
+      "role": "handwritten",
+      "why": "a hand-written check from before 2026-10-07; frozen, migrates onto the engine",
+      "parses": "colour literals by regex over sources and built output",
+      "migrate_to": "query and text detectors (tree-sitter css/javascript) with the token sources declared",
+      "work_order": "wo-0016-every-check-a-contract",
+      "frozen": "2026-10-07"
+    },
+    {
+      "path": "packages/cli/src/canon/colour.js",
+      "role": "handwritten",
+      "why": "a hand-written check from before 2026-10-07; frozen, migrates onto the engine",
+      "parses": "colour literals and custom properties by regex over CSS and sources",
+      "migrate_to": "query detectors over the tree-sitter css grammar",
+      "work_order": "wo-0016-every-check-a-contract",
+      "frozen": "2026-10-07"
+    },
+    {
+      "path": "packages/cli/src/canon/persian.js",
+      "role": "handwritten",
+      "why": "a hand-written check from before 2026-10-07; frozen, migrates onto the engine",
+      "parses": "Persian segments by hand from sources and config",
+      "migrate_to": "the fa-lint rule pack as declared contracts over tree-sitter/marked segments",
+      "work_order": "wo-0016-every-check-a-contract",
+      "frozen": "2026-10-07"
+    },
+    {
+      "path": "packages/cli/src/canon/lockfile.js",
+      "role": "handwritten",
+      "why": "a hand-written check from before 2026-10-07; frozen, migrates onto the engine",
+      "parses": "package.json and package-lock.json consistency by hand",
+      "migrate_to": "schema detectors over the parsed JSON with npm's own resolution as facts",
+      "work_order": "wo-0016-every-check-a-contract",
+      "frozen": "2026-10-07"
+    }
+  ]
+}

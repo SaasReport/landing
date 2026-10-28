@@ -1,0 +1,21 @@
+/* ---------- netting: gross positions collapse into net settlement (plugin styles, from the project's tokens) ---------- */
+.kw-netting{container:kwnetting/inline-size;display:grid;gap:12px}
+.kw-netting__fig{display:grid;grid-template-columns:minmax(240px,1.1fr) minmax(200px,1fr);gap:16px;align-items:center}
+.kw-netting__svg{width:100%;height:auto;display:block;max-height:360px}
+.kw-net-mesh{stroke:var(--kw-line);stroke-width:1;opacity:.9;transition:opacity .9s ease,stroke .9s ease}
+.kw-net-spoke{stroke:var(--kw-accent);stroke-width:2.2;stroke-linecap:round;stroke-dasharray:140;stroke-dashoffset:0;transition:stroke-dashoffset .9s ease .35s,opacity .6s}
+.kw-net-dot circle{fill:var(--kw-surface);stroke:var(--kw-accent);stroke-width:2}
+.kw-net-dot text{font-size:11px;font-weight:700;fill:var(--kw-ink);font-family:inherit}
+.kw-net-hub circle{fill:var(--kw-accent)}
+.kw-netting.is-settled line.kw-net-mesh{opacity:calc(.06 + var(--ratio,.5) * .3)}
+.kw-netting.is-gross line.kw-net-mesh{opacity:1;stroke:var(--kw-muted)}
+.kw-netting.is-gross line.kw-net-spoke{stroke-dashoffset:140;opacity:.2;transition:none}
+.kw-netting__totals{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0}
+.kw-netting__totals>div{padding:10px 12px;border-radius:var(--kw-rb);background:var(--kw-surface);border:1px solid var(--kw-line)}
+.kw-netting__totals dt{font-size:12px;color:var(--kw-muted)}
+.kw-netting__totals dd{margin:2px 0 0;font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.kw-netting__totals [data-total=net]{border-color:var(--kw-accent);background:var(--kw-tint)}
+.kw-netting__who{list-style:none;margin:10px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:4px 12px;font-size:13px}
+.kw-netting__n{display:inline-grid;place-items:center;width:20px;height:20px;margin-inline-end:6px;border-radius:50%;border:1.5px solid var(--kw-accent);font-size:11px;font-weight:700}
+@container kwnetting (max-width:560px){.kw-netting__fig{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){.kw-netting *,.kw-netting{transition:none!important;animation:none!important}}

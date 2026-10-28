@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/agent-identities.schema.json",
+  "title": "kit.agent-identities.v1",
+  "description": "agent-identities.json: the mapping table of agent principals (docs/AGENT-GUARD.md). Every agent ROLE (the main session, a subagent type, a ralph loop, Codex, a CI bot, a GitHub App) has a kit principal id kit:agent:<trust-domain>:<kind>:<local>, its OWN Ed25519 key (public half here, private half in the 0700 key store of the machine that runs it: never shared between ids) and, where the owner created one, a GitHub App identity. The table is the base of every signature check; CI reads it from the BASE branch, so a pull request cannot add its own key. Changes need the owner's signed approval.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "rows"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "owners": {
+      "type": "array",
+      "description": "The owner principals whose Ed25519 keys sign approvals (guard-path changes, merge reviews recorded outside GitHub).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "login",
+          "publicKey",
+          "fingerprint"
+        ],
+        "properties": {
+          "login": {
+            "type": "string"
+          },
+          "publicKey": {
+            "type": "string",
+            "description": "Base64 SPKI DER of an Ed25519 public key."
+          },
+          "fingerprint": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{16}$"
+          }
+        }
+      }
+    },
+    "rows": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "kind",
+          "publicKey",
+          "fingerprint",
+          "issuedAt",
+          "expiresAt"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^kit:agent:[a-z0-9][a-z0-9-]*:(main|subagent|loop|codex|ci|app):[a-z0-9][a-z0-9._-]*$",
+            "description": "Agent entity id, class agent; urn shape kit:<class>:<trust-domain>:<subclass>:<local-part>."
+          },
+          "kind": {
+            "enum": [
+              "main",
+              "subagent",
+              "loop",
+              "codex",
+              "ci",
+              "app"
+            ]
+          },
+          "publicKey": {
+            "type": "string"
+          },
+          "fingerprint": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{16}$"
+          },
+          "issuedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "date",
+            "description": "At most 90 days after issuedAt (keys rotate)."
+          },
+          "revokedAt": {
+            "type": "string",
+            "format": "date"
+          },
+          "githubApp": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "slug",
+              "appId"
+            ],
+            "properties": {
+              "slug": {
+                "type": "string"
+              },
+              "appId": {
+                "type": "integer"
+              },
+              "bot": {
+                "type": "string",
+                "description": "The bot login commits and merges carry (<slug>[bot])."
+              }
+            }
+          },
+          "evidence": {
+            "type": "integer",
+            "description": "Sequence number of the issuance evidence record."
+          }
+        }
+      }
+    }
+  }
+}

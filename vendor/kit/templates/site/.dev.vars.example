@@ -1,0 +1,4 @@
+# Local secrets for `wrangler dev` (copy to .dev.vars; never commit .dev.vars).
+ADMIN_TOKEN="change-me"
+IP_SALT="change-me-too"
+# GEMINI_API_KEY=""

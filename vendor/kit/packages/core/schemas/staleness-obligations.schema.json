@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/staleness-obligations.schema.json",
+  "title": "kit.staleness-obligations.v1",
+  "description": "packages/core/registry/staleness-obligations.json: what docs/FRESHNESS.md owes and has not built. Each row names the boundary, the source it will read, the threshold (a pointer into a registry, or null when the rule is exact), the finding class and the verifier that will prove it, and the exact command when there is one. A row leaves the file when it is built; a test proves every row is shown in the document.",
+  "type": "object",
+  "required": [
+    "obligations"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "obligations": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "boundary",
+          "owed",
+          "source",
+          "threshold",
+          "class",
+          "verifier"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "boundary": {
+            "type": "string",
+            "minLength": 3
+          },
+          "owed": {
+            "type": "string",
+            "minLength": 20
+          },
+          "source": {
+            "type": "string",
+            "minLength": 5,
+            "description": "What it reads: a path and its mtime, an API, a file."
+          },
+          "threshold": {
+            "anyOf": [
+              {
+                "type": "null"
+              },
+              {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9._-]+\\.json#/[A-Za-z0-9_/-]+$"
+              }
+            ],
+            "description": "registry file#pointer of the value, or null when the rule is exact."
+          },
+          "class": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "verifier": {
+            "type": "string",
+            "minLength": 5
+          },
+          "command": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

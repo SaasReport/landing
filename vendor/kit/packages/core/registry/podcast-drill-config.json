@@ -1,0 +1,7 @@
+{
+  "about": "The parameters of the publish drill (kit.podcast-drill-config.v1; packages/cli/src/podcast-drill.js): which variables of the parent process the child that imports the project's Worker may see, how far ahead a weekly or monthly series is searched for its next item, which hours of that day the pinned clock tries, and how long the child may run. The child sees no provider key, token or deploy credential; NODE_OPTIONS is not passed (it could inject a preload into the child), and HOME is a fresh temporary directory.",
+  "childEnv": ["PATH", "TZ", "TMPDIR", "TMP", "TEMP", "GITHUB_SHA", "KIT_TEST_NO_NETWORK"],
+  "horizonDays": 400,
+  "hoursUtc": [12, 6, 18, 0, 23],
+  "timeoutMs": 180000
+}

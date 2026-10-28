@@ -1,0 +1,194 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kit:schema:widgets-plugin:v1",
+  "title": "kit.widgets-plugin.v1",
+  "description": "The declarative part of an archetype plugin of the widget engine. A plugin module's default export is this object plus its hooks (needs, derive, render, check; optional resolve and exports.<kind>); the registry validates both and refuses what the contract does not name. Plugins hold no content: every text comes from the project's widgets.spec.json (docs/WIDGETS.md).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "contract",
+    "id",
+    "version",
+    "describes",
+    "capabilities"
+  ],
+  "properties": {
+    "schema": {
+      "const": "kit.widgets-plugin.v1"
+    },
+    "contract": {
+      "description": "The plugin contract's major version this plugin was written for.",
+      "type": "integer",
+      "minimum": 1
+    },
+    "id": {
+      "description": "The archetype id the spec names. The kit's plugins have bare ids; a project's own start with its prefix (its registered prefix from the project registry).",
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(-[a-z0-9]+)*$",
+      "maxLength": 48
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "describes": {
+      "description": "One sentence for the docs and the check's messages: what the archetype shows and what it needs.",
+      "type": "string",
+      "minLength": 12
+    },
+    "reads": {
+      "description": "The shared scenario fields the plugin reads (actors, steps, inputs, outcomes, compare, screens, …): documentation the check keeps honest.",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-zA-Z][a-zA-Z0-9]*$"
+      }
+    },
+    "spec": {
+      "description": "The scenario key the plugin owns and the JSON Schema 2020-12 fragment for it, composed into kit.widgets-spec.v1 by $ref. `shared: true` means the key already belongs to the shared scenario model.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key"
+      ],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[a-z][a-zA-Z0-9]*$"
+        },
+        "schema": {
+          "description": "A JSON Schema 2020-12 object; local $defs are the plugin's own, #/$defs/{id,tone,text,sourced,value} are the shared ones.",
+          "type": "object"
+        },
+        "shared": {
+          "const": true
+        },
+        "requiresWidget": {
+          "description": "A scenario holding this key must also ask for a widget of this archetype.",
+          "type": "boolean"
+        }
+      }
+    },
+    "data": {
+      "description": "A JSON Schema 2020-12 for the derived widget data (validated by kit widgets check).",
+      "type": "object"
+    },
+    "capabilities": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "rtl",
+        "reducedMotion",
+        "needsCanvas"
+      ],
+      "properties": {
+        "rtl": {
+          "description": "Works in right-to-left locales (mirrors, logical properties).",
+          "type": "boolean"
+        },
+        "reducedMotion": {
+          "description": "Shows its final state statically under prefers-reduced-motion.",
+          "type": "boolean"
+        },
+        "needsCanvas": {
+          "description": "Draws on a Canvas2D layer (the static HTML does not depend on it).",
+          "type": "boolean"
+        }
+      }
+    },
+    "runtime": {
+      "description": "The progressive-enhancement module (an ES module, default export mount(el, api)), a path relative to the plugin file, loaded only when a widget of this archetype is on the page; null for none.",
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "chrome": {
+      "description": "The plugin's interface words per locale (a project plugin; the kit's own live in the locale packs). `title` is the widget heading; en is required.",
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[a-z]{2}$"
+      },
+      "required": [
+        "en"
+      ],
+      "additionalProperties": {
+        "type": "object",
+        "required": [
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "words": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "string"
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "chromeKeys": {
+      "description": "The interface words the plugin reads from the locale packs (each must exist in en, fa and ar).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "textKeys": {
+      "description": "Property names under which the plugin's derived data carries text a visitor reads (kit widgets check proves each is traceable to the spec or a source).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "requires": {
+      "description": "Other plugins this one builds on (registered first).",
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "type": "string"
+      }
+    },
+    "exports": {
+      "description": "Export kinds the archetype can feed (build.exports[].as), each a function (widget, entry, ctx).",
+      "type": "object"
+    },
+    "exportUsage": {
+      "description": "Where a widget exported as a kind must also be placed (usage.surfaces[].placement), with the message the check gives.",
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "placement"
+        ],
+        "properties": {
+          "placement": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "archetypeOnly": {
+            "type": "boolean"
+          }
+        }
+      }
+    },
+    "styles": {
+      "description": "A stylesheet template (rendered from the project's tokens like theme/widgets.css), a path relative to the plugin file; null for none.",
+      "type": [
+        "string",
+        "null"
+      ]
+    }
+  }
+}

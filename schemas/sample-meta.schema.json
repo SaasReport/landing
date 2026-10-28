@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://saasreport.ai/schemas/sample-meta.schema.json",
+  "title": "saasreport.landing-sample-meta.v1",
+  "description": "What the sample data files are, and the one fact the snapshots cannot hold: the customers with recurring revenue before the first snapshot.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["label", "description", "currency", "history"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "label": { "const": "SAMPLE" },
+    "description": { "type": "string", "minLength": 20 },
+    "currency": { "type": "string", "pattern": "^[a-z]{3}$" },
+    "history": { "type": "array", "items": { "type": "string", "minLength": 1 } }
+  }
+}

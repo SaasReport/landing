@@ -2,20 +2,38 @@
   "name": "saasreport-landing",
   "private": true,
   "type": "module",
-  "description": "saasreport.ai: a static site generated from the core registries; its widgets run the real engine on labelled sample data.",
   "license": "UNLICENSED",
-  "scripts": {
-    "sync": "node scripts/sync-core.mjs",
-    "build": "node scripts/build.mjs",
-    "check": "node scripts/check.mjs",
-    "qa": "node scripts/qa.mjs",
-    "test": "npm run check && node --test test/*.test.mjs && npm run build"
-  },
-  "devDependencies": {
-    "ajv": "^8.20.0",
-    "playwright": "^1.49.1"
+  "dependencies": {
+    "@saasreport/calendar": "file:vendor/kit/packages/calendar",
+    "@saasreport/channels": "file:vendor/kit/packages/channels",
+    "@saasreport/cli": "file:vendor/kit/packages/cli",
+    "@saasreport/cloudflare": "file:vendor/kit/packages/cloudflare",
+    "@saasreport/comms": "file:vendor/kit/packages/comms",
+    "@saasreport/core": "file:vendor/kit/packages/core",
+    "@saasreport/fa-lint": "file:vendor/kit/packages/fa-lint",
+    "@saasreport/format": "file:vendor/kit/packages/format",
+    "@saasreport/plugins": "file:vendor/kit/packages/plugins",
+    "@saasreport/podcast": "file:vendor/kit/packages/podcast",
+    "@saasreport/site": "file:vendor/kit/packages/site",
+    "@saasreport/speech": "file:vendor/kit/packages/speech",
+    "@saasreport/uploads": "file:vendor/kit/packages/uploads",
+    "@saasreport/widgets": "file:vendor/kit/packages/widgets",
+    "@saasreport/workbench": "file:vendor/kit/packages/workbench"
   },
   "engines": {
     "node": ">=22"
+  },
+  "devDependencies": {
+    "mermaid": "^11.12.0",
+    "playwright": "^1.63.0",
+    "semver": "^7.8.5"
+  },
+  "scripts": {
+    "generate": "node scripts/generate.mjs",
+    "build": "node scripts/generate.mjs && node vendor/kit/packages/cli/bin/kit.js widgets build && node vendor/kit/packages/cli/bin/kit.js site build && cp -r public/. dist/",
+    "check": "node scripts/generate.mjs --check && node vendor/kit/packages/cli/bin/kit.js widgets check && node vendor/kit/packages/cli/bin/kit.js widgets build --check && node vendor/kit/packages/cli/bin/kit.js site check && node vendor/kit/packages/cli/bin/kit.js diagrams check",
+    "test": "node vendor/kit/packages/cli/bin/kit.js check canon && npm run check && npm run build && node vendor/kit/packages/cli/bin/kit.js site shell --out dist",
+    "qa": "node test/interact.test.mjs",
+    "qa:visual": "node vendor/kit/packages/cli/bin/kit.js site visual-qa --out dist"
   }
 }
