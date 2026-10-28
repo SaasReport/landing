@@ -33,7 +33,7 @@ const field = (id, label, min, value, max) => `<label class="field"><span>${esc(
 const html = `<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>${esc(content.title)}</title><meta name="description" content="${esc(content.description)}">
-<link rel="icon" href="data:,"><link rel="stylesheet" href="styles.css"></head><body>
+<link rel="icon" href="data:,"><link rel="stylesheet" href="styles.css"></head><body><!--email_off-->
 <p class="status" role="note">${esc(content.status)}</p>
 <header class="top"><a class="brand" href="#top">SaasReport™</a><nav aria-label="Sections"><a href="#try">Try it</a><a href="#problem">Problem</a><a href="#who">Who</a><a href="#roi">ROI</a><a class="btn" href="${mail}">${esc(content.contact.label)}</a></nav></header>
 <main id="top">
@@ -62,8 +62,8 @@ const html = `<!doctype html>
 <section id="commitments" class="panel"><h2>${esc(content.commitments.title)}</h2><p class="note">${esc(content.commitments.note)}</p><ul class="commit">${commitments}</ul></section>
 </main>
 <footer><p>${esc(content.legal)}</p><p>© ${year} ${esc(holder)} ${esc(content.footer.rights)} <a href="mailto:${esc(content.contact.mailto)}">${esc(content.contact.mailto)}</a></p></footer>
-<script type="application/json" id="data">${JSON.stringify({ reg, sample, labels: { reportType: "Report" } }).replace(/</g, "\\u003c")}</script>
-<script type="module" src="app.js"></script></body></html>`;
+<!--/email_off--><script type="application/json" id="data">${JSON.stringify({ reg, sample, labels: { reportType: "Report" } }).replace(/</g, "\\u003c")}</script>
+<script data-cfasync="false" type="module" src="app.js"></script></body></html>`;
 
 rmSync("dist", { recursive: true, force: true });
 mkdirSync("dist", { recursive: true });
