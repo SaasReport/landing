@@ -25,7 +25,7 @@ export default {
   widgets: { generated },
   out: "dist",
   styles: ["/styles.css"],
-  scripts: ["/landing.js", "/totop.js"],
+  scripts: ["/landing.js", "/totop.js", "/forms.js"],
   sitemap: true,
   assets: { "landing.js": {}, "totop.js": {} },
   pageChrome: { strings: { en: { footer: chrome.footer } }, cta: { en: [chrome.cta] } },

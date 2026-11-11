@@ -639,8 +639,12 @@
     "title": "Tell us who asks about your numbers.",
     "lead": "We read each request and write back. We will not add you to a list.",
     "submit": "Send my request",
-    "fine": "This sends a form. You get a confirmation email.",
-    "done": "Thank you. Check your email for our confirmation.",
+    "fine": "This sends your answers to SaasReport. We write back by email.",
+    "done": "Thank you. We have your request and will write back by email. Your reference is {reference}.",
+    "sending": "Sending your request.",
+    "invalid": "Some answers are missing or not valid. Check the marked fields and send again.",
+    "failed": "Your request was not sent. Nothing was saved. Try again in a moment.",
+    "busy": "Too many requests right now. Nothing was saved. Try again later.",
     "fields": {
       "name": "Your name",
       "email": "Work email",
@@ -669,7 +673,7 @@
     "title": "Privacy",
     "eyebrow": "Privacy",
     "paragraphs": [
-      "Our privacy policy is a draft and is not published yet. The early-access form asks only for what we need to answer you."
+      "Our privacy policy is a draft and is not published yet. The early-access form asks only for what we need to answer you. We keep your answers so we can write back, and we delete them if you ask."
     ]
   }
 }

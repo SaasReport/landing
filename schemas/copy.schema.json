@@ -1373,7 +1373,11 @@
         "done",
         "fields",
         "autoreply",
-        "ownerLabel"
+        "ownerLabel",
+        "sending",
+        "invalid",
+        "failed",
+        "busy"
       ],
       "properties": {
         "eyebrow": {
@@ -1464,6 +1468,18 @@
           }
         },
         "ownerLabel": {
+          "$ref": "#/$defs/line"
+        },
+        "sending": {
+          "$ref": "#/$defs/line"
+        },
+        "invalid": {
+          "$ref": "#/$defs/line"
+        },
+        "failed": {
+          "$ref": "#/$defs/line"
+        },
+        "busy": {
           "$ref": "#/$defs/line"
         }
       }

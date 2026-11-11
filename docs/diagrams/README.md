@@ -12,13 +12,15 @@ Solid arrows: derives from (parent to derived). Dotted: supersedes. Relationship
 
 Source: [`lineage.mmd`](lineage.mmd)
 
-## Index (4)
+## Index (6)
 
 | id | title | kind | derives from | relates to | depicts | source |
 | --- | --- | --- | --- | --- | --- | --- |
 | `saasreport.diagrams.lineage` v1 | Diagram lineage (generated) | other | none | none | doc: [the diagram headers]() | [lineage.mmd](lineage.mmd) |
 | `saasreport.landing.architecture` v1 | How the landing is built | architecture | none | sibling `saasreport.landing.widgets` | file: [the content generator](../../scripts/generate.mjs)<br>file: [the site project](../../site.config.js)<br>doc: [the architecture description](../ARCHITECTURE.md) | [landing-architecture.mmd](landing-architecture.mmd) |
 | `saasreport.landing.architecture.overview` v1 | How the landing is built, in the architecture document | architecture | none | none | file: [the content generator](../../scripts/generate.mjs) | [ARCHITECTURE.md #1](../ARCHITECTURE.md) |
+| `saasreport.landing.forms` v1 | How an early-access request is received | flow | none | sibling `saasreport.landing.architecture` | file: [the form endpoint](../../src/form-intake.js)<br>file: [the Pages Function](../../functions/api/forms/[id].js)<br>file: [the contract](../../contracts/forms.openapi.json)<br>doc: [the forms description](../FORMS.md) | [landing-forms.mmd](landing-forms.mmd) |
+| `saasreport.landing.forms.doc` v1 | How an early-access request is received, in the forms document | flow | `saasreport.landing.forms` | none | file: [the form endpoint](../../src/form-intake.js) | [FORMS.md #1](../FORMS.md) |
 | `saasreport.landing.widgets` v1 | Where each widget's numbers come from | flow | none | sibling `saasreport.landing.architecture` | file: [the widget spec](../../widgets.spec.json)<br>file: [the engine adapter](../../vendor/core/adapters/widgets-engine.mjs) | [landing-widgets.mmd](landing-widgets.mmd) |
 
 ## saasreport.diagrams.lineage
@@ -36,6 +38,14 @@ How the landing is built. From the core registries and the page's own copy, thro
 ![How the landing is built](landing-architecture.png)
 
 Source: [`landing-architecture.mmd`](landing-architecture.mmd)
+
+## saasreport.landing.forms
+
+How an early-access request is received. The early-access modal posts to a Cloudflare Pages Function, which validates the answers against the declared form and stores one row in D1; no email is sent until the comms engine is deployed.
+
+![How an early-access request is received](landing-forms.png)
+
+Source: [`landing-forms.mmd`](landing-forms.mmd)
 
 ## saasreport.landing.widgets
 

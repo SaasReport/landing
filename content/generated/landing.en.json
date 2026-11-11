@@ -577,7 +577,7 @@
       "title": "Tell us who asks about your numbers.",
       "lead": "We read each request and write back. We will not add you to a list.",
       "submit": "Send my request",
-      "fine": "This sends a form. You get a confirmation email.",
+      "fine": "This sends your answers to SaasReport. We write back by email.",
       "fields": [
         {
           "name": "name",
@@ -633,7 +633,7 @@
       "title": "Privacy",
       "doc": [
         {
-          "p": "Our privacy policy is a draft and is not published yet. The early-access form asks only for what we need to answer you."
+          "p": "Our privacy policy is a draft and is not published yet. The early-access form asks only for what we need to answer you. We keep your answers so we can write back, and we delete them if you ask."
         }
       ]
     }

@@ -58,3 +58,9 @@ The picture of record, with every file, is `docs/diagrams/landing-architecture.p
 ![How the landing is built](diagrams/landing-architecture.png)
 
 ![Where each widget's numbers come from](diagrams/landing-widgets.png)
+
+## The form endpoint
+
+The early-access modal is received by a Cloudflare Pages Function, `POST /api/forms/<id>`, that stores each valid
+request in D1 until the comms engine is deployed. Its flow, contract, storage and limits are in `docs/FORMS.md`
+(diagram `saasreport.landing.forms`, `docs/diagrams/landing-forms.png`).

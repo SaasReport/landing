@@ -1,0 +1,25 @@
+%%{init: {"theme":"base","themeVariables":{"fontFamily":"Inter, Arial, sans-serif","fontSize":"15px","textColor":"#0B0B0B","stateLabelColor":"#0B0B0B","transitionLabelColor":"#0B0B0B","background":"#F7F9FC","primaryColor":"#FFFFFF","primaryTextColor":"#0B0B0B","primaryBorderColor":"#0B0B0B","lineColor":"#4D5B70","secondaryColor":"#EDF1F6","tertiaryColor":"#F7F9FC","clusterBkg":"#EDF1F6","clusterBorder":"#B9C6D8","edgeLabelBackground":"#F7F9FC","titleColor":"#0B0B0B","actorBkg":"#0B0B0B","actorBorder":"#0B0B0B","actorTextColor":"#FFFFFF","actorLineColor":"#B9C6D8","signalColor":"#0B0B0B","signalTextColor":"#0B0B0B","labelBoxBkgColor":"#F7F9FC","labelBoxBorderColor":"#B9C6D8","noteBkgColor":"#EEF3F9","noteBorderColor":"#6F9BD8","sequenceNumberColor":"#FFFFFF","stateBkg":"#FFFFFF","stateBorder":"#0B0B0B","transitionColor":"#4D5B70","specialStateColor":"#12396B"}}}%%
+%% kit:diagram {"id":"saasreport.landing.forms","title":"How an early-access request is received","project":"saasreport","kind":"flow","summary":"The early-access modal posts to a Cloudflare Pages Function, which validates the answers against the declared form and stores one row in D1; no email is sent until the comms engine is deployed.","lineage":{"derives_from":[],"supersedes":[],"version":"1"},"relates_to":[{"id":"saasreport.landing.architecture","relation":"sibling"}],"depicts":[{"kind":"file","ref":"the form endpoint","path":"src/form-intake.js"},{"kind":"file","ref":"the Pages Function","path":"functions/api/forms/[id].js"},{"kind":"file","ref":"the contract","path":"contracts/forms.openapi.json"},{"kind":"doc","ref":"the forms description","path":"docs/FORMS.md"}],"reviewed":"2026-11-11"}
+flowchart TB
+  decl("Declared form src/forms.js")
+  gen("Content generator scripts/generate.mjs")
+  visitor("Visitor sends the early-access modal")
+  script("Page script public/forms.js")
+  fn("Pages Function POST /api/forms/id")
+  check{"Declared form, same site, size and answers valid?"}
+  refuse("Refused: 4xx with the field and its code, nothing stored")
+  store[("D1 table landing_form_requests, production only")]
+  done("Confirmation in the modal with the reference")
+  later("Later: comms engine sends the receipt and the owner copy")
+  decl --> gen
+  gen --> script
+  gen --> fn
+  visitor --> script
+  script --> fn
+  fn --> check
+  check -->|no| refuse
+  check -->|yes| store
+  store --> done
+  store -.-> later
+  class fn,store accent
+  classDef accent fill:#12396B,stroke:#12396B,color:#FFFFFF,stroke-width:2px

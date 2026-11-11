@@ -105,12 +105,6 @@
     }
   },
   "notApplicable": {
-    "contracts": {
-      "predicate": "no-http-surface"
-    },
-    "sdk": {
-      "predicate": "no-openapi-contract"
-    },
     "digits": {
       "predicate": "no-persian-site"
     },
@@ -123,5 +117,17 @@
     "release": {
       "predicate": "no-deployed-workers"
     }
-  }
+  },
+  "contracts": [
+    {
+      "name": "forms",
+      "type": "openapi",
+      "contract": "contracts/forms.openapi.json",
+      "sources": [
+        "functions/api/forms/[id].js",
+        "src/form-intake.js"
+      ],
+      "routes": "(?<![\\w.])/api/forms(?:/[A-Za-z0-9._{}-]+)*/?(?![\\w/])"
+    }
+  ]
 }
