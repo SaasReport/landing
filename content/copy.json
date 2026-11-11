@@ -603,8 +603,8 @@
     "title": "The Dashboard shows everything. A report says what matters to you.",
     "columns": [
       "The question",
-      "Stripe Dashboard",
-      "A SaasReport report"
+      "A SaasReport report",
+      "Stripe Dashboard"
     ],
     "rows": [
       {
