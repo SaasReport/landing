@@ -195,7 +195,8 @@ const sections = [
   widgetsSection("findings", ["findings"], { eyebrow: P.findings.eyebrow, title: P.findings.title }),
   {
     type: "compare", id: "compare", head: { eyebrow: C.compare.eyebrow, title: C.compare.title }, columns: C.compare.columns,
-    rows: C.compare.rows.map((r) => ({ option: r.option, pro: r.dashboard, con: r.report, us: true })),
+    // the report is the answer the page is about: it takes the emphasised cell, the Dashboard the plain one (columns follow the same order)
+    rows: C.compare.rows.map((r) => ({ option: r.option, pro: r.report, con: r.dashboard, us: true })),
   },
   widgetsSection("cost", ["cost"], { eyebrow: C.roi.eyebrow, title: C.roi.title }),
   band("cta-cost", C.roi.cta),

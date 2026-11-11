@@ -278,38 +278,38 @@
       },
       "columns": [
         "The question",
-        "Stripe Dashboard",
-        "A SaasReport report"
+        "A SaasReport report",
+        "Stripe Dashboard"
       ],
       "rows": [
         {
           "option": "Who it is for",
-          "pro": "The person who runs Stripe.",
-          "con": "Each reader: CEO, CFO, board, investors, sales, marketing, success, refunds, support, platform operators.",
+          "pro": "Each reader: CEO, CFO, board, investors, sales, marketing, success, refunds, support, platform operators.",
+          "con": "The person who runs Stripe.",
           "us": true
         },
         {
           "option": "What you see first",
-          "pro": "Every payment, customer and subscription.",
-          "con": "That reader's priority figures, in that reader's order.",
+          "pro": "That reader's priority figures, in that reader's order.",
+          "con": "Every payment, customer and subscription.",
           "us": true
         },
         {
           "option": "When it arrives",
-          "pro": "When you open it.",
-          "con": "On a schedule: daily, weekly, monthly, quarterly or yearly, as the report allows.",
+          "pro": "On a schedule: daily, weekly, monthly, quarterly or yearly, as the report allows.",
+          "con": "When you open it.",
           "us": true
         },
         {
           "option": "What it says about a change",
-          "pro": "The figures.",
-          "con": "The figures, and a finding that names its evidence.",
+          "pro": "The figures, and a finding that names its evidence.",
+          "con": "The figures.",
           "us": true
         },
         {
           "option": "Who can read it",
-          "pro": "People with a Stripe login.",
-          "con": "Readers you choose, by a signed link that expires.",
+          "pro": "Readers you choose, by a signed link that expires.",
+          "con": "People with a Stripe login.",
           "us": true
         }
       ]
