@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/upload-lifecycle.schema.json",
+  "title": "kit.upload-lifecycle.v1",
+  "description": "The upload lifecycle as data: the states an upload record can be in, who may cause each transition and through which operation. The engine (@saasreport/uploads lifecycle.js) refuses any transition this table does not list; one test enumerates every pair of states against it. A transition with a storage effect (an object written or removed) is two-phase: the record carries an `op` (the intent) before the objects change, and the commit clears it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "states", "actors", "operations", "transitions"],
+  "properties": {
+    "schema": { "const": "kit.upload-lifecycle.v1" },
+    "states": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["pending", "quarantined", "held", "released", "blocked", "rejected", "deleted"],
+      "description": "Every stage of an upload record and what it means for the objects.",
+      "properties": {
+        "pending": { "$ref": "#/$defs/state" },
+        "quarantined": { "$ref": "#/$defs/state" },
+        "held": { "$ref": "#/$defs/state" },
+        "released": { "$ref": "#/$defs/state" },
+        "blocked": { "$ref": "#/$defs/state" },
+        "rejected": { "$ref": "#/$defs/state" },
+        "deleted": { "$ref": "#/$defs/state" }
+      }
+    },
+    "actors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["system", "human", "retention"],
+      "properties": { "system": { "type": "string" }, "human": { "type": "string" }, "retention": { "type": "string" } }
+    },
+    "operations": {
+      "type": "object",
+      "description": "The operations a transition can be caused by, and what the reconciler does with one that never committed (roll the intent back or forward).",
+      "additionalProperties": false,
+      "required": ["intake", "rollback", "rescan", "release", "delete", "hold", "migrate"],
+      "properties": {
+        "intake": { "$ref": "#/$defs/operation" },
+        "rollback": { "$ref": "#/$defs/operation" },
+        "rescan": { "$ref": "#/$defs/operation" },
+        "release": { "$ref": "#/$defs/operation" },
+        "delete": { "$ref": "#/$defs/operation" },
+        "hold": { "$ref": "#/$defs/operation" },
+        "migrate": { "$ref": "#/$defs/operation" }
+      }
+    },
+    "transitions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["via", "actors", "from", "to"],
+        "properties": {
+          "via": { "enum": ["intake", "rollback", "rescan", "release", "delete", "hold", "migrate"] },
+          "actors": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["system", "human", "retention"] } },
+          "from": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": [null, "pending", "quarantined", "held", "released", "blocked", "rejected", "deleted"] }, "description": "null: the record does not exist yet." },
+          "to": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "enum": ["pending", "quarantined", "held", "released", "blocked", "rejected", "deleted"] } },
+          "note": { "type": "string" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["meaning", "quarantine_object", "released_object", "terminal", "sweepable"],
+      "properties": {
+        "meaning": { "type": "string" },
+        "quarantine_object": { "enum": ["absent", "present", "either"], "description": "What the reconciler expects in the quarantine bucket when no operation is in flight." },
+        "released_object": { "enum": ["absent", "present", "either"] },
+        "terminal": { "type": "boolean" },
+        "sweepable": { "type": "boolean", "description": "May the retention sweep delete a record in this state (when past retain_until, not on hold, no operation in flight)? The one definition: the sinks and the engine read it from here." }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["effect", "if_interrupted"],
+      "properties": {
+        "effect": { "type": "string" },
+        "if_interrupted": { "enum": ["none", "roll_back", "roll_forward"] }
+      }
+    }
+  }
+}

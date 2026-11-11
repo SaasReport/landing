@@ -1,0 +1,45 @@
+# The independent watcher of a site's monitor (docs/RESILIENCE.md). Copy to .github/workflows/watch.yml; resilience.json names it.
+# It runs on GitHub, outside the Cloudflare account: it fails when the monitor stopped, its status is stale, in the future or off its
+# contract, or a route did not deliver its daily canary. GitHub mails a failed scheduled run to the user who last changed the cron
+# line below: the owner commits that line. `kit resilience keepalive` keeps GitHub's inactivity auto-disable from silencing it.
+name: watch
+on:
+  schedule:
+    - cron: "7 */2 * * *"
+    - cron: "17 6 * * *"   # the daily canary through the second route
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  watch:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      # the kit at its head (t=0, docs/FRESHNESS.md): scripts/kit.mjs fetches the published archive of the head with no credential, verifies it and runs it; nothing of the kit is checked out or committed
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.22.2
+      # the vendored CLI imports its dependencies: install them from the lockfile before any kit step
+      - run: npm ci
+      - name: daily canary through the second route
+        run: node scripts/kit.mjs resilience canary --monitor site-journeys
+        if: github.event.schedule == '17 6 * * *'
+        env:
+          MONITOR_TELEGRAM_CHAT_ID: ${{ secrets.MONITOR_TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+      - name: keep the schedule alive
+        run: node scripts/kit.mjs resilience keepalive --monitor site-journeys
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: watch the monitor
+        run: node scripts/kit.mjs resilience watch --monitor site-journeys
+        env:
+          MONITOR_STATUS_URL: ${{ vars.MONITOR_STATUS_URL }}
+          MONITOR_TELEGRAM_CHAT_ID: ${{ secrets.MONITOR_TELEGRAM_CHAT_ID }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}

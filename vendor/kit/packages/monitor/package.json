@@ -1,0 +1,26 @@
+{
+  "name": "@saasreport/monitor",
+  "version": "0.1.0",
+  "description": "Daily synthetic journeys for a kit site in a headless browser (Cloudflare Browser Rendering + Durable Object), results in D1, alerts via channels.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": { "types": "./src/index.d.ts", "default": "./src/index.js" },
+    "./status": { "default": "./src/status.js" },
+    "./migrations/*": "./migrations/*",
+    "./contracts/*": "./contracts/*"
+  },
+  "files": ["src", "migrations", "contracts", "README.md"],
+  "scripts": { "test": "node --test test/*.test.mjs" },
+  "dependencies": {
+    "@cloudflare/puppeteer": "^1.0.0",
+    "@saasreport/calendar": "*",
+    "@saasreport/channels": "*"
+  },
+  "peerDependencies": { "@saasreport/core": "*" },
+  "peerDependenciesMeta": { "@saasreport/core": { "optional": true } },
+  "engines": { "node": ">=20.17.0" },
+  "license": "Apache-2.0",
+  "private": true
+}

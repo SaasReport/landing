@@ -1,0 +1,36 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/staleness-registry.schema.json",
+  "remote": "origin",
+  "main_branch": "main",
+  "registry_dirs": [
+    "registry",
+    "packages/core/registry",
+    "packages/sim"
+  ],
+  "release_file": "release.json",
+  "build_path": "/api/build",
+  "kit_head_file": "kit-head.json",
+  "local": {
+    "worktree_registry": "scratch/worktrees.json",
+    "scratch_env": "KIT_SCRATCH",
+    "scratch_max_age_days": 14,
+    "scratch_walk": {
+      "max_entries": 20000,
+      "max_depth": 8
+    }
+  },
+  "verification_days": [
+    "verified",
+    "checked",
+    "verifiedOn",
+    "testedOn",
+    "readOn",
+    "retrieved"
+  ],
+  "deploy_paths_always": [
+    "package.json",
+    "package-lock.json",
+    "release.json",
+    "vendor"
+  ]
+}

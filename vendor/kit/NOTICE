@@ -1,0 +1,25 @@
+kit — portable publishing engine on Cloudflare
+Copyright 2026 Iran Open Finance
+
+This product was extracted from the Iran Open Finance web application.
+
+This product includes software derived from Cloudflare Forge
+(https://github.com/cloudflare/forge), Copyright Cloudflare, Inc., licensed under
+the Apache License 2.0: packages/forge is a port of Forge's packages/forge, owned
+and maintained here, starting from the origin commit recorded in
+packages/forge/ORIGIN.json (86cb1ef3047abc7441d96c894e8cd35e826fa8e5). Each
+derived file names its upstream file and the changes made; see
+packages/forge/NOTICE.
+
+packages/calendar computes Solar Hijri dates with the leap-year break table of
+K. M. Borkowski, "The Persian calendar for 3000 years" (1996), as ported in
+jalaali-js (https://github.com/jalaali/jalaali-js), Copyright (c) Behrang Noruzi
+Niya, licensed under the MIT License; the full notice is in packages/calendar/NOTICE
+and ships in that package.
+
+packages/fa-lint normalizes Persian text with code derived from Virastar 0.22.1
+(https://github.com/brothersincode/virastar), Copyright (c) 2011 Allen A. Bargi,
+Copyright (c) 2025 Brothers in Code, licensed under the MIT License; the full notice
+is in packages/fa-lint/NOTICE and ships in that package.
+
+This copy derives from a snapshot of an upstream Apache-2.0 toolkit; it is maintained independently and has no runtime or registry dependency on it.

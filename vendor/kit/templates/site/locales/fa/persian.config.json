@@ -1,0 +1,8 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/persian-config.schema.json",
+  "sources": [
+    { "name": "ui", "files": ["kit.config.js"] },
+    { "name": "content", "files": ["content/*.js"] }
+  ],
+  "classes": { "brand": [] }
+}

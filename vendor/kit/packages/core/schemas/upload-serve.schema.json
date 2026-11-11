@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/upload-serve.schema.json",
+  "title": "kit.upload-serve.v1",
+  "description": "The response headers of a released upload (@saasreport/uploads serveHeaders and downloadResponse; a consumer that serves uploads itself sets exactly these). An upload is only ever served with the content type of its sniffed kind (application/octet-stream for a kind that could run in a browser) and X-Content-Type-Options: nosniff, and as an attachment unless the policy declares the kind inline-safe (policy.serve.inline_types, raster images only), in which case it carries the restrictive image CSP. Header names are lower case, as a Headers object lists them.",
+  "type": "object",
+  "required": ["content-type", "x-content-type-options", "content-disposition", "content-security-policy", "cache-control", "cross-origin-resource-policy", "referrer-policy"],
+  "properties": {
+    "content-type": { "enum": ["application/pdf", "image/png", "image/jpeg", "image/gif", "image/webp", "text/plain", "application/json", "application/zip", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/vnd.openxmlformats-officedocument.presentationml.presentation", "application/msword", "application/vnd.ms-excel", "application/vnd.ms-powerpoint", "application/octet-stream"], "description": "The sniffed type when it is on the inert allowlist (serve.js INERT_TYPES), otherwise application/octet-stream: an allowlist, so a new runnable type can never be served by omission. A test keeps this enum equal to INERT_TYPES plus application/octet-stream." },
+    "x-content-type-options": { "const": "nosniff" },
+    "content-disposition": { "type": "string", "pattern": "^(attachment|inline)(;|$)" },
+    "content-security-policy": { "type": "string" },
+    "cache-control": { "const": "private, no-store" },
+    "cross-origin-resource-policy": { "const": "same-site" },
+    "referrer-policy": { "const": "no-referrer" },
+    "content-length": { "type": "string", "pattern": "^[0-9]+$" }
+  },
+  "oneOf": [
+    {
+      "title": "attachment (the default for every kind)",
+      "properties": {
+        "content-disposition": { "pattern": "^attachment;" },
+        "content-security-policy": { "const": "sandbox; default-src 'none'; frame-ancestors 'none'" }
+      }
+    },
+    {
+      "title": "inline (only a raster image the policy declares inline-safe)",
+      "properties": {
+        "content-type": { "enum": ["image/png", "image/jpeg", "image/gif", "image/webp"] },
+        "content-disposition": { "const": "inline" },
+        "content-security-policy": { "const": "default-src 'none'; img-src 'self'; style-src 'none'; sandbox" }
+      }
+    }
+  ]
+}

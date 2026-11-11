@@ -1,0 +1,19 @@
+{
+  "name": "@saasreport/sim",
+  "version": "0.1.0",
+  "description": "Pure, seeded, replayable simulation engines: yield curves (NSS fit, par-to-zero bootstrap, bump-and-reprice duration, convexity, DV01, key-rate durations), a bond/loan/sukuk-cashflow pricer and the Basel IRRBB shock set. Every formula is implemented from the published standard, validated against its worked examples and refuses inputs outside its validated ranges.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./data/*": "./data/*",
+    "./package.json": "./package.json"
+  },
+  "dependencies": { "@saasreport/core": "*" },
+  "files": ["src", "data", "ORIGIN.json", "NOTICE", "README.md"],
+  "scripts": { "test": "node --test test/*.test.mjs" },
+  "engines": { "node": ">=20.17.0" },
+  "license": "Apache-2.0",
+  "sideEffects": false,
+  "private": true
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/build.schema.json",
+  "title": "kit.build.v1",
+  "description": "The answer of GET /api/build on every Worker a kit project deploys (@saasreport/cloudflare/build withBuild): the commit the Worker's version was deployed from (wrangler deploy --var BUILD_COMMIT:<sha>, so it is part of the version), and the builds of the Workers behind its service bindings under role keys (never an internal name: the answer is public). Read with no credential by `kit release verify` after every deploy and every day by the drift workflow. null means the version carries no commit (deployed from a shell): a drift. \"unreachable\" means a Worker behind a binding did not answer: unreadable, never a drift.",
+  "type": "object",
+  "required": ["commit", "services"],
+  "additionalProperties": false,
+  "properties": {
+    "commit": { "$ref": "#/$defs/commit" },
+    "services": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+      "additionalProperties": {
+        "type": "object",
+        "required": ["commit"],
+        "properties": { "commit": { "$ref": "#/$defs/commit" }, "services": { "type": "object" } }
+      }
+    }
+  },
+  "$defs": {
+    "commit": { "anyOf": [{ "type": "string", "pattern": "^[0-9a-f]{40}$" }, { "const": "unreachable" }, { "type": "null" }] }
+  }
+}

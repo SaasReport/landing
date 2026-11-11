@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/site/schema/search-config.schema.json",
+  "title": "kit.search-config.v1",
+  "description": "project.search in site.config.js: what a project tells the global search beyond its pages. Everything is optional: without it the sections are the first path segment of every page, labelled by that section's own page, and there are no facets or synonyms.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "exclude": { "type": "array", "items": { "type": "string", "minLength": 1 }, "description": "Globs (relative to the output directory) of pages the search leaves out." },
+    "registry": { "type": "object", "description": "A page registry (kit.page-registry.v1, buildRegistry): the sections, facets, synonyms, labels and weights then come from it." },
+    "sections": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "label", "paths"], "properties": {
+      "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }, "label": { "type": "string", "minLength": 1 },
+      "paths": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^/" }, "description": "URL globs (/academy/**) of the pages in the section; the language prefix is not part of the path." } } }, "description": "Sections by rule, ahead of the ones derived from the path." },
+    "facets": { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["id", "label", "values"], "properties": {
+      "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }, "label": { "type": "string", "minLength": 1 },
+      "values": { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "required": ["id", "label", "match"], "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" }, "label": { "type": "string", "minLength": 1 },
+        "synonyms": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "match": { "type": "object", "additionalProperties": false, "minProperties": 1, "properties": { "paths": { "type": "array", "items": { "type": "string", "pattern": "^/" } }, "words": { "type": "array", "items": { "type": "string", "minLength": 1 } } }, "description": "A page has the value when its path matches a glob or its title or summary has one of the words." } } } } } }, "description": "Facets (audience, industry, regulation…) a result can be filtered by, as rules." },
+    "tags": { "type": "object", "additionalProperties": false, "required": ["label", "values"], "properties": {
+      "label": { "type": "string", "minLength": 1 },
+      "values": { "type": "array", "minItems": 1, "items": { "type": "object", "additionalProperties": false, "required": ["id", "label"], "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$" }, "label": { "type": "string", "minLength": 1 }, "synonyms": { "type": "array", "items": { "type": "string", "minLength": 1 } } } } } },
+      "description": "The project's tag vocabulary as a search facet (kit.content-tags.v1; build it with searchFacet from @saasreport/core/tags): pages name their tags in <meta name=\"kit:tags\" content=\"id id\">." },
+    "synonyms": { "type": "array", "items": { "type": "array", "minItems": 2, "items": { "type": "string", "minLength": 1 } }, "description": "Groups of words the search treats as one (Persian and Latin spellings of one term, an abbreviation and its name)." }
+  }
+}

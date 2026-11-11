@@ -1,0 +1,96 @@
+{
+  "about": "Kit-shipped migrations applied before the comment rule of 2026-10-14 (no semicolon or apostrophe inside a -- comment: remote D1 splits at ; and chokes on quotes). An applied migration is never edited, so these exact bytes (sha256) are excused; a new or changed file is judged. The list only shrinks: it is never extended.",
+  "base": "origin/main",
+  "files": {
+    "7c33607b82446fb0ad4d7d1f8f0ee162c0aa2ed5c5358904fe4cf1428b7577a4": {
+      "path": "packages/cloudflare/migrations/0001_posts_events.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "92de049a5fa31d039c61ba6e7bcd0210f62f4e7d0332463ba79fdb477f80e911": {
+      "path": "packages/cloudflare/migrations/0002_podcast_episodes.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "31001db671f283710ac66e54fb4ec6c490b85dfff15ae6d63178f00389c033fb": {
+      "path": "packages/cloudflare/migrations/0003_reactions.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "dfeaf696707c1133e8359af6694cf9437e8c630758bb8319294510e862a65663": {
+      "path": "packages/cloudflare/migrations/0005_leads.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "b32cf1556075bbdbd0f74104746736fe352eb8afa1dbe1a1923ed4b2a460987d": {
+      "path": "packages/cloudflare/migrations/0006_locale.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "9d012a831b7e43ab5fd1b55c61c7a03f6db0e20607d633a0241f9151f8a25ac2": {
+      "path": "packages/cloudflare/migrations/0008_podcast_provenance.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "2bf00992caaef57ace020554d3f82132df5ecae6730436e341f6403f49c623b9": {
+      "path": "packages/cloudflare/migrations/0009_podcast_provenance_triggers.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "e06e335d8e0315205d2e9d8a8a3d8ac279e03d8bb212a53aba14e8dd1b40ca8a": {
+      "path": "packages/cloudflare/migrations/0010_podcast_provenance_triggers.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "13dfb657b9a1b5d1899617bedba0eeb7fa6c6b57aa215ba480a95cc2146101da": {
+      "path": "packages/cloudflare/migrations/0011_podcast_provenance_triggers.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "6fcca20cfe21194ba09ee50b90808f3abcc3a1deef92721f80cdd5eb247fcb2e": {
+      "path": "packages/cloudflare/migrations/0012_monitor_runs_superseded.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "bdb10a2dbb4788f8fe7d3c31f7a50931eba0fd00555718f798beff849e8450d4": {
+      "path": "packages/comms/migrations/0001_comms.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "201a6eaf914fc72d447100580c2b92e2beefb9047ee00365a8c3290f661eb227": {
+      "path": "packages/comms/migrations/0002_comms_dispatch_idempotency.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "9386b3e9c7f9fb98f207ae9510c1956cbd7ece2b08cdb60a8936e4f99473a59e": {
+      "path": "packages/comms/migrations/0003_comms_form_deliveries.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "a0715c3d671b50fc96aaec62b806e95bcae1cddcd2a21d66df4b57ccf5f30e67": {
+      "path": "packages/monitor/migrations/0001_monitor_runs.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "9ce6c18770ea38c6b7c000126e6f44ef4742510b98abc2895313097e72c44ce3": {
+      "path": "packages/monitor/migrations/0002_monitor_alert_state.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "4180669e149a7f1d15821cd8f6bd2220c35dd08102bd99b7b87d3a8232372f93": {
+      "path": "packages/monitor/migrations/0003_monitor_deliveries.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "7fcfcc3e303507246f855e25c0d341027ae8078ac5ed1fd5fa0aa5bd10015afa": {
+      "path": "packages/uploads/migrations/0001_upload_records.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    },
+    "dc7674434df213ae854d24038e2c1e5e4e3f808363d579e80bbba9d5bad3f1cc": {
+      "path": "packages/uploads/migrations/0002_upload_records_version.sql",
+      "reason": "Applied before the comment rule of 2026-10-14 and immutable (an applied migration is never edited); its comments hold a semicolon or an apostrophe.",
+      "reviewed": "2026-10-14"
+    }
+  }
+}

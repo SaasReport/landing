@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/spelling-exceptions.schema.json",
+  "title": "kit.spelling-exceptions.v1",
+  "description": "A British English project's one list of phrases spelled the American way by their owners (spelling.exceptions.json): a name or title (MIT License, Rich Authorization Requests), a protocol value (the ACP checkout state canceled), a defined term quoted from a statute or specification, a file name. kit check spelling (the site's content) and kit check podcast (the spoken scripts) both read it, and britishSpelling leaves each phrase as written. Every entry is reviewed and has its reason; an entry that matches nothing is stale and fails (there is no expiry date: a name or title is spelled so for good).",
+  "type": "object",
+  "required": ["$schema", "exceptions"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "exceptions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["phrase", "kind", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "phrase": { "type": "string", "minLength": 3, "description": "The words exactly as their owner spells them (matched case-insensitively, as whole words, with their plural)." },
+          "kind": { "enum": ["name", "title", "protocol", "term", "file"], "description": "name: an organisation or product; title: a document's title; protocol: a value on the wire (a status, a parameter); term: a defined term of a statute or specification; file: a file name." },
+          "reason": { "type": "string", "minLength": 12, "description": "Who spells it this way, and where." },
+          "files": { "type": "array", "minItems": 1, "items": { "type": "string" }, "description": "Optional: the files (globs) where the phrase is kept, e.g. an HTTP reason phrase in one script; without it, everywhere." }
+        }
+      }
+    }
+  }
+}

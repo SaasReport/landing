@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:kit:schema:csp:v1",
+  "title": "Content-Security-Policy configuration",
+  "description": "A project's CSP as data: named policies (one per surface), the directives that get a fresh per-request nonce, and the endpoint browsers report violations to. Built into a header by @saasreport/cloudflare/csp (cspHeader, withCsp). Scripts never get 'unsafe-inline' or 'unsafe-eval': inline scripts carry the request's nonce instead.",
+  "type": "object",
+  "required": ["policies"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "$comment": { "type": "string" },
+    "report": {
+      "description": "Where browsers send violation reports (report-uri and the Reporting API group of the same name).",
+      "type": "object",
+      "required": ["path", "group"],
+      "additionalProperties": false,
+      "properties": {
+        "path": { "type": "string", "pattern": "^/[A-Za-z0-9/_.-]*$" },
+        "group": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }
+      }
+    },
+    "policies": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": { "pattern": "^[a-z][a-z0-9-]*$" },
+      "additionalProperties": { "$ref": "#/$defs/policy" }
+    }
+  },
+  "$defs": {
+    "source": { "type": "string", "pattern": "^[^\\s;,]+$" },
+    "scriptSource": {
+      "type": "string",
+      "pattern": "^[^\\s;,]+$",
+      "not": { "enum": ["'unsafe-inline'", "'unsafe-eval'", "'unsafe-hashes'", "*", "data:", "blob:"] }
+    },
+    "sources": { "type": "array", "uniqueItems": true, "items": { "$ref": "#/$defs/source" } },
+    "scriptSources": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "$ref": "#/$defs/scriptSource" } },
+    "policy": {
+      "type": "object",
+      "required": ["directives"],
+      "additionalProperties": false,
+      "properties": {
+        "$comment": { "type": "string" },
+        "nonce": {
+          "description": "Directives that get 'nonce-<per request>'; every <script> the response carries gets the same nonce attribute.",
+          "type": "array",
+          "uniqueItems": true,
+          "items": { "enum": ["script-src", "script-src-elem", "style-src", "style-src-elem"] }
+        },
+        "directives": {
+          "type": "object",
+          "required": ["default-src", "script-src"],
+          "propertyNames": { "pattern": "^[a-z][a-z-]*$" },
+          "additionalProperties": { "$ref": "#/$defs/sources" },
+          "properties": {
+            "default-src": { "$ref": "#/$defs/scriptSources" },
+            "script-src": { "$ref": "#/$defs/scriptSources" },
+            "script-src-elem": { "$ref": "#/$defs/scriptSources" },
+            "script-src-attr": { "type": "array", "maxItems": 1, "items": { "const": "'none'" } }
+          }
+        }
+      }
+    }
+  }
+}

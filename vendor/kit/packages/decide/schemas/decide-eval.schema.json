@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/decide/schemas/decide-eval.schema.json",
+  "title": "kit.decide-eval.v1",
+  "description": "An evaluation set for a decision gate: states with their true answers, and where each came from.",
+  "type": "object",
+  "required": ["$schema", "gate", "provenance", "cases"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "gate": { "type": "string", "description": "The gate id the labels answer." },
+    "provenance": { "type": "string" },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "source", "state", "labels"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "source": { "enum": ["transcript", "synthetic"], "description": "transcript: a real event (kind and JSON payload only, identifiers pseudonymised); synthetic: written to cover a class the transcript lacks." },
+          "count": { "type": "integer", "minimum": 1, "description": "How many times this exact event arrived in the transcript." },
+          "state": true,
+          "labels": { "type": "object", "minProperties": 1, "additionalProperties": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

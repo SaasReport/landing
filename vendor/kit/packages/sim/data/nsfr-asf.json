@@ -1,0 +1,69 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-factor-table.schema.json",
+  "schema": "kit.sim-factor-table.v1",
+  "id": "nsfr-asf",
+  "version": "2023-01-01",
+  "profile": "baseline",
+  "standard": {
+    "body": "BCBS",
+    "title": "Net Stable Funding Ratio (Basel Framework NSF20, NSF30; BCBS d295, October 2014)",
+    "url": "https://www.bis.org/basel_framework/chapter/NSF/30.htm",
+    "versionPublished": "2019-12-15"
+  },
+  "factors": [
+    {
+      "id": "capital-and-long-term",
+      "label": "regulatory capital (net of Tier 2 under a year), capital instruments and liabilities of one year or more, retail term deposits over a year without early withdrawal",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "NSF30.10",
+      "min": 10000,
+      "max": 10000
+    },
+    {
+      "id": "stable-retail",
+      "label": "stable non-maturity and term deposits under a year, retail and small business",
+      "value": 9500,
+      "unit": "bp",
+      "ref": "NSF30.11",
+      "min": 9500,
+      "max": 9500
+    },
+    {
+      "id": "less-stable-retail",
+      "label": "less stable non-maturity and term deposits under a year, retail and small business",
+      "value": 9000,
+      "unit": "bp",
+      "ref": "NSF30.12",
+      "min": 9000,
+      "max": 9000
+    },
+    {
+      "id": "wholesale-corporate-operational",
+      "label": "funding under a year from non-financial corporates, operational deposits, sovereigns, PSEs, development banks",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "NSF30.13(1) to (3)",
+      "min": 5000,
+      "max": 5000
+    },
+    {
+      "id": "other-six-to-twelve-months",
+      "label": "other funding of six months to under a year, including central banks and financial institutions",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "NSF30.13(4)",
+      "min": 5000,
+      "max": 5000
+    },
+    {
+      "id": "all-other-liabilities",
+      "label": "all other liabilities and equity, including funding under six months from central banks and financial institutions",
+      "value": 0,
+      "unit": "bp",
+      "ref": "NSF30.14",
+      "min": 0,
+      "max": 0
+    }
+  ]
+}

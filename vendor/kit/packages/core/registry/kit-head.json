@@ -1,0 +1,8 @@
+{
+  "$comment": "NOT CONFIGURED: SaasReport has no published kit head yet, so the url is on the reserved .invalid TLD, which can never resolve: nothing is read from anywhere until the owner creates the bucket and public URL named here and replaces it. Where the kit's main head is published (kit.kit-head.v1, schema packages/core/schemas/kit-head.schema.json): the kit's CI writes the object on every push to main (.github/workflows/kit-head.yml, environment kit-head), and every site's `kit check vendor` reads `url` with no credential (vendor-stale, docs/RELEASE.md). Written through the Cloudflare R2 data-plane API (R2's S3-compatible request format) (SigV4, endpoint https://<account>.r2.cloudflarestorage.com/<bucket>/<key>, region auto), not the R2 object REST endpoint: that one answers 403 to a bucket-scoped token and accepts only an account-wide R2 write token (proven 2026-10-13). One source: nothing else names the bucket, the key or the URL. The archive of the head (archive_key, {sha} replaced) is published beside the head object by the same run and named by it: a site's bootstrap (vendor.transport archive) fetches it with no credential and verifies it by sha256.",
+  "bucket": "saasreport-kit-head",
+  "key": "kit-main.json",
+  "url": "https://kit-head.invalid/kit-main.json",
+  "recent": 300,
+  "archive_key": "kit-{sha}.tar.gz"
+}

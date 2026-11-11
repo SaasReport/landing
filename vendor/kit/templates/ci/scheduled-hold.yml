@@ -1,0 +1,77 @@
+# The scheduled hold gate (docs/CI.md): a scheduled run whose cause is unchanged is held, not failed and mailed again every tick.
+# Copy to .github/workflows/scheduled-hold.yml UNCHANGED and make it the first job of every scheduled workflow:
+#
+#   jobs:
+#     hold:
+#       uses: ./.github/workflows/scheduled-hold.yml
+#       permissions: { actions: write, contents: read }
+#     work:
+#       needs: hold
+#       if: needs.hold.outputs.held != 'true'
+#       ...
+#
+# On a scheduled tick it reads this workflow's own runs on the branch with the job token (no new secret) and asks `kit ci hold`
+# (kit.ci-hold-verdict.v1): if the newest decided run at the same head failed, the cause is on record and unchanged, so this run is
+# CANCELLED (never green: an all-skipped run would conclude success and launder the failure; never red: that is the mail the hold
+# exists to stop). A push, a dispatch, a workflow_run or a new commit on the branch is never held: the first failure per head still
+# fails and mails once, and the work runs again as soon as anything moved. A runs document that cannot be read is an error, never
+# a hold and never a pass.
+name: scheduled-hold
+on:
+  workflow_call:
+    outputs:
+      held:
+        description: "'true' when this scheduled run is held (and being cancelled); every other job needs this one and runs only when it is not 'true'"
+        value: ${{ jobs.hold.outputs.held }}
+jobs:
+  hold:
+    name: hold an unchanged scheduled failure
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      actions: write   # reads this workflow's runs; cancels this run when held
+      contents: read
+    outputs:
+      held: ${{ steps.verdict.outputs.held }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      # the kit at its head (t=0, docs/FRESHNESS.md): scripts/kit.mjs fetches the published archive of the head with no credential, verifies it and runs it; nothing of the kit is checked out or committed
+      # the exact node of registry/toolchain.json (a test proves they agree)
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22.22.2
+      # this repository's dependencies from its lockfile; the kit's own come from the kit's lockfile, installed by scripts/kit.mjs at first use
+      - run: npm ci
+      - name: the verdict from this workflow's runs on the branch (kit.ci-hold-verdict.v1)
+        id: verdict
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          WORKFLOW_REF: ${{ github.workflow_ref }}
+          BRANCH: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+          EVENT: ${{ github.event_name }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          # github.workflow_ref is owner/repo/.github/workflows/<file>@<ref>: the file names the workflow to the runs API
+          wf="${WORKFLOW_REF#*/.github/workflows/}"; wf="${wf%@*}"
+          gh api "repos/$REPO/actions/workflows/$wf/runs?branch=$BRANCH&per_page=25" > runs.json
+          node scripts/kit.mjs ci hold --runs runs.json --sha "$SHA" --event "$EVENT" --run-id "$RUN_ID" --out verdict.json | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "held=$(node -p 'require("./verdict.json").held')" >> "$GITHUB_OUTPUT"
+      - name: "held: cancel this run (never green, never a second failure), and refuse loudly if the cancel does not land"
+        if: steps.verdict.outputs.held == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          echo "::notice::held: the failure on record is unchanged at this head; this run is cancelled (see the summary)"
+          gh api -X POST "repos/$REPO/actions/runs/$RUN_ID/cancel"
+          # the cancellation kills this job within seconds; if it has not after two minutes, the run must not end green
+          sleep 120
+          echo "::error::the cancel request was accepted but the run is still running: a held run must never conclude on its own"
+          exit 1

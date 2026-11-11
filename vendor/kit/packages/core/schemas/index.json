@@ -1,0 +1,683 @@
+{
+  "$comment": "The kit's schema registry (docs/CONSTITUTION.md \u00a72): every bundled schema and contract, by name. `schema` in kit.canon.json names one of these (or an $id, or a repo path). packages/core/test/schema.test.mjs checks every entry: file exists, $id ends with the file path, title is kit.<name>.v1 (or the contract's own), the schema compiles. Real artefacts are validated by kit.canon.json (`kit check schemas`), not by copies.",
+  "schemas": [
+    {
+      "name": "canon",
+      "file": "canon.schema.json",
+      "describes": "kit.canon.json at a repository root",
+      "gate": "kit check canon"
+    },
+    {
+      "name": "copy-pack",
+      "file": "copy-pack.schema.json",
+      "describes": "a module's reader-facing copy as validated data (locale packs, notice packs, name tables)",
+      "gate": "kit check schemas, kit check hardcoding"
+    },
+    {
+      "name": "canon-allow",
+      "file": "canon-allow.schema.json",
+      "describes": "canon.allow.json, the reviewed hardcoding allow-list",
+      "gate": "kit check hardcoding"
+    },
+    {
+      "name": "visual-qa",
+      "file": "visual-qa.schema.json",
+      "describes": "the report of kit site visual-qa, the rendered gate of the colour canon",
+      "gate": "kit site visual-qa"
+    },
+    {
+      "name": "search-qa",
+      "file": "search-qa.schema.json",
+      "describes": "search-qa.json of a site: the typed queries added to the ones kit site search-qa derives from the index",
+      "gate": "kit site search-qa"
+    },
+    {
+      "name": "search-qa-report",
+      "file": "search-qa-report.schema.json",
+      "describes": "the report of kit site search-qa, the rendered gate of the global search",
+      "gate": "kit site search-qa"
+    },
+    {
+      "name": "spelling-exceptions",
+      "file": "spelling-exceptions.schema.json",
+      "describes": "spelling.exceptions.json, a British English project's reviewed American-spelled phrases (names, titles, protocol values)",
+      "gate": "kit check spelling, kit check podcast"
+    },
+    {
+      "name": "projects",
+      "file": "projects.schema.json",
+      "describes": "the project registry (names, domains, prefixes)",
+      "gate": "kit check schemas (kit)"
+    },
+    {
+      "name": "theme-sources",
+      "file": "theme-sources.schema.json",
+      "describes": "packages/core/registry/themes/sources.json, the provenance of each organisation's vendored diagram theme",
+      "gate": "kit check schemas (kit), packages/cli/test/diagram-themes.test.mjs"
+    },
+    {
+      "name": "kit-config",
+      "file": "kit-config.schema.json",
+      "describes": "kit.config.js default export",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "directory-v2",
+      "file": "directory-v2.schema.json",
+      "describes": "kit.directory.v2: role-only, machine-readable directory categories without resolved brand colour literals",
+      "gate": "kit check schemas; @saasreport/site renderDirectoryJson"
+    },
+    {
+      "name": "site-config",
+      "file": "site-config.schema.json",
+      "describes": "site.config.js default export",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "comms-config",
+      "file": "comms-config.schema.json",
+      "describes": "comms.config.js default export (every email template's contract)",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "legal-notices",
+      "file": "legal-notices.schema.json",
+      "describes": "a project's legal notices object",
+      "gate": "kit check schemas (via comms-config)"
+    },
+    {
+      "name": "lead-forms",
+      "file": "lead-forms.schema.json",
+      "describes": "a project's lead forms (src/forms.js FORMS)",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "forms-config",
+      "file": "forms-config.schema.json",
+      "describes": "the forms block of a project's comms config: declared forms and their owner (secret name of the recipients)",
+      "gate": "@saasreport/comms checkConfig (npm run comms:check) and packages/comms/test/forms.test.mjs"
+    },
+    {
+      "name": "form-notification",
+      "file": "form-notification.schema.json",
+      "describes": "one form submission and its two deliveries (receipt and owner): POST /v1/comms/submit, the comms_form_deliveries record, GET /api/forms/deliveries",
+      "gate": "packages/comms/test/forms.test.mjs"
+    },
+    {
+      "name": "podcast-config",
+      "file": "podcast-config.schema.json",
+      "describes": "a project's podcast.config.json (voices, pacing, schedule, provenance policy, covers)",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "podcast-episode",
+      "file": "podcast-episode.schema.json",
+      "describes": "an episode spec (episodeFromItem output) queued by the cron",
+      "gate": "createEpisode (every queued episode)"
+    },
+    {
+      "name": "content-tags",
+      "file": "content-tags.schema.json",
+      "describes": "a project's content-tag vocabulary (tags.config.json): id, label per locale, group, colour role, description; series, episodes and posts name tags from it only",
+      "gate": "kit check tags, createKit options.tags"
+    },
+    {
+      "name": "podcast-provenance",
+      "file": "podcast-provenance.schema.json",
+      "describes": "podcast_episodes.provenance_json, the pipeline provenance record",
+      "gate": "createEpisode, the monitor and the database trigger"
+    },
+    {
+      "name": "podcast-drill",
+      "file": "podcast-drill.schema.json",
+      "describes": "the proof of a publish drill (kit podcast drill), recorded as a drill of kind publish",
+      "gate": "kit podcast drill, kit check resilience"
+    },
+    {
+      "name": "plugin-manifest",
+      "file": "plugin-manifest.schema.json",
+      "describes": "plugins/<prefix>/.claude-plugin/plugin.json",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "plugin-marketplace",
+      "file": "plugin-marketplace.schema.json",
+      "describes": ".claude-plugin/marketplace.json of a project",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "holiday-pack",
+      "file": "holiday-pack.schema.json",
+      "describes": "one market's holiday pack (calendar/markets)",
+      "gate": "kit check schemas (kit)"
+    },
+    {
+      "name": "diagram-theme",
+      "file": "diagram-theme.schema.json",
+      "describes": "the %%{init}%% JSON of every Mermaid diagram (theme.init line 1)",
+      "gate": "packages/core/test/schema.test.mjs"
+    },
+    {
+      "name": "openapi",
+      "file": "openapi.schema.json",
+      "describes": "an OpenAPI 3.1 contract (structural minimum)",
+      "gate": "kit check contracts"
+    },
+    {
+      "name": "mcp-tool",
+      "file": "mcp-tool.schema.json",
+      "describes": "one MCP tool definition (tools/list)",
+      "gate": "packages/cloudflare/test/calendar.test.mjs"
+    },
+    {
+      "name": "api-meta",
+      "file": "../../cloudflare/contracts/api-meta.schema.json",
+      "describes": "GET /api/meta body (kit.api-meta.v1)",
+      "gate": "packages/cloudflare/test/twins-meta.test.mjs"
+    },
+    {
+      "name": "webhook-event",
+      "file": "../../channels/contracts/webhook-event.schema.json",
+      "describes": "the signed webhook envelope (kit.webhook-event.v1)",
+      "gate": "packages/channels/test/webhooks.test.mjs"
+    },
+    {
+      "name": "compile-report",
+      "file": "../../plugins/schema/compile-report.schema.json",
+      "describes": "an agent-plugin compile report (kit.compile-report.v1)",
+      "gate": "@saasreport/plugins validateReport"
+    },
+    {
+      "name": "plugin-learning",
+      "file": "../../plugins/schema/learnings.schema.json",
+      "describes": "one line of <prefix>-out/learnings.jsonl (kit.plugin-learning.v1)",
+      "gate": "@saasreport/plugins validateLearnings"
+    },
+    {
+      "name": "terminal-notify",
+      "file": "../../site/schema/terminal-notify.schema.json",
+      "describes": "assets[\"terminal.js\"].data.notify of a site project (the notify view's scenarios)",
+      "gate": "@saasreport/site checkAssets"
+    },
+    {
+      "name": "taxonomy",
+      "file": "../../site/schema/taxonomy.schema.json",
+      "describes": "a site's information architecture as rules: sections, groups, facets (the input of the page registry)",
+      "gate": "@saasreport/site buildRegistry"
+    },
+    {
+      "name": "page-registry",
+      "file": "../../site/schema/page-registry.schema.json",
+      "describes": "the generated registry of every page of a site (kit buildRegistry); menu, hubs, crumbs, related, sitemap, llms.txt and search derive from it",
+      "gate": "@saasreport/site checkRegistry"
+    },
+    {
+      "name": "search-index",
+      "file": "../../site/schema/search-index.schema.json",
+      "describes": "/search-index.json, written by kit site build for every kit site: pages, body terms, sections, facets, synonyms, per-page weights (version 2)",
+      "gate": "kit site shell, @saasreport/site checkSearchIndex"
+    },
+    {
+      "name": "search-config",
+      "file": "../../site/schema/search-config.schema.json",
+      "describes": "project.search in site.config.js: excluded pages, sections, facets and synonyms for the global search",
+      "gate": "@saasreport/site checkProject"
+    },
+    {
+      "name": "widgets-spec",
+      "file": "../../widgets/schemas/widgets-spec.schema.json",
+      "describes": "widgets.spec.json of a project: audiences, use cases, scenarios, sources; usage, application, architecture and utility per widget (docs/WIDGETS.md)",
+      "gate": "kit widgets check"
+    },
+    {
+      "name": "widgets-generated",
+      "file": "../../widgets/schemas/widgets-generated.schema.json",
+      "describes": "widgets.generated.json, written by kit widgets build (never by hand)",
+      "gate": "kit widgets check"
+    },
+    {
+      "name": "vocabularies",
+      "file": "../../widgets/schemas/vocabularies.schema.json",
+      "describes": "packages/widgets/registry/vocabularies.json: marks only one project may use, beyond the project registry's names",
+      "gate": "kit check schemas (kit), kit widgets check"
+    },
+    {
+      "name": "vendor-manifest",
+      "file": "vendor-manifest.schema.json",
+      "describes": "<path>.manifest.json of a vendored kit snapshot (commit, sha256 per file)",
+      "gate": "kit check vendor"
+    },
+    {
+      "name": "sdk-config",
+      "file": "sdk-config.schema.json",
+      "describes": "kit.sdk.json: the SDKs @saasreport/forge generates from every OpenAPI contract (docs/SDK.md)",
+      "gate": "kit check sdk"
+    },
+    {
+      "name": "sdk-manifest",
+      "file": "sdk-manifest.schema.json",
+      "describes": "forge.manifest.json of a generated SDK (contract sha256, @saasreport/forge version and origin, sha256 per file)",
+      "gate": "kit check sdk"
+    },
+    {
+      "name": "claude-policy",
+      "file": "claude-policy.schema.json",
+      "describes": "claude.policy.json: the Claude Code token-cost standard (kit defaults in registry/claude.policy.json; a project's overrides, within the schema's bounds)",
+      "gate": "kit check claude (kit check canon), kit claude sync"
+    },
+    {
+      "name": "forge-origin",
+      "file": "forge-origin.schema.json",
+      "describes": "ORIGIN.json of @saasreport/forge: the upstream origin commit and every upstream file, ported or not, with its sha256",
+      "gate": "kit check schemas (kit)"
+    },
+    {
+      "name": "decide-config",
+      "file": "../../decide/schemas/decide-config.schema.json",
+      "describes": "decide.config.json: typed-decision backends (System One endpoints) and the escalation threshold",
+      "gate": "kit check schemas (kit), packages/decide/test"
+    },
+    {
+      "name": "decide-gate",
+      "file": "../../decide/schemas/decide-gate.schema.json",
+      "describes": "packages/decide/gates/*.json: a gate's typed questions and when the big model reads",
+      "gate": "kit check schemas (kit), kit decide"
+    },
+    {
+      "name": "decide-eval",
+      "file": "../../decide/schemas/decide-eval.schema.json",
+      "describes": "packages/decide/eval/*.json: labelled states for a gate, with provenance",
+      "gate": "kit check schemas (kit), kit decide eval"
+    },
+    {
+      "name": "decision",
+      "file": "../../decide/contracts/decision.schema.json",
+      "describes": "kit.decision.v1: decide() request and result (contract of @saasreport/decide)",
+      "gate": "packages/decide/test"
+    },
+    {
+      "name": "fa-rules",
+      "file": "fa-rules.schema.json",
+      "describes": "a Persian rule pack (@saasreport/fa-lint rules/*.json, a project's own): lexicon classes, rules, fail/pass examples",
+      "gate": "kit check persian"
+    },
+    {
+      "name": "persian-config",
+      "file": "persian-config.schema.json",
+      "describes": "persian.config.json: a project's Persian sources, classes, podcast scripts, allow-list and review gate",
+      "gate": "kit check persian"
+    },
+    {
+      "name": "approval-ledger",
+      "file": "approval-ledger.schema.json",
+      "describes": "the one approval ledger: append-only, hash-chained, Ed25519-signed sign-offs (Shariah concepts, Persian native review)",
+      "gate": "kit check shariah-review, kit check fa-review, kit check canon"
+    },
+    {
+      "name": "trust-record",
+      "file": "trust-record.schema.json",
+      "describes": "the owner-signed trust record of a project: ledger paths, kinds, anchors, bootstrap rosters, the one allowed migration, the witness start",
+      "gate": "kit check canon"
+    },
+    {
+      "name": "trust-pin",
+      "file": "trust-pin.schema.json",
+      "describes": "KIT_TRUST_PIN: the out-of-repository minimum record seq, verifier and witness per project",
+      "gate": "kit check canon"
+    },
+    {
+      "name": "concept-catalogue",
+      "file": "concept-catalogue.schema.json",
+      "describes": "a concept catalogue: the one source of a daily concept series (definitions, sources with exact quotes, accuracy, episode beats)",
+      "gate": "kit check concepts"
+    },
+    {
+      "name": "concept-schedule",
+      "file": "concept-schedule.schema.json",
+      "describes": "the append-only order of a concept series (which concept on which day)",
+      "gate": "kit check concepts"
+    },
+    {
+      "name": "concepts-config",
+      "file": "concepts-config.schema.json",
+      "describes": "concepts.config.json: series, episode format and size, spoken glue, gates, order and runway of a concept series",
+      "gate": "kit check concepts"
+    },
+    {
+      "name": "diagram",
+      "file": "diagram.schema.json",
+      "describes": "the `%% kit:diagram {...}` header of every diagram source (id, lineage, relationships, depicts)",
+      "gate": "kit diagrams check, kit check diagrams"
+    },
+    {
+      "name": "diagram-externals",
+      "file": "diagram-externals.schema.json",
+      "describes": "docs/diagrams/externals.json: diagram ids of other repositories that diagram headers may refer to",
+      "gate": "kit diagrams check, kit check diagrams"
+    },
+    {
+      "name": "upload-record",
+      "file": "upload-record.schema.json",
+      "describes": "the Evidence record of one upload (@saasreport/uploads)",
+      "gate": "kit test (packages/uploads)"
+    },
+    {
+      "name": "upload-policy",
+      "file": "upload-policy.schema.json",
+      "describes": "what one form accepts as a file: types, caps, retention, the needs_sandbox decision",
+      "gate": "kit check schemas, kit check canon"
+    },
+    {
+      "name": "uploads-config",
+      "file": "uploads-config.schema.json",
+      "describes": "uploads.config.json: project, quarantine and released buckets, one UploadPolicy per form",
+      "gate": "kit check schemas, kit check canon"
+    },
+    {
+      "name": "upload-error",
+      "file": "upload-error.schema.json",
+      "describes": "the refusal body of a form or webhook intake (@saasreport/uploads)",
+      "gate": "kit test (packages/uploads, packages/cloudflare)"
+    },
+    {
+      "name": "curve-input",
+      "file": "curve-input.schema.json",
+      "describes": "a rate curve for the simulation engines: zero, par (bootstrapped) or NSS",
+      "gate": "kit check schemas (@saasreport/sim tests)"
+    },
+    {
+      "name": "cashflow-ladder",
+      "file": "cashflow-ladder.schema.json",
+      "describes": "a banking-book repricing ladder (assets and liabilities in minor units) for the IRRBB engine",
+      "gate": "@saasreport/sim tests"
+    },
+    {
+      "name": "sim-scenario",
+      "file": "sim-scenario.schema.json",
+      "describes": "one scenario for a @saasreport/sim engine (engine, seed, as-of, source kind, inputs)",
+      "gate": "kit sim run, @saasreport/sim tests"
+    },
+    {
+      "name": "sim-run",
+      "file": "sim-run.schema.json",
+      "describes": "the record of one engine run: inputs hash, seed, engine version, outputs, assumptions, validation status",
+      "gate": "kit sim run, @saasreport/sim tests"
+    },
+    {
+      "name": "sim-result",
+      "file": "sim-result.schema.json",
+      "describes": "a simulation result with a SourceEnvelope-aligned provenance block for workbench badges",
+      "gate": "@saasreport/sim tests"
+    },
+    {
+      "name": "sim-origin",
+      "file": "sim-origin.schema.json",
+      "describes": "packages/sim/ORIGIN.json: inspiring repositories, licences, what was not taken, the standards implemented",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "sim-irrbb-params",
+      "file": "sim-irrbb-params.schema.json",
+      "describes": "the IRRBB standard as data: shock sizes, buckets, rotation coefficients, outlier threshold",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "sim-factor-table",
+      "file": "sim-factor-table.schema.json",
+      "describes": "a reference table of a published standard as data for @saasreport/sim: every row with its paragraph and the standard's bounds",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "sim-profile",
+      "file": "sim-profile.schema.json",
+      "describes": "a jurisdiction profile for @saasreport/sim: national options as bounded overrides of table rows",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "sim-outputs",
+      "file": "sim-outputs.schema.json",
+      "describes": "the outputs of every @saasreport/sim engine, one definition each, enforced at emit by kit.sim-run.v1",
+      "gate": "kit sim run, @saasreport/sim tests"
+    },
+    {
+      "name": "constitution-rules",
+      "file": "constitution-rules.schema.json",
+      "describes": "constitution.rules.json: the ONE registry of a project's constitutional rules, read by every enforcement layer (kit defaults in registry/constitution.rules.json; a project only adds)",
+      "gate": "kit check enforcement (kit check canon), kit agent-guard sync"
+    },
+    {
+      "name": "resilience",
+      "file": "resilience.schema.json",
+      "describes": "resilience.json: monitors (notify, own database, stale window, dead-man), alert routes, backups, drills with proof",
+      "gate": "kit check resilience (kit check canon)"
+    },
+    {
+      "name": "agent-identities",
+      "file": "agent-identities.schema.json",
+      "describes": "agent-identities.json: kit principal ids, per-agent public keys and GitHub App identities of the agents of a project",
+      "gate": "kit check enforcement (kit check canon), kit agent-guard identity"
+    },
+    {
+      "name": "broker-config",
+      "file": "broker-config.schema.json",
+      "describes": "one project's agent credential broker: the GitHub App, repositories, agents (kit id, Ed25519 key, actions) and the merge rule (@saasreport/broker)",
+      "gate": "kit test (packages/broker), the broker Worker on start"
+    },
+    {
+      "name": "broker-request",
+      "file": "broker-request.schema.json",
+      "describes": "a signed agent request to the broker (token or merge, with the independent review)",
+      "gate": "kit test (packages/broker)"
+    },
+    {
+      "name": "broker-evidence",
+      "file": "broker-evidence.schema.json",
+      "describes": "one hash-chained evidence record of the broker: every authenticated allow and deny, never a token",
+      "gate": "kit test (packages/broker), the D1 triggers"
+    },
+    {
+      "name": "work-order",
+      "file": "work-order.schema.json",
+      "describes": "what a piece of work is before any code exists: goal, contracts, invariants, paths, gates, must-fail tests and approvals (docs/CONSTITUTION.md \u00a710)",
+      "gate": "kit check canon (schemas: work-orders/*.json)"
+    },
+    {
+      "name": "finding-class",
+      "file": "finding-class.schema.json",
+      "describes": "the registry of finding classes, each refused at t=0 by a gate proven on its real case (docs/CONSTITUTION.md \u00a710)",
+      "gate": "kit check canon (findings)"
+    },
+    {
+      "name": "finding-case",
+      "file": "finding-case.schema.json",
+      "describes": "findings/<class>/must-fail/<case>/source.json: where a must-fail case comes from, blob by blob",
+      "gate": "kit check findings"
+    },
+    {
+      "name": "handwritten-ledger",
+      "file": "handwritten-ledger.schema.json",
+      "describes": "the canon checks' modules: the engine, or a hand-written check frozen on 2026-10-07 with the work order that migrates it (wo-0016)",
+      "gate": "kit check canon (schemas) and packages/cli/test/handwritten-ledger.test.mjs"
+    },
+    {
+      "name": "ci-rerun-verdict",
+      "file": "ci-rerun-verdict.schema.json",
+      "describes": "kit ci unstarted: whether a failed CI run is re-run once because none of its failed jobs ever started (a CI provider outage), and why",
+      "gate": "kit ci unstarted (validates its own output) and packages/cli/test/ci.test.mjs"
+    },
+    {
+      "name": "ci-hold-verdict",
+      "file": "ci-hold-verdict.schema.json",
+      "describes": "kit ci hold: whether a scheduled run is held because the newest decided run of the same workflow at the same head failed (an unchanged cause is not failed and mailed again every tick), and why",
+      "gate": "kit ci hold (validates its own output), templates/ci/scheduled-hold.yml and packages/cli/test/ci.test.mjs"
+    },
+    {
+      "name": "kit-source",
+      "file": "kit-source.schema.json",
+      "describes": "the kit at t=0: what scripts/kit.mjs verified before a use of the kit (the checkout at vendor.path is the kit's published head, clean, installed, linked); kit source and kit check canon (vendor, source mode) read it",
+      "gate": "templates/site/scripts/kit.mjs (writes it), kit check canon vendor in source mode (validates it), packages/cli/test/source.test.mjs"
+    },
+    {
+      "name": "directory",
+      "file": "directory.schema.json",
+      "describes": "directory/directory.json, the public machine-readable actor directory of a site (data, never CSS)",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "upload-evidence",
+      "file": "upload-evidence.schema.json",
+      "describes": "one system action on an upload, appended to the evidence log (@saasreport/uploads)",
+      "gate": "kit test (packages/uploads)"
+    },
+    {
+      "name": "upload-lifecycle",
+      "file": "upload-lifecycle.schema.json",
+      "describes": "the upload lifecycle table (packages/uploads/lifecycle.json): states, actors, operations and the only transitions the engine allows",
+      "gate": "kit check schemas, kit check canon, kit test (packages/uploads)"
+    },
+    {
+      "name": "regex-linear",
+      "file": "regex-linear.schema.json",
+      "describes": "the reviewed list of regexes allowed outside packages/uploads/src (packages/uploads/test/regex-linear.json)",
+      "gate": "kit check schemas, kit check canon, kit test (packages/uploads)"
+    },
+    {
+      "name": "upload-serve",
+      "file": "upload-serve.schema.json",
+      "describes": "the response headers of a released upload: sniffed content type, nosniff, attachment unless the policy declares the kind inline-safe, the image CSP when inline (@saasreport/uploads)",
+      "gate": "kit test (packages/uploads)"
+    },
+    {
+      "name": "toolchain",
+      "file": "toolchain.schema.json",
+      "describes": "packages/core/registry/toolchain.json, the one pin of node, npm and git",
+      "gate": "kit check schemas, kit check staleness"
+    },
+    {
+      "name": "staleness-registry",
+      "file": "staleness-registry.schema.json",
+      "describes": "packages/core/registry/staleness.json, the names kit check staleness reads",
+      "gate": "kit check schemas, kit check staleness"
+    },
+    {
+      "name": "dated-registry",
+      "file": "dated-registry.schema.json",
+      "describes": "a registry of facts read from outside: max_age_days and a verified day per fact",
+      "gate": "kit check staleness"
+    },
+    {
+      "name": "staleness-report",
+      "file": "staleness-report.schema.json",
+      "describes": "the report of kit check staleness --json",
+      "gate": "kit check staleness"
+    },
+    {
+      "name": "worktrees",
+      "file": "worktrees.schema.json",
+      "describes": "scratch/worktrees.json, the machine's worktree registry (path, repo, branch, owner, last_sync)",
+      "gate": "kit check staleness --local"
+    },
+    {
+      "name": "staleness-obligations",
+      "file": "staleness-obligations.schema.json",
+      "describes": "packages/core/registry/staleness-obligations.json, what docs/FRESHNESS.md owes",
+      "gate": "kit check schemas, kit check staleness (test)"
+    },
+    {
+      "name": "release",
+      "file": "release.schema.json",
+      "describes": "release.json at a repository root: the one production workflow's project facts (build, databases, Workers in order, owner address, drills, bootstrap state)",
+      "gate": "kit check release"
+    },
+    {
+      "name": "governance",
+      "file": "governance.schema.json",
+      "describes": "governance.json, the declared review requirements of the generated default-branch ruleset (approvals, code-owner review, last-push approval, independent-review marker)",
+      "gate": "kit agent-guard sync"
+    },
+    {
+      "name": "release-workers",
+      "file": "release-workers.schema.json",
+      "describes": "the answer of kit release workers --json: the project and the Workers release.json deploys, by name (the central deployer's one source of Worker names)",
+      "gate": "kit release workers"
+    },
+    {
+      "name": "release-bootstrap",
+      "file": "release-bootstrap.schema.json",
+      "describes": "release/bootstrap.json, the receipt of a bootstrap production run",
+      "gate": "kit check release, kit release bootstrap"
+    },
+    {
+      "name": "build",
+      "file": "build.schema.json",
+      "describes": "the answer of GET /api/build on every deployed Worker (the commit it serves)",
+      "gate": "kit release verify"
+    },
+    {
+      "name": "health",
+      "file": "health.schema.json",
+      "describes": "the answer of GET /api/health on a kit site Worker, derived from its monitor",
+      "gate": "kit check release"
+    },
+    {
+      "name": "kit-head",
+      "file": "kit-head.schema.json",
+      "describes": "kit-main.json, the published head of the kit's main (vendor-stale)",
+      "gate": "kit check vendor"
+    },
+    {
+      "name": "kit-head-registry",
+      "file": "kit-head-registry.schema.json",
+      "describes": "packages/core/registry/kit-head.json, where the kit's main head is published",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "legacy-migration-comments",
+      "file": "legacy-migration-comments.schema.json",
+      "describes": "the kit-shipped migrations excused from the comment rule, by sha256",
+      "gate": "kit check migrations, kit check schemas"
+    },
+    {
+      "name": "d1-unsupported",
+      "file": "d1-unsupported.schema.json",
+      "describes": "what remote D1 refuses that stock SQLite runs (statements, functions, virtual tables, pragmas), each with its Cloudflare source",
+      "gate": "kit check migrations, kit check schemas"
+    },
+    {
+      "name": "podcast-drill-config",
+      "file": "podcast-drill-config.schema.json",
+      "describes": "the parameters of the publish drill: child environment allow-list, search horizon, hours, time limit",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "migration-order-source",
+      "file": "migration-order-source.schema.json",
+      "describes": "the wrangler version and comparator the kit's migration order mirrors",
+      "gate": "kit check schemas"
+    },
+    {
+      "name": "capability-manifest",
+      "file": "capability-manifest.schema.json",
+      "describes": "contracts/capabilities.json, the canonical X-as-Code and X-as-a-Service registry with API/Forge SDK/widget parity and Failure-First promotion evidence",
+      "gate": "kit check contracts and kit check schemas"
+    },
+    {
+      "name": "universal-envelope",
+      "file": "universal-envelope.schema.json",
+      "describes": "kit.universal-envelope.v1 immutable T=0 transport for all typed content, event, media, API, workflow, SDK/widget and release lifecycles; domain payload contracts remain authoritative",
+      "gate": "packages/core/test/universal-envelope.test.mjs; kit check schemas"
+    },
+    {
+      "name": "universal-boundaries",
+      "file": "universal-boundaries.schema.json",
+      "describes": "kit.universal-boundaries.v1 declares all 47 T=0 universal system boundaries and exact failure-first gate requirements across surface, widget, app, API, SDK, environment, tenant, product, agent, engine, daemon, rail, Workflows, storage, content and release",
+      "gate": "packages/core/test/universal-envelope.test.mjs; kit check schemas"
+    },
+    {
+      "name": "media-bundle",
+      "file": "media-bundle.schema.json",
+      "describes": "One canonical typed content payload for podcast, infographic, blog and clip projections under the universal T=0 envelope, without a second lifecycle/authority contract",
+      "gate": "packages/core/test/media.test.mjs; packages/core/test/universal-media.test.mjs"
+    }
+  ]
+}

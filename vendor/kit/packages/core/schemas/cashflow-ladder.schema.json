@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/cashflow-ladder.schema.json",
+  "title": "kit.cashflow-ladder.v1",
+  "description": "A banking-book repricing ladder for the IRRBB engine: notional repricing cash flows by item, assets and liabilities, in integer minor units of one currency. The engine slots them into the 19 buckets of SRP31.96.",
+  "type": "object",
+  "required": ["schema", "minorExponent", "items"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "kit.cashflow-ladder.v1" },
+    "minorExponent": { "type": "integer", "minimum": 0, "maximum": 6, "description": "Decimals of one major unit of the currency (2 for cents)." },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 2000,
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "amount", "repricingYears"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "kind": { "enum": ["asset", "liability"] },
+          "amount": { "oneOf": [{ "type": "integer", "minimum": 0, "maximum": 9007199254740991 }, { "type": "string", "pattern": "^[0-9]+$" }], "description": "Minor units, never negative: the kind carries the sign." },
+          "repricingYears": { "type": "number", "minimum": 0, "maximum": 100 }
+        }
+      }
+    }
+  }
+}

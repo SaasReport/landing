@@ -1,0 +1,22 @@
+{{banner}}
+.ntf{position:fixed;z-index:90;bottom:22px;inset-inline-end:22px;display:flex;flex-direction:column-reverse;gap:10px;width:min(380px,calc(100vw - 32px));pointer-events:none}
+.ntf__item{pointer-events:auto;position:relative;display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:start;padding:14px 14px 16px;background:{{color.ink}};color:{{color.onInk}};border-radius:14px;border:1px solid color-mix(in srgb,{{color.onInk}} 8%,transparent);box-shadow:0 18px 40px -18px color-mix(in srgb,{{color.ink}} 55%,transparent);font-family:"{{font.sans}}",Tahoma,sans-serif;direction:{{locale.dir}};text-align:start;overflow:hidden;opacity:0;transform:translateY(10px);transition:opacity {{motion.ui}} {{motion.easing}},transform {{motion.ui}} {{motion.easing}};touch-action:pan-y}
+.ntf__item.is-in{opacity:1;transform:none}
+.ntf__item.is-out{opacity:0;transform:translateY(6px) scale(.98)}
+.ntf__node{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;flex:none;background:var(--c,{{color.accent}})}
+.ntf__node svg{width:18px;height:18px;fill:none;stroke:{{color.onInk}};stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+.ntf--brand .ntf__node svg{fill:{{color.onInk}}}
+.ntf--success{--c:{{color.ok}}}.ntf--info{--c:{{color.muted}}}.ntf--warning{--c:{{color.warn}}}.ntf--error{--c:{{color.err}}}.ntf--brand{--c:{{color.accent}}}
+.ntf__body{min-width:0}
+.ntf__body b{display:block;font-size:14.5px;font-weight:800;line-height:1.5}
+.ntf__body p{margin:2px 0 0;font-size:13.5px;line-height:1.7;color:{{color.onInkMuted}};overflow-wrap:anywhere}
+.ntf__acts{display:flex;gap:6px;margin-top:10px}
+.ntf__btn{font:inherit;font-size:13px;font-weight:700;padding:5px 12px;border-radius:9px;background:{{color.accent}};color:{{color.onAccent}};border:0;cursor:pointer}
+.ntf__btn--ghost{background:transparent;color:{{color.onInk}};border:1px solid color-mix(in srgb,{{color.onInk}} 30%,transparent)}
+.ntf__x{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;background:transparent;border:0;color:{{color.onInkDim}};cursor:pointer}
+.ntf__x:hover{color:{{color.onInk}};background:color-mix(in srgb,{{color.onInk}} 8%,transparent)}
+.ntf__x svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round}
+.ntf__rail{position:absolute;inset-inline:0;bottom:0;height:3px;background:{{color.inkTrack}}}
+.ntf__rail i{position:absolute;inset:0;background:var(--c,{{color.accent}});transform-origin:right}
+@media (max-width:640px){.ntf{inset-inline:16px;bottom:16px;width:auto}}
+@media (prefers-reduced-motion:reduce){.ntf__item{transition:none}}

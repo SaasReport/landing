@@ -1,0 +1,25 @@
+{
+  "name": "@saasreport/comms",
+  "version": "0.1.0",
+  "description": "Outbound email on Cloudflare from one comms config: comms-engine specs (header mark, body, signature, legal footer) in fa, en and ar, the comms-engine and mail-sender (send_email) Workers, wrangler.toml and HTML previews.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./node": "./src/node.js",
+    "./notices": "./src/notices.js",
+    "./html": "./src/html.js",
+    "./engine": "./workers/comms-engine/engine.js",
+    "./mail-sender": "./workers/mail-sender/sender.js",
+    "./submit": "./src/submit.js",
+    "./locales/*": "./src/locales/*.js",
+    "./migrations/*": "./migrations/*",
+    "./package.json": "./package.json"
+  },
+  "dependencies": { "@saasreport/calendar": "*", "@saasreport/cloudflare": "*", "@saasreport/core": "*", "@saasreport/format": "*" },
+  "files": ["src", "workers", "migrations", "examples", "README.md"],
+  "scripts": { "test": "node --test test/*.test.mjs" },
+  "engines": { "node": ">=20.17.0" },
+  "license": "Apache-2.0",
+  "sideEffects": false
+}

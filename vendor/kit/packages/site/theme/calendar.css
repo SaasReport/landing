@@ -1,0 +1,166 @@
+{{banner}}
+.ical{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;color:var(--text);text-align:start}
+.ical__top{display:flex;flex-wrap:wrap;gap:14px 20px;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line)}
+.ical__title h3{font-size:clamp(22px,2.6vw,30px);font-weight:900;margin:0;line-height:1.3}
+.ical__title p{margin:0;color:var(--muted);font-size:13.5px}
+.ical__ctl{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.ical__nav{display:flex;gap:4px}
+.ical__btn{height:38px;min-width:38px;border-radius:50%;border:1.5px solid var(--line-2);display:grid;place-items:center;transition:border-color .2s,background .2s}
+.ical__btn:hover{border-color:var(--orange)}
+.ical__btn .ico{transform:scaleX(-1)}
+.ical__btn--next .ico{transform:none}
+.ical__btn--txt{border-radius:99px;padding:0 14px;font-weight:700;font-size:13.5px}
+.ical__prof{display:flex;flex-wrap:wrap;max-width:100%;min-width:0;align-items:center;gap:8px;font-size:12.5px;color:var(--muted);font-weight:700}
+.ical__prof select,.ical__f input,.ical__f select{max-width:100%;border:1px solid var(--control);border-radius:10px;padding:7px 10px;background:var(--surface);font-size:14px;color:var(--text);min-width:0}
+.ical select:focus,.ical input:focus{outline:2px solid var(--focus);outline-offset:1px}
+.ical__body{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr)}
+.ical__main{padding:16px 20px 20px;border-inline-end:1px solid var(--line);min-width:0}
+.ical__wk,.ical__grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px}
+.ical__wk{margin-bottom:6px}
+.ical__wk span{text-align:center;font-size:12.5px;font-weight:700;color:var(--muted);padding:4px 0}
+.ical__wk span.is-off{color:var(--accent-text)}
+.ical__wk em{font-style:normal}
+.ical__d{position:relative;aspect-ratio:1/.9;border-radius:14px;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;transition:border-color .15s,background .15s,transform .15s;min-width:0}
+.ical__d:hover{border-color:var(--black)}
+.ical__d b{font-size:clamp(16px,1.9vw,22px);font-weight:800;line-height:1;width:2em;height:2em;display:grid;place-items:center;border-radius:50%}
+.ical__d small{position:absolute;font-size:10.5px;color:var(--muted);line-height:1}
+.ical__d .g{top:6px;left:7px;font-family:var(--mono)}
+.ical__d .h{bottom:6px;left:7px}
+.ical__d .dot{position:absolute;top:7px;right:7px;width:6px;height:6px;border-radius:50%;background:var(--rail)}
+.ical__d.is-out{opacity:1}.ical__d.is-out b,.ical__d.is-out small{color:var(--dim)}
+.ical__d.is-off{background:var(--sink)}
+.ical__d.is-hol{background:color-mix(in srgb,{{color.accent}} 7%,transparent);border-color:color-mix(in srgb,{{color.accent}} 35%,transparent)}
+.ical__d.is-hol b{color:var(--accent-text)}
+.ical__d.is-hol .dot,.ical__d.is-pred .dot{background:var(--orange)}
+.ical__d.is-pred b{outline:1.5px dashed var(--orange);outline-offset:-1.5px;box-shadow:none}
+.ical__d.has-fin:not(.is-hol):not(.is-pred) .dot{background:var(--black)}
+.ical__d.is-today b{background:var(--black);color:{{color.onInk}};outline:none}
+.ical__d.is-today.is-hol b,.ical__d.is-today.is-pred b{background:var(--orange);color:{{color.onAccent}}}
+.ical__d.is-sel{border-color:var(--orange);box-shadow:0 0 0 2px var(--orange)}
+.ical__d:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+.ical__legend{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12.5px;color:var(--muted)}
+.ical__legend li{display:inline-flex;align-items:center;gap:6px}
+.lg{width:14px;height:14px;border-radius:50%;display:inline-block}
+.lg--today{background:var(--black)}.lg--hol{background:var(--orange)}.lg--pred{border:1.5px dashed var(--orange)}
+.lg--wk{background:var(--sink);border:1px solid var(--line-2);border-radius:4px}.lg--fin{width:8px;height:8px;background:var(--black)}
+.ical__month-events{margin-top:14px}
+.ical__month-events>b{display:block;font-size:13.5px;margin-bottom:6px}
+.ical__month-events ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:4px 12px}
+.ical__month-events button{display:flex;gap:8px;align-items:center;width:100%;text-align:start;padding:5px 8px;border-radius:9px;font-size:13px;transition:background .15s}
+.ical__month-events button:hover{background:var(--wash)}
+.ical__month-events .n{flex:none;width:24px;height:24px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:12px;border:1.5px solid var(--rail)}
+.ical__month-events li.k-hol .n{background:var(--orange);border-color:var(--orange);color:{{color.onAccent}}}
+.ical__month-events li.k-pred .n{border:1.5px dashed var(--orange);color:var(--accent-text)}
+.ical__month-events li.k-finance .n{border-color:var(--black)}
+.ical__month-events em{margin-inline-start:auto;font-style:normal;font-size:11px;color:var(--accent-text);font-weight:700}
+.ical__month-events li.k-pred em{color:var(--muted)}
+
+/* day card */
+.ical__card{padding:18px 20px;display:flex;flex-direction:column;gap:14px;background:var(--warm)}
+.section--paper .ical__card{background:{{color.bg}}}
+.ical__cardhead{display:flex;gap:12px;align-items:center}
+.ical__big{width:64px;height:64px;border-radius:50%;background:var(--black);color:{{color.onInk}};display:grid;place-items:center;font-size:28px;font-weight:900;flex:none}
+.ical__cardhead b{display:block;font-size:17px}
+.ical__cardhead small{color:var(--muted);font-size:13px}
+.ical__st{margin-inline-start:auto;font-size:12px;font-weight:800;border-radius:99px;padding:2px 10px;border:1.5px solid currentColor;white-space:nowrap}
+.st-ok{color:var(--ok)}.st-hol{color:var(--accent-text)}.st-pred{color:var(--accent-text);border-style:dashed}.st-off{color:var(--muted)}
+.ical__dates,.ical__fin,.ical__conv{margin:0;display:grid;gap:0;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:2px 12px}
+.ical__dates div,.ical__fin div,.ical__conv div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;font-size:13.5px}
+.ical__dates div+div,.ical__fin div+div,.ical__conv div+div{border-top:1px dashed var(--line)}
+.ical dt{color:var(--muted);flex:none}
+.ical dd{margin:0;font-weight:700;text-align:end}
+.ical__evs{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.ical__evs li{display:flex;gap:8px;align-items:center;font-size:14px;font-weight:700}
+.ical__evs i{width:10px;height:10px;border-radius:50%;background:var(--rail);flex:none}
+.ical__evs .k-hol i{background:var(--orange)}.ical__evs .k-pred i{border:1.5px dashed var(--orange);background:none}.ical__evs .k-finance i{background:var(--black)}
+.ical__evs em{margin-inline-start:auto;font-style:normal;font-size:11.5px;color:var(--muted);font-weight:500}
+.ical__none{margin:0;color:var(--muted);font-size:13.5px}
+.u{font-style:normal;font-size:11.5px;font-weight:700;color:var(--accent-text);border:1px dashed var(--orange);border-radius:99px;padding:0 7px;white-space:nowrap}
+.ical__cardact{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}
+
+/* year view */
+.ical__year{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.ical__mini{border:1px solid var(--line);border-radius:12px;padding:8px;text-align:start;transition:border-color .15s}
+.ical__mini:hover{border-color:var(--orange)}
+.ical__mini>b{font-size:13px;display:block;margin-bottom:4px}
+.ical__mgrid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:1px}
+.ical__mgrid i{font-style:normal;font-size:9.5px;text-align:center;line-height:17px;border-radius:50%;color:var(--text)}
+.ical__mgrid i.is-out{visibility:hidden}
+.ical__mgrid i.is-off{color:var(--muted)}
+.ical__mgrid i.is-hol{background:var(--orange);color:{{color.onAccent}}}
+.ical__mgrid i.is-pred{color:var(--accent-text);outline:1px dashed var(--orange);outline-offset:-1px}
+.ical__mgrid i.is-today{background:var(--black);color:{{color.onInk}}}
+
+/* tools */
+.ical__tools{border-top:1px solid var(--line);padding:16px 20px;display:grid;gap:12px}
+.ical__tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.ical__tabs button{flex:none;padding:7px 14px;border-radius:99px;font-weight:700;font-size:14px;color:var(--muted);border:1.5px solid var(--line-2);transition:all .2s}
+.ical__tabs button[aria-selected="true"]{background:var(--black);border-color:var(--black);color:{{color.onInk}}}
+.ical__tool{display:grid;gap:12px}
+.ical__form{display:flex;flex-wrap:wrap;gap:10px}
+.ical__f{display:grid;gap:3px;font-size:12.5px;color:var(--muted);font-weight:700;min-width:150px;flex:1}
+.ical__fi{display:flex;gap:4px}
+.ical__fi input{flex:1;width:100%}
+.ical__pick{width:36px;border-radius:10px;border:1px solid var(--line-2);display:grid;place-items:center;color:var(--accent-text)}
+.ical__pick:hover{border-color:var(--orange)}
+.ical__res{display:grid;gap:2px;background:var(--black);color:{{color.onInk}};border-radius:14px;padding:14px 16px}
+.ical__res small{color:{{color.onInkDim}};font-size:12.5px}
+.ical__res b{font-size:clamp(18px,2.2vw,24px);font-weight:900;color:var(--accent-text)}
+.ical__res span{font-size:13px;color:{{color.onInkMuted}}}
+.ical__res .u{justify-self:start;margin:4px 0}
+.ical__rail{list-style:none;margin:0;padding:6px 0 0;display:flex;gap:0;overflow-x:auto;position:relative}
+.ical__rail li{flex:1;min-width:34px;display:grid;justify-items:center;gap:2px;position:relative;font-size:12px}
+.ical__rail li::before{content:"";position:absolute;top:8px;inset-inline:0;height:2px;background:var(--rail)}
+.ical__rail i{width:18px;height:18px;border-radius:50%;border:2px solid var(--rail);background:var(--surface);position:relative;z-index:1}
+.ical__rail li.b i{border-color:var(--black)}
+.ical__rail li.x i{background:var(--sink);border-style:dashed}
+.ical__rail li.a i{background:var(--black);border-color:var(--black)}
+.ical__rail li.z i{background:var(--orange);border-color:var(--orange)}
+.ical__rail small{color:var(--muted);font-size:10.5px}
+.ical__tbl{width:100%;border-collapse:collapse;font-size:13.5px}
+.ical__tbl th{font-size:12px;color:var(--muted);text-align:start;padding:6px 8px;border-bottom:1px solid var(--line-2)}
+.ical__tbl td{padding:7px 8px;border-bottom:1px solid var(--line)}
+.ical__tbl td:last-child,.ical__tbl th:last-child{text-align:end}
+.ical__tbl tr.mv td:nth-child(3){color:var(--accent-text);font-weight:700}
+.ical__tbl em{font-style:normal;font-size:11.5px;color:var(--muted);font-weight:500}
+.ical__tbl tfoot td{font-weight:800;border:0}
+.ical__hl{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.ical__hl li{font-size:12.5px;border-radius:99px;padding:2px 10px;border:1px solid var(--orange);color:var(--accent-text)}
+.ical__hl li.k-pred{border-style:dashed}
+.ical__err{margin:0;color:var(--err);font-weight:700;font-size:13.5px}
+.ical__api{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:center;font-size:12.5px;color:var(--muted);background:var(--sink);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+.ical__api a{font-family:var(--mono);font-size:12px;color:var(--text);word-break:break-all;flex:1;text-decoration:underline;text-decoration-color:var(--rail);text-underline-offset:3px}
+.ical__api .link{display:inline-flex;gap:4px;align-items:center;font-size:12.5px;text-decoration:none}
+.ical__foot{border-top:1px solid var(--line);padding:14px 20px;display:grid;gap:10px}
+.ical__sub{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ical__sub b{font-size:14px;margin-inline-end:auto}
+.ical__note{margin:0;font-size:12.5px;color:var(--muted)}
+
+@media (max-width:1000px){
+  .ical__body{grid-template-columns:minmax(0,1fr)}
+  .ical__main{border-inline-end:0;border-bottom:1px solid var(--line)}
+  .ical__year{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .ical__top,.ical__main,.ical__card,.ical__tools,.ical__foot{padding-inline:12px}
+  .ical__wk,.ical__grid{gap:3px}
+  .ical__wk em{display:none}
+  .ical__wk span::after{content:attr(data-short)}
+  .ical__api a{flex-basis:100%;order:3}
+  .ical__d{border-radius:10px;aspect-ratio:1/1.05}
+  .ical__d b{font-size:15px;width:1.7em;height:1.7em}
+  .ical__d .g,.ical__d .h{font-size:8.5px;left:4px}
+  .ical__d .g{top:3px}.ical__d .h{bottom:3px}
+  .ical__d .dot{top:4px;right:4px;width:5px;height:5px}
+  .ical__month-events ul{grid-template-columns:minmax(0,1fr)}
+  .ical__year{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .ical__ctl{width:100%;justify-content:space-between}
+  .ical__f{min-width:130px}
+  .ical__tbl{font-size:12px}
+  .ical__tbl th:nth-child(2),.ical__tbl td:nth-child(2){display:none}
+  .ical__sub b{width:100%}
+}
+.ical__cardact{position:relative;flex-wrap:wrap}
+.ical__addmenu{display:flex;flex-wrap:wrap;gap:6px;width:100%;padding:10px;margin-top:6px;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+/* black surfaces: accent text reads in the accent tint for dark backgrounds (WCAG AA, checked by checkTokens) */
+.ical__res{--accent-text:{{color.accentOnDark}};--dim:{{color.dimOnDark}}}

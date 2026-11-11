@@ -1,0 +1,101 @@
+{{banner}}
+{{picker.tag}}{display:block;position:relative;min-width:0}
+{{picker.tag}}.{{picker.prefix}}-host--popup{display:flex;align-items:stretch;gap:4px}
+{{picker.tag}}.{{picker.prefix}}-host--popup>input{flex:1;width:100%;min-width:0}
+.{{picker.prefix}}-toggle{flex:none;width:36px;min-height:34px;border-radius:10px;border:1px solid var(--line-2,{{color.line2}});background:var(--surface,{{color.onInk}});color:var(--text,{{color.ink}});display:grid;place-items:center;cursor:pointer;transition:border-color .15s,color .15s}
+.{{picker.prefix}}-toggle:hover,.{{picker.prefix}}-toggle[aria-expanded="true"]{border-color:var(--orange,{{color.accent}});color:var(--orange,{{color.accent}})}
+.{{picker.prefix}}-toggle:focus-visible{outline:2px solid var(--orange,{{color.accent}});outline-offset:1px}
+
+.{{picker.prefix}}{
+  --dp-bg:var(--surface,{{color.onInk}}); --dp-text:var(--text,{{color.ink}}); --dp-muted:var(--muted,{{color.muted}}); --dp-dim:var(--dim,{{color.dimOnLight}});
+  --dp-line:var(--line,{{color.line}}); --dp-line-2:var(--line-2,{{color.line2}}); --dp-sink:var(--sink,{{color.sink}}); --dp-wash:var(--wash,color-mix(in srgb,{{color.ink}} 3.5%,transparent));
+  --dp-orange:var(--orange,{{color.accent}}); --dp-accent-text:{{color.accentText}}; --dp-orange-press:var(--orange-press,{{color.accentPress}}); --dp-rail:var(--rail,{{color.rail}});
+  --dp-node:var(--black,{{color.ink}}); --dp-node-text:{{color.onInk}}; --dp-in:color-mix(in srgb,{{color.accent}} 10%,transparent); --dp-ok:var(--st-ok,{{color.ok}});
+  box-sizing:border-box;width:308px;max-width:calc(100vw - 16px);background:var(--dp-bg);color:var(--dp-text);
+  border:1px solid var(--dp-line-2);border-radius:var(--r-card,14px);padding:10px 10px 8px;font:inherit;font-size:14px;line-height:1.5;text-align:start;
+  font-family:{{font.sans}},Tahoma,system-ui,sans-serif
+}
+.{{picker.prefix}} *,.{{picker.prefix}} *::before,.{{picker.prefix}} *::after{box-sizing:border-box}
+/* dark palette: forced, OS-following, or on the site's black surfaces */
+.{{picker.prefix}}.{{picker.prefix}}--dark,.section--deep .{{picker.prefix}}:not(.{{picker.prefix}}--light),.footer .{{picker.prefix}}:not(.{{picker.prefix}}--light),.band .{{picker.prefix}}:not(.{{picker.prefix}}--light),.drawer .{{picker.prefix}}:not(.{{picker.prefix}}--light){
+  --dp-accent-text:{{color.accentOnDark}}; --dp-bg:{{color.inkRaised}}; --dp-text:{{color.onInk}}; --dp-muted:{{color.onInkDim}}; --dp-dim:{{color.dimOnDark}}; --dp-line:color-mix(in srgb,{{color.onInk}} 10%,transparent); --dp-line-2:color-mix(in srgb,{{color.onInk}} 22%,transparent);
+  --dp-sink:color-mix(in srgb,{{color.onInk}} 4.5%,transparent); --dp-wash:color-mix(in srgb,{{color.onInk}} 6%,transparent); --dp-rail:{{color.railDark}}; --dp-node:{{color.onInk}}; --dp-node-text:{{color.ink}}; --dp-in:color-mix(in srgb,{{color.accent}} 18%,transparent); --dp-ok:{{color.onDarkOk}}
+}
+@media (prefers-color-scheme:dark){
+  .{{picker.prefix}}.{{picker.prefix}}--auto{
+    --dp-accent-text:{{color.accentOnDark}}; --dp-bg:{{color.inkRaised}}; --dp-text:{{color.onInk}}; --dp-muted:{{color.onInkDim}}; --dp-dim:{{color.dimOnDark}}; --dp-line:color-mix(in srgb,{{color.onInk}} 10%,transparent); --dp-line-2:color-mix(in srgb,{{color.onInk}} 22%,transparent);
+    --dp-sink:color-mix(in srgb,{{color.onInk}} 4.5%,transparent); --dp-wash:color-mix(in srgb,{{color.onInk}} 6%,transparent); --dp-rail:{{color.railDark}}; --dp-node:{{color.onInk}}; --dp-node-text:{{color.ink}}; --dp-in:color-mix(in srgb,{{color.accent}} 18%,transparent); --dp-ok:{{color.onDarkOk}}
+  }
+}
+.{{picker.prefix}}.{{picker.prefix}}--light{
+  --dp-accent-text:{{color.accentText}};
+  --dp-bg:{{color.onInk}}; --dp-text:{{color.ink}}; --dp-muted:{{color.muted}}; --dp-dim:{{color.dimOnLight}}; --dp-line:{{color.line}}; --dp-line-2:{{color.line2}}; --dp-sink:{{color.sink}};
+  --dp-wash:color-mix(in srgb,{{color.ink}} 3.5%,transparent); --dp-rail:{{color.rail}}; --dp-node:{{color.ink}}; --dp-node-text:{{color.onInk}}; --dp-in:color-mix(in srgb,{{color.accent}} 10%,transparent); --dp-ok:{{color.ok}}
+}
+/* popup: top layer (popover) or fixed; placed by script next to the input */
+.{{picker.prefix}}--popup{position:fixed;z-index:60;margin:0;inset:auto;box-shadow:0 18px 40px -24px color-mix(in srgb,{{color.ink}} 45%,transparent)}
+.{{picker.prefix}}--popup[hidden]{display:none}
+.{{picker.prefix}}--popup:popover-open{inset:auto}
+
+.{{picker.prefix}}__head{display:flex;align-items:center;gap:2px;margin-bottom:6px}
+.{{picker.prefix}}__title{flex:1;text-align:center;font-weight:800;font-size:15px;white-space:nowrap}
+.{{picker.prefix}}__nav{width:32px;height:32px;flex:none;border-radius:50%;border:1px solid transparent;background:transparent;color:var(--dp-text);display:grid;place-items:center;cursor:pointer;padding:0;transition:border-color .15s,background .15s}
+.{{picker.prefix}}__nav:hover{border-color:var(--dp-line-2);background:var(--dp-wash)}
+.{{picker.prefix}}__nav[data-nav="-12"],.{{picker.prefix}}__nav[data-nav="12"]{color:var(--dp-muted)}
+
+.{{picker.prefix}}__grid{display:grid;gap:2px}
+.{{picker.prefix}}__row{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px}
+.{{picker.prefix}}__wk span{text-align:center;font-size:12px;font-weight:700;color:var(--dp-muted);padding:2px 0 4px}
+.{{picker.prefix}}__wk span.is-off{color:var(--dp-accent-text)}
+.{{picker.prefix}}__d{position:relative;display:grid;place-items:center;height:38px;border-radius:10px;cursor:pointer;user-select:none;-webkit-tap-highlight-color:transparent}
+.{{picker.prefix}}__d.is-empty{cursor:default}
+.{{picker.prefix}}__d b{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14.5px;line-height:1;border:1.5px solid transparent;transition:background .12s,border-color .12s,color .12s}
+.{{picker.prefix}}__d:not(.is-empty):not(.is-disabled):hover b{border-color:var(--dp-text)}
+.{{picker.prefix}}__d.is-weekend{background:var(--dp-sink)}
+.{{picker.prefix}}__d.is-weekend b{color:var(--dp-muted)}
+.{{picker.prefix}}__d.is-hol b,.{{picker.prefix}}__d.is-pred b{color:var(--dp-accent-text)}
+/* holiday nodes: solid = official, dashed hollow = predicted (lunar, ±1 day) */
+.{{picker.prefix}}__node{position:absolute;bottom:2px;left:50%;transform:translateX(-50%);width:6px;height:6px;border-radius:50%;background:var(--dp-orange)}
+.{{picker.prefix}}__d.is-pred .{{picker.prefix}}__node{width:8px;height:8px;bottom:1px;background:transparent;border:1.5px dashed var(--dp-orange)}
+.{{picker.prefix}}__d.is-today b{background:var(--dp-node);color:var(--dp-node-text);border-color:var(--dp-node)}
+.{{picker.prefix}}__d.is-in{background:var(--dp-in);border-radius:0}
+/* RTL: later days sit to the left, so the band leaves the start cell leftwards and enters the end cell from the right */
+.{{picker.prefix}}__d.is-start::before,.{{picker.prefix}}__d.is-end::before{content:"";position:absolute;top:0;bottom:0;background:var(--dp-in);z-index:0}
+.{{picker.prefix}}__d.is-start::before{left:0;right:50%}
+.{{picker.prefix}}__d.is-end::before{right:0;left:50%}
+.{{picker.prefix}}__d.is-start.is-end::before{display:none}
+.{{picker.prefix}}__d b{position:relative;z-index:1}
+.{{picker.prefix}}__d.is-sel b{background:var(--dp-orange);border-color:var(--dp-orange);color:{{color.onAccent}};font-weight:800}
+.{{picker.prefix}}__d.is-sel .{{picker.prefix}}__node{background:var(--dp-node)}
+.{{picker.prefix}}__d.is-sel.is-pred .{{picker.prefix}}__node{background:transparent;border-color:var(--dp-node)}
+.{{picker.prefix}}__d.is-disabled{cursor:not-allowed}
+.{{picker.prefix}}__d.is-disabled b{color:var(--dp-dim);text-decoration:line-through;text-decoration-thickness:1px;opacity:.7}
+.{{picker.prefix}}__d.is-disabled.is-sel b{background:transparent;color:var(--dp-dim);border-color:var(--dp-line-2)}
+.{{picker.prefix}}__d:focus{outline:none}
+.{{picker.prefix}}__d:focus-visible b{outline:2px solid var(--dp-orange);outline-offset:2px}
+
+.{{picker.prefix}}__foot{margin-top:8px;padding:8px 4px 2px;border-top:1px solid var(--dp-line);display:grid;gap:3px;font-size:12.5px;min-height:62px}
+.{{picker.prefix}}__f1{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.{{picker.prefix}}__f1 b{font-size:13.5px;font-weight:800}
+.{{picker.prefix}}__f2{color:var(--dp-muted)}
+.{{picker.prefix}}__chip{flex:none;font-size:11px;font-weight:800;border-radius:99px;padding:0 8px;border:1.5px solid currentColor;white-space:nowrap}
+.{{picker.prefix}}__chip.c-ok{color:var(--dp-ok)}.{{picker.prefix}}__chip.c-hol{color:var(--dp-accent-text)}.{{picker.prefix}}__chip.c-pred{color:var(--dp-accent-text);border-style:dashed}.{{picker.prefix}}__chip.c-off{color:var(--dp-muted)}
+.{{picker.prefix}}__hols{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.{{picker.prefix}}__hols li{display:flex;gap:6px;align-items:flex-start}
+.{{picker.prefix}}__hols i{flex:none;width:8px;height:8px;border-radius:50%;background:var(--dp-orange);margin-top:6px}
+.{{picker.prefix}}__hols li.is-pred i{background:transparent;border:1.5px dashed var(--dp-orange)}
+.{{picker.prefix}}__hols em,.{{picker.prefix}}__settle em{display:block;font-style:normal;font-size:11.5px;color:var(--dp-muted)}
+.{{picker.prefix}}__settle{color:var(--dp-text)}
+.{{picker.prefix}}__settle b{font-weight:800}
+.{{picker.prefix}}__rng{color:var(--dp-muted)}
+.{{picker.prefix}}__acts{display:flex;justify-content:space-between;gap:6px;margin-top:6px}
+.{{picker.prefix}}__act{border:1px solid var(--dp-line-2);background:transparent;color:var(--dp-text);border-radius:99px;padding:2px 12px;font:inherit;font-size:12.5px;font-weight:700;cursor:pointer}
+.{{picker.prefix}}__act:hover{border-color:var(--dp-orange)}
+.{{picker.prefix}}__nav:focus-visible,.{{picker.prefix}}__act:focus-visible{outline:2px solid var(--dp-orange);outline-offset:1px}
+
+@media (max-width:420px){
+  .{{picker.prefix}}{width:calc(100vw - 16px);padding:10px 8px 8px}
+  .{{picker.prefix}}__d{height:42px}
+  .{{picker.prefix}}__d b{width:34px;height:34px}
+}
+@media (prefers-reduced-motion:reduce){.{{picker.prefix}} *{transition:none!important}}

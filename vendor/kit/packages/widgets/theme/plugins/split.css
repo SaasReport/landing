@@ -1,0 +1,26 @@
+/* ---------- split: one amount into allocations, each with its own stream (plugin styles, from the project's tokens) ---------- */
+.kw-split{container:kwsplit/inline-size;display:grid;gap:12px}
+.kw-split__fig{display:grid;grid-template-columns:minmax(120px,.8fr) minmax(60px,1fr) minmax(150px,1.2fr);align-items:stretch;gap:0}
+.kw-split__src{align-self:center;display:grid;gap:2px;padding:14px;border-radius:var(--kw-r);background:var(--kw-ink);color:{{color.onInk}};z-index:1}
+.kw-split__src span{font-size:12.5px;color:{{color.onInkMuted}}}
+.kw-split__src b{font-size:24px;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.kw-split__bands{width:100%;height:100%;min-height:calc(var(--n) * 52px);display:block;overflow:visible}
+path.kw-split__band{fill:none;stroke:var(--kw-accent);stroke-width:calc(var(--sw) * 1px);stroke-linecap:butt;opacity:.26;vector-effect:non-scaling-stroke}
+.kw-split__streak{fill:none;stroke:var(--kw-accent);stroke-width:calc(var(--sw) * .42px);stroke-linecap:round;opacity:0;vector-effect:non-scaling-stroke}
+.kw-split.is-drawn path.kw-split__band{stroke-dasharray:var(--len,0) var(--len,0);animation:kw-split-draw .8s calc(var(--i) * 140ms) ease-out both}
+.kw-split.is-running path.kw-split__band{stroke-dasharray:none;animation:none}
+.kw-split.is-running .kw-split__streak{opacity:.9;stroke-dasharray:1 22;animation:kw-split-run calc(1.4s + var(--i) * .3s) linear infinite}
+.kw-split.is-paused .kw-split__streak{animation-play-state:paused}
+@keyframes kw-split-draw{from{stroke-dashoffset:var(--len,320)}to{stroke-dashoffset:0}}
+@keyframes kw-split-run{to{stroke-dashoffset:-23}}
+.kw-split__to{list-style:none;margin:0;padding:0;display:grid;grid-template-rows:repeat(var(--n),52px)}
+.kw-split__to li{position:relative;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:0 14px;border-block-end:1px solid var(--kw-line);font-size:14px}
+.kw-split__to li:last-child{border-block-end:0}
+.kw-split__to b{font-variant-numeric:tabular-nums}
+.kw-split__bar{position:absolute;inset-inline-start:0;inset-block-end:-1px;height:2px;width:calc(var(--share) * 100%);background:var(--kw-accent);transform-origin:left center}
+@container kwsplit (max-width:519px){
+  .kw-split__fig{grid-template-columns:1fr;gap:0}
+  .kw-split__bands{display:none}
+  .kw-split__src{margin-block-end:8px}
+}
+@media (prefers-reduced-motion:reduce){.kw-split *,.kw-split{transition:none!important;animation:none!important}}

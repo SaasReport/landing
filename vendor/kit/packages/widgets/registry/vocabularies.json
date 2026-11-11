@@ -1,0 +1,8 @@
+{
+  "$schema": "../schemas/vocabularies.schema.json",
+  "schema": "kit.vocabularies.v1",
+  "$comment": "Marks only one project may use in its widgets, beyond what the project registry (packages/core/registry/projects.json: name, aliases, domain, prefixes) already says: native-script names, product marks, script globals. Words a family shares (open finance, calendar) are not listed; a project bans generic words with vocabulary.forbidden in its own spec. docs/WIDGETS.md.",
+  "projects": [
+    { "key": "saasreport", "terms": ["SaasReportNotify"] }
+  ]
+}

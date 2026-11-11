@@ -1,0 +1,271 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-factor-table.schema.json",
+  "schema": "kit.sim-factor-table.v1",
+  "id": "lcr-outflows",
+  "version": "2023-01-01",
+  "profile": "baseline",
+  "standard": {
+    "body": "BCBS",
+    "title": "Liquidity Coverage Ratio (Basel Framework LCR20, LCR30, LCR40; BCBS d238, 2013, revised d295 context)",
+    "url": "https://www.bis.org/basel_framework/chapter/LCR/40.htm",
+    "versionPublished": "2019-12-15"
+  },
+  "factors": [
+    {
+      "id": "retail-stable",
+      "label": "retail deposits, stable (fully insured, effective scheme)",
+      "value": 500,
+      "unit": "bp",
+      "ref": "LCR40.7",
+      "min": 300
+    },
+    {
+      "id": "retail-less-stable",
+      "label": "retail deposits, less stable",
+      "value": 1000,
+      "unit": "bp",
+      "ref": "LCR40.13",
+      "min": 1000
+    },
+    {
+      "id": "retail-term-over-30d",
+      "label": "retail term deposits with residual maturity over 30 days, no early withdrawal without significant penalty",
+      "value": 0,
+      "unit": "bp",
+      "ref": "LCR40.16",
+      "min": 0
+    },
+    {
+      "id": "small-business-stable",
+      "label": "small business funding, stable",
+      "value": 500,
+      "unit": "bp",
+      "ref": "LCR40.22",
+      "min": 300
+    },
+    {
+      "id": "small-business-less-stable",
+      "label": "small business funding, less stable",
+      "value": 1000,
+      "unit": "bp",
+      "ref": "LCR40.22",
+      "min": 1000
+    },
+    {
+      "id": "operational-deposits",
+      "label": "operational deposits (clearing, custody, cash management)",
+      "value": 2500,
+      "unit": "bp",
+      "ref": "LCR40.26 to LCR40.36",
+      "min": 2500
+    },
+    {
+      "id": "cooperative-network-deposits",
+      "label": "deposits in an institutional network of cooperative banks, qualifying",
+      "value": 2500,
+      "unit": "bp",
+      "ref": "LCR40.37",
+      "min": 2500
+    },
+    {
+      "id": "corporate-sovereign-general",
+      "label": "non-financial corporates, sovereigns, central banks, MDBs, PSEs, no operational relationship",
+      "value": 4000,
+      "unit": "bp",
+      "ref": "LCR40.40",
+      "min": 4000
+    },
+    {
+      "id": "corporate-sovereign-insured",
+      "label": "as above, fully covered by an effective deposit insurance scheme or equivalent guarantee",
+      "value": 2000,
+      "unit": "bp",
+      "ref": "LCR40.41",
+      "min": 2000
+    },
+    {
+      "id": "other-legal-entities",
+      "label": "other legal entity customers, banks, securities firms, bank-issued debt",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.42, LCR40.43",
+      "min": 10000
+    },
+    {
+      "id": "secured-level1-or-central-bank",
+      "label": "maturing secured funding backed by Level 1 assets or with central banks",
+      "value": 0,
+      "unit": "bp",
+      "ref": "LCR40.46 table",
+      "min": 0
+    },
+    {
+      "id": "secured-level2a",
+      "label": "maturing secured funding backed by Level 2A assets",
+      "value": 1500,
+      "unit": "bp",
+      "ref": "LCR40.46 table",
+      "min": 1500
+    },
+    {
+      "id": "secured-domestic-public-sector",
+      "label": "maturing secured funding with domestic sovereign, PSEs or MDBs not backed by Level 1 or 2A",
+      "value": 2500,
+      "unit": "bp",
+      "ref": "LCR40.46 table",
+      "min": 2500
+    },
+    {
+      "id": "secured-level2b-rmbs",
+      "label": "maturing secured funding backed by eligible RMBS",
+      "value": 2500,
+      "unit": "bp",
+      "ref": "LCR40.46 table",
+      "min": 2500
+    },
+    {
+      "id": "secured-level2b-other",
+      "label": "maturing secured funding backed by other Level 2B assets",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "LCR40.46 table",
+      "min": 5000
+    },
+    {
+      "id": "secured-other",
+      "label": "all other maturing secured funding",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.46 table",
+      "min": 10000
+    },
+    {
+      "id": "derivatives-net-outflows",
+      "label": "net derivative cash outflows",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.49",
+      "min": 10000
+    },
+    {
+      "id": "downgrade-triggers",
+      "label": "collateral or contractual outflows for a downgrade of up to three notches",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.51",
+      "min": 10000
+    },
+    {
+      "id": "collateral-valuation-change",
+      "label": "non-Level 1 collateral posted for derivatives (valuation changes)",
+      "value": 2000,
+      "unit": "bp",
+      "ref": "LCR40.52",
+      "min": 2000
+    },
+    {
+      "id": "excess-collateral-callable",
+      "label": "excess non-segregated collateral callable at any time",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.53",
+      "min": 10000
+    },
+    {
+      "id": "collateral-due-not-demanded",
+      "label": "collateral contractually due but not yet demanded",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.54",
+      "min": 10000
+    },
+    {
+      "id": "collateral-substitution",
+      "label": "collateral substitution into non-HQLA",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.55",
+      "min": 10000
+    },
+    {
+      "id": "structured-financing-maturing",
+      "label": "own ABS, covered bonds and structured financing maturing in 30 days",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.57",
+      "min": 10000
+    },
+    {
+      "id": "facility-retail-small-business",
+      "label": "undrawn committed facilities, retail and small business",
+      "value": 500,
+      "unit": "bp",
+      "ref": "LCR40.64",
+      "min": 500
+    },
+    {
+      "id": "facility-credit-corporate",
+      "label": "undrawn committed credit facilities, non-financial corporates, sovereigns, central banks, PSEs, MDBs",
+      "value": 1000,
+      "unit": "bp",
+      "ref": "LCR40.64",
+      "min": 1000
+    },
+    {
+      "id": "facility-liquidity-corporate",
+      "label": "undrawn committed liquidity facilities, non-financial corporates, sovereigns, central banks, PSEs, MDBs",
+      "value": 3000,
+      "unit": "bp",
+      "ref": "LCR40.64",
+      "min": 3000
+    },
+    {
+      "id": "facility-bank",
+      "label": "undrawn committed credit and liquidity facilities, banks subject to prudential supervision",
+      "value": 4000,
+      "unit": "bp",
+      "ref": "LCR40.64",
+      "min": 4000
+    },
+    {
+      "id": "facility-credit-financial",
+      "label": "undrawn committed credit facilities, other financial institutions",
+      "value": 4000,
+      "unit": "bp",
+      "ref": "LCR40.64",
+      "min": 4000
+    },
+    {
+      "id": "facility-liquidity-financial",
+      "label": "undrawn committed liquidity facilities, other financial institutions",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.64",
+      "min": 10000
+    },
+    {
+      "id": "facility-other-legal-entities",
+      "label": "undrawn committed facilities, other legal entities",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.64",
+      "min": 10000
+    },
+    {
+      "id": "contractual-lending-financial",
+      "label": "contractual obligations to extend funds to financial institutions",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.65",
+      "min": 10000
+    },
+    {
+      "id": "other-contractual-outflows",
+      "label": "other contractual cash outflows",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.74",
+      "min": 10000
+    }
+  ]
+}

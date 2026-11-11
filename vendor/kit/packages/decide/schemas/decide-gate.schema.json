@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/decide/schemas/decide-gate.schema.json",
+  "title": "kit.decide-gate.v1",
+  "description": "A decision gate: the typed questions asked about one kind of state, and the rule that says when the big model must look (packages/decide, docs/DECIDE.md).",
+  "type": "object",
+  "required": ["$schema", "id", "description", "questions", "readWhen"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "description": { "type": "string" },
+    "questions": { "type": "array", "minItems": 1, "items": { "$ref": "https://github.com/SaasReport/kit/blob/main/packages/decide/contracts/decision.schema.json#/$defs/question" } },
+    "readWhen": {
+      "type": "array",
+      "minItems": 1,
+      "description": "The big model reads the item when any decision escalates or any listed question returns one of the listed options.",
+      "items": {
+        "type": "object",
+        "required": ["question", "in"],
+        "additionalProperties": false,
+        "properties": { "question": { "type": "string" }, "in": { "type": "array", "minItems": 1, "items": { "type": "string" } } }
+      }
+    }
+  }
+}

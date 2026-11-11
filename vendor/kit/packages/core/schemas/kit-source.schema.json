@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/kit-source.schema.json",
+  "title": "kit.kit-source.v1",
+  "description": "The kit at t=0 (docs/FRESHNESS.md): what scripts/kit.mjs verified before a use of the kit: what is at vendor.path is the kit at the published head (kit.kit-head.v1) with no local edit: the published archive unpacked and verified by sha256 (transport archive) or a clean git checkout at that HEAD (transport git), with the kit's dependencies installed from its lockfile and linked into node_modules. Written to <path>/node_modules/.kit-source-record.json by every ensure; a refusal writes nothing.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "repository",
+    "path",
+    "transport",
+    "sha",
+    "date",
+    "published",
+    "installed",
+    "verified_at"
+  ],
+  "properties": {
+    "schema": {
+      "const": "kit.kit-source.v1"
+    },
+    "repository": {
+      "type": "string",
+      "minLength": 1,
+      "description": "the kit repository the checkout tracks (kit.canon.json vendor.repository, default the kit's)"
+    },
+    "path": {
+      "type": "string",
+      "minLength": 1,
+      "description": "kit.canon.json vendor.path (default .kit)"
+    },
+    "sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "the checkout's HEAD: equal to published.sha or the record does not exist"
+    },
+    "date": {
+      "type": "string",
+      "format": "date-time",
+      "description": "the commit date of HEAD"
+    },
+    "published": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "url",
+        "sha",
+        "date"
+      ],
+      "properties": {
+        "url": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "date": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "description": "the published head object it was verified against (the URL the kit's registry names)"
+    },
+    "installed": {
+      "type": "boolean",
+      "description": "the kit's dependencies are installed from the lockfile of this very HEAD"
+    },
+    "linked": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "the links made in this ensure (node_modules/@saasreport, node_modules/.bin/kit); absent on a verify"
+    },
+    "verified_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "transport": {
+      "type": "string",
+      "enum": [
+        "archive",
+        "git"
+      ],
+      "description": "how the kit was brought to path: the published archive (no credential) or a git checkout"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "sha",
+          "published"
+        ]
+      },
+      "then": {
+        "$comment": "equality of sha and published.sha is enforced by the bootstrap (a mismatch is a refusal, never a record)"
+      }
+    }
+  ]
+}

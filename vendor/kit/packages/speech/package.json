@@ -1,0 +1,16 @@
+{
+  "name": "@saasreport/speech",
+  "version": "0.1.0",
+  "description": "Spoken-text normalizer for TTS scripts: Persian (numbers, dates, T+n, Latin terms), Arabic (numbers, Gregorian and Hijri dates, percent, currencies, Latin terms) and English locale packs, turn merging and duration estimates.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": { "types": "./src/index.d.ts", "default": "./src/index.js" },
+    "./package.json": "./package.json"
+  },
+  "files": ["src", "README.md"],
+  "engines": { "node": ">=20.17.0" },
+  "license": "Apache-2.0",
+  "sideEffects": false
+}

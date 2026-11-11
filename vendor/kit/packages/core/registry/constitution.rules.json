@@ -1,0 +1,958 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/constitution-rules.schema.json",
+  "rules": [
+    {
+      "id": "diagrams-rendered-by-kit",
+      "class": "constitution",
+      "title": "Diagrams come only from kit diagrams render",
+      "text": "Every diagram is produced by `kit diagrams render` from a Mermaid source that carries the `%% kit:diagram` header (kit.diagram.v1) and the project's theme. Never a hand-made PNG or SVG, never mmdc, Kroki, mermaid.live or any other renderer.",
+      "source": "docs/DIAGRAMS.md",
+      "enforce": {
+        "hook": [
+          "diagram-image-handwritten",
+          "diagram-headerless-source",
+          "diagram-foreign-renderer"
+        ],
+        "canon": [
+          "diagrams"
+        ],
+        "ci": true,
+        "ruleset": true
+      }
+    },
+    {
+      "id": "diagrams-stored-and-indexed",
+      "class": "constitution",
+      "title": "Every diagram is stored as source and PNG with an index",
+      "text": "Each diagram shown anywhere is committed as source plus PNG under docs/diagrams/ with the generated index; the PNG must match its source. Run `kit diagrams render`, never edit the index.",
+      "source": "docs/DIAGRAMS.md",
+      "enforce": {
+        "canon": [
+          "diagrams"
+        ],
+        "ci": true,
+        "ruleset": true
+      }
+    },
+    {
+      "id": "diagrams-shown-and-inspected",
+      "class": "constitution",
+      "title": "Show the rendered image and look at it first",
+      "text": "Show the rendered image itself in the conversation, and look at it before sending or committing it: font loaded, nothing clipped or overlapping, readable at phone width.",
+      "source": "docs/DIAGRAMS.md",
+      "enforce": {},
+      "instructionOnly": "Looking at an image is an act of the agent. No hook, check or ruleset can observe it; the rule is context only."
+    },
+    {
+      "id": "architecture-described-with-diagram",
+      "class": "constitution",
+      "title": "Every architecture or design description includes a diagram",
+      "text": "Every architecture or design description (docs, README, PR description, reply) includes a Mermaid diagram, not only text or tables, and a change to how pieces fit together updates docs/ARCHITECTURE.md in the same change.",
+      "source": "docs/DIAGRAMS.md",
+      "enforce": {},
+      "instructionOnly": "Whether a prose description should have had a diagram is a judgement; nothing can read a reply or a pull-request body. Context only."
+    },
+    {
+      "id": "generated-never-hand-edited",
+      "class": "constitution",
+      "title": "Generated files are never hand-edited",
+      "text": "A generated file is never edited by hand: change its source and run its generator (kit vendor sync, kit claude sync, kit diagrams render, kit widgets build, kit sdk generate). The vendored kit under vendor/kit is changed in the kit repository only.",
+      "source": "docs/CONSTITUTION.md",
+      "enforce": {
+        "hook": [
+          "generated-hand-edit"
+        ],
+        "canon": [
+          "freshness",
+          "vendor",
+          "sdk",
+          "claude"
+        ],
+        "ci": true,
+        "ruleset": true
+      }
+    },
+    {
+      "id": "nothing-hardcoded",
+      "class": "constitution",
+      "title": "Schema first, contract first, canonical",
+      "text": "Nothing is hardcoded: every API, webhook, event, email template, MCP tool and plugin has an OpenAPI 3.1 or JSON Schema 2020-12 contract proven by tests; every config, content and data file is schema-validated; one source per fact.",
+      "source": "docs/CONSTITUTION.md",
+      "enforce": {
+        "canon": [
+          "schemas",
+          "contracts",
+          "hardcoding",
+          "sdk",
+          "tokens"
+        ],
+        "ci": true,
+        "ruleset": true
+      }
+    },
+    {
+      "id": "no-secrets",
+      "class": "conduct",
+      "title": "Never write, read or print a secret",
+      "text": "Never write a secret into a file, a command, a commit or a message; never read a secret file (.env, .dev.vars, keys) or print an environment variable that holds one. Secrets live in the environment of the platform that needs them.",
+      "source": "docs/CONSTITUTION.md",
+      "enforce": {
+        "hook": [
+          "secret-literal",
+          "secret-file-read",
+          "secret-env-print"
+        ],
+        "canon": [
+          "hardcoding"
+        ],
+        "ci": true
+      },
+      "instructionOnly": "A secret read through an interpreter (python -c, node -e) or encoded is not visible to a hook; GitHub secret scanning is the backstop, not this registry."
+    },
+    {
+      "id": "never-skip-checks-or-force",
+      "class": "conduct",
+      "title": "Never skip hooks, force-push or push to a protected branch",
+      "text": "Never use --no-verify, never switch git hooks off, never force-push, never push straight to main or master, and never change rulesets or branch protection. Fix the failing check instead.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "git-skip-hooks",
+          "git-force-push",
+          "git-protected-branch-push",
+          "ruleset-tamper"
+        ],
+        "ci": true,
+        "ruleset": true
+      }
+    },
+    {
+      "id": "enforcement-not-disabled",
+      "class": "conduct",
+      "title": "The enforcement itself is never disabled",
+      "text": "Never edit .claude/settings*.json or the hook files to weaken them, never set disableAllHooks, and never start `claude` with --bare, --safe-mode, --setting-sources or --settings. Changes to enforcement are made by the owner, in the kit.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "guard-tamper",
+          "guard-bypass-flags"
+        ],
+        "canon": [
+          "enforcement"
+        ],
+        "ci": true,
+        "ruleset": true
+      }
+    },
+    {
+      "id": "subagent-declared-scope",
+      "class": "conduct",
+      "title": "A subagent writes only inside its declared scope",
+      "text": "A subagent writes only inside the scope declared for its agent type in constitution.rules.json (read-only agents write nothing). An agent type with no declared scope may not write; declare it, do not work around it.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "subagent-scope"
+        ],
+        "canon": [
+          "enforcement"
+        ],
+        "ci": true
+      }
+    },
+    {
+      "id": "canon-first-and-tests-before-deploy",
+      "class": "constitution",
+      "title": "kit check canon runs first; nothing deploys untested",
+      "text": "`kit check canon` is the first step of npm test, every pull request runs npm test in CI, and every deploy script runs the tests first. A red run is fixed, never waived, baselined or skipped.",
+      "source": "docs/CONSTITUTION.md",
+      "enforce": {
+        "canon": [
+          "enforcement",
+          "findings",
+          "migrations"
+        ],
+        "ci": true,
+        "deploy": true,
+        "ruleset": true
+      }
+    },
+    {
+      "id": "naming-prefix",
+      "class": "constitution",
+      "title": "Every resource carries its project's name as prefix",
+      "text": "Every resource a project owns is prefixed with the project's own name, as the project registry (packages/core/registry/projects.json) lists it; never a retired prefix. One resource serves one project. Before deleting anything: check routes, domains and bindings, archive to R2 and a GitHub archive branch.",
+      "source": "docs/NAMING.md",
+      "enforce": {},
+      "instructionOnly": "The kit has no check that reads a Cloudflare account or a wrangler name against the registry's prefixes; the rule is context only until one exists."
+    },
+    {
+      "id": "portable-parts-in-kit",
+      "class": "constitution",
+      "title": "Portable parts belong in the kit",
+      "text": "Portable code, schemas and checks belong in SaasReport/kit; a site keeps its own content, brand and config, never edits the kit in the site; holds it at its head (t=0).",
+      "source": "CLAUDE.md",
+      "enforce": {
+        "hook": [
+          "generated-hand-edit"
+        ],
+        "canon": [
+          "vendor"
+        ]
+      },
+      "instructionOnly": "Whether a new piece of code is portable is a judgement. Only the part that vendor/kit is not hand-edited is mechanical."
+    },
+    {
+      "id": "agent-never-deploys",
+      "class": "separation",
+      "title": "The author never deploys or changes production",
+      "text": "An agent that writes code never deploys it and never changes production state (wrangler deploy, secrets, remote D1, DNS or Cloudflare API writes). Open a pull request; the reviewed CI environment deploys.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "agent-production-write"
+        ],
+        "canon": [
+          "enforcement"
+        ],
+        "ci": true
+      },
+      "instructionOnly": "The hook only sees commands run through the agent's tools. A token with deploy rights that the agent can still read is a credential the agent can use some other way; narrowing and expiring it is Cloudflare account state and the owner's (scoped tokens, a second account)."
+    },
+    {
+      "id": "deploy-through-reviewed-environment",
+      "class": "separation",
+      "title": "Deploys run in a CI environment, not from a machine",
+      "text": "Production changes only through the one production workflow (kit release, docs/RELEASE.md): main's HEAD, a GitHub environment, the tested build, each D1 migrated first; every Worker answers /api/build with its commit.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "canon": [
+          "enforcement",
+          "release"
+        ],
+        "deploy": true,
+        "ci": true
+      },
+      "instructionOnly": "That the environment really requires reviewers who are not the author is GitHub state, readable only with admin rights (`kit agent-guard github verify`) and impossible with one human account: a second reviewer is the owner's."
+    },
+    {
+      "id": "alerts-have-recipients",
+      "class": "resilience",
+      "title": "A monitor always names who it tells, and never in git",
+      "text": "Every alert route a monitor declares resolves at run time (binding, template, a well-formed destination) or the monitor refuses to run. Recipients are Worker secrets the owner sets, never in git, never empty: one owner address, info@<domain>, set by the deploy (kit release ship).",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "canon": [
+          "enforcement",
+          "resilience"
+        ],
+        "ci": true
+      },
+      "instructionOnly": "Whether a named recipient is a real person who answers is not visible to code; the daily canary through every route and the alert drill are the proof."
+    },
+    {
+      "id": "second-reviewer-required",
+      "class": "separation",
+      "title": "Only the owner approves and merges",
+      "text": "An agent never approves, merges or enables auto-merge of a pull request, its own or anyone's, and never writes an approval row (fa-review, merge authority, native-reader approval). The owner principal approves and merges.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "agent-merge",
+          "agent-approval-write"
+        ],
+        "ruleset": true
+      },
+      "instructionOnly": "The hook sees only what the agent's tools do. While agents push and open pull requests with the owner's own GitHub token, GitHub cannot tell the author from the approver: a distinct agent identity (a GitHub App) is the owner's to create. The owner decided against a second human account, so independent review is the owner reading it. Rulesets on private repositories need a plan GitHub does not give these organisations today."
+    },
+    {
+      "id": "resilience-proven-by-drills",
+      "class": "resilience",
+      "title": "Every failover and restore is proven by a recorded drill",
+      "text": "A backup, a fallback sender, a second DNS root or a restore path counts only with a dated drill record that passed; a mitigation with no drill is not a mitigation.",
+      "source": "docs/RESILIENCE.md",
+      "enforce": {
+        "canon": [
+          "resilience"
+        ],
+        "ci": true
+      },
+      "instructionOnly": "A drill record is self-attested: its proof file is hashed, not signed. Signing drill proofs with the approval ledger's signing path (once it lands) is owed."
+    },
+    {
+      "id": "every-worker-watched",
+      "class": "resilience",
+      "title": "Every deployed Worker is watched",
+      "text": "Every wrangler config this repository deploys (found by content, every [env.*]) is watched by a monitor declared in resilience.json, or is that monitor.",
+      "source": "docs/RESILIENCE.md",
+      "enforce": {
+        "canon": [
+          "resilience"
+        ],
+        "ci": true
+      }
+    },
+    {
+      "id": "monitor-own-database",
+      "class": "resilience",
+      "title": "A monitor writes to a database it does not watch",
+      "text": "A monitor Worker binds its own D1; by database_id (names resolved), it differs from every D1 the watched Workers bind, and MONITOR_DB_ID and MONITOR_WATCHED_DB_IDS carry those ids so the monitor refuses at run time too.",
+      "source": "docs/RESILIENCE.md",
+      "enforce": {
+        "canon": [
+          "resilience"
+        ],
+        "ci": true
+      }
+    },
+    {
+      "id": "monitor-stale-window",
+      "class": "resilience",
+      "title": "A stale status is reported as stale",
+      "text": "stale_after_min is at least the longest gap between the monitor's cron firings and at most three of them; a status older than that, or dated in the future, is stale, never passing.",
+      "source": "docs/RESILIENCE.md",
+      "enforce": {
+        "canon": [
+          "resilience"
+        ],
+        "ci": true
+      }
+    },
+    {
+      "id": "monitor-dead-man",
+      "class": "resilience",
+      "title": "The absence of a monitor is reported by an independent path",
+      "text": "A scheduled GitHub watcher (kit resilience watch, kept alive by kit resilience keepalive) and, for a worker monitor, a dead-man provider on another root report the absence; the ping result is stored and a failed ping fails the run.",
+      "source": "docs/RESILIENCE.md",
+      "enforce": {
+        "canon": [
+          "resilience"
+        ],
+        "ci": true
+      }
+    },
+    {
+      "id": "alert-routes-proven",
+      "class": "resilience",
+      "title": "Every alert route is proven every day",
+      "text": "At least two routes on two roots; the canary goes through every route once a day and each delivery is recorded; a route that fails is alerted through the others and fails the run; the watcher fails on a stale route or a failed delivery.",
+      "source": "docs/RESILIENCE.md",
+      "enforce": {
+        "canon": [
+          "resilience"
+        ],
+        "ci": true
+      }
+    },
+    {
+      "id": "backup-separate-resource",
+      "class": "resilience",
+      "title": "Every D1 and R2 has a backup in another resource",
+      "text": "Every D1 database and R2 bucket a watched Worker binds has a backup whose destination is a different resource, driven by a backup config, with a restore drill.",
+      "source": "docs/RESILIENCE.md",
+      "enforce": {
+        "canon": [
+          "resilience"
+        ],
+        "ci": true
+      }
+    },
+    {
+      "id": "key-custody-separate-from-deploy",
+      "class": "separation",
+      "title": "Signing keys are not held by whoever can deploy",
+      "text": "Signing keys live in a KMS or HSM with threshold holders who are not the deployers; a public key set exposes production keys only.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {},
+      "instructionOnly": "Key custody is infrastructure and people. Nothing in a repository can force it; it is the owner's decision and account set-up."
+    },
+    {
+      "id": "decision-path-at-every-boundary",
+      "class": "conduct",
+      "title": "One decision path at every boundary",
+      "text": "Every boundary an agent action passes (prompt, tool call, agent spawn and stop, commit, push, pull-request merge, CI, deploy, network egress) is decided by the same rules, then the tighten-only advisors, through the resident daemon, and holds when the daemon cannot answer.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "subagent-scope"
+        ],
+        "canon": [
+          "enforcement"
+        ],
+        "ci": true,
+        "deploy": true
+      },
+      "instructionOnly": "Inside Claude Code every boundary is hooked and checked. A network proxy that sends egress to the daemon, Codex's managed requirements.toml, and a session with no hooks are infrastructure this repository cannot force; the CI audit and the ruleset are what still hold for those (docs/AGENT-GUARD.md)."
+    },
+    {
+      "id": "no-orphan-process",
+      "class": "orphans",
+      "title": "No process outlives its task",
+      "text": "Every process an agent or the guard starts is bounded: `claude -p` runs under `timeout` or --max-turns, a detached process under `timeout`, every hook has a timeout, every CI job a timeout-minutes, and the decision daemon exits when idle, when old and when its project is gone.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "unbounded-process"
+        ],
+        "canon": [
+          "enforcement"
+        ],
+        "reconcile": [
+          "process"
+        ]
+      }
+    },
+    {
+      "id": "no-orphan-branch-worktree-pr",
+      "class": "orphans",
+      "title": "No orphan branch, worktree or pull request",
+      "text": "A worktree whose directory is gone, a branch already merged, an agent branch with no upstream and no commits for weeks, and an open pull request with no activity are orphans: finish, merge or delete them.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "reconcile": [
+          "git",
+          "pr"
+        ]
+      },
+      "instructionOnly": "Remote branches and pull requests are listed through the GitHub API with a token (`reconcile --repo`), so it runs when the owner or CI runs it, not on every commit."
+    },
+    {
+      "id": "no-orphan-object",
+      "class": "orphans",
+      "title": "No stored object without a record",
+      "text": "Every stored object (an upload, a backup, an export) has exactly one record, and every record has its object; the two lists are reconciled and the difference is an orphan.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "reconcile": [
+          "object"
+        ]
+      },
+      "instructionOnly": "The reconciler compares two listings. Reading the live bucket needs the account token and is the owner's run; nothing here schedules it."
+    },
+    {
+      "id": "no-orphan-generated-artefact",
+      "class": "orphans",
+      "title": "No generated artefact without a source",
+      "text": "Every generated file (a diagram image, the vendored kit, an SDK, a generated agent or block) has its source and its generator; an artefact whose source is gone, or that was edited by hand, fails the canon.",
+      "source": "docs/CONSTITUTION.md",
+      "enforce": {
+        "canon": [
+          "diagrams",
+          "vendor",
+          "sdk",
+          "claude",
+          "freshness",
+          "enforcement"
+        ],
+        "reconcile": [
+          "generated"
+        ],
+        "ci": true
+      }
+    },
+    {
+      "id": "no-orphan-rule",
+      "class": "orphans",
+      "title": "No rule without an enforcing gate, no gate without a rule",
+      "text": "Every rule names the layers that enforce it, and every enforcing hook or check is claimed by a rule: a claim with nothing behind it, or an enforcer no rule owns, fails the canon.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "canon": [
+          "enforcement"
+        ],
+        "ci": true
+      }
+    },
+    {
+      "id": "no-ad-hoc-credentials",
+      "class": "separation",
+      "title": "An agent never mints, revokes or sets a credential",
+      "text": "An agent never creates, rotates, revokes or sets a token, secret or deploy credential (Cloudflare tokens, wrangler or GitHub secrets). Scoped deploy credentials are issued by the governed custody path, never ad hoc.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "agent-credential-mutation"
+        ],
+        "canon": [
+          "enforcement"
+        ],
+        "ci": true
+      },
+      "instructionOnly": "The custody path itself (a store of scoped, expiring deploy credentials, an issuing daemon with a decision before issuance, a record per issuance, revocation, and the link to deploy workflows) is designed in docs/AGENT-GUARD.md and NOT built here. Until it exists the owner issues deploy credentials by hand, and a token an agent can already read stays usable by other routes."
+    },
+    {
+      "id": "external-mutations-are-declared-actions",
+      "class": "separation",
+      "title": "Infrastructure mutations are declared actions, decided first",
+      "text": "Every external or infrastructure mutation (Cloudflare, GitHub administration, DNS, tokens, secrets, deploys) is a declared action class in the registry, decided by the same path before it happens, and an agent cannot perform it directly; each refusal leaves an evidence record.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "agent-production-write",
+          "agent-credential-mutation",
+          "ruleset-tamper"
+        ],
+        "canon": [
+          "enforcement"
+        ],
+        "ci": true
+      },
+      "instructionOnly": "An agent that reaches the infrastructure by a route the tools do not show (a script it wrote, an interpreter, a credential in its environment) is not seen by the hook; taking the credentials away from the agent (the gateway and custody design) is what closes that, and is owed."
+    },
+    {
+      "id": "no-unreviewed-merge",
+      "class": "separation",
+      "title": "Nothing merges without the owner's review",
+      "text": "A pull request merges only after the owner has reviewed it, with the required checks green; an agent never merges its own or any pull request, and never enables auto-merge.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "agent-merge"
+        ],
+        "ruleset": true,
+        "ci": true
+      },
+      "instructionOnly": "Server-side the ruleset requires an approving review and the checks, but GitHub enforces it only on plans that support rulesets for the repository (not the current free private repositories), and while agents use the owner's own token GitHub cannot tell the agent's merge from the owner's. A distinct agent identity is the owner's to create."
+    },
+    {
+      "id": "tools-are-an-allow-list",
+      "class": "conduct",
+      "title": "Only declared tools run",
+      "text": "Every tool an agent can call belongs to a declared class (read, exec, write, network, agent, meta) or is an MCP tool of a listed server; anything else is held until the owner declares it.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "undeclared-tool"
+        ],
+        "canon": [
+          "enforcement"
+        ],
+        "ci": true
+      }
+    },
+    {
+      "id": "no-obfuscated-execution",
+      "class": "conduct",
+      "title": "Commands are written out, not hidden",
+      "text": "A command is written out where the guard can read it: no decoded string run as a command, no command named by a variable, no shell fed from a pipe or a download, no script written and run in one command, no inline interpreter code that starts processes.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "obfuscated-execution"
+        ],
+        "ci": true
+      },
+      "instructionOnly": "Text can always hide what it will do (an alias, a function, a script already on disk, a symlink). This rule is defence in depth; what holds regardless is that the agent has no credential to misuse (the broker) and the base-branch audit in CI."
+    },
+    {
+      "id": "agent-identity-attribution",
+      "class": "separation",
+      "title": "Every agent commit is attributable to its own key",
+      "text": "Each agent acts as a kit principal (kit:agent:<trust-domain>:<kind>:<local>) with its own signing key; its commits carry a signed trailer, and a commit by an agent with no key is held, so the guard can tell an agent's work from the owner's.",
+      "source": "docs/AGENT-GUARD.md",
+      "enforce": {
+        "hook": [
+          "agent-identity"
+        ],
+        "ci": true
+      }
+    }
+  ],
+  "generated": {
+    "globs": [
+      "docs/diagrams/README.md",
+      "**/*.generated.*",
+      "**/forge.manifest.json",
+      "**/*.manifest.json"
+    ],
+    "markers": [
+      "generated by",
+      "Generated by",
+      "DO NOT EDIT",
+      "do not edit",
+      "generated_by",
+      "@generated"
+    ],
+    "markerLines": 8
+  },
+  "diagrams": {
+    "imageGlobs": [
+      "docs/**/*.png",
+      "docs/**/*.svg",
+      "docs/**/*.jpg",
+      "docs/**/*.jpeg",
+      "docs/**/*.webp"
+    ],
+    "sourceExtensions": [
+      ".md",
+      ".mdx",
+      ".mmd",
+      ".markdown"
+    ],
+    "foreignRenderers": [
+      "mmdc",
+      "mermaid-cli",
+      "mermaid.ink",
+      "mermaid.live",
+      "kroki",
+      "plantuml",
+      "graphviz",
+      "excalidraw"
+    ],
+    "fixtureGlobs": [
+      "findings/**"
+    ]
+  },
+  "secrets": {
+    "patterns": [
+      {
+        "id": "anthropic-key",
+        "regex": "sk-ant-[A-Za-z0-9_-]{20,}"
+      },
+      {
+        "id": "openai-style-key",
+        "regex": "\\bsk-[A-Za-z0-9]{32,}"
+      },
+      {
+        "id": "github-token",
+        "regex": "\\bgh[pousr]_[A-Za-z0-9]{36,}"
+      },
+      {
+        "id": "github-fine-grained-token",
+        "regex": "github_pat_[A-Za-z0-9_]{50,}"
+      },
+      {
+        "id": "aws-access-key",
+        "regex": "\\bAKIA[0-9A-Z]{16}\\b"
+      },
+      {
+        "id": "private-key-block",
+        "regex": "-----BEGIN (?:RSA |EC |OPENSSH |DSA |PGP )?PRIVATE KEY"
+      },
+      {
+        "id": "slack-token",
+        "regex": "\\bxox[baprs]-[A-Za-z0-9-]{10,}"
+      },
+      {
+        "id": "stripe-live-key",
+        "regex": "\\b[sr]k_live_[A-Za-z0-9]{20,}"
+      }
+    ],
+    "fileNames": [
+      "^\\.env(\\..+)?$",
+      "^\\.dev\\.vars(\\..+)?$",
+      "\\.pem$",
+      "\\.p12$",
+      "\\.pfx$",
+      "^id_(rsa|ed25519|ecdsa|dsa)(\\.pub)?$",
+      "^\\.npmrc$",
+      "^\\.netrc$",
+      "^\\.git-credentials$",
+      "^credentials(\\.json)?$"
+    ],
+    "fileExceptions": [
+      "\\.(example|sample|template|dist)$",
+      "\\.pub$"
+    ],
+    "envNames": "(TOKEN|SECRET|PASSWORD|PASSWD|API[_-]?KEY|PRIVATE[_-]?KEY|CREDENTIAL|AUTH)"
+  },
+  "git": {
+    "protectedBranches": [
+      "main",
+      "master"
+    ],
+    "skipHookEnv": [
+      "HUSKY",
+      "HUSKY_SKIP_HOOKS",
+      "SKIP_SIMPLE_GIT_HOOKS",
+      "LEFTHOOK"
+    ]
+  },
+  "protected": {
+    "globs": [
+      ".claude/settings.json",
+      ".claude/settings.local.json",
+      ".claude/hooks/**",
+      ".github/rulesets/**",
+      ".githooks/**"
+    ],
+    "bypassFlags": [
+      "--bare",
+      "--safe-mode",
+      "--setting-sources",
+      "--settings"
+    ],
+    "bypassEnv": [
+      "CLAUDE_CODE_SIMPLE",
+      "CLAUDE_CODE_SAFE_MODE"
+    ],
+    "approvalGlobs": [
+      "fa-review.json",
+      "**/fa-review.json",
+      "**/*approvals*.json",
+      "**/approval-rows/**"
+    ],
+    "approvalCommands": [
+      "persian approve",
+      "merge-authority",
+      "agent-guard identity issue",
+      "agent-guard identity revoke",
+      "agent-guard approve"
+    ]
+  },
+  "scopes": {
+    "agents": {
+      "Explore": {
+        "write": [],
+        "why": "Claude Code's built-in search agent: read-only."
+      },
+      "Plan": {
+        "write": [],
+        "why": "Claude Code's built-in planning agent: read-only."
+      },
+      "kit-explore": {
+        "write": [],
+        "why": "The kit's standard search agent: read-only."
+      },
+      "kit-review": {
+        "write": [],
+        "why": "The kit's standard review agent: read-only."
+      },
+      "kit-implement": {
+        "write": [
+          "**"
+        ],
+        "why": "The kit's standard implementing agent: the working tree (protected paths and generated files stay refused by their own rules)."
+      }
+    }
+  },
+  "separation": {
+    "deployCommands": [
+      "wrangler deploy",
+      "wrangler publish",
+      "wrangler pages deploy",
+      "wrangler versions deploy",
+      "kit purge"
+    ],
+    "gates": [
+      "npm test",
+      "npm run test",
+      "check canon"
+    ],
+    "recipientVars": [
+      "MONITOR_NOTIFY_TO",
+      "NOTIFY_TO",
+      "ALERT_TO",
+      "ALERT_RECIPIENTS",
+      "MONITOR_TELEGRAM_CHAT_ID",
+      "MONITOR_BALE_CHAT_ID",
+      "MONITOR_WEBHOOK_URL",
+      "OPS_NOTIFY_TO"
+    ],
+    "requiredApprovals": 1,
+    "ciEnvironmentFor": [
+      "wrangler deploy",
+      "wrangler publish",
+      "wrangler pages deploy",
+      "wrangler versions deploy"
+    ]
+  },
+  "daemon": {
+    "state": ".claude/guard.daemon.json",
+    "maxBodyBytes": 8388608,
+    "requestTimeoutMs": 2000,
+    "idleMinutes": 60,
+    "maxAgeMinutes": 1440,
+    "hookTimeoutSeconds": 10,
+    "evidence": ".claude/guard.evidence.jsonl",
+    "addr": ".claude/guard.addr"
+  },
+  "budgets": {
+    "measurement": {
+      "loadLimit": 0.7,
+      "windowMs": 500,
+      "maxWaitMs": 30000,
+      "maxTotalWaitMs": 90000,
+      "spawnTimeoutMs": 10000,
+      "ownCpuTolerance": 0.05
+    },
+    "boundaries": [
+      {
+        "id": "decision",
+        "p50Ms": 0.1,
+        "p99Ms": 1,
+        "samples": 3000,
+        "warmup": 500,
+        "what": "The rules in process: the hot path every boundary shares (the advisor target)."
+      },
+      {
+        "id": "egress",
+        "p50Ms": 0.1,
+        "p99Ms": 1,
+        "samples": 3000,
+        "warmup": 500,
+        "what": "The same rules over a network call (the gateway boundary)."
+      },
+      {
+        "id": "audit-per-file",
+        "p50Ms": 0.5,
+        "p99Ms": 2,
+        "samples": 2000,
+        "warmup": 300,
+        "what": "CI: the rules over one changed file of a pull request."
+      },
+      {
+        "id": "daemon-call",
+        "p50Ms": 1,
+        "p99Ms": 5,
+        "samples": 1000,
+        "warmup": 200,
+        "what": "One call to the resident daemon over loopback TCP."
+      },
+      {
+        "id": "command-hook",
+        "p50Ms": 15,
+        "p99Ms": 40,
+        "samples": 100,
+        "warmup": 10,
+        "what": "The installed hook command as Claude Code or Codex runs it: sh, bash builtins, the daemon. No curl, no cat, no node. The owner target is p50 5 ms / p99 20 ms; it is NOT reachable with a command hook, because starting sh then bash costs about 10 ms on its own (measured: sh -c : 3.8 ms, bash -c : 6.6 ms). Only an http hook (no process) reaches it, and an http hook fails open on a refused connection, so it is not used."
+      },
+      {
+        "id": "git-hook",
+        "p50Ms": 30,
+        "p95Ms": 100,
+        "samples": 25,
+        "warmup": 3,
+        "what": "pre-commit: bash builtins and the daemon, which runs git itself, warm and cached by blob hash. No node, no git call in the hook."
+      },
+      {
+        "id": "managed-launcher",
+        "p50Ms": 20,
+        "p95Ms": 100,
+        "samples": 25,
+        "warmup": 3,
+        "what": "The owner-only managed-policy launcher: bash, one git call to find the repository, then the repository's own hook client."
+      }
+    ]
+  },
+  "orphans": {
+    "processMarkers": [
+      "agent-guard/daemon.mjs"
+    ],
+    "branchPatterns": [
+      "**"
+    ],
+    "staleDays": 14
+  },
+  "actions": [
+    {
+      "id": "cloudflare-mutation",
+      "description": "Any write to a Cloudflare account: deploy, DNS, D1, R2, KV, Pages, Access, Email.",
+      "rules": [
+        "agent-production-write"
+      ]
+    },
+    {
+      "id": "credential-mutation",
+      "description": "Minting, rotating, revoking or setting any token, secret or key (Cloudflare tokens, wrangler secrets, GitHub secrets).",
+      "rules": [
+        "agent-credential-mutation"
+      ]
+    },
+    {
+      "id": "github-admin-mutation",
+      "description": "Merging, approving, rulesets, environments, protected branches, forced or deleting ref updates, approval rows.",
+      "rules": [
+        "agent-merge",
+        "agent-approval-write",
+        "ruleset-tamper",
+        "git-force-push",
+        "git-protected-branch-push"
+      ]
+    },
+    {
+      "id": "guard-mutation",
+      "description": "Weakening the enforcement itself: its settings, hooks, git hooks and the flags that switch them off.",
+      "rules": [
+        "guard-tamper",
+        "guard-bypass-flags",
+        "git-skip-hooks"
+      ]
+    }
+  ],
+  "tools": {
+    "classes": {
+      "read": [
+        "Read",
+        "Glob",
+        "Grep",
+        "LS",
+        "NotebookRead"
+      ],
+      "exec": [
+        "Bash",
+        "BashOutput",
+        "KillBash",
+        "PowerShell",
+        "Monitor",
+        "Tmux",
+        "REPL"
+      ],
+      "write": [
+        "Edit",
+        "Write",
+        "MultiEdit",
+        "NotebookEdit"
+      ],
+      "network": [
+        "WebFetch",
+        "WebSearch"
+      ],
+      "agent": [
+        "Agent",
+        "Task",
+        "TaskCreate",
+        "TaskUpdate",
+        "TaskList",
+        "TaskGet",
+        "TaskOutput",
+        "TaskStop"
+      ],
+      "meta": [
+        "TodoWrite",
+        "ExitPlanMode",
+        "AskUserQuestion",
+        "Skill",
+        "ToolSearch",
+        "SendUserFile",
+        "EnterWorktree",
+        "ExitWorktree",
+        "ListPlugins",
+        "ListSkills",
+        "SearchPlugins",
+        "SearchSkills",
+        "SendMessage",
+        "ArtifactComments",
+        "ArtifactData",
+        "Artifact"
+      ]
+    },
+    "mcp": {
+      "allowServers": [
+        "github",
+        "Context7"
+      ]
+    }
+  },
+  "guardPaths": [
+    ".githooks/",
+    ".github/workflows/",
+    "constitution.rules.json",
+    "agent-identities.json",
+    "guard-approvals.jsonl",
+    ".claude/settings.json",
+    ".claude/hooks/",
+    "kit.canon.json#/vendor",
+    "kit.canon.json#/project"
+  ]
+}

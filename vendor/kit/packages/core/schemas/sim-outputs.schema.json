@@ -1,0 +1,1124 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-outputs.schema.json",
+  "title": "kit.sim-outputs.v1",
+  "description": "The outputs of every @saasreport/sim engine, one definition each (curve, priceRisk, irrbb, saccr, sma, lcr, nsfr). kit.sim-run.v1 selects the definition by engine and enforces it at emit; money is integer minor units, a number while it is a safe integer and a digit string beyond.",
+  "type": "object",
+  "$defs": {
+    "money": {
+      "oneOf": [
+        {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "string",
+          "pattern": "^-?[0-9]+$"
+        }
+      ]
+    },
+    "curve": {
+      "type": "object",
+      "required": [
+        "curveSource",
+        "lastTenor",
+        "zeroRates"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "curveSource": {
+          "type": "string"
+        },
+        "lastTenor": {
+          "type": "number"
+        },
+        "zeroRates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "tenor",
+              "zero",
+              "zeroAnnual",
+              "discountFactor",
+              "forward1y"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "tenor": {
+                "type": "number"
+              },
+              "zero": {
+                "type": "number"
+              },
+              "zeroAnnual": {
+                "type": "number"
+              },
+              "discountFactor": {
+                "type": "number"
+              },
+              "forward1y": {
+                "type": [
+                  "number",
+                  "null"
+                ]
+              }
+            }
+          }
+        },
+        "nssFit": {
+          "type": "object",
+          "required": [
+            "params",
+            "rmse",
+            "maxError",
+            "iterations",
+            "starts"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "params": {
+              "type": "object",
+              "required": [
+                "beta0",
+                "beta1",
+                "beta2",
+                "beta3",
+                "tau1",
+                "tau2"
+              ],
+              "additionalProperties": false,
+              "properties": {
+                "beta0": {
+                  "type": "number"
+                },
+                "beta1": {
+                  "type": "number"
+                },
+                "beta2": {
+                  "type": "number"
+                },
+                "beta3": {
+                  "type": "number"
+                },
+                "tau1": {
+                  "type": "number"
+                },
+                "tau2": {
+                  "type": "number"
+                }
+              }
+            },
+            "rmse": {
+              "type": "number"
+            },
+            "maxError": {
+              "type": "number"
+            },
+            "iterations": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "starts": {
+              "type": "integer",
+              "minimum": 0
+            }
+          }
+        }
+      }
+    },
+    "priceRisk": {
+      "type": "object",
+      "required": [
+        "instruments"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "instruments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "type",
+              "dirty",
+              "accrued",
+              "clean",
+              "periods",
+              "effectiveDuration",
+              "convexity",
+              "dv01",
+              "keyRates",
+              "cashflows"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "type": {
+                "enum": [
+                  "fixed",
+                  "floating",
+                  "amortising",
+                  "profit-rate"
+                ]
+              },
+              "dirty": {
+                "type": "number"
+              },
+              "accrued": {
+                "type": "number"
+              },
+              "clean": {
+                "type": "number"
+              },
+              "periods": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "effectiveDuration": {
+                "type": "number"
+              },
+              "convexity": {
+                "type": "number"
+              },
+              "dv01": {
+                "type": "number"
+              },
+              "keyRates": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "tenor",
+                    "duration",
+                    "dv01"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "tenor": {
+                      "type": "number"
+                    },
+                    "duration": {
+                      "type": "number"
+                    },
+                    "dv01": {
+                      "type": "number"
+                    }
+                  }
+                }
+              },
+              "cashflows": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "date",
+                    "interest",
+                    "principal",
+                    "amount"
+                  ],
+                  "additionalProperties": false,
+                  "properties": {
+                    "date": {
+                      "type": "string",
+                      "format": "date"
+                    },
+                    "interest": {
+                      "type": "number"
+                    },
+                    "principal": {
+                      "type": "number"
+                    },
+                    "amount": {
+                      "type": "number"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "irrbb": {
+      "type": "object",
+      "required": [
+        "currency",
+        "minorExponent",
+        "baseEve",
+        "scenarios",
+        "maxLoss",
+        "worstScenario",
+        "slots",
+        "nii",
+        "assetTotal",
+        "liabilityTotal"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "minorExponent": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "baseEve": {
+          "$ref": "#/$defs/money"
+        },
+        "scenarios": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "eve",
+              "deltaEve",
+              "loss"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "enum": [
+                  "parallel-up",
+                  "parallel-down",
+                  "steepener",
+                  "flattener",
+                  "short-up",
+                  "short-down"
+                ]
+              },
+              "eve": {
+                "$ref": "#/$defs/money"
+              },
+              "deltaEve": {
+                "$ref": "#/$defs/money"
+              },
+              "loss": {
+                "$ref": "#/$defs/money"
+              }
+            }
+          }
+        },
+        "maxLoss": {
+          "$ref": "#/$defs/money"
+        },
+        "worstScenario": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "slots": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "bucket",
+              "midpointYears",
+              "net"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "bucket": {
+                "type": "string"
+              },
+              "midpointYears": {
+                "type": "number"
+              },
+              "net": {
+                "$ref": "#/$defs/money"
+              }
+            }
+          }
+        },
+        "outlierTest": {
+          "type": "object",
+          "required": [
+            "ref",
+            "tier1",
+            "thresholdBp",
+            "maxLossBpOfTier1",
+            "outlier"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "ref": {
+              "type": "string"
+            },
+            "tier1": {
+              "$ref": "#/$defs/money"
+            },
+            "thresholdBp": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "maxLossBpOfTier1": {
+              "type": "number"
+            },
+            "outlier": {
+              "type": "boolean"
+            }
+          }
+        },
+        "nii": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "deltaNii"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "enum": [
+                  "parallel-up",
+                  "parallel-down"
+                ]
+              },
+              "deltaNii": {
+                "$ref": "#/$defs/money"
+              }
+            }
+          }
+        },
+        "assetTotal": {
+          "$ref": "#/$defs/money"
+        },
+        "liabilityTotal": {
+          "$ref": "#/$defs/money"
+        },
+        "ladder": {
+          "$ref": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/cashflow-ladder.schema.json"
+        }
+      }
+    },
+    "saccr": {
+      "type": "object",
+      "required": [
+        "minorExponent",
+        "margined",
+        "mporDays",
+        "v",
+        "c",
+        "replacementCost",
+        "multiplier",
+        "addOn",
+        "pfe",
+        "alpha",
+        "ead",
+        "trades",
+        "hedgingSets",
+        "entities",
+        "components"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "minorExponent": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "margined": {
+          "type": "boolean"
+        },
+        "mporDays": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "v": {
+          "$ref": "#/$defs/money"
+        },
+        "c": {
+          "$ref": "#/$defs/money"
+        },
+        "replacementCost": {
+          "$ref": "#/$defs/money"
+        },
+        "multiplier": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "addOn": {
+          "type": "object",
+          "required": [
+            "ir",
+            "fx",
+            "credit",
+            "equity",
+            "commodity",
+            "aggregate"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "ir": {
+              "$ref": "#/$defs/money"
+            },
+            "fx": {
+              "$ref": "#/$defs/money"
+            },
+            "credit": {
+              "$ref": "#/$defs/money"
+            },
+            "equity": {
+              "$ref": "#/$defs/money"
+            },
+            "commodity": {
+              "$ref": "#/$defs/money"
+            },
+            "aggregate": {
+              "$ref": "#/$defs/money"
+            }
+          }
+        },
+        "pfe": {
+          "$ref": "#/$defs/money"
+        },
+        "alpha": {
+          "type": "number"
+        },
+        "ead": {
+          "$ref": "#/$defs/money"
+        },
+        "eadMargined": {
+          "$ref": "#/$defs/money"
+        },
+        "eadUnmargined": {
+          "$ref": "#/$defs/money"
+        },
+        "cappedAtUnmargined": {
+          "type": "boolean"
+        },
+        "trades": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "assetClass",
+              "adjustedNotional",
+              "maturityFactor",
+              "delta",
+              "effectiveNotional"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "assetClass": {
+                "enum": [
+                  "ir",
+                  "fx",
+                  "credit",
+                  "equity",
+                  "commodity"
+                ]
+              },
+              "adjustedNotional": {
+                "type": "number"
+              },
+              "maturityFactor": {
+                "type": "number"
+              },
+              "delta": {
+                "type": "number",
+                "minimum": -1,
+                "maximum": 1
+              },
+              "effectiveNotional": {
+                "type": "number"
+              }
+            }
+          }
+        },
+        "hedgingSets": {
+          "type": "object",
+          "required": [
+            "ir",
+            "fx",
+            "commodity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "ir": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "hedgingSet",
+                  "buckets",
+                  "effectiveNotional",
+                  "addOn"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "hedgingSet": {
+                    "type": "string"
+                  },
+                  "buckets": {
+                    "type": "array",
+                    "minItems": 3,
+                    "maxItems": 3,
+                    "items": {
+                      "type": "number"
+                    }
+                  },
+                  "effectiveNotional": {
+                    "type": "number"
+                  },
+                  "addOn": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "fx": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "hedgingSet",
+                  "effectiveNotional",
+                  "addOn"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "hedgingSet": {
+                    "type": "string"
+                  },
+                  "effectiveNotional": {
+                    "type": "number"
+                  },
+                  "addOn": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "commodity": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "hedgingSet",
+                  "types",
+                  "addOn"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "hedgingSet": {
+                    "type": "string"
+                  },
+                  "types": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "addOn": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "entities": {
+          "type": "object",
+          "required": [
+            "credit",
+            "equity"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "credit": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "entity",
+                  "effectiveNotional",
+                  "addOn",
+                  "rho"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "entity": {
+                    "type": "string"
+                  },
+                  "effectiveNotional": {
+                    "type": "number"
+                  },
+                  "addOn": {
+                    "type": "number"
+                  },
+                  "rho": {
+                    "type": "number"
+                  }
+                }
+              }
+            },
+            "equity": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "entity",
+                  "effectiveNotional",
+                  "addOn",
+                  "rho"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "entity": {
+                    "type": "string"
+                  },
+                  "effectiveNotional": {
+                    "type": "number"
+                  },
+                  "addOn": {
+                    "type": "number"
+                  },
+                  "rho": {
+                    "type": "number"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "components": {
+          "type": "object",
+          "required": [
+            "creditSystematic",
+            "creditIdiosyncratic"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "creditSystematic": {
+              "type": "number"
+            },
+            "creditIdiosyncratic": {
+              "type": "number"
+            }
+          }
+        }
+      }
+    },
+    "sma": {
+      "type": "object",
+      "required": [
+        "currency",
+        "minorExponent",
+        "ildc",
+        "sc",
+        "fc",
+        "bi",
+        "bucket",
+        "bic",
+        "lossComponent",
+        "lossYears",
+        "ilm",
+        "ilmApplied",
+        "orc",
+        "rwa",
+        "note"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "minorExponent": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "ildc": {
+          "$ref": "#/$defs/money"
+        },
+        "sc": {
+          "$ref": "#/$defs/money"
+        },
+        "fc": {
+          "$ref": "#/$defs/money"
+        },
+        "bi": {
+          "$ref": "#/$defs/money"
+        },
+        "bucket": {
+          "enum": [
+            1,
+            2,
+            3
+          ]
+        },
+        "bic": {
+          "$ref": "#/$defs/money"
+        },
+        "lossComponent": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "$ref": "#/$defs/money"
+            }
+          ]
+        },
+        "lossYears": {
+          "type": [
+            "integer",
+            "null"
+          ]
+        },
+        "ilm": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "ilmApplied": {
+          "type": "boolean"
+        },
+        "orc": {
+          "$ref": "#/$defs/money"
+        },
+        "rwa": {
+          "$ref": "#/$defs/money"
+        },
+        "note": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "lcr": {
+      "type": "object",
+      "required": [
+        "minorExponent",
+        "hqla",
+        "outflows",
+        "inflows",
+        "netOutflows",
+        "ratioBp",
+        "meetsMinimum",
+        "minimumBp"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "minorExponent": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "hqla": {
+          "type": "object",
+          "required": [
+            "level1",
+            "level2a",
+            "level2b",
+            "adjustment15",
+            "adjustment40",
+            "stock",
+            "items"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "level1": {
+              "$ref": "#/$defs/money"
+            },
+            "level2a": {
+              "$ref": "#/$defs/money"
+            },
+            "level2b": {
+              "$ref": "#/$defs/money"
+            },
+            "adjustment15": {
+              "$ref": "#/$defs/money"
+            },
+            "adjustment40": {
+              "$ref": "#/$defs/money"
+            },
+            "stock": {
+              "$ref": "#/$defs/money"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "class",
+                  "amount",
+                  "haircutBp",
+                  "value"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "class": {
+                    "enum": [
+                      "level1",
+                      "level2a",
+                      "level2b-rmbs",
+                      "level2b-other"
+                    ]
+                  },
+                  "amount": {
+                    "$ref": "#/$defs/money"
+                  },
+                  "haircutBp": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "value": {
+                    "$ref": "#/$defs/money"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "outflows": {
+          "type": "object",
+          "required": [
+            "total",
+            "items"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "total": {
+              "$ref": "#/$defs/money"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "category",
+                  "amount",
+                  "factorBp",
+                  "ref",
+                  "weighted"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "$ref": "#/$defs/money"
+                  },
+                  "factorBp": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "ref": {
+                    "type": "string"
+                  },
+                  "weighted": {
+                    "$ref": "#/$defs/money"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "inflows": {
+          "type": "object",
+          "required": [
+            "total",
+            "cap",
+            "counted",
+            "items"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "total": {
+              "$ref": "#/$defs/money"
+            },
+            "cap": {
+              "$ref": "#/$defs/money"
+            },
+            "counted": {
+              "$ref": "#/$defs/money"
+            },
+            "items": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "category",
+                  "amount",
+                  "factorBp",
+                  "ref",
+                  "weighted"
+                ],
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  },
+                  "amount": {
+                    "$ref": "#/$defs/money"
+                  },
+                  "factorBp": {
+                    "type": "integer",
+                    "minimum": 0
+                  },
+                  "ref": {
+                    "type": "string"
+                  },
+                  "weighted": {
+                    "$ref": "#/$defs/money"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "netOutflows": {
+          "$ref": "#/$defs/money"
+        },
+        "ratioBp": {
+          "$ref": "#/$defs/money"
+        },
+        "meetsMinimum": {
+          "type": "boolean"
+        },
+        "minimumBp": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "nsfr": {
+      "type": "object",
+      "required": [
+        "minorExponent",
+        "availableStableFunding",
+        "requiredStableFunding",
+        "ratioBp",
+        "meetsMinimum",
+        "minimumBp",
+        "asf",
+        "rsf"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "minorExponent": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "availableStableFunding": {
+          "$ref": "#/$defs/money"
+        },
+        "requiredStableFunding": {
+          "$ref": "#/$defs/money"
+        },
+        "ratioBp": {
+          "$ref": "#/$defs/money"
+        },
+        "meetsMinimum": {
+          "type": "boolean"
+        },
+        "minimumBp": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "asf": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "category",
+              "amount",
+              "factorBp",
+              "ref",
+              "weighted"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              },
+              "amount": {
+                "$ref": "#/$defs/money"
+              },
+              "factorBp": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "ref": {
+                "type": "string"
+              },
+              "weighted": {
+                "$ref": "#/$defs/money"
+              }
+            }
+          }
+        },
+        "rsf": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "id",
+              "category",
+              "amount",
+              "factorBp",
+              "ref",
+              "weighted"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "id": {
+                "type": "string"
+              },
+              "category": {
+                "type": "string"
+              },
+              "amount": {
+                "$ref": "#/$defs/money"
+              },
+              "factorBp": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "ref": {
+                "type": "string"
+              },
+              "weighted": {
+                "$ref": "#/$defs/money"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

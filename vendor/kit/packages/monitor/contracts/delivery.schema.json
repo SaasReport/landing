@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/monitor/contracts/delivery.schema.json",
+  "title": "kit.monitor-delivery.v1",
+  "description": "One row of monitor_deliveries: one message through one route in one run, written by the runner (recordDelivery) and read by the status document (routes). The kinds are fixed here, not in a migration comment (applied migrations are append-only): canary, the daily proof of a route; drill, an alert drill's marked message (POST /run?mode=drill); alert, journeys failed; route-failure, another route did not deliver; deadman-failure, the dead-man ping failed.",
+  "type": "object",
+  "required": ["run_started_at", "route", "kind", "ok", "at"],
+  "additionalProperties": false,
+  "properties": {
+    "run_started_at": { "type": "string", "format": "date-time" },
+    "route": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+    "kind": { "enum": ["canary", "drill", "alert", "route-failure", "deadman-failure"] },
+    "ok": { "enum": [0, 1] },
+    "error": { "type": ["string", "null"] },
+    "at": { "type": "string", "format": "date-time" }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sdk-config.schema.json",
+  "generator": "forge",
+  "targets": [
+    {
+      "name": "saasreport-forms",
+      "contract": "contracts/forms.openapi.json",
+      "out": "sdk/saasreport-forms",
+      "cli": "saasreport-forms"
+    }
+  ]
+}

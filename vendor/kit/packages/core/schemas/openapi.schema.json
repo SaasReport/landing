@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/openapi.schema.json",
+  "title": "kit.openapi-3.1.v1",
+  "description": "The structural minimum of an OpenAPI 3.1 document as kit contracts use it: version, info, paths with operations and responses, components. Not the full OpenAPI meta-schema; enough for `kit check contracts` to rely on.",
+  "type": "object",
+  "required": ["openapi", "info", "paths"],
+  "properties": {
+    "openapi": { "type": "string", "pattern": "^3\\.1\\.\\d+$" },
+    "info": { "type": "object", "required": ["title", "version"], "properties": { "title": { "type": "string" }, "version": { "type": "string" } } },
+    "servers": { "type": "array", "items": { "type": "object", "required": ["url"] } },
+    "paths": {
+      "type": "object",
+      "propertyNames": { "pattern": "^/" },
+      "additionalProperties": {
+        "type": "object",
+        "propertyNames": { "enum": ["get", "put", "post", "delete", "options", "head", "patch", "trace", "summary", "description", "parameters", "servers", "$ref"] },
+        "patternProperties": {
+          "^(get|put|post|delete|options|head|patch|trace)$": {
+            "type": "object",
+            "required": ["responses"],
+            "properties": { "operationId": { "type": "string" }, "responses": { "type": "object", "minProperties": 1 } }
+          }
+        }
+      }
+    },
+    "components": { "type": "object" },
+    "webhooks": { "type": "object" }
+  }
+}

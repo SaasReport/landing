@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/decide/contracts/decision.schema.json",
+  "title": "kit.decision.v1",
+  "description": "decide(request) -> result: one state, typed questions with fixed options, and per question the chosen option (or \"escalate\") with its probabilities. The contract of @saasreport/decide; tests validate real requests and results against it.",
+  "type": "object",
+  "required": ["request", "result"],
+  "properties": { "request": { "$ref": "#/$defs/request" }, "result": { "$ref": "#/$defs/result" } },
+  "$defs": {
+    "request": {
+      "type": "object",
+      "required": ["state", "questions"],
+      "additionalProperties": false,
+      "properties": {
+        "state": { "description": "A string or a JSON value (rendered as labelled text by the server)." },
+        "questions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/question" } }
+      }
+    },
+    "question": {
+      "type": "object",
+      "required": ["id", "options"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Za-z_][A-Za-z0-9_-]*$" },
+        "type": { "enum": ["choice", "noul"], "default": "choice", "description": "noul: a yes/no question; its options are exactly yes and no." },
+        "instructions": { "type": "string" },
+        "options": {
+          "description": "Option names, or names with a description each.",
+          "oneOf": [
+            { "type": "array", "minItems": 1, "maxItems": 255, "uniqueItems": true, "items": { "$ref": "#/$defs/optionName" } },
+            { "type": "object", "minProperties": 1, "maxProperties": 255, "propertyNames": { "$ref": "#/$defs/optionName" }, "additionalProperties": { "type": "string" } }
+          ]
+        },
+        "threshold": { "type": "number", "minimum": 0, "maximum": 1, "description": "Overrides the configured threshold for this question." }
+      }
+    },
+    "optionName": { "type": "string", "pattern": "^[A-Za-z0-9_][A-Za-z0-9_ .-]*$", "not": { "const": "escalate" } },
+    "result": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": { "$ref": "#/$defs/answer" }
+    },
+    "answer": {
+      "type": "object",
+      "required": ["choice", "best", "probs", "confidence", "escalate"],
+      "additionalProperties": false,
+      "properties": {
+        "choice": { "type": "string", "description": "The best option, or \"escalate\" when its probability is below the threshold or the backend failed." },
+        "best": { "type": ["string", "null"], "description": "The most likely option even when escalating (null when the backend failed)." },
+        "probs": { "type": "object", "additionalProperties": { "type": "number", "minimum": 0, "maximum": 1 } },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1, "description": "The probability of best." },
+        "escalate": { "type": "boolean" },
+        "reason": { "type": "string", "description": "Why it escalated." },
+        "backend": { "type": "string" },
+        "ms": { "type": "number", "minimum": 0, "description": "Wall-clock time of the backend request this answer came from." }
+      }
+    }
+  }
+}

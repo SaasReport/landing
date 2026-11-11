@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/broker-request.schema.json",
+  "title": "kit.broker-request.v1",
+  "description": "A request an agent sends to the broker. `sig` is the agent's Ed25519 signature (canonical base64) over the canonical JSON (sorted keys, no whitespace) of the request without `sig`. `aud` is the project whose broker it is for, so a request or review cannot be replayed at another project's broker. A merge also carries `base` and `review`: signed by a different, reviewer agent over {v, aud, agent, verdict, for, repo, pr, base, head, nonce, iat}, where `for` is the agent allowed to use it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "aud",
+    "agent",
+    "action",
+    "repo",
+    "nonce",
+    "iat",
+    "sig"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "aud": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]{1,15}$"
+    },
+    "agent": {
+      "type": "string",
+      "pattern": "^kit:agent:[a-z0-9-]+:[a-z0-9][a-z0-9.-]{0,63}$"
+    },
+    "action": {
+      "type": "string",
+      "pattern": "^[a-z][a-z-]{1,31}$"
+    },
+    "repo": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._-]{1,100}$"
+    },
+    "pr": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000000000
+    },
+    "head": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "nonce": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{16,64}$"
+    },
+    "iat": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 10000000000
+    },
+    "review": {
+      "$ref": "#/$defs/review"
+    },
+    "sig": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9+/]{85}[AQgw]==$"
+    },
+    "base": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._/-]{1,200}$"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "action": {
+            "const": "merge"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "pr",
+          "base",
+          "head",
+          "review"
+        ]
+      }
+    }
+  ],
+  "$defs": {
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "v",
+        "aud",
+        "agent",
+        "verdict",
+        "for",
+        "repo",
+        "pr",
+        "base",
+        "head",
+        "nonce",
+        "iat",
+        "sig"
+      ],
+      "properties": {
+        "v": {
+          "const": 1
+        },
+        "aud": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9]{1,15}$"
+        },
+        "agent": {
+          "type": "string",
+          "pattern": "^kit:agent:[a-z0-9-]+:[a-z0-9][a-z0-9.-]{0,63}$"
+        },
+        "verdict": {
+          "const": "clean"
+        },
+        "repo": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._-]{1,100}$"
+        },
+        "pr": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000000000
+        },
+        "head": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "nonce": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]{16,64}$"
+        },
+        "iat": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10000000000
+        },
+        "sig": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9+/]{85}[AQgw]==$"
+        },
+        "for": {
+          "type": "string",
+          "pattern": "^kit:agent:[a-z0-9-]+:[a-z0-9][a-z0-9.-]{0,63}$"
+        },
+        "base": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9._/-]{1,200}$"
+        }
+      }
+    }
+  }
+}

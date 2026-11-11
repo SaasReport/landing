@@ -1,0 +1,95 @@
+// SAMPLE CONTENT: a glossary of six generic finance terms in two categories (series "daily": one term a day,
+// round-robin across categories). Definitions carry no figures; every term has a short two-host talk for the
+// daily episode. Replace them with your own.
+export default {
+  categories: [
+    { key: "payments", name: "Payments" },
+    { key: "saving", name: "Saving and investing" },
+  ],
+  terms: [
+    {
+      slug: "settlement", term: "Settlement", category: "payments",
+      short: "The moment money or assets actually change hands after a payment or a trade is agreed.",
+      definition: "Settlement is the final step of a payment or a trade: the moment the money or the asset really moves from one party to the other. Agreeing on a payment and settling it are often separated by one or more business days, because banks, clearing houses and payment networks process transfers in batches. Until settlement, a payment can still fail or be reversed. See also [direct debit](/glossary/direct-debit).",
+      related: ["direct-debit", "chargeback"],
+      talk: [
+        ["host", "What does it actually mean when a payment settles?"],
+        ["expert", "It's the moment the money really moves. Agreeing on a payment and actually moving the money are two different steps."],
+        ["host", "Why aren't they the same moment?"],
+        ["expert", "Banks and payment networks work in batches, often on business days only. Until settlement, a payment can still fail or be reversed."],
+        ["host", "So when can I be sure the money has arrived?"],
+        ["expert", "Once it has settled. Good apps show the settlement date, so you know exactly when the money is really yours."],
+      ],
+    },
+    {
+      slug: "compound-interest", term: "Compound interest", category: "saving",
+      short: "Interest calculated on the original amount and on the interest already added to it.",
+      definition: "Compound interest is interest earned on both the original amount and the interest that has already been added to the balance. Because each period's interest becomes part of the balance, growth speeds up over time. How often interest is added, for example monthly or yearly, changes the result; the effective annual rate includes that effect. Compounding works the same way on debt, where unpaid interest is charged interest too.",
+      related: ["inflation", "diversification"],
+      talk: [
+        ["host", "How is compound interest different from normal interest?"],
+        ["expert", "The interest you earn is added to your balance, and then that interest earns interest too. So growth speeds up over time."],
+        ["host", "Is that always good news?"],
+        ["expert", "Only when you're saving. On a loan or a card, unpaid interest is added to the debt and charged interest as well."],
+        ["host", "So what is the one thing to remember?"],
+        ["expert", "Time. For savings, start early and let it grow; for debt, pay early so interest has less time to pile up."],
+      ],
+    },
+    {
+      slug: "direct-debit", term: "Direct debit", category: "payments",
+      short: "A standing permission that lets a company collect payments from your bank account.",
+      definition: "A direct debit is a permission you give a company, called a mandate, to collect payments from your bank account when they are due, such as a monthly bill. The company starts each payment, not you, but it may only collect what the mandate allows, and you can usually cancel the mandate through your bank. Many schemes also let you ask for a refund of a payment that was taken by mistake.",
+      related: ["settlement", "chargeback"],
+      talk: [
+        ["host", "With a direct debit, who actually sends the money?"],
+        ["expert", "The company collects it from your account. You sign a permission once, called a mandate, and they take each payment when it's due."],
+        ["host", "Doesn't that give them too much control?"],
+        ["expert", "They can only take what the mandate allows, you can cancel it through your bank, and mistakes can usually be refunded."],
+        ["host", "Why do companies like it so much?"],
+        ["expert", "Because payments arrive on time without anyone having to remember them, and for customers that often means fewer late fees."],
+      ],
+    },
+    {
+      slug: "diversification", term: "Diversification", category: "saving",
+      short: "Spreading money across different investments so that one loss does not sink everything.",
+      definition: "Diversification means spreading savings or investments across different assets, companies, sectors or regions, so that a loss in one of them has a limited effect on the whole. It does not remove risk and it does not guarantee a gain, but it reduces the damage a single failure can do. Funds that hold many different investments are a common way to diversify with a small amount of money.",
+      related: ["compound-interest", "inflation"],
+      talk: [
+        ["host", "Is diversification just a fancy way to say don't put all your eggs in one basket?"],
+        ["expert", "Pretty much. You spread your money across different investments, so one bad result can't sink everything."],
+        ["host", "So it makes investing safe?"],
+        ["expert", "Safer, not safe. It limits the damage of a single failure, but it can't remove risk or guarantee a gain."],
+        ["host", "Do I need a lot of money to diversify?"],
+        ["expert", "Not really. A fund that holds many different investments spreads even a small amount across all of them."],
+      ],
+    },
+    {
+      slug: "chargeback", term: "Chargeback", category: "payments",
+      short: "A card payment reversed by the card issuer after the cardholder disputes it.",
+      definition: "A chargeback is the reversal of a card payment by the bank that issued the card, after the cardholder disputes it: for example when goods never arrived or a payment was not authorised. The merchant can respond with evidence, and the card network's rules decide who bears the loss. Chargebacks protect consumers, but frequent chargebacks cost merchants fees and can end their ability to accept cards.",
+      related: ["direct-debit", "settlement"],
+      talk: [
+        ["host", "What happens when I dispute a card payment?"],
+        ["expert", "Your card's bank can reverse the payment. That reversal is the chargeback, for example when goods never arrived."],
+        ["host", "And the shop just loses the money?"],
+        ["expert", "The shop can send evidence, and the card network's rules decide who bears the loss. Too many chargebacks cost shops dearly."],
+        ["host", "Should I ask for one whenever something goes wrong?"],
+        ["expert", "Talk to the shop first. A chargeback is the safety net for when that fails, not the first step."],
+      ],
+    },
+    {
+      slug: "inflation", term: "Inflation", category: "saving",
+      short: "The general rise in prices over time, which reduces what a unit of money can buy.",
+      definition: "Inflation is the general increase in prices over time. When prices rise, each unit of money buys a little less, so savings that earn less interest than the rate of inflation lose purchasing power even though the balance grows. Central banks usually try to keep inflation low and stable. When comparing returns, the real return, meaning the return after inflation, shows what money can actually buy.",
+      related: ["compound-interest", "diversification"],
+      talk: [
+        ["host", "Why does everyone worry about inflation?"],
+        ["expert", "Because when prices rise, the same money buys less. Your balance can grow and still buy fewer things than before."],
+        ["host", "So what should savers look at?"],
+        ["expert", "The real return: what you earn after inflation. If interest is lower than inflation, your savings quietly lose value."],
+        ["host", "Is there anything savers can do about it?"],
+        ["expert", "Compare offers by their real return, and spread savings so that part of them can grow faster than prices."],
+      ],
+    },
+  ],
+};

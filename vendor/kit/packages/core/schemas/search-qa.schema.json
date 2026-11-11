@@ -1,0 +1,92 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/search-qa.schema.json",
+  "title": "kit.search-qa.v1",
+  "description": "search-qa.json of a site: the typed queries `kit site search-qa` adds to the ones it derives from the site's own search index (docs/SITE.md). Every case names what must hold; a case with none of expect, typo, highlight, none, hint or sameAs only has to run without a console error.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "pages": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^/"
+      },
+      "description": "Pages on which Ctrl+K must open exactly one dialog (default: the home page). List every page that owns the key (a terminal's command palette)."
+    },
+    "latencyMs": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "description": "Budget for the median time from a key press to the next frame with the results (default 130)."
+    },
+    "derive": {
+      "type": "boolean",
+      "description": "false: only the cases listed here (default: also the ones derived from the index)."
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "q"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "q": {
+            "type": "string",
+            "minLength": 1,
+            "description": "The query, typed key by key."
+          },
+          "expect": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "url"
+            ],
+            "properties": {
+              "url": {
+                "type": "string",
+                "pattern": "^/"
+              },
+              "within": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 40,
+                "description": "The page must be among the first N results (default 3)."
+              }
+            }
+          },
+          "typo": {
+            "type": "boolean",
+            "description": "The page must say it searched for a corrected word."
+          },
+          "highlight": {
+            "type": "string",
+            "minLength": 1,
+            "description": "A word that must be marked in the results."
+          },
+          "none": {
+            "type": "boolean",
+            "description": "No result: the empty state shows."
+          },
+          "hint": {
+            "type": "boolean",
+            "description": "Too short to search: the hint shows."
+          },
+          "sameAs": {
+            "type": "string",
+            "minLength": 1,
+            "description": "Another query that must rank the same first three pages (folding: letter variants, ZWNJ, digits, case)."
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/d1-unsupported.schema.json",
+  "title": "kit.d1-unsupported.v1",
+  "description": "What remote Cloudflare D1 refuses that stock SQLite runs: statements by their first word, functions, virtual table modules, and PRAGMAs (an allow-list of what D1 supports, plus refused values). Every entry cites the Cloudflare page that states it.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["about", "statements", "functions", "virtualTables", "pragmas"],
+  "$defs": {
+    "source": { "type": "string", "pattern": "^https://developers\\.cloudflare\\.com/d1/" },
+    "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]+$" },
+    "why": { "type": "string", "minLength": 20 }
+  },
+  "properties": {
+    "about": { "type": "string", "minLength": 20 },
+    "statements": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["id", "starts", "why", "source"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "starts": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Z]+$" } },
+          "why": { "$ref": "#/$defs/why" },
+          "source": { "$ref": "#/$defs/source" }
+        }
+      }
+    },
+    "functions": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["id", "name", "why", "source"],
+        "properties": {
+          "id": { "$ref": "#/$defs/id" },
+          "name": { "type": "string", "pattern": "^[a-z_]+$" },
+          "why": { "$ref": "#/$defs/why" },
+          "source": { "$ref": "#/$defs/source" }
+        }
+      }
+    },
+    "virtualTables": {
+      "type": "object", "additionalProperties": false, "required": ["allowedModules", "why", "source"],
+      "properties": {
+        "allowedModules": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z0-9_]+$" } },
+        "why": { "$ref": "#/$defs/why" },
+        "source": { "$ref": "#/$defs/source" }
+      }
+    },
+    "pragmas": {
+      "type": "object", "additionalProperties": false, "required": ["supported", "why", "source", "valueRefusals"],
+      "properties": {
+        "supported": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z_]+$" } },
+        "why": { "$ref": "#/$defs/why" },
+        "source": { "$ref": "#/$defs/source" },
+        "valueRefusals": {
+          "type": "array",
+          "items": {
+            "type": "object", "additionalProperties": false, "required": ["id", "pragma", "values", "why", "source"],
+            "properties": {
+              "id": { "$ref": "#/$defs/id" },
+              "pragma": { "type": "string", "pattern": "^[a-z_]+$" },
+              "values": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^[A-Z0-9]+$" } },
+              "why": { "$ref": "#/$defs/why" },
+              "source": { "$ref": "#/$defs/source" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

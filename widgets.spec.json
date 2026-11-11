@@ -1,0 +1,42 @@
+{
+  "$schema": "./vendor/kit/packages/widgets/schemas/widgets-spec.schema.json",
+  "project": { "key": "saasreport", "name": "SaasReport", "url": "https://saasreport.ai", "repo": "https://github.com/SaasReport/landing" },
+  "locales": [{ "code": "en", "dir": "ltr" }],
+  "tone": { "register": "formal-plain", "notes": ["Short sentences, concrete nouns, no hype, no claim a file does not prove.", "Every figure is computed by the engine on sample data and labelled as sample."] },
+  "theme": { "tokens": "tokens.json" },
+  "honesty": {
+    "default": "sample",
+    "labels": {
+      "live": { "$ref": "copy#/widgets/honesty/live" },
+      "engine": { "$ref": "copy#/widgets/honesty/engine" },
+      "sample": { "$ref": "copy#/widgets/honesty/sample" }
+    }
+  },
+  "sources": {
+    "engine": { "kind": "engine", "path": "vendor/core/adapters/widgets-engine.mjs", "describes": "the core widgets engine adapter: the metric engine on the core sample dataset" },
+    "copy": { "kind": "content", "path": "content/copy.json", "describes": "the landing page's own copy" },
+    "stakeholders": { "kind": "content", "path": "vendor/core/registry/stakeholders.json", "describes": "the stakeholder registry of SaasReport/core" },
+    "commitments": { "kind": "content", "path": "vendor/core/registry/commitments.json", "describes": "the commitments register of SaasReport/core" }
+  },
+  "vocabulary": { "owned": ["SaasReport"], "forbidden": ["revolutionize", "revolutionise", "seamless", "empower", "unlock", "game-changing", "cutting-edge", "best-in-class", "supercharge", "leverage"] },
+  "audiences": [
+    { "id": "subscription", "label": { "$ref": "copy#/widgets/audiences/subscription" } },
+    { "id": "merchant", "label": { "$ref": "copy#/widgets/audiences/merchant" } },
+    { "id": "platform", "label": { "$ref": "copy#/widgets/audiences/platform" } }
+  ],
+  "useCases": [
+    { "id": "people", "label": { "$ref": "copy#/widgets/useCases/people" }, "audiences": ["subscription", "merchant", "platform"], "sources": ["engine", "stakeholders"] },
+    { "id": "reports", "label": { "$ref": "copy#/widgets/useCases/reports" }, "audiences": ["subscription", "merchant", "platform"], "sources": ["engine"] },
+    { "id": "cost", "label": { "$ref": "copy#/widgets/useCases/cost" }, "audiences": ["subscription", "merchant", "platform"], "sources": ["copy"] },
+    { "id": "delivery", "label": { "$ref": "copy#/widgets/useCases/delivery" }, "audiences": ["subscription", "merchant", "platform"], "sources": ["engine", "commitments"] },
+    { "id": "trust", "label": { "$ref": "copy#/widgets/useCases/trust" }, "audiences": ["subscription", "merchant", "platform"], "sources": ["engine", "commitments"] }
+  ],
+  "includes": ["content/generated/scenarios.json"],
+  "scenarios": [],
+  "archetypes": ["roles", "screens", "feed", "calculator", "pipeline", "timeline", "runs"],
+  "build": {
+    "asOf": "2026-10-28",
+    "out": "content/generated/widgets.generated.json",
+    "page": { "path": "/examples/", "title": { "$ref": "copy#/widgets/page/title" }, "intro": { "$ref": "copy#/widgets/page/intro" } }
+  }
+}

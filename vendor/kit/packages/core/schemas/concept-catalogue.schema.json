@@ -1,0 +1,494 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/concept-catalogue.schema.json",
+  "title": "kit.concept-catalogue.v1",
+  "description": "A project's concept catalogue: the one source of a daily concept series (docs/CONCEPTS.md). Each concept has an id, a localized title, a one-sentence definition, a theme, a difficulty, related ids, sources (URL, document, section and the exact quote that supports the definition, with the sha256 of the document as fetched and the date) and an `accuracy` record (`verified`: a person or agent read the primary source and the quote is in it; `unverified`: not yet, with the reason). The `episode` block holds the five beats of a one-minute episode (hook, definition, why it matters, example, one-line takeaway); the kit composes the two-host script, the written article and the schedule from it, so an episode and its article never drift. A contested concept (scholars or regulators disagree) carries at least two attributed `views`, and the episode says so. Episodes are generated from approved entries only; nothing here is hand-added to a feed.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "series",
+    "locale",
+    "asOf",
+    "themes",
+    "concepts"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "series": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "The kit series id this catalogue feeds (concepts.config.json series.id)."
+    },
+    "locale": {
+      "type": "string",
+      "pattern": "^[a-z]{2}(-[A-Z]{2})?$",
+      "description": "The language of the episode beats (fa, en-GB)."
+    },
+    "asOf": {
+      "type": "string",
+      "format": "date",
+      "description": "The as-of date of the catalogue's facts: no source was read after it, and every `accuracy.checked` is on or before it."
+    },
+    "themes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/slug"
+          },
+          "title": {
+            "$ref": "#/$defs/titleText"
+          },
+          "summary": {
+            "$ref": "#/$defs/localized"
+          }
+        }
+      }
+    },
+    "concepts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/concept"
+      }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "maxLength": 60
+    },
+    "localized": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 300
+      }
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "document",
+        "publisher",
+        "url",
+        "section",
+        "quote",
+        "retrieved"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "document": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 200,
+          "description": "The title of the document as published."
+        },
+        "publisher": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120
+        },
+        "kind": {
+          "enum": [
+            "primary",
+            "secondary"
+          ],
+          "description": "primary: the standard setter, regulator or issuer itself. A verified concept needs at least one primary source."
+        },
+        "url": {
+          "type": "string",
+          "pattern": "^https://[^\\s()]+$",
+          "maxLength": 400
+        },
+        "section": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120,
+          "description": "Paragraph, standard or section number, e.g. 'para 12', 'FAS 28 section 3'."
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 20,
+          "maxLength": 700,
+          "description": "The exact passage of the document (in the document's language) that supports the definition."
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "retrieved": {
+          "type": "string",
+          "format": "date",
+          "description": "The day the document was fetched and the quote found in it."
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256",
+          "description": "sha256 of the fetched document bytes."
+        },
+        "max_age_days": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 400,
+          "description": "A retrieved source is read again within this many days; 365: a published definition is revised by year at most."
+        }
+      }
+    },
+    "view": {
+      "type": "object",
+      "required": [
+        "label",
+        "position"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "label": {
+          "type": "string",
+          "minLength": 2,
+          "maxLength": 120,
+          "description": "Who holds the position (a body, a school, a jurisdiction). Never 'scholars' without saying which."
+        },
+        "position": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 400
+        },
+        "basis": {
+          "type": "string",
+          "minLength": 5,
+          "maxLength": 300
+        },
+        "source": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Index into the concept's sources that records this position."
+        }
+      }
+    },
+    "concept": {
+      "type": "object",
+      "required": [
+        "id",
+        "theme",
+        "title",
+        "definition",
+        "difficulty",
+        "related",
+        "sources",
+        "accuracy",
+        "episode"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/slug"
+        },
+        "theme": {
+          "$ref": "#/$defs/slug"
+        },
+        "title": {
+          "$ref": "#/$defs/titleText"
+        },
+        "definition": {
+          "$ref": "#/$defs/definitionText",
+          "description": "One sentence, written. It is the episode summary and the article's first line."
+        },
+        "difficulty": {
+          "enum": [
+            "intro",
+            "intermediate",
+            "advanced"
+          ]
+        },
+        "related": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 8,
+          "items": {
+            "$ref": "#/$defs/slug"
+          }
+        },
+        "prerequisites": {
+          "type": "array",
+          "uniqueItems": true,
+          "maxItems": 4,
+          "items": {
+            "$ref": "#/$defs/slug"
+          },
+          "description": "Concepts the scheduler places earlier (a subset of related, by intent)."
+        },
+        "glossary": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+          "description": "Slug of the project's glossary page for this concept, or null when it has none."
+        },
+        "widget": {
+          "type": [
+            "object",
+            "null"
+          ],
+          "required": [
+            "scenario"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "scenario": {
+              "$ref": "#/$defs/slug",
+              "description": "A scenario id of the project's widgets.spec.json (kit widgets build); `kit check concepts` fails when it does not exist."
+            },
+            "label": {
+              "$ref": "#/$defs/localized"
+            }
+          }
+        },
+        "contested": {
+          "type": "boolean",
+          "description": "Scholars, schools or regulators disagree. Requires at least two attributed views and the episode's `views` beat."
+        },
+        "views": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 5,
+          "items": {
+            "$ref": "#/$defs/view"
+          }
+        },
+        "sources": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "items": {
+            "$ref": "#/$defs/source"
+          }
+        },
+        "accuracy": {
+          "type": "object",
+          "required": [
+            "status",
+            "checked"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "enum": [
+                "verified",
+                "unverified"
+              ]
+            },
+            "checked": {
+              "type": "string",
+              "format": "date",
+              "description": "The day the sources were last read against the definition."
+            },
+            "by": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 120,
+              "description": "Who read the sources (a person, or the agent and its session)."
+            },
+            "reason": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 400,
+              "description": "Required when unverified: what could not be read or confirmed."
+            },
+            "note": {
+              "type": "string",
+              "maxLength": 400
+            },
+            "max_age_days": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 400,
+              "description": "A checked day is read again within this many days, or the fact is treated as unverified; 365: the facts change by year."
+            }
+          }
+        },
+        "episode": {
+          "type": "object",
+          "required": [
+            "hook",
+            "definition",
+            "why",
+            "example",
+            "takeaway"
+          ],
+          "additionalProperties": false,
+          "properties": {
+            "hook": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 200,
+              "description": "The host's opening question or surprise."
+            },
+            "definition": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 400,
+              "description": "The expert's plain explanation, as spoken."
+            },
+            "why": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 400,
+              "description": "Why it matters."
+            },
+            "example": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 400
+            },
+            "takeaway": {
+              "type": "string",
+              "minLength": 10,
+              "maxLength": 200,
+              "description": "The one-line takeaway."
+            },
+            "views": {
+              "type": "string",
+              "minLength": 20,
+              "maxLength": 400,
+              "description": "Required when contested: the positions, each attributed, none presented as universal."
+            }
+          }
+        },
+        "tags": {
+          "type": "array",
+          "maxItems": 5,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 2,
+            "maxLength": 40
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "contested": {
+                "const": true
+              }
+            },
+            "required": [
+              "contested"
+            ]
+          },
+          "then": {
+            "required": [
+              "views"
+            ],
+            "properties": {
+              "episode": {
+                "required": [
+                  "views"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "accuracy": {
+                "properties": {
+                  "status": {
+                    "const": "unverified"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "accuracy": {
+                "required": [
+                  "reason"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "accuracy": {
+                "properties": {
+                  "status": {
+                    "const": "verified"
+                  }
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "accuracy": {
+                "required": [
+                  "by"
+                ]
+              },
+              "sources": {
+                "items": {
+                  "required": [
+                    "kind",
+                    "sha256"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "titleText": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 2,
+        "maxLength": 90
+      },
+      "description": "A title per locale: at most 90 characters (the episode and post title contract)."
+    },
+    "definitionText": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {
+        "pattern": "^[a-z]{2}(-[A-Z]{2})?$"
+      },
+      "additionalProperties": {
+        "type": "string",
+        "minLength": 10,
+        "maxLength": 200
+      },
+      "description": "One sentence per locale: at most 200 characters (the episode summary contract)."
+    }
+  }
+}

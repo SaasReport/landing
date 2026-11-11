@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/upload-evidence.schema.json",
+  "title": "kit.upload-evidence.v1",
+  "description": "One thing the SYSTEM did to an upload (a rescan that changed nothing, a rollback, a re-keying), appended to the evidence log (quarantine bucket, evidence/<upload id>/) instead of the record, so bookkeeping can never fill the record's decisions and freeze a tightening.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "upload_id", "action", "by", "at"],
+  "properties": {
+    "schema": { "const": "kit.upload-evidence.v1" },
+    "upload_id": { "type": "string", "pattern": "^upl_[0-9a-f]{32}$" },
+    "action": { "enum": ["release", "delete", "hold", "rescan", "migrate"] },
+    "by": { "type": "string", "minLength": 1, "maxLength": 120 },
+    "at": { "type": "string", "format": "date-time" },
+    "note": { "type": "string", "maxLength": 300 }
+  }
+}

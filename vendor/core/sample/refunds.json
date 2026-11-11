@@ -1,0 +1,74 @@
+[
+  {
+    "id": "re_01",
+    "charge": "ch_004",
+    "currency": "usd",
+    "amount": 9900,
+    "status": "succeeded",
+    "reason": "requested_by_customer",
+    "created": 1786017600
+  },
+  {
+    "id": "re_02",
+    "charge": "ch_011",
+    "currency": "usd",
+    "amount": 12400,
+    "status": "succeeded",
+    "reason": "requested_by_customer",
+    "created": 1786708800
+  },
+  {
+    "id": "re_03",
+    "charge": "ch_020",
+    "currency": "usd",
+    "amount": 9900,
+    "status": "succeeded",
+    "reason": null,
+    "created": 1787400000
+  },
+  {
+    "id": "re_04",
+    "charge": "ch_056",
+    "currency": "usd",
+    "amount": 9900,
+    "status": "succeeded",
+    "reason": "requested_by_customer",
+    "created": 1788436800
+  },
+  {
+    "id": "re_05",
+    "charge": "ch_061",
+    "currency": "usd",
+    "amount": 14900,
+    "status": "succeeded",
+    "reason": "requested_by_customer",
+    "created": 1788955200
+  },
+  {
+    "id": "re_06",
+    "charge": "ch_066",
+    "currency": "usd",
+    "amount": 9900,
+    "status": "succeeded",
+    "reason": "duplicate",
+    "created": 1789214400
+  },
+  {
+    "id": "re_07",
+    "charge": "ch_071",
+    "currency": "usd",
+    "amount": 17400,
+    "status": "succeeded",
+    "reason": "fraudulent",
+    "created": 1789732800
+  },
+  {
+    "id": "re_08",
+    "charge": "ch_080",
+    "currency": "usd",
+    "amount": 9900,
+    "status": "succeeded",
+    "reason": "requested_by_customer",
+    "created": 1790337600
+  }
+]

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/projects.schema.json",
+  "title": "kit.projects.v1",
+  "description": "The project registry: one entry per project, the single source of every project's name, domain and resource prefixes (docs/NAMING.md renders its table from it). The hardcoding scan reads it to recognise project names and URLs in package code.",
+  "type": "object",
+  "required": ["$schema", "projects"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "projects": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["key", "name", "domain", "prefix"],
+        "additionalProperties": false,
+        "if": { "required": ["shortPolicy"] },
+        "then": { "properties": { "short": { "type": "null" } } },
+        "properties": {
+          "key": { "type": "string", "pattern": "^[a-z][a-z0-9]*$", "description": "Registry key = the full prefix without the dash." },
+          "name": { "type": "string", "minLength": 1, "description": "Display name." },
+          "domain": { "type": "string", "pattern": "^[a-z0-9-]+(\\.[a-z0-9-]+)+$" },
+          "prefix": { "type": "string", "pattern": "^[a-z][a-z0-9]*-$", "description": "Full resource prefix." },
+          "short": { "type": ["string", "null"], "pattern": "^[a-z][a-z0-9]*-$", "description": "Short resource prefix (null: none yet, unless shortPolicy says none by decision)." },
+          "shortPolicy": { "const": "none", "description": "The owner decided this project has NO short form, ever (the full name is the only prefix): `short` must then be null or absent, and docs/NAMING.md says \"none, by decision\" instead of \"none yet\", so a later short prefix cannot slip in." },
+          "aliases": { "type": "array", "items": { "type": "string" }, "description": "Other spellings of the name the scan should recognise (e.g. with spaces)." },
+          "github": { "type": "array", "items": { "type": "string", "pattern": "^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$" }, "description": "Repositories of the project (owner/repo)." },
+          "owner": { "type": "object", "required": ["github"], "additionalProperties": false, "properties": { "github": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,38}$", "description": "The GitHub user who owns the project and is the sole approver of its ledgers: the default for `kit trust propose --owner` and the CODEOWNERS lines. The owner's name lives only in the owner-signed trust roster." } }, "description": "The project owner (canonical source of the owner handle)." },
+          "theme": { "type": "string", "pattern": "^themes/[a-z][a-z0-9]*\\.init$", "description": "The project's vendored diagram theme: a file under packages/core/registry/themes/, a byte copy of the project's own docs/diagrams/theme.init with its provenance in themes/sources.json (theme-sources.schema.json). A diagram whose header says this project is drawn in it, wherever it is rendered; a project without one has its diagrams refused outside its own repository." },
+          "owner": { "type": "object", "required": ["github"], "additionalProperties": false, "properties": { "github": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9-]{0,38}$", "description": "The GitHub user who owns the project and is the sole approver of its ledgers: the default for `kit trust propose --owner` and the CODEOWNERS lines. The owner's name lives only in the owner-signed trust roster." } }, "description": "The project owner (canonical source of the owner handle)." },
+          "note": { "type": "string" },
+          "capabilityEngine": { "type": "boolean", "description": "The kit capability engine serves this project: its capability registry entries carry ids <code>.capability.<domain>.<action> (finding class capability-id-prefix, whose pattern packages/core/scripts/project-codes.mjs generates from this flag). A project that builds its own engine leaves it out." }
+        }
+      }
+    },
+    "legacy": {
+      "type": "array",
+      "description": "Retired prefixes: never used for new resources.",
+      "items": {
+        "type": "object",
+        "required": ["prefix", "belongsTo", "action"],
+        "additionalProperties": false,
+        "properties": {
+          "prefix": { "type": "string", "pattern": "^[a-z][a-z0-9]*-$" },
+          "belongsTo": { "type": "string" },
+          "action": { "type": "string" }
+        }
+      }
+    }
+  }
+}

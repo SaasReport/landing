@@ -1,0 +1,19 @@
+{
+  "name": "@saasreport/workbench",
+  "version": "0.1.0",
+  "description": "The workbench archetype (after the Gloomberb pattern, built natively): a command grammar with a schema-validated registry, a Persian-folded command line, keyboard navigation, a pane layout manager, watchlists, and panes that each declare their data through a SourceEnvelope and always show a SYNTHETIC / SANDBOX / YOURS / PUBLIC FEED badge. No content of its own: every command, pane and source comes from the project's widgets.spec.json.",
+  "type": "module",
+  "main": "./src/index.js",
+  "exports": {
+    ".": "./src/index.js",
+    "./schemas/*": "./schemas/*",
+    "./assets/*": "./assets/*",
+    "./theme/*": "./theme/*",
+    "./package.json": "./package.json"
+  },
+  "dependencies": { "@saasreport/calendar": "*", "@saasreport/core": "*" },
+  "files": ["src", "schemas", "assets", "theme", "README.md"],
+  "engines": { "node": ">=20.17.0" },
+  "license": "Apache-2.0",
+  "sideEffects": false
+}

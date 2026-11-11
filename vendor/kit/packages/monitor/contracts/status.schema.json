@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/monitor/contracts/status.schema.json",
+  "title": "kit.monitor-status.v1",
+  "description": "The status document of @saasreport/monitor (GET /status on the monitor Worker, GET /api/status on a site that mounts statusHandler). Produced by statusDocument and validated by `kit resilience watch` before it believes anything in it: an HTML page, an empty object or a document without runs and routes is not a status.",
+  "type": "object",
+  "required": ["ok", "status", "last", "recent", "routes"],
+  "additionalProperties": false,
+  "properties": {
+    "ok": { "const": true },
+    "status": { "enum": ["passing", "failing", "stale", "unknown"] },
+    "reason": { "$ref": "#/$defs/reason", "description": "Why the status cannot be judged (not-configured: the stale limit is not a positive whole number of minutes)." },
+    "stale": { "type": "boolean" },
+    "future": { "type": "boolean", "description": "The newest run is dated more than 5 minutes ahead of the server clock." },
+    "age_min": { "type": ["integer", "null"] },
+    "stale_after_min": { "type": "integer", "minimum": 1 },
+    "last": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/run" }] },
+    "recent": { "type": "array", "items": { "$ref": "#/$defs/run" } },
+    "routes": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["route", "last_attempt_at", "last_ok_at", "last_reason", "failed"],
+        "properties": {
+          "route": { "type": "string", "minLength": 1 },
+          "last_attempt_at": { "type": ["string", "null"], "format": "date-time", "description": "null: a declared route that has never been attempted (last_reason never-attempted)." },
+          "last_ok_at": { "type": ["string", "null"], "format": "date-time" },
+          "last_reason": { "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/reason" }], "description": "The newest failure's reason code; the error text stays in the monitor's D1." },
+          "failed": { "type": "integer", "minimum": 0, "description": "Failed deliveries since the route's last successful one (last_ok_at), in the rows read: a failure a later delivery cleared does not count." }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "reason": { "enum": ["not-configured", "timeout", "rejected", "provider-error", "unreachable", "failed", "never-attempted"], "description": "A public reason code (status.js REASON_CODES); never the provider's error text, which can carry a chat id, a URL or an address." },
+    "run": {
+      "type": "object", "additionalProperties": false, "required": ["started_at", "finished_at", "trigger", "ok", "journeys"],
+      "properties": {
+        "started_at": { "type": "string", "format": "date-time" },
+        "finished_at": { "type": ["string", "null"] },
+        "trigger": { "enum": ["cron", "manual", "drill"], "description": "cron: the scheduled run; manual: POST /run; drill: POST /run?mode=drill (an alert drill: a marked drill message through every route, whatever the health)." },
+        "ok": { "type": "boolean" },
+        "journeys": { "type": "array", "items": { "type": "object", "required": ["name", "ok"], "properties": { "name": { "type": "string" }, "ok": { "type": "boolean" } } } },
+        "alert_status": { "enum": ["none", "sent", "failed"] },
+        "alert_reason": { "$ref": "#/$defs/reason" },
+        "deadman_status": { "enum": ["sent", "watcher", "failed"] }
+      }
+    }
+  }
+}

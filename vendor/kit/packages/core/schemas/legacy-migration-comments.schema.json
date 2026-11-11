@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/legacy-migration-comments.schema.json",
+  "title": "kit.legacy-migration-comments.v1",
+  "description": "The kit-shipped migrations applied before the comment rule of 2026-10-14 (kit check migrations: no semicolon and no apostrophe inside a -- comment, because remote D1 splits a migration at a semicolon and chokes on quotes). An applied migration is never edited, so its exact bytes (sha256) are excused. The list only shrinks.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "about",
+    "base",
+    "files"
+  ],
+  "properties": {
+    "about": {
+      "type": "string",
+      "minLength": 20
+    },
+    "base": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9._/-]+$",
+      "description": "The ref the shrink-only proof compares against (the branch the kit's pull requests merge into)"
+    },
+    "files": {
+      "type": "object",
+      "propertyNames": {
+        "pattern": "^[0-9a-f]{64}$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "reason",
+          "reviewed"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "pattern": "^packages/[a-z-]+/migrations/[^/]+\\.sql$"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 30
+          },
+          "reviewed": {
+            "type": "string",
+            "format": "date"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,49 @@
+# One self-hosted kit instance. Replace the placeholder ids (see README.md, "Set up Cloudflare").
+name = "my-site"
+main = "src/worker.js"
+compatibility_date = "2026-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Landing page (public/index.html) and the kit client assets (public/kit/, written by `kit init` / `kit deploy`).
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = true
+
+# Posts, events, episodes, reactions, monitor runs. Create with `npx wrangler d1 create my-site`.
+[[d1_databases]]
+binding = "DB"
+database_name = "my-site"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "node_modules/@saasreport/cloudflare/migrations"
+
+# Podcast audio. Create with `npx wrangler r2 bucket create my-site-podcasts`.
+[[r2_buckets]]
+binding = "PODCASTS"
+bucket_name = "my-site-podcasts"
+
+# Workers AI: optional conversation scripts for blog articles.
+[ai]
+binding = "AI"
+
+# One durable run per episode: script, speech, MP3, publish.
+[[workflows]]
+name = "my-site-podcast"
+binding = "PODCAST_WF"
+class_name = "PodcastWorkflow"
+
+# Optional: email announcements through a comms/mail Worker.
+# [[services]]
+# binding = "COMMS"
+# service = "my-comms-worker"
+
+# The daily publishing run. Cron is UTC and must fire before the series' `at` (06:00 in site.timezone).
+[triggers]
+crons = ["0 5 * * *"]
+
+[vars]
+# TELEGRAM_CHAT_ID: declare it with the channel's id once announcements are wanted (and TELEGRAM_BOT_TOKEN as a secret).
+# Secrets (never in this file): npx wrangler secret put ADMIN_TOKEN | IP_SALT | GEMINI_API_KEY | TELEGRAM_BOT_TOKEN
+
+[observability]
+enabled = true

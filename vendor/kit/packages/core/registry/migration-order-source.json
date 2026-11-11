@@ -1,0 +1,15 @@
+{
+  "about": "Where the kit's migration order comes from (kit.migration-order-source.v1): the comparator wrangler applies D1 migrations with, mirrored exactly by packages/core/src/migration-order.js. Numeric prefix by parseInt semantics on the text before the first underscore, files without a number last, ties broken by plain string comparison; two files with one number therefore have a defined order (number, then name).",
+  "wrangler": {
+    "version": "4.145.0",
+    "file": "node_modules/wrangler/wrangler-dist/cli.js",
+    "origin": "../workers-utils/src/d1-migrations.ts",
+    "functions": [
+      "getD1MigrationFiles",
+      "listFilesRelative",
+      "compareMigrationPaths",
+      "compareSegments"
+    ],
+    "rule": "leadingMigrationNumber = parseInt(firstSegment.split(\"_\")[0], 10); numbers first, NaN last, then a plain < / > string compare as the tie-break"
+  }
+}

@@ -1,0 +1,12 @@
+# Cloudflare Pages configuration of the landing (project `landing`, saasreport.ai). Pages reads this file on every
+# Git deployment; nothing here is deployed from a machine. The form endpoint (functions/api/forms/[id].js) stores
+# early-access requests in D1 until the comms engine is deployed (docs/FORMS.md).
+name = "landing"
+pages_build_output_dir = "dist"
+compatibility_date = "2025-09-26"
+
+# Production only: a preview deployment has no database, so a form sent from a preview answers 503 and stores nothing.
+[[env.production.d1_databases]]
+binding = "FORMS_DB"
+database_name = "saasreport-comms-engine-production"
+database_id = "f55e76c2-c243-4248-90e4-aee62548371c"

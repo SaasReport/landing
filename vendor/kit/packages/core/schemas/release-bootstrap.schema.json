@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/release-bootstrap.schema.json",
+  "title": "kit.release-bootstrap.v1",
+  "description": "release/bootstrap.json: the receipt of the first production run of a repository in state bootstrap (docs/RELEASE.md). Written by `kit release ship` from a read-only Cloudflare API read of every declared Worker's settings (its BUILD_COMMIT binding) and of its public build endpoint, BEFORE any production change, and completed by `kit release drills` after the deploy; the records pull request commits it with the drill records and sets release.json state to ready. A receipt whose `eligible` is false refuses bootstrap; a receipt with `deployed_commit` set means production exists and bootstrap can never be entered again.",
+  "type": "object",
+  "required": ["checked_at", "run", "commit", "workers", "eligible"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "checked_at": { "type": "string", "format": "date-time" },
+    "run": { "type": "string", "description": "The GitHub run URL that wrote the receipt." },
+    "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "workers": {
+      "type": "object",
+      "description": "Every declared Worker name → its state before this run, read-only from the account's Workers API: absent; present-unreleased (its version carries no BUILD_COMMIT binding and its public /api/build serves no sha: deployed outside the production workflow); present-released (a BUILD_COMMIT sha in its version, or a sha served on /api/build: a production run deployed it); present-unknown (its settings could not be read). A 404 on /api/build is never evidence; any other unreadable answer of a present Worker with no BUILD_COMMIT (network error, 5xx, a 200 with no readable commit) is present-unknown, which refuses bootstrap.",
+      "additionalProperties": { "enum": ["absent", "present-unreleased", "present-released", "present-unknown"] }
+    },
+    "eligible": { "type": "boolean", "description": "True only when every declared Worker is absent or present-unreleased: no production run has deployed here, the only state in which bootstrap applies." },
+    "deployed_commit": { "type": ["string", "null"], "pattern": "^[0-9a-f]{40}$", "description": "Set after the bootstrap run deployed and verified this commit: from then on production exists." },
+    "drills": { "type": "array", "items": { "type": "string" }, "description": "The drills the bootstrap run performed (kind:subject)." }
+  }
+}

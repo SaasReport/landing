@@ -1,0 +1,197 @@
+<div class="kw-page" dir="rtl" lang="fa">
+<header class="kw-page__head"><h1>نمونه‌ها</h1><div class="kw-filter" role="group" aria-label="نمایش ویجت‌ها برای"><button type="button" class="kw-chip" aria-pressed="true" data-kw-aud="">همه</button><button type="button" class="kw-chip" aria-pressed="false" data-kw-aud="members">اعضا</button><button type="button" class="kw-chip" aria-pressed="false" data-kw-aud="staff">کارکنان</button></div><p class="kw-empty" data-kw-empty hidden>هنوز ویجتی برای این مخاطب نیست.</p></header>
+<section class="kw-uc" id="uc-lending" aria-labelledby="uc-lending-t"><h2 id="uc-lending-t">امانت</h2>
+<article class="kw-sc" id="sc-borrow" data-audiences="members staff" aria-labelledby="sc-borrow-t">
+<h3 id="sc-borrow-t">امانت گرفتن کتاب</h3><p class="kw-sc__sum">از میز امانت تا یادآوری.</p>
+<p class="kw-sc__for">برای: <span class="kw-chip">اعضا</span> <span class="kw-chip">کارکنان</span></p>
+<div class="kw-grid"><section class="kw kw--feed" id="w-borrow-feed-fa" data-widget="feed" aria-labelledby="w-borrow-feed-fa-t" data-reset-label="از اول">
+<header class="kw__head"><h4 id="w-borrow-feed-fa-t">جریان رویدادها</h4><span class="kw-badge" data-honesty="sample">نمونه</span></header>
+<p class="kw__lead"><b>چه می‌آموزید:</b> مسیر امانت از میز تا یادآوری. <b>چه می‌توانید بکنید:</b> امانت را تمدید کنید.</p>
+<div class="kw__bar"><button type="button" class="kw-btn" data-kw-replay>پخش دوباره</button></div>
+<ol class="kw-feed" data-kw-items aria-live="polite"><li class="kw-feed__item" data-tone="info">
+<span class="kw-feed__icon" aria-hidden="true"></span>
+<div class="kw-feed__body"><p class="kw-feed__meta"><span><b>عضو</b> <span aria-hidden="true">←</span> میز امانت</span><code dir="ltr">loan.requested</code></p>
+<p class="kw-feed__title">کتابی را می‌خواهد</p>
+
+
+
+</div></li><li class="kw-feed__item" data-tone="ok">
+<span class="kw-feed__icon" aria-hidden="true"></span>
+<div class="kw-feed__body"><p class="kw-feed__meta"><span><b>میز امانت</b> <span aria-hidden="true">←</span> عضو</span><span><time datetime="2026-10-15">۲۳ مهر ۱۴۰۵</time></span><span class="kw-decision" data-decision="allow">مجاز</span></p>
+<p class="kw-feed__title">امانت</p><p class="kw-feed__text">سررسید ۱۴ روز دیگر</p>
+<p class="kw-chips" aria-label="کانال‌ها"><span class="kw-chip">ایمیل</span><span class="kw-chip">اعلان اپ</span></p>
+<ul class="kw-rules" aria-label="قواعد"><li>Two renewals at most</li></ul>
+<div class="kw-acts"><button type="button" class="kw-btn" data-kw-act data-done="انجام شد" data-result="تمدید شد" data-tone="ok">تمدید</button><button type="button" class="kw-btn kw-btn--ghost" data-kw-act data-done="انجام شد" data-result="مهر تأیید شد" data-tone="ok">بررسی</button><p class="kw-result" data-kw-result hidden></p></div>
+</div></li></ol>
+<details class="kw-about"><summary>این ویجت چطور ساخته شده</summary><dl>
+<dt>نمایش می‌دهد</dt><dd><a href="/lending/">میز امانت</a></dd>
+<dt>اجزا</dt><dd><ul><li>API امانت</li><li>موتور سررسید</li></ul></dd>
+<dt>جریان</dt><dd>درخواست، امانت، یادآوری. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">نمودار معماری</a></dd>
+<dt>استفاده در</dt><dd><ul><li><a href="/examples/">/examples/</a>: کنار همه‌ی ویجت‌های سناریو.</li><li><a href="/terminal/">/terminal/</a>: نمای اعلان ترمینال.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--chain" id="w-borrow-chain-fa" data-widget="chain" aria-labelledby="w-borrow-chain-fa-t" data-reset-label="از اول">
+<header class="kw__head"><h4 id="w-borrow-chain-fa-t">زنجیره</h4><span class="kw-badge" data-honesty="sample">نمونه</span></header>
+<p class="kw__lead"><b>چه می‌آموزید:</b> مسیر امانت از میز تا یادآوری. <b>چه می‌توانید بکنید:</b> امانت را تمدید کنید.</p>
+<div class="kw__bar"><button type="button" class="kw-btn" data-kw-walk>مرور زنجیره</button></div>
+<ol class="kw-chain" data-kw-items><li class="kw-chain__link" data-tone="info" data-kind="person">
+<div class="kw-chain__node" aria-hidden="true">۱</div>
+<div class="kw-chain__card"><p class="kw-chain__who"><b>عضو</b> <span aria-hidden="true">←</span> میز امانت</p>
+<p class="kw-chain__what">کتابی را می‌خواهد</p><div class="kw-chain__more" data-kw-more></div></div>
+<span class="kw-chain__rail" aria-hidden="true"></span></li><li class="kw-chain__link" data-tone="ok" data-kind="organisation">
+<div class="kw-chain__node" aria-hidden="true">۲</div>
+<div class="kw-chain__card"><p class="kw-chain__who"><b>میز امانت</b> <span aria-hidden="true">←</span> عضو<span class="kw-decision" data-decision="allow">مجاز</span></p>
+<p class="kw-chain__what">امانت</p><div class="kw-chain__more" data-kw-more><p class="kw-chain__out">سررسید ۱۴ روز دیگر</p></div></div>
+</li></ol><div class="kw-expect"><h5>نتیجه‌ی مورد انتظار</h5><ul><li><b>نتیجه</b> کتاب دست عضو است.</li></ul></div>
+<details class="kw-about"><summary>این ویجت چطور ساخته شده</summary><dl>
+<dt>نمایش می‌دهد</dt><dd><a href="/lending/">میز امانت</a></dd>
+<dt>اجزا</dt><dd><ul><li>API امانت</li><li>موتور سررسید</li></ul></dd>
+<dt>جریان</dt><dd>درخواست، امانت، یادآوری. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">نمودار معماری</a></dd>
+<dt>استفاده در</dt><dd><ul><li><a href="/examples/">/examples/</a>: کنار همه‌ی ویجت‌های سناریو.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--timeline" id="w-borrow-timeline-fa" data-widget="timeline" aria-labelledby="w-borrow-timeline-fa-t" data-reset-label="از اول" data-kw-runtime="static">
+<header class="kw__head"><h4 id="w-borrow-timeline-fa-t">خط زمانی</h4><span class="kw-badge" data-honesty="sample">نمونه</span></header>
+<p class="kw__lead"><b>چه می‌آموزید:</b> مسیر امانت از میز تا یادآوری. <b>چه می‌توانید بکنید:</b> امانت را تمدید کنید.</p>
+<p class="kw-asof">به تاریخ ۹ مهر ۱۴۰۵</p>
+<ol class="kw-tl"><li class="kw-tl__ev" data-tone="ok" data-when="next">
+<time datetime="2026-10-15">۲۳ مهر ۱۴۰۵</time><div><p class="kw-tl__title">امانت</p><p class="kw-tl__text">سررسید ۱۴ روز دیگر</p><p class="kw-tl__who">میز امانت</p></div></li></ol>
+<details class="kw-about"><summary>این ویجت چطور ساخته شده</summary><dl>
+<dt>نمایش می‌دهد</dt><dd><a href="/lending/">میز امانت</a></dd>
+<dt>اجزا</dt><dd><ul><li>API امانت</li><li>موتور سررسید</li></ul></dd>
+<dt>جریان</dt><dd>درخواست، امانت، یادآوری. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">نمودار معماری</a></dd>
+<dt>استفاده در</dt><dd><ul><li><a href="/examples/">/examples/</a>: کنار همه‌ی ویجت‌های سناریو.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--calculator" id="w-borrow-calculator-fa" data-widget="calculator" aria-labelledby="w-borrow-calculator-fa-t" data-reset-label="از اول">
+<header class="kw__head"><h4 id="w-borrow-calculator-fa-t">محاسبه‌گر</h4><span class="kw-badge" data-honesty="sample">نمونه</span></header>
+<p class="kw__lead"><b>چه می‌آموزید:</b> مسیر امانت از میز تا یادآوری. <b>چه می‌توانید بکنید:</b> امانت را تمدید کنید.</p>
+<form class="kw-calc" data-kw-calc data-numerals="۰۱۲۳۴۵۶۷۸۹" data-group="٬" data-decimal="٫"><fieldset><legend>ورودی‌ها</legend><label class="kw-calc__in"><span>روز</span><input type="number" inputmode="decimal" name="days" value="14" min="1" max="60"></label></fieldset>
+<div class="kw-calc__out" aria-live="polite"><h5>نتیجه‌ها</h5><p><span>روزها با دو تمدید</span> <span class="kw-calc__val"><output data-expr="days * 3" data-decimals="0">۴۲</output></span></p></div></form><div class="kw-expect"><h5>نتیجه‌ی مورد انتظار</h5><ul><li><b>نتیجه</b> کتاب دست عضو است.</li></ul></div>
+<details class="kw-about"><summary>این ویجت چطور ساخته شده</summary><dl>
+<dt>نمایش می‌دهد</dt><dd><a href="/lending/">میز امانت</a></dd>
+<dt>اجزا</dt><dd><ul><li>API امانت</li><li>موتور سررسید</li></ul></dd>
+<dt>جریان</dt><dd>درخواست، امانت، یادآوری. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">نمودار معماری</a></dd>
+<dt>استفاده در</dt><dd><ul><li><a href="/examples/">/examples/</a>: کنار همه‌ی ویجت‌های سناریو.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--playground" id="w-borrow-playground-fa" data-widget="playground" aria-labelledby="w-borrow-playground-fa-t" data-reset-label="از اول">
+<header class="kw__head"><h4 id="w-borrow-playground-fa-t">کاوشگر API</h4><span class="kw-badge" data-honesty="sample">نمونه</span></header>
+<p class="kw__lead"><b>چه می‌آموزید:</b> مسیر امانت از میز تا یادآوری. <b>چه می‌توانید بکنید:</b> امانت را تمدید کنید.</p>
+<div class="kw-tabs" role="tablist" aria-label="امانت گرفتن کتاب"><button type="button" role="tab" id="borrow-playground-fa-call-0-tab" aria-controls="borrow-playground-fa-call-0" aria-selected="true" data-kw-tab><code dir="ltr">POST</code> کتابی را می‌خواهد</button><button type="button" role="tab" id="borrow-playground-fa-call-1-tab" aria-controls="borrow-playground-fa-call-1" aria-selected="false" data-kw-tab><code dir="ltr">GET</code> امانت</button></div>
+<div class="kw-pg" role="tabpanel" id="borrow-playground-fa-call-0" aria-labelledby="borrow-playground-fa-call-0-tab" data-kw-panel>
+<p class="kw-pg__who"><b>عضو</b> · کتابی را می‌خواهد</p>
+<h5>درخواست</h5><pre dir="ltr" class="kw-code"><b>POST</b> /loans
+
+{
+  &quot;book&quot;: &quot;&lt;book&gt;&quot;,
+  &quot;days&quot;: 14,
+  &quot;member&quot;: &quot;m_7&quot;
+}</pre>
+<button type="button" class="kw-btn" data-kw-send>ارسال درخواست</button>
+<div data-kw-response><h5>پاسخ <code dir="ltr">201</code></h5><pre dir="ltr" class="kw-code">{
+  &quot;due&quot;: &quot;2026-10-01&quot;,
+  &quot;id&quot;: &quot;ln_42&quot;,
+  &quot;status&quot;: &quot;open&quot;
+}</pre></div></div><div class="kw-pg" role="tabpanel" id="borrow-playground-fa-call-1" aria-labelledby="borrow-playground-fa-call-1-tab" data-kw-panel hidden>
+<p class="kw-pg__who"><b>میز امانت</b> · امانت</p>
+<h5>درخواست</h5><pre dir="ltr" class="kw-code"><b>GET</b> /loans/ln_42</pre>
+<button type="button" class="kw-btn" data-kw-send>ارسال درخواست</button>
+<div data-kw-response><h5>پاسخ <code dir="ltr">200</code></h5><pre dir="ltr" class="kw-code">{
+  &quot;id&quot;: &quot;ln_42&quot;,
+  &quot;status&quot;: &quot;open&quot;
+}</pre></div></div>
+<details class="kw-about"><summary>این ویجت چطور ساخته شده</summary><dl>
+<dt>نمایش می‌دهد</dt><dd><a href="/lending/">میز امانت</a></dd>
+<dt>اجزا</dt><dd><ul><li>API امانت</li><li>موتور سررسید</li></ul></dd>
+<dt>جریان</dt><dd>درخواست، امانت، یادآوری. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">نمودار معماری</a></dd>
+<dt>استفاده در</dt><dd><ul><li><a href="/examples/">/examples/</a>: کنار همه‌ی ویجت‌های سناریو.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--roles" id="w-borrow-roles-fa" data-widget="roles" aria-labelledby="w-borrow-roles-fa-t" data-reset-label="از اول">
+<header class="kw__head"><h4 id="w-borrow-roles-fa-t">چه کسی چه می‌کند</h4><span class="kw-badge" data-honesty="sample">نمونه</span></header>
+<p class="kw__lead"><b>چه می‌آموزید:</b> مسیر امانت از میز تا یادآوری. <b>چه می‌توانید بکنید:</b> امانت را تمدید کنید.</p>
+<div class="kw-tabs" role="tablist" aria-label="امانت گرفتن کتاب"><button type="button" role="tab" id="borrow-roles-fa-role-0-tab" aria-controls="borrow-roles-fa-role-0" aria-selected="true" data-kw-tab data-kind="person">عضو</button><button type="button" role="tab" id="borrow-roles-fa-role-1-tab" aria-controls="borrow-roles-fa-role-1" aria-selected="false" data-kw-tab data-kind="organisation">میز امانت</button></div>
+<div class="kw-role" role="tabpanel" id="borrow-roles-fa-role-0" aria-labelledby="borrow-roles-fa-role-0-tab" data-kw-panel>
+<h5>عضو</h5>
+<p class="kw-role__k">می‌بیند</p><ul><li>تاریخ سررسید</li></ul>
+<p class="kw-role__k">انجام می‌دهد</p><ul><li>کتابی را می‌خواهد</li></ul>
+<p class="kw-role__link">عضو <span aria-hidden="true">←</span> میز امانت: کتابی را می‌خواهد</p><p class="kw-role__link">میز امانت <span aria-hidden="true">←</span> عضو: امانت</p></div><div class="kw-role" role="tabpanel" id="borrow-roles-fa-role-1" aria-labelledby="borrow-roles-fa-role-1-tab" data-kw-panel>
+<h5>میز امانت</h5>
+
+<p class="kw-role__k">انجام می‌دهد</p><ul><li>امانت</li></ul>
+<p class="kw-role__link">عضو <span aria-hidden="true">←</span> میز امانت: کتابی را می‌خواهد</p><p class="kw-role__link">میز امانت <span aria-hidden="true">←</span> عضو: امانت</p></div>
+<details class="kw-about"><summary>این ویجت چطور ساخته شده</summary><dl>
+<dt>نمایش می‌دهد</dt><dd><a href="/lending/">میز امانت</a></dd>
+<dt>اجزا</dt><dd><ul><li>API امانت</li><li>موتور سررسید</li></ul></dd>
+<dt>جریان</dt><dd>درخواست، امانت، یادآوری. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">نمودار معماری</a></dd>
+<dt>استفاده در</dt><dd><ul><li><a href="/examples/">/examples/</a>: کنار همه‌ی ویجت‌های سناریو.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--tour" id="w-borrow-tour-fa" data-widget="tour" aria-labelledby="w-borrow-tour-fa-t" data-reset-label="از اول">
+<header class="kw__head"><h4 id="w-borrow-tour-fa-t">تور راهنما</h4><span class="kw-badge" data-honesty="sample">نمونه</span></header>
+<p class="kw__lead"><b>چه می‌آموزید:</b> مسیر امانت از میز تا یادآوری. <b>چه می‌توانید بکنید:</b> امانت را تمدید کنید.</p>
+<div class="kw-tour" data-kw-tour data-numerals="۰۱۲۳۴۵۶۷۸۹" data-continue="ادامه" data-finish="پایان" data-next="بعدی">
+<nav class="kw-tour__list" aria-label="کارها"><ol><li><a href="?task=borrow&amp;step=1#w-borrow-tour-fa" data-kw-task="borrow"><b>امانت</b><small>از میز تا یادآوری.</small><span class="kw-tour__prog" data-kw-prog data-total="2" data-label="{n} از {total}">۰ از ۲</span><i class="kw-tour__bar" aria-hidden="true"><i></i></i></a></li></ol></nav>
+<div class="kw-tour__stage">
+<section class="kw-tour__task" data-kw-tour-task="borrow" aria-labelledby="borrow-tour-fa-borrow-t"><h5 id="borrow-tour-fa-borrow-t">امانت</h5>
+<ol class="kw-tour__steps"><li class="kw-tour__step" data-tone="info" data-kw-tour-step="1" data-appearance="callout">
+<p class="kw-tour__n">گام ۱ از ۲</p>
+<figure class="kw-phone kw-tour__screen" aria-label="میز امانت"><figcaption><b>میز امانت</b><small>میز امانت</small></figcaption>
+<p class="kw-chips"><span class="kw-chip" data-anchor="1">صف</span></p>
+<dl class="kw-kv"><div><dt>عضو</dt><dd>m_7</dd></div><div><dt>سررسید</dt><dd>۱۴</dd></div></dl>
+</figure>
+<div class="kw-tour__callout" role="note"><span class="kw-chip" data-beat="toast">اعلان</span><p class="kw-tour__who"><b>عضو</b> <span aria-hidden="true">←</span> میز امانت</p>
+<p class="kw-tour__what">کتابی را می‌خواهد</p></div></li><li class="kw-tour__step" data-tone="ok" data-kw-tour-step="2" data-appearance="modal">
+<p class="kw-tour__n">گام ۲ از ۲</p>
+<figure class="kw-phone kw-tour__screen" aria-label="میز امانت"><figcaption><b>میز امانت</b><small>میز امانت</small></figcaption>
+<p class="kw-chips"><span class="kw-chip">صف</span></p>
+<dl class="kw-kv"><div><dt>عضو</dt><dd>m_7</dd></div><div data-anchor="1"><dt>سررسید</dt><dd>۱۴</dd></div></dl>
+</figure>
+<div class="kw-tour__callout" role="note"><span class="kw-chip" data-beat="seal">مهرشده</span><p class="kw-tour__who"><b>میز امانت</b> <span aria-hidden="true">←</span> عضو<span class="kw-decision" data-decision="allow">مجاز</span></p>
+<p class="kw-tour__what">امانت</p><p class="kw-tour__out">سررسید ۱۴ روز دیگر</p><ul class="kw-rules"><li>Two renewals at most</li></ul></div></li></ol></section>
+<section class="kw-tour__finish" data-kw-tour-finish><h5>پایان</h5><p class="">کتاب دست عضو است.</p><a class="kw-btn" href="/catalogue/">باز کردن فهرست</a></section>
+</div>
+<div class="kw__bar kw__bar--end kw-tour__nav"><button type="button" class="kw-btn kw-btn--ghost" data-kw-back>قبلی</button><span class="kw-status" data-kw-status aria-live="polite">۱ از ۲</span><button type="button" class="kw-btn" data-kw-next>بعدی</button></div>
+</div>
+<details class="kw-about"><summary>این ویجت چطور ساخته شده</summary><dl>
+<dt>نمایش می‌دهد</dt><dd><a href="/lending/">میز امانت</a></dd>
+<dt>اجزا</dt><dd><ul><li>API امانت</li><li>موتور سررسید</li></ul></dd>
+<dt>جریان</dt><dd>درخواست، امانت، یادآوری. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">نمودار معماری</a></dd>
+<dt>استفاده در</dt><dd><ul><li><a href="/examples/">/examples/</a>: کنار همه‌ی ویجت‌های سناریو.</li></ul></dd>
+</dl></details>
+</section>
+<section class="kw kw--notify" id="w-borrow-notify-fa" data-widget="notify" aria-labelledby="w-borrow-notify-fa-t" data-reset-label="از اول">
+<header class="kw__head"><h4 id="w-borrow-notify-fa-t">مرکز اعلان‌ها</h4><span class="kw-badge" data-honesty="sample">نمونه</span></header>
+<p class="kw__lead"><b>چه می‌آموزید:</b> مسیر امانت از میز تا یادآوری. <b>چه می‌توانید بکنید:</b> امانت را تمدید کنید.</p>
+<div class="kw-nc" data-kw-nc data-numerals="۰۱۲۳۴۵۶۷۸۹">
+<div class="kw__bar"><button type="button" class="kw-btn" data-kw-play aria-pressed="false" data-play="پخش دوباره" data-pause="توقف">پخش دوباره</button><span class="kw-status" data-kw-status aria-live="polite"></span></div>
+<div class="kw-nc__tabs" role="tablist" aria-label="امانت گرفتن کتاب"><button type="button" role="tab" aria-selected="true" aria-controls="borrow-notify-fa-dev-phone" data-kw-devtab="phone">گوشی عضو <span class="kw-nc__badge" data-kw-badge>۱</span></button><button type="button" role="tab" aria-selected="false" aria-controls="borrow-notify-fa-dev-desk" data-kw-devtab="desk">کنسول میز <span class="kw-nc__badge" data-kw-badge>۱</span></button></div>
+<div class="kw-nc__stage has-phone"><div class="kw-nc__main"><figure class="kw-dev kw-dev--phone" id="borrow-notify-fa-dev-phone" data-kw-dev="phone" role="tabpanel" aria-label="گوشی عضو">
+<div class="kw-dev__lock" aria-hidden="true"><span class="kw-dev__notch"></span><p class="kw-dev__time" data-kw-clock></p><p class="kw-dev__date">۹ مهر ۱۴۰۵</p></div>
+<figcaption class="kw-dev__bar"><span class="kw-dev__dots" aria-hidden="true"><i></i><i></i><i></i></span><b>گوشی عضو</b><small>عضو</small></figcaption>
+<ol class="kw-dev__stack" aria-live="polite"><li class="kw-nc__n" data-tone="ok" data-kw-n="1" data-device="phone">
+<div class="kw-nc__head"><span class="kw-nc__icon" aria-hidden="true"></span><p class="kw-nc__meta"><b>میز امانت</b><time>۲۳ مهر ۱۴۰۵</time></p></div>
+<p class="kw-nc__title">امانت</p><p class="kw-nc__body">سررسید ۱۴ روز دیگر</p>
+<p class="kw-nc__tags"><span class="kw-decision" data-decision="allow">مجاز</span></p>
+<button type="button" class="kw-nc__open" aria-expanded="true" aria-controls="borrow-notify-fa-scene-1" data-kw-open>جزئیات</button><div class="kw-scene kw-scene--seal" id="borrow-notify-fa-scene-1" data-kw-scene="seal"><ol class="kw-scene__list"><li><span class="kw-scene__dot" aria-hidden="true"></span><b>امانت</b> <span>۱۴</span></li></ol><p class="kw-scene__seal"><code dir="ltr" data-kw-hash>9f2c41aa</code><span class="kw-scene__stamp" aria-hidden="true">✓</span></p></div>
+<div class="kw-acts"><button type="button" class="kw-btn kw-btn--ghost" data-kw-act data-kind="approve" data-done="انجام شد" data-result="رد شد: درخواست‌دهنده نمی‌تواند درخواست خودش را تأیید کند." data-blocked="1" data-tone="err">عضو می‌کوشد خودش تأیید کند</button><button type="button" class="kw-btn kw-btn--ghost" data-kw-act data-kind="verify" data-done="انجام شد" data-result="مهر تأیید شد" data-tone="ok">بررسی <small>میز امانت</small></button><p class="kw-result" data-kw-result hidden></p></div>
+</li></ol></figure></div><div class="kw-nc__side"><div class="kw-nc__col"><figure class="kw-dev kw-dev--console" id="borrow-notify-fa-dev-desk" data-kw-dev="desk" role="tabpanel" aria-label="کنسول میز">
+
+<figcaption class="kw-dev__bar"><span class="kw-dev__dots" aria-hidden="true"><i></i><i></i><i></i></span><b>کنسول میز</b><small>میز امانت</small></figcaption>
+<ol class="kw-dev__stack" aria-live="polite"><li class="kw-nc__n" data-tone="info" data-kw-n="0" data-device="desk">
+<div class="kw-nc__head"><span class="kw-nc__icon" aria-hidden="true"></span><p class="kw-nc__meta"><b>عضو</b><time>اکنون</time></p></div>
+<p class="kw-nc__title">کتابی را می‌خواهد</p>
+<p class="kw-nc__tags"></p>
+<button type="button" class="kw-nc__open" aria-expanded="true" aria-controls="borrow-notify-fa-scene-0" data-kw-open>جزئیات</button><div class="kw-scene kw-scene--checklist" id="borrow-notify-fa-scene-0" data-kw-scene="checklist"><p class="kw-scene__title">بررسی‌ها</p><ol class="kw-scene__list"><li><span class="kw-scene__dot" aria-hidden="true"></span><b>Two renewals at most</b></li><li><span class="kw-scene__dot" aria-hidden="true"></span><b>A reminder three days before</b></li></ol></div>
+
+</li></ol></figure></div></div></div>
+</div>
+<details class="kw-about"><summary>این ویجت چطور ساخته شده</summary><dl>
+<dt>نمایش می‌دهد</dt><dd><a href="/lending/">میز امانت</a></dd>
+<dt>اجزا</dt><dd><ul><li>API امانت</li><li>موتور سررسید</li></ul></dd>
+<dt>جریان</dt><dd>درخواست، امانت، یادآوری. <a href="https://github.com/example/library/blob/main/docs/diagrams/lending.png" rel="noopener">نمودار معماری</a></dd>
+<dt>استفاده در</dt><dd><ul><li><a href="/examples/">/examples/</a>: مرکز اعلان.</li></ul></dd>
+</dl></details>
+</section></div></article></section>
+</div>

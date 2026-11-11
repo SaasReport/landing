@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/finding-case.schema.json",
+  "title": "kit.finding-case.v1",
+  "description": "Where a must-fail case of a finding class comes from (docs/CONSTITUTION.md §10): every case is the real finding, as it was. findings/<class>/must-fail/<case>/source.json names the repository, the commit and the finding, and for every file of the case either the git blob it is (its path at that commit, the blob id; `kit check findings` hashes the case file the way git does and fails on any difference, offline) or, for a file that is not a copy of one blob (an index listing, a table read from a dispatcher, an image the owner was shown), how it was derived and from what.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "repo",
+    "commit",
+    "finding",
+    "expect",
+    "files"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "v": {
+      "const": 1
+    },
+    "repo": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$",
+      "description": "owner/repo the finding was made in"
+    },
+    "commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{7,40}$"
+    },
+    "finding": {
+      "type": "string",
+      "minLength": 20,
+      "description": "what was found, where (PR, run, review), and when"
+    },
+    "expect": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 3
+      },
+      "description": "what the gate must report on this case: each string is part of the match of one of its findings, so the case is refused for the finding it was cut from and not for something else in the file"
+    },
+    "files": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "source",
+              "blob"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1,
+                "description": "the file in the case directory"
+              },
+              "source": {
+                "type": "string",
+                "minLength": 1,
+                "description": "its path in repo at commit"
+              },
+              "blob": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{40}$",
+                "description": "git rev-parse <commit>:<source>"
+              }
+            }
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "derived"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "minLength": 1
+              },
+              "derived": {
+                "type": "string",
+                "minLength": 20,
+                "description": "how the file was made from the real finding (the command, or the blob it was read from)"
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}

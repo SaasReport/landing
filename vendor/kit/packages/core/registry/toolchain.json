@@ -1,0 +1,37 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/toolchain.schema.json",
+  "tools": {
+    "node": {
+      "exact": "22.22.2",
+      "required_on": [
+        "ci",
+        "codespace",
+        "machine"
+      ]
+    },
+    "npm": {
+      "exact": "10.9.7",
+      "required_on": [
+        "ci",
+        "codespace",
+        "machine"
+      ]
+    },
+    "git": {
+      "exact": "2.55.0",
+      "required_on": [
+        "codespace"
+      ]
+    },
+    "docker": {
+      "exact": "29.8.0",
+      "required_on": [
+        "codespace"
+      ]
+    }
+  },
+  "host": {
+    "ci_env": "GITHUB_ACTIONS",
+    "codespace_env": "CODESPACES"
+  }
+}

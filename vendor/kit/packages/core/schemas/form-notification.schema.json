@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/form-notification.schema.json",
+  "title": "kit.form-notification.v1",
+  "description": "One form submission and its two deliveries (docs/FORMS.md). $defs.submission is the body of the comms engine's POST /v1/comms/submit (what a site's form handler hands over, through @saasreport/comms submitForm); the root is the record the engine keeps in D1 (comms_form_deliveries), answers that call with, serves at GET /api/forms/deliveries/<reference> and hands to onEvent as comms.form.delivered or comms.form.owner_failed. It carries no address and no submitted value: the contents travel in the emails, the ledger keeps statuses. An owner delivery that is not `sent` is a failure (suppressed included): it is recorded, raised as an event and counted by GET /api/forms/deliveries, which the monitor's form-deliveries journey reads.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["reference", "form_id", "site", "test", "created_at", "receipt", "owner", "ledger_url"],
+  "properties": {
+    "reference": { "$ref": "#/$defs/reference" },
+    "form_id": { "$ref": "#/$defs/formId" },
+    "site": { "type": "string", "format": "uri", "pattern": "^https://" },
+    "test": { "type": "boolean", "description": "A test or drill submission (marked TEST in the subject of both emails); its receipt goes to the owner's recipients, never to the address in the form." },
+    "created_at": { "type": "string", "format": "date-time" },
+    "updated_at": { "type": ["string", "null"], "format": "date-time" },
+    "receipt": { "$ref": "#/$defs/delivery" },
+    "owner": { "$ref": "#/$defs/delivery" },
+    "ledger_url": { "type": "string", "format": "uri", "description": "<site>/api/forms/deliveries/<reference>: this record." }
+  },
+  "$defs": {
+    "reference": { "type": "string", "pattern": "^[A-Z][A-Z0-9]{0,3}-[A-HJ-NP-Z2-9]{16}$", "description": "<prefix>-<16 characters of the 32-letter alphabet A-HJ-NP-Z2-9>: 80 bits from the platform's CSPRNG (newReference in @saasreport/core/form-deliveries). The ledger link in the owner's notification is the reference, so it is long enough that the reference cannot be guessed, and its lookup is rate-limited per client." },
+    "formId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{0,63}$" },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["pending", "sent", "suppressed", "failed"], "description": "pending: not finished (a pending owner delivery older than the monitor's window is a failure); suppressed: the recipient asked not to be written to (a receipt only: an owner delivery is never suppressed, it fails)." },
+        "dispatch_id": { "type": ["string", "null"], "description": "The comms_dispatch row of this email, when the engine reserved one." },
+        "error": { "type": ["string", "null"], "maxLength": 300, "description": "Why it failed: an error code and detail, never an address." }
+      }
+    },
+    "submission": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["form_id", "reference", "submitter", "params"],
+      "properties": {
+        "form_id": { "$ref": "#/$defs/formId" },
+        "reference": { "$ref": "#/$defs/reference" },
+        "form_label": { "type": "string", "minLength": 1, "maxLength": 200, "description": "The form's name in the owner's notification (default: the form id)." },
+        "submitter": {
+          "type": "object", "additionalProperties": false, "required": ["email"],
+          "properties": { "email": { "type": "string", "minLength": 3, "maxLength": 254, "pattern": "^[^\\s@<>]+@[^\\s@<>]+\\.[^\\s@<>]{2,}$" } }
+        },
+        "params": { "type": "object", "description": "The acknowledgement template's params (name, reference, submitted_at, fields_html, fields_text and the template's own); the owner's notification gets the same submission (fields_html, fields_text) plus form_id, form_label, site, ledger_url and test_marker from the engine." },
+        "test": { "type": "boolean", "default": false },
+        "locale": { "type": "string", "pattern": "^[A-Za-z]{2,3}(-[A-Za-z0-9]{1,8})*$", "description": "The submitter's language (BCP 47; its first subtag picks the autoreply variant, the form's `ack_templates`). A language the project does not declare gets the primary one." },
+        "notices": { "type": "object", "description": "The legal-notice pick of the receipt (dispatch `notices`)." }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ok", "window_hours", "submissions", "owner_failed", "owner_pending_stale", "receipt_failed"],
+      "description": "GET /api/forms/deliveries: counts over the window, no reference, no address. ok is false when an owner delivery failed or is pending past pending_after_min.",
+      "properties": {
+        "ok": { "type": "boolean" },
+        "window_hours": { "type": "integer", "minimum": 1 },
+        "pending_after_min": { "type": "integer", "minimum": 1 },
+        "submissions": { "type": "integer", "minimum": 0 },
+        "owner_sent": { "type": "integer", "minimum": 0 },
+        "owner_failed": { "type": "integer", "minimum": 0 },
+        "owner_pending_stale": { "type": "integer", "minimum": 0 },
+        "receipt_failed": { "type": "integer", "minimum": 0 },
+        "last_owner_failure_at": { "type": ["string", "null"] },
+        "last_test_at": { "type": ["string", "null"], "format": "date-time", "description": "When the latest test (drill) submission in the window was recorded: the monitor drills once a day, never twice." }
+      }
+    },
+    "manifestForm": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["form_id", "ack_template_id", "ack_templates", "owner_template_id"],
+      "description": "One entry of the comms manifest's `forms`: the autoreply exists once per declared locale (`ack_templates`, keyed by language; `ack_template_id` is the primary locale's). Every variant is refused on plain /v1/comms/dispatch, and a submission's `locale` picks its variant.",
+      "properties": {
+        "form_id": { "$ref": "#/$defs/formId" },
+        "ack_template_id": { "type": "string", "minLength": 3 },
+        "ack_templates": { "type": "object", "minProperties": 1, "propertyNames": { "pattern": "^[a-z]{2,3}$" }, "additionalProperties": { "type": "string", "minLength": 3 } },
+        "owner_template_id": { "type": "string", "minLength": 3 }
+      }
+    },
+    "submitAnswer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ok"],
+      "description": "The answer of POST /v1/comms/submit. `delivery` is the ledger record (the root of this schema). `outcome_recorded: false` appears only when the engine's final write of the outcome failed; a caller that sees `error` and no `delivery` records the failure itself (submitForm).",
+      "properties": {
+        "ok": { "type": "boolean" },
+        "delivery": { "$ref": "#" },
+        "outcome_recorded": { "const": false, "description": "Appears only when the final write of the outcomes failed after the row existed (and possibly after both emails went): the submission IS recorded, its row stays pending and the summary counts it as failed once stale. Never a reason to ask the submitter to submit again." },
+        "error": { "type": "string" },
+        "field": { "type": "string" },
+        "form_id": { "type": "string" },
+        "detail": { "type": "string" }
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+@saasreport/forge
+Copyright 2026 Iran Open Finance
+
+This package contains a port of Cloudflare Forge (packages/forge of the
+cloudflare/forge repository), Copyright Cloudflare, Inc., licensed under the
+Apache License, Version 2.0. The port started from the origin commit recorded
+in ORIGIN.json (86cb1ef3047abc7441d96c894e8cd35e826fa8e5, 2026-10-02).
+
+Files derived from Forge carry an SPDX header naming the upstream file they were
+ported from and the changes made; ORIGIN.json lists every upstream file at the
+origin commit with its sha256 and whether it was ported (and to which file) or
+why not. The changes, in short: TypeScript to JavaScript; every OpenAPI method;
+derived operationIds; request bodies, parameters and 2xx responses as the
+contract declares them; per-instance resolver state; Cloudflare's response
+envelope, organisation-specific CLI options, overlays and Fern/Docker
+generators removed; native JavaScript, CLI and Python targets added.
+
+The full licence text is in LICENSE at the root of the kit repository (the kit
+itself is Apache-2.0).

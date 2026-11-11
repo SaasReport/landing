@@ -1,0 +1,2 @@
+Inter (https://rsms.me/inter/) is licensed under the SIL Open Font License, Version 1.1
+(https://openfontlicense.org). Inter-400.woff2 is the regular weight, loaded by the diagram renderer from this directory.

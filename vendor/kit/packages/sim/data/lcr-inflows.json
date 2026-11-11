@@ -1,0 +1,138 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-factor-table.schema.json",
+  "schema": "kit.sim-factor-table.v1",
+  "id": "lcr-inflows",
+  "version": "2023-01-01",
+  "profile": "baseline",
+  "standard": {
+    "body": "BCBS",
+    "title": "Liquidity Coverage Ratio (Basel Framework LCR20, LCR30, LCR40; BCBS d238, 2013, revised d295 context)",
+    "url": "https://www.bis.org/basel_framework/chapter/LCR/40.htm",
+    "versionPublished": "2019-12-15"
+  },
+  "factors": [
+    {
+      "id": "reverse-repo-level1",
+      "label": "maturing reverse repo and securities borrowing backed by Level 1",
+      "value": 0,
+      "unit": "bp",
+      "ref": "LCR40.78, LCR40.79 table",
+      "max": 0
+    },
+    {
+      "id": "reverse-repo-level2a",
+      "label": "backed by Level 2A (inflow equals the haircut)",
+      "value": 1500,
+      "unit": "bp",
+      "ref": "LCR40.78, LCR40.79 table",
+      "max": 1500
+    },
+    {
+      "id": "reverse-repo-level2b-rmbs",
+      "label": "backed by eligible RMBS",
+      "value": 2500,
+      "unit": "bp",
+      "ref": "LCR40.78, LCR40.79 table",
+      "max": 2500
+    },
+    {
+      "id": "reverse-repo-level2b-other",
+      "label": "backed by other Level 2B",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "LCR40.78, LCR40.79 table",
+      "max": 5000
+    },
+    {
+      "id": "margin-lending-other-collateral",
+      "label": "margin lending backed by all other collateral",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "LCR40.78, LCR40.79 table",
+      "max": 5000
+    },
+    {
+      "id": "secured-lending-covering-short-positions",
+      "label": "maturing secured lending whose collateral is used to cover short positions",
+      "value": 0,
+      "unit": "bp",
+      "ref": "LCR40.79",
+      "min": 0,
+      "max": 0
+    },
+    {
+      "id": "reverse-repo-other",
+      "label": "backed by non-HQLA assets (other collateral)",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.78, LCR40.79 table",
+      "max": 10000
+    },
+    {
+      "id": "retail-small-business-performing",
+      "label": "fully performing loans to retail and small business customers",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "LCR40.86",
+      "max": 5000
+    },
+    {
+      "id": "wholesale-non-financial-performing",
+      "label": "fully performing loans to non-financial wholesale customers",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "LCR40.87",
+      "max": 5000
+    },
+    {
+      "id": "wholesale-financial-performing",
+      "label": "fully performing loans to financial institutions and central banks",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.87",
+      "max": 10000
+    },
+    {
+      "id": "securities-maturing-non-hqla",
+      "label": "securities maturing within 30 days not in the stock",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.88",
+      "max": 10000
+    },
+    {
+      "id": "operational-deposits-held",
+      "label": "operational deposits held at other institutions",
+      "value": 0,
+      "unit": "bp",
+      "ref": "LCR40.89",
+      "min": 0,
+      "max": 0
+    },
+    {
+      "id": "derivatives-net-inflows",
+      "label": "net derivative cash inflows",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "LCR40.91",
+      "max": 10000
+    },
+    {
+      "id": "undrawn-facilities-held",
+      "label": "committed facilities held at other institutions",
+      "value": 0,
+      "unit": "bp",
+      "ref": "LCR40.82",
+      "min": 0,
+      "max": 0
+    },
+    {
+      "id": "inflow-cap",
+      "label": "cap on inflows as a share of total outflows",
+      "value": 7500,
+      "unit": "bp",
+      "ref": "LCR40.77",
+      "max": 7500
+    }
+  ]
+}

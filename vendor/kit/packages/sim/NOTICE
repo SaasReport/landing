@@ -1,0 +1,17 @@
+@saasreport/sim
+Copyright 2026 Iran Open Finance
+
+Licensed under the Apache License, Version 2.0.
+
+This package is a native re-implementation of published standards and textbook
+methods (see ORIGIN.json for the standards and their sections). It contains no
+code from any other project and has no dependency on one.
+
+The following projects were READ to understand which formulas a simulation toolkit
+needs. Their algorithms are public knowledge; nothing of their code was copied:
+
+  ommaganti/yield-curve-sim   MIT          (NSS fit, bump-and-reprice, key-rate tents)
+  TommasoBelluzzo/BaselTools  Apache-2.0   (SA-CCR and SMA formula chain)
+  mgao6767/brms               MIT          (rule-driven double-entry, for a later engine)
+
+ORIGIN.json records, per project, what was taken as an idea and what was not taken.

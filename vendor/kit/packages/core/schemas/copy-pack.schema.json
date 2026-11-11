@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/copy-pack.schema.json",
+  "title": "kit.copy-pack.v1",
+  "description": "A module's reader-facing copy as data: a non-empty object (or list) whose leaves are strings (a locale pack, a notice pack, a table of names), nested in objects and arrays. Where the copy needs parameters it is a template function or a {placeholder} string. A module listed under `schemas` in kit.canon.json with this schema is validated data: its strings are content, and the hardcoding scan reads the same text written anywhere else as a finding.",
+  "anyOf": [
+    { "type": "object", "minProperties": 1, "additionalProperties": { "$ref": "#/$defs/node" } },
+    { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/node" } }
+  ],
+  "$defs": {
+    "node": {
+      "anyOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "$ref": "#/$defs/node" } },
+        { "type": "object", "additionalProperties": { "$ref": "#/$defs/node" } },
+        { "type": ["number", "boolean", "null"] },
+        { "not": { "type": ["string", "array", "object", "number", "boolean", "null"] }, "description": "A template function (brand) => text: copy that needs parameters." }
+      ]
+    }
+  }
+}

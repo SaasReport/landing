@@ -1,0 +1,95 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-factor-table.schema.json",
+  "schema": "kit.sim-factor-table.v1",
+  "id": "nsfr-rsf",
+  "version": "2023-01-01",
+  "profile": "baseline",
+  "standard": {
+    "body": "BCBS",
+    "title": "Net Stable Funding Ratio (Basel Framework NSF20, NSF30; BCBS d295, October 2014)",
+    "url": "https://www.bis.org/basel_framework/chapter/NSF/30.htm",
+    "versionPublished": "2019-12-15"
+  },
+  "factors": [
+    {
+      "id": "rsf-0",
+      "label": "coins, banknotes, central bank reserves, claims on central banks under six months, trade date receivables",
+      "value": 0,
+      "unit": "bp",
+      "ref": "NSF30.25",
+      "min": 0,
+      "max": 0
+    },
+    {
+      "id": "rsf-5",
+      "label": "unencumbered Level 1 assets (other than those at 0%)",
+      "value": 500,
+      "unit": "bp",
+      "ref": "NSF30.26",
+      "min": 500,
+      "max": 500
+    },
+    {
+      "id": "rsf-10",
+      "label": "unencumbered loans to financial institutions under six months secured by Level 1, freely rehypothecable",
+      "value": 1000,
+      "unit": "bp",
+      "ref": "NSF30.27",
+      "min": 1000,
+      "max": 1000
+    },
+    {
+      "id": "rsf-15",
+      "label": "unencumbered Level 2A assets; other unencumbered loans to financial institutions under six months",
+      "value": 1500,
+      "unit": "bp",
+      "ref": "NSF30.28",
+      "min": 1500,
+      "max": 1500
+    },
+    {
+      "id": "rsf-50",
+      "label": "unencumbered Level 2B assets; HQLA encumbered six to twelve months; loans to financial institutions and central banks of six to twelve months; operational deposits at financial institutions; other non-HQLA under a year",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "NSF30.29",
+      "min": 5000,
+      "max": 5000
+    },
+    {
+      "id": "rsf-65",
+      "label": "unencumbered residential mortgages of one year or more with risk weight 35% or lower; other performing loans of one year or more with risk weight 35% or lower",
+      "value": 6500,
+      "unit": "bp",
+      "ref": "NSF30.30",
+      "min": 6500,
+      "max": 6500
+    },
+    {
+      "id": "rsf-85",
+      "label": "initial margin and CCP default fund contributions; other performing loans of one year or more; non-HQLA securities of one year or more and listed equities; physical commodities",
+      "value": 8500,
+      "unit": "bp",
+      "ref": "NSF30.31",
+      "min": 8500,
+      "max": 8500
+    },
+    {
+      "id": "rsf-100",
+      "label": "assets encumbered one year or more; net derivative assets; assets without a stated maturity; all other assets",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "NSF30.32",
+      "min": 10000,
+      "max": 10000
+    },
+    {
+      "id": "minimum-ratio",
+      "label": "minimum NSFR",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "NSF20.2 (100%)",
+      "min": 10000
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/upload-policy.schema.json",
+  "title": "kit.upload-policy.v1",
+  "description": "What one form accepts as a file (@saasreport/uploads): the file fields it declares, the types it allows (decided from the file's own bytes, never from its name or declared type), the size caps, retention, and what happens to a file the pipeline cannot clear. A form without a policy takes no files and rejects file parts. Nothing is hardcoded in a handler: the policy is data, validated here.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "file_fields", "allowed_types", "max_bytes", "retention_days", "on_needs_sandbox"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{2,79}$", "description": "Stable id, copied into every UploadRecord (policy_id) so a verdict can be traced to the rule that produced it." },
+    "file_fields": {
+      "type": "array", "minItems": 1, "maxItems": 10,
+      "description": "The multipart field names that may carry a file. A file part under any other name is rejected (file_field_not_accepted).",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "pattern": "^[a-z][a-z0-9_]{0,39}$" },
+          "required": { "type": "boolean", "default": false },
+          "max_files": { "type": "integer", "minimum": 1, "maximum": 20, "default": 1 }
+        }
+      }
+    },
+    "allowed_types": {
+      "type": "array", "minItems": 1, "uniqueItems": true,
+      "description": "Sniffed types the form accepts (the sniffer's list, see ALLOWABLE_TYPES in @saasreport/uploads). Executables, scripts and archives other than OOXML are never allowable.",
+      "items": { "enum": [
+        "application/pdf", "image/png", "image/jpeg", "image/gif", "image/webp", "image/svg+xml",
+        "text/plain", "application/json", "application/zip",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+        "application/msword", "application/vnd.ms-excel", "application/vnd.ms-powerpoint"
+      ] }
+    },
+    "max_bytes": { "type": "integer", "minimum": 1, "maximum": 67108864, "description": "Largest single file. 64 MiB at most: the Worker holds the bytes to hash and triage them (128 MiB isolate); larger files take a presigned direct upload into quarantine." },
+    "max_request_bytes": { "type": "integer", "minimum": 1, "maximum": 134217728, "description": "Largest whole multipart request. Defaults to max_bytes times the total file count plus 1 MiB of fields." },
+    "max_field_bytes": { "type": "integer", "minimum": 1, "maximum": 1048576, "description": "Largest text field of the form (default 65536)." },
+    "retention_days": { "type": "integer", "minimum": 1, "maximum": 3650, "description": "A released upload is deleted this many days after receipt (tombstone kept)." },
+    "blocked_retention_days": { "type": "integer", "minimum": 1, "maximum": 90, "default": 7, "description": "A held or blocked object is deleted from quarantine after this many days unless on hold." },
+    "on_needs_sandbox": { "enum": ["hold", "release_download_only"], "description": "What the form does with a file whose verdict is needs_sandbox (which is what a project with no scanner configured gets for every file): hold it in quarantine until a person decides, or release it for download only. The verdict stays needs_sandbox either way; there is no implicit pass." },
+    "scanner": { "type": "string", "pattern": "^[a-z][a-z0-9_.-]{0,59}$", "description": "Name of the scanner the project wired for this form (createUploads({ scanners })). Absent: none, and every file is needs_sandbox." },
+    "scan_timeout_ms": { "type": "integer", "minimum": 1000, "maximum": 600000, "default": 30000 },
+    "serve": {
+      "type": "object", "additionalProperties": false,
+      "properties": {
+        "origin": { "type": "string", "format": "uri", "pattern": "^https://", "description": "The cookieless origin released files are served from." },
+        "url_ttl_seconds": { "type": "integer", "minimum": 30, "maximum": 3600, "default": 300 },
+        "inline_types": {
+          "type": "array", "uniqueItems": true, "items": { "enum": ["image/png", "image/jpeg", "image/gif", "image/webp"] },
+          "description": "The kinds this form declares inline-safe: a released upload of exactly one of these sniffed types is served without Content-Disposition: attachment, under the restrictive image CSP (kit.upload-serve.v1). Raster images only: SVG, HTML, XML, script, PDF and Office files are never inline, whatever this says. Absent or empty: every download is an attachment."
+        }
+      }
+    },
+    "limits": {
+      "type": "object", "additionalProperties": false,
+      "description": "Triage limits, each within the hard ceiling of the engine (TRIAGE_CEILING). Omitted ones take TRIAGE_DEFAULTS.",
+      "properties": {
+        "max_zip_entries": { "type": "integer", "minimum": 1, "maximum": 10000 },
+        "max_uncompressed_bytes": { "type": "integer", "minimum": 1, "maximum": 1073741824 },
+        "max_ratio": { "type": "integer", "minimum": 2, "maximum": 1000 },
+        "max_pdf_objects": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "max_pdf_decoded_bytes": { "type": "integer", "minimum": 1, "maximum": 268435456 },
+        "max_filter_chain": { "type": "integer", "minimum": 1, "maximum": 8 }
+      }
+    }
+  }
+}

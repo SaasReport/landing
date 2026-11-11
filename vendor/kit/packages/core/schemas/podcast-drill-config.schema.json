@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/podcast-drill-config.schema.json",
+  "title": "kit.podcast-drill-config.v1",
+  "description": "The parameters of the publish drill: the variables of the parent process its child may see (no key, token or credential, no NODE_OPTIONS), the search horizon for the next item of a weekly or monthly series, the hours of that day the pinned clock tries, and the child's time limit.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["about", "childEnv", "horizonDays", "hoursUtc", "timeoutMs"],
+  "properties": {
+    "about": { "type": "string", "minLength": 20 },
+    "childEnv": {
+      "type": "array", "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$", "not": { "pattern": "KEY|TOKEN|SECRET|PASSWORD|CREDENTIAL|NOTIFY|NODE_OPTIONS|^HOME$" } }
+    },
+    "horizonDays": { "type": "integer", "minimum": 31, "maximum": 1000 },
+    "hoursUtc": { "type": "array", "minItems": 1, "uniqueItems": true, "items": { "type": "integer", "minimum": 0, "maximum": 23 } },
+    "timeoutMs": { "type": "integer", "minimum": 10000, "maximum": 900000 }
+  }
+}

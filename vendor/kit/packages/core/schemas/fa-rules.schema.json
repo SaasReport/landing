@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/fa-rules.schema.json",
+  "title": "kit.fa-rules.v1",
+  "description": "A Persian rule pack for `kit check persian` (@saasreport/fa-lint, docs/PERSIAN.md): lexicon classes and rules. Every rule carries the examples that must fail and must pass; the tests run both sets, so a correction recorded here can never ship twice. Patterns are JavaScript regular expressions (flags gu) over one text segment; {{name}} expands to a class (an alternation, longest first), {{<}} / {{>}} are Persian word boundaries and {{fa}} is one Persian letter.",
+  "type": "object",
+  "required": ["$schema", "pack", "version", "classes", "rules"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "pack": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "The pack's name (kit: the kit's own pack; a project names its own)." },
+    "version": { "type": "integer", "minimum": 1, "description": "Raised whenever a rule is added or changed." },
+    "description": { "type": "string" },
+    "classes": {
+      "type": "object",
+      "description": "Lexicon classes, by name: the words a {{name}} token stands for. A project's persian.config.json adds words to a class or defines new ones (e.g. brand).",
+      "propertyNames": { "pattern": "^[a-zA-Z][a-zA-Z0-9]*$" },
+      "additionalProperties": { "$ref": "#/$defs/wordList" }
+    },
+    "exampleClasses": {
+      "type": "object",
+      "description": "Words the examples assume for classes a project supplies (e.g. a brand), used only when the examples run as tests.",
+      "additionalProperties": { "$ref": "#/$defs/wordList" }
+    },
+    "rules": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/rule" } }
+  },
+  "$defs": {
+    "wordList": { "type": "array", "items": { "type": "string", "minLength": 1 }, "uniqueItems": true },
+    "rule": {
+      "type": "object",
+      "required": ["id", "layer", "on", "pattern", "fix", "reason", "source", "severity", "examples"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^fa-[a-z0-9]+(?:-[a-z0-9]+)*$", "description": "Stable id, cited in findings and allow-list entries." },
+        "title": { "type": "string" },
+        "ownerId": { "type": "string", "pattern": "^FA-[A-Z0-9]+(?:-[A-Z0-9]+)*$", "description": "The id the owner's correction list gives this rule (e.g. FA-BI-CALQUE), kept so a future correction is traceable to it." },
+        "layer": { "enum": ["typography", "wording", "grammar", "glossary"], "description": "typography: characters, spacing, ZWNJ, digits, bidi; wording: calques and word choice; grammar: word order and government; glossary: one concept, one word." },
+        "on": { "enum": ["raw", "normalized"], "description": "raw: the text as written (typography); normalized: after the normalizer (Persian ی/ک and digits, ZWNJ in compounds, spacing), so a rule is written once for every spelling." },
+        "pattern": { "type": "string", "minLength": 1 },
+        "unless": { "type": "string", "description": "A pattern tested, anchored, on the text right after the match: when it matches, the finding is dropped (e.g. a verb follows, so the phrase is a sentence, not a calqued compound)." },
+        "unlessBefore": { "type": "string", "description": "A pattern tested on the text right before the match (anchored at its end): when it matches, the finding is dropped." },
+        "fix": { "type": "string", "description": "The suggested fix: a replacement for the match ($& and $1…$9 are the match and its groups; empty deletes it), or advice in words when the fix needs a person (then autofix is false)." },
+        "autofix": { "type": "boolean", "default": false, "description": "The fix is a safe mechanical replacement; `kit persian fix --write` applies it." },
+        "reason": { "type": "string", "minLength": 10, "description": "Why, in Persian (the reviewer's words)." },
+        "why": { "type": "string", "description": "Why, in English." },
+        "source": {
+          "type": "object",
+          "required": ["kind", "ref"],
+          "additionalProperties": false,
+          "properties": {
+            "kind": { "enum": ["owner-correction", "proofread", "constitution", "style-guide"], "description": "owner-correction: the owner corrected this text; proofread: a recorded proofreading change list; constitution: a kit constitutional rule; style-guide: general Persian orthography (e.g. the Academy's guide, Virastar)." },
+            "ref": { "type": "string", "minLength": 3, "description": "Which correction: a date and place, a change-list row, a document section." },
+            "date": { "type": "string", "format": "date" },
+            "before": { "type": "string", "description": "The text as it shipped (must also be a fail example)." },
+            "after": { "type": "string", "description": "The owner's corrected text (must also be a pass example)." }
+          }
+        },
+        "severity": { "const": "error", "description": "Every rule is an error. There is no warning level (docs/CONSTITUTION.md, t=0): a rule that cannot be made precise is removed, an instance a reviewer read goes in persian.config.json allow." },
+        "registers": { "type": "array", "items": { "enum": ["written", "spoken"] }, "minItems": 1, "uniqueItems": true, "description": "Where the rule applies: written copy, spoken scripts (podcasts, colloquial), or both (default)." },
+        "examples": {
+          "type": "object",
+          "required": ["fail", "pass"],
+          "additionalProperties": false,
+          "properties": {
+            "fail": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "description": "Each must produce this rule's finding." },
+            "pass": { "type": "array", "minItems": 1, "items": { "type": "string", "minLength": 1 }, "description": "Each must produce no finding of this rule." }
+          }
+        }
+      }
+    }
+  }
+}

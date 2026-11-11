@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/legal-notices.schema.json",
+  "title": "kit.legal-notices.v1",
+  "description": "A project's legal notices (@saasreport/comms/notices): which audiences and jurisdictions it offers, the default selection for emails, placeholder values and optional wording overrides per language. Wording is fixed text: {{placeholder}}, never ${…}.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "audiences": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" } },
+    "jurisdictions": { "type": "array", "uniqueItems": true, "items": { "type": "string", "pattern": "^[A-Z]{2}$" } },
+    "default": { "type": "object", "additionalProperties": false, "properties": { "audiences": { "type": "array", "items": { "type": "string" } }, "jurisdictions": { "type": "array", "items": { "type": "string" } } } },
+    "status": { "type": "object", "propertyNames": { "pattern": "^[A-Z]{2}$" }, "additionalProperties": { "type": "string" } },
+    "values": { "type": "object", "propertyNames": { "pattern": "^[a-z0-9_]+$" } },
+    "copy": { "type": "object", "propertyNames": { "pattern": "^[a-z]{2}$" } }
+  }
+}

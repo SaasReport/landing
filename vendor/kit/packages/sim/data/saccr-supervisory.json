@@ -1,0 +1,393 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/sim-factor-table.schema.json",
+  "schema": "kit.sim-factor-table.v1",
+  "id": "saccr-supervisory",
+  "version": "2023-01-01",
+  "profile": "baseline",
+  "standard": {
+    "body": "BCBS",
+    "title": "Standardised approach to counterparty credit risk (Basel Framework CRE52; BCBS 279 and BCBS d424 consolidation)",
+    "url": "https://www.bis.org/basel_framework/chapter/CRE/52.htm",
+    "versionPublished": "2020-03-27"
+  },
+  "factors": [
+    {
+      "id": "alpha",
+      "label": "alpha, the multiplier of RC + PFE",
+      "value": 14000,
+      "unit": "bp",
+      "ref": "CRE52.1",
+      "min": 14000,
+      "max": 14000
+    },
+    {
+      "id": "multiplier-floor",
+      "label": "floor of the PFE multiplier",
+      "value": 500,
+      "unit": "bp",
+      "ref": "CRE52.23",
+      "min": 500,
+      "max": 500
+    },
+    {
+      "id": "sd-rate",
+      "label": "rate in the supervisory duration (0.05)",
+      "value": 500,
+      "unit": "bp",
+      "ref": "CRE52.34",
+      "min": 500,
+      "max": 500
+    },
+    {
+      "id": "business-days-per-year",
+      "label": "business days in a year",
+      "value": 250,
+      "unit": "count",
+      "ref": "CRE52.34, CRE52.48",
+      "min": 250,
+      "max": 250
+    },
+    {
+      "id": "floor-days",
+      "label": "floor of M and of the supervisory duration, business days",
+      "value": 10,
+      "unit": "count",
+      "ref": "CRE52.34, CRE52.48",
+      "min": 10,
+      "max": 10
+    },
+    {
+      "id": "mpor-daily-bilateral",
+      "label": "margin period of risk, daily re-margining, bilateral",
+      "value": 10,
+      "unit": "count",
+      "ref": "CRE52.50",
+      "min": 10,
+      "max": 10
+    },
+    {
+      "id": "mpor-cleared",
+      "label": "margin period of risk, centrally cleared",
+      "value": 5,
+      "unit": "count",
+      "ref": "CRE52.50",
+      "min": 5,
+      "max": 5
+    },
+    {
+      "id": "mpor-base-nondaily",
+      "label": "business days added to the re-margining period when not daily",
+      "value": 9,
+      "unit": "count",
+      "ref": "CRE52.50",
+      "min": 9,
+      "max": 9
+    },
+    {
+      "id": "ir-bucket-corr-adjacent",
+      "label": "correlation between adjacent IR maturity buckets",
+      "value": 7000,
+      "unit": "bp",
+      "ref": "CRE52.57 (coefficient 1.4 = 2 x 70%)",
+      "min": 7000,
+      "max": 7000
+    },
+    {
+      "id": "ir-bucket-corr-far",
+      "label": "correlation between IR buckets 1 and 3",
+      "value": 3000,
+      "unit": "bp",
+      "ref": "CRE52.57 (coefficient 0.6 = 2 x 30%)",
+      "min": 3000,
+      "max": 3000
+    },
+    {
+      "id": "margined-mf-multiplier",
+      "label": "maturity factor multiplier of a margined netting set (3/2)",
+      "value": 15000,
+      "unit": "bp",
+      "ref": "CRE52.52",
+      "min": 15000,
+      "max": 15000
+    },
+    {
+      "id": "max-trades-single-mpor",
+      "label": "trades in a netting set above which the margin period of risk is doubled",
+      "value": 5000,
+      "unit": "count",
+      "ref": "CRE52.50",
+      "min": 5000,
+      "max": 5000
+    },
+    {
+      "id": "basis-multiplier",
+      "label": "supervisory factor multiplier for basis hedging sets",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "CRE52.73",
+      "min": 5000,
+      "max": 5000
+    },
+    {
+      "id": "volatility-multiplier",
+      "label": "supervisory factor multiplier for volatility hedging sets",
+      "value": 50000,
+      "unit": "bp",
+      "ref": "CRE52.73",
+      "min": 50000,
+      "max": 50000
+    },
+    {
+      "id": "sf-ir",
+      "label": "supervisory factor: interest rate",
+      "value": 50,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 50,
+      "max": 50
+    },
+    {
+      "id": "sf-fx",
+      "label": "supervisory factor: foreign exchange",
+      "value": 400,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 400,
+      "max": 400
+    },
+    {
+      "id": "sf-credit-aaa",
+      "label": "supervisory factor: credit single name AAA",
+      "value": 38,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 38,
+      "max": 38
+    },
+    {
+      "id": "sf-credit-aa",
+      "label": "supervisory factor: credit single name AA",
+      "value": 38,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 38,
+      "max": 38
+    },
+    {
+      "id": "sf-credit-a",
+      "label": "supervisory factor: credit single name A",
+      "value": 42,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 42,
+      "max": 42
+    },
+    {
+      "id": "sf-credit-bbb",
+      "label": "supervisory factor: credit single name BBB",
+      "value": 54,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 54,
+      "max": 54
+    },
+    {
+      "id": "sf-credit-bb",
+      "label": "supervisory factor: credit single name BB",
+      "value": 106,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 106,
+      "max": 106
+    },
+    {
+      "id": "sf-credit-b",
+      "label": "supervisory factor: credit single name B",
+      "value": 160,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 160,
+      "max": 160
+    },
+    {
+      "id": "sf-credit-ccc",
+      "label": "supervisory factor: credit single name CCC",
+      "value": 600,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 600,
+      "max": 600
+    },
+    {
+      "id": "sf-credit-index-ig",
+      "label": "supervisory factor: credit index investment grade",
+      "value": 38,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 38,
+      "max": 38
+    },
+    {
+      "id": "sf-credit-index-sg",
+      "label": "supervisory factor: credit index speculative grade",
+      "value": 106,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 106,
+      "max": 106
+    },
+    {
+      "id": "sf-equity-single",
+      "label": "supervisory factor: equity single name",
+      "value": 3200,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 3200,
+      "max": 3200
+    },
+    {
+      "id": "sf-equity-index",
+      "label": "supervisory factor: equity index",
+      "value": 2000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 2000,
+      "max": 2000
+    },
+    {
+      "id": "sf-commodity-electricity",
+      "label": "supervisory factor: commodity electricity",
+      "value": 4000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 4000,
+      "max": 4000
+    },
+    {
+      "id": "sf-commodity-other",
+      "label": "supervisory factor: commodity oil/gas, metals, agricultural, other",
+      "value": 1800,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 1800,
+      "max": 1800
+    },
+    {
+      "id": "corr-credit-single",
+      "label": "supervisory correlation: credit single name",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 5000,
+      "max": 5000
+    },
+    {
+      "id": "corr-credit-index",
+      "label": "supervisory correlation: credit index",
+      "value": 8000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 8000,
+      "max": 8000
+    },
+    {
+      "id": "corr-equity-single",
+      "label": "supervisory correlation: equity single name",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 5000,
+      "max": 5000
+    },
+    {
+      "id": "corr-equity-index",
+      "label": "supervisory correlation: equity index",
+      "value": 8000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 8000,
+      "max": 8000
+    },
+    {
+      "id": "corr-commodity",
+      "label": "supervisory correlation: commodity",
+      "value": 4000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 4000,
+      "max": 4000
+    },
+    {
+      "id": "vol-ir",
+      "label": "supervisory option volatility: interest rate",
+      "value": 5000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 5000,
+      "max": 5000
+    },
+    {
+      "id": "vol-fx",
+      "label": "supervisory option volatility: foreign exchange",
+      "value": 1500,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 1500,
+      "max": 1500
+    },
+    {
+      "id": "vol-credit-single",
+      "label": "supervisory option volatility: credit single name",
+      "value": 10000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 10000,
+      "max": 10000
+    },
+    {
+      "id": "vol-credit-index",
+      "label": "supervisory option volatility: credit index",
+      "value": 8000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 8000,
+      "max": 8000
+    },
+    {
+      "id": "vol-equity-single",
+      "label": "supervisory option volatility: equity single name",
+      "value": 12000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 12000,
+      "max": 12000
+    },
+    {
+      "id": "vol-equity-index",
+      "label": "supervisory option volatility: equity index",
+      "value": 7500,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 7500,
+      "max": 7500
+    },
+    {
+      "id": "vol-commodity-electricity",
+      "label": "supervisory option volatility: commodity electricity",
+      "value": 15000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 15000,
+      "max": 15000
+    },
+    {
+      "id": "vol-commodity-other",
+      "label": "supervisory option volatility: commodity other than electricity",
+      "value": 7000,
+      "unit": "bp",
+      "ref": "CRE52.72 Table 2",
+      "min": 7000,
+      "max": 7000
+    }
+  ]
+}

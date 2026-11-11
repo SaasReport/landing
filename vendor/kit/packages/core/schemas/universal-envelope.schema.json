@@ -1,0 +1,205 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/universal-envelope.schema.json",
+  "title": "kit.universal-envelope.v1",
+  "description": "Immutable T=0 cross-project intent envelope: one canonical namespace, source digest, contract/registry/policy authority, payload hash, trace/idempotency and required observed evidence; publication is exclusively an external governed lifecycle decision.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "tenant",
+    "project",
+    "kind",
+    "subject",
+    "revision",
+    "occurred_at",
+    "authority",
+    "provenance",
+    "trace",
+    "payload",
+    "lineage",
+    "lifecycle"
+  ],
+  "properties": {
+    "schema": {
+      "const": "kit.universal-envelope.v1"
+    },
+    "id": {
+      "type": "string",
+      "minLength": 9,
+      "maxLength": 420
+    },
+    "tenant": {
+      "$ref": "#/$defs/slug"
+    },
+    "project": {
+      "$ref": "#/$defs/slug"
+    },
+    "kind": {
+      "$ref": "#/$defs/slug"
+    },
+    "subject": {
+      "$ref": "#/$defs/slug"
+    },
+    "revision": {
+      "$ref": "#/$defs/slug"
+    },
+    "occurred_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "authority": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "registry_ref",
+        "contract_ref",
+        "policy_ref",
+        "root_sha256"
+      ],
+      "properties": {
+        "registry_ref": {
+          "$ref": "#/$defs/ref"
+        },
+        "contract_ref": {
+          "$ref": "#/$defs/ref"
+        },
+        "policy_ref": {
+          "$ref": "#/$defs/ref"
+        },
+        "root_sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source_ref",
+        "source_sha256",
+        "observed_at",
+        "actor"
+      ],
+      "properties": {
+        "source_ref": {
+          "$ref": "#/$defs/ref"
+        },
+        "source_sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "observed_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "actor": {
+          "$ref": "#/$defs/ref"
+        }
+      }
+    },
+    "trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "correlation_id",
+        "causation_id",
+        "idempotency_key"
+      ],
+      "properties": {
+        "correlation_id": {
+          "$ref": "#/$defs/ref"
+        },
+        "causation_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        },
+        "idempotency_key": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "payload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "contract_ref",
+        "schema_id",
+        "sha256",
+        "data",
+        "schema_sha256"
+      ],
+      "properties": {
+        "contract_ref": {
+          "$ref": "#/$defs/ref"
+        },
+        "sha256": {
+          "$ref": "#/$defs/hash"
+        },
+        "data": true,
+        "schema_id": {
+          "type": "string",
+          "minLength": 3
+        },
+        "schema_sha256": {
+          "$ref": "#/$defs/hash"
+        }
+      }
+    },
+    "lineage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "parent_id"
+      ],
+      "properties": {
+        "parent_id": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "minLength": 1
+        }
+      }
+    },
+    "lifecycle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "state",
+        "required_evidence"
+      ],
+      "properties": {
+        "state": {
+          "const": "planned-not-executed"
+        },
+        "required_evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/slug"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]{0,79}$"
+    },
+    "ref": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1024
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

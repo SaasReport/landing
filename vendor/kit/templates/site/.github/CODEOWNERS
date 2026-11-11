@@ -1,0 +1,4 @@
+# The canon and every waiver in it change only with the owner's review (kit check canon).
+# Replace @OWNER with the owner's GitHub handle: kit check canon fails while the placeholder is here.
+/kit.canon.json @OWNER
+/canon.allow.json @OWNER

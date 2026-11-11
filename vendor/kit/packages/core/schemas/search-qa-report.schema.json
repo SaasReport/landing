@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/search-qa-report.schema.json",
+  "title": "kit.search-qa-report.v1",
+  "description": "The report of kit site search-qa: per viewport the findings and the measured key-to-frame latency.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "generated",
+    "outDir",
+    "viewports",
+    "index",
+    "cases",
+    "latencyMs",
+    "ok",
+    "failures",
+    "screenshots"
+  ],
+  "properties": {
+    "schema": {
+      "const": "kit.search-qa-report.v1"
+    },
+    "generated": {
+      "type": "string"
+    },
+    "outDir": {
+      "type": "string"
+    },
+    "viewports": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^\\d+x\\d+$"
+      }
+    },
+    "index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "v",
+        "pages",
+        "sections",
+        "facets",
+        "synonyms"
+      ],
+      "properties": {
+        "v": {
+          "type": "integer"
+        },
+        "pages": {
+          "type": "integer"
+        },
+        "sections": {
+          "type": "integer"
+        },
+        "facets": {
+          "type": "integer"
+        },
+        "synonyms": {
+          "type": "integer"
+        }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "latencyMs": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "median",
+          "max",
+          "queries"
+        ],
+        "properties": {
+          "median": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "max": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "queries": {
+            "type": "integer"
+          }
+        }
+      }
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "viewport",
+          "kind",
+          "message"
+        ],
+        "properties": {
+          "viewport": {
+            "type": "string"
+          },
+          "kind": {
+            "enum": [
+              "results",
+              "highlight",
+              "typo",
+              "fold",
+              "none",
+              "keyboard",
+              "latency",
+              "shortcut",
+              "layout",
+              "console"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "screenshots": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

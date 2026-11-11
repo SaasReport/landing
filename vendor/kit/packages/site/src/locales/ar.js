@@ -1,0 +1,75 @@
+/**
+ * Arabic (ar): RTL, formal Modern Standard Arabic chrome strings, Arabic-Indic digits by default
+ * (a project may set digits: "latin"), Gregorian calendar by default with lunar Hijri available.
+ * Strings marked "review" are reasonable MSA but worth a native editor's check for the project's audience.
+ */
+export default {
+  code: "ar",
+  lang: "ar",
+  dir: "rtl",
+  hreflang: "ar",
+  og: "ar_AR",
+  intl: "ar",
+  name: "العربية",
+  digits: "arabic",
+  counter: "arabic-indic",
+  calendar: "gregorian",
+  number: { decimal: "٫", group: "٬", percent: "٪" },
+  arrow: { next: "←", back: "→", crumb: "‹" },
+  // From Sunday. The week start is not the pack's: it comes from the project's calendar profile (Sunday in the Gulf).
+  weekdays: ["الأحد", "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت"],   // from Sunday; L.weekdays starts on the calendar profile's first day
+  months: {
+    // review: Egyptian and Gulf usage; the Levant and Iraq use كانون الثاني, شباط, … instead.
+    gregorian: ["يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو", "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"],
+    hijri: ["محرم", "صفر", "ربيع الأول", "ربيع الآخر", "جمادى الأولى", "جمادى الآخرة", "رجب", "شعبان", "رمضان", "شوال", "ذو القعدة", "ذو الحجة"],
+    jalali: ["فروردين", "أرديبهشت", "خرداد", "تير", "مرداد", "شهريور", "مهر", "آبان", "آذر", "دي", "بهمن", "إسفند"],
+  },
+  hijriSuffix: " هـ",
+  strings: {
+    skip: "الانتقال إلى المحتوى الرئيسي",
+    home: "الصفحة الرئيسية",
+    navMain: "التنقل الرئيسي",
+    navMobile: "قائمة الأجهزة المحمولة",
+    menuOpen: "فتح القائمة",
+    menu: "القائمة",
+    overview: "نظرة عامة",
+    search: "بحث",
+    searchPlaceholder: "ابحث في كل الصفحات",
+    searchNone: "لا توجد صفحة مطابقة",
+    searchHint: "اكتب حرفين على الأقل للبحث في كل الصفحات",
+    searchCount: "{n} نتيجة",
+    searchFixed: "نتائج «{to}» (بدلًا من «{from}»)",
+    searchAll: "الكل",
+    searchFilter: "تصفية: الجمهور، القطاع، اللوائح…",
+    language: "اللغة",
+    close: "إغلاق",
+    copy: "نسخ",
+    copyCode: "نسخ الشيفرة البرمجية",
+    footerNav: "روابط التذييل",
+    privacy: "سياسة الخصوصية",
+    terms: "شروط الاستخدام",
+    consent: "أوافق على {privacy}.",
+    consentBoth: "أوافق على {terms} و{privacy}.",
+    successTitle: "تم تسجيل طلبك",
+    successRef: "الرقم المرجعي:",
+    gotIt: "حسنًا", // review: some sites prefer «تم» or «فهمت».
+    choose: "اختر",
+    required: " *",
+    chooseOne: "اختر خياراً واحداً على الأقل.",
+    apiLogEmpty: "تظهر هنا استدعاءات واجهة برمجة التطبيقات (API).",
+    backToTop: "العودة إلى أعلى الصفحة",
+    sectionIndex: "فهرس أقسام الصفحة",
+    sections: "الأقسام",
+    pageSections: "أقسام الصفحة",
+    sectionsOnPage: "أقسام هذه الصفحة",
+    fields: {
+      name: "الاسم الكامل",
+      email: "البريد الإلكتروني",
+      workEmail: "البريد الإلكتروني للعمل",
+      company: "المؤسسة أو الشركة",
+      role: "المسمى الوظيفي",
+      message: "الرسالة",
+      notes: "ملاحظات",
+    },
+  },
+};

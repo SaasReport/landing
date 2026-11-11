@@ -1,0 +1,405 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/fa-review.schema.json",
+  "entries": [
+    {
+      "file": "content/page-01.js",
+      "sha256": "694efbc22e89e421057a92567b3f2ac8cec7dbae80d2ccc2943f044c433c94cf",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 109,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-02.md",
+      "sha256": "ff21fa22a79df614d780a2a5a96411e5cee1315c66ebd6094e18cd8c2dc863c7",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 18,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-03.md",
+      "sha256": "4d1e3252189695c68446f539b7d71d7367fb0298559ac16febdf3982c5a7ebcf",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 19,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-04.md",
+      "sha256": "5e80f0eb723824cd5d795d91ef70f5e1af094c2f0470af5343d87dbc117fa77f",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 19,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-05.md",
+      "sha256": "0aaad168d3945981bb7be4218d0e8764d4851b3d5627dc092788c0258dc78cc5",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 15,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-06.md",
+      "sha256": "a0034adddee8494d882c2199fb46e6ea5e0c28ee92034e739b6860c60d011ea6",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 16,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-07.js",
+      "sha256": "18a881d4592df9f997237b4812b5c74427cd1cd45781e8b094c2bb2db17a9b8d",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 82,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-08.md",
+      "sha256": "7ce1a23270080add4183875fcd303fa9ed0d510c8f5f8683e31027105c22b53a",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 1,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-09.md",
+      "sha256": "588ca1446c35e9b8a7915ea994f046f663bff9f0abf2791078e39c2a114c07a4",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 1,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-10.json",
+      "sha256": "16ee1e5b2a25f53a5baee0648c251e152a7f876f999a9050c1e12a31126c1dc5",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 4,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-11.mjs",
+      "sha256": "ca21a5f115c18f1a81eb90c3b360d49f7d3f008370e7f6ec068240a781184dc8",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 21,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-12.mjs",
+      "sha256": "961d93c642137e2694771a59a68df085b458e9aa479375fb653843d7605b411e",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 30,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-13.mjs",
+      "sha256": "0b2633d20f72fb1e30ffd498fcedf6a34cae631c7d2001b1dd25f362d7fac11b",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 12,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-14.js",
+      "sha256": "950cb9d821519eb4c5574e4439cd8d8096cf5307252deb03f158e9971fd71ec7",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 9,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-15.js",
+      "sha256": "9508370cdd8e74bcd550793f86c92931789431b9d08b2658178aceb71d1f659a",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 9,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-16.js",
+      "sha256": "56e0d70f1dc1ac56f6a36784f7e0f80a9bb1728cc7e96f0f63cd8f1fbc139011",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 9,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-17.js",
+      "sha256": "b79ac78971aa41847e7392c4135da6953246463851b6bed5f4147a097aa0f745",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 167,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-18.js",
+      "sha256": "a3d8eef3d13b1d85f7170c13283042da971a4838d1d0cab89213efaec04d2be6",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 37,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-19.js",
+      "sha256": "597b46f089a2a423bd04ca5ad98ee95c3c305994baf093cb1b2dd3eeef82527a",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 26,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-20.js",
+      "sha256": "226b06f14956e95dc95e260d4c8c4006a8c3ff78f2488a1a8728f304854e49c4",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 225,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-21.js",
+      "sha256": "a1accc2a21526aa84c261b7af7b68e05b4f82b7fa3f8c530efee04a5647f8d9a",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 232,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-22.js",
+      "sha256": "6cc7d3ad34fe366a9f95193a19047c453d85d415ea83e0e2033e748c5bf6a9a8",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 208,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-23.js",
+      "sha256": "9169171fdb410d906c38f0202c0f5a3bc7cb974e447099a7e8ef19eabcc70c26",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 216,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "src/forms.js",
+      "sha256": "bb6a6003f07cd3c82dcfaa9b97b593bf9f4e33e39635e1f1bc2912410897e1e0",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 166,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-24.js",
+      "sha256": "956ee0303e7cc0184c6fcb6439d3172ab4376e4335d116f435575333067d11dd",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 14,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-25.js",
+      "sha256": "edc253b8dc0fe92c5f52854262d2669685052ce44ea321193b49289fb6b6e92b",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-26.js",
+      "sha256": "883f7f897963cfc657699940e9b4d1f755ac20b214ddac1e86c9c59aa37c3087",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-27.js",
+      "sha256": "ab0da583763e15c08a6bc6bee93b19b1b7f740e93d2c1d7dc6783c191b8eec69",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-28.js",
+      "sha256": "b320fbce927ff92c7ca316f7d0105d7c199ba127d82ba9fbaf439445194894ee",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-29.js",
+      "sha256": "db72491ecfd8b1cbfa06b380bc40f31e5c07095e0f06821e3ac4e466ab3c5494",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-30.js",
+      "sha256": "0792e92b5a38bc1ddfef67ce6f79af2bbfbbae119a01aac25eabf64702503b1e",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-31.js",
+      "sha256": "2305b2f5be147f8251cb05170011235f11af8cd23fdeee90adef535cddbcd4ad",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-32.js",
+      "sha256": "53d5adbb8ff01fab9195c0edb709c616ac30ea4d23e93c4aeee78a984671cbb5",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-33.js",
+      "sha256": "e3da27e114c61780883a971125053821a1869dacd32017548e3fc3141ec7ad9c",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-34.js",
+      "sha256": "279d6a677c1a4a715cfc1395790608effc20f7cc90ac376b47e75394a80dc60a",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-35.js",
+      "sha256": "c5a5fe6395f7f0180bcfa1789ad5dfdcebb6416b3c06fd7aa91f63115c4a010c",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-36.js",
+      "sha256": "22c9e2f0bec1314b59f785213acd8ba0d1cd72ebf131bc21c2699127981096f0",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-37.js",
+      "sha256": "fdaad0cb37fa256f32c505f6d7f0af98053b31ca643b7cac13a12cb2c4b74996",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-38.js",
+      "sha256": "5cf0811ea5d4f95d036bfce81c88eced01e7eb440a926628407781308a748255",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 243,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-39.js",
+      "sha256": "899de0098e375911d36da7fc15b9a184dc4a921a58abfa346d47b756e979497a",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 9,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-40.js",
+      "sha256": "d3452918eba70a3136496da8429b8220a8804ef072b32866888a99d77a97ffe2",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 10,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-41.js",
+      "sha256": "746b25bb170d0992808d3968d7f20cb5dae0bfaf24c5a4f2b712803f2ad34b5a",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 3,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-42.js",
+      "sha256": "8f51c006280878a6bda3f1347069b19c77a24218931eb104317e242bab35a5ad",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 31,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-43.js",
+      "sha256": "60af96eb85af8afd90653bfeced71e6a9710242710b549812d99e81b2e319ac8",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 3,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-44.js",
+      "sha256": "6b9fcb951f7938a5efe0fa5efba3de8256894edaf4f9a08c4511b449e3eeeb9e",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 453,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-45.js",
+      "sha256": "d35e9bca2e8dfaca84342bbcdb2dbb1a822c71cad250352694e1a09e06b42de9",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 624,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-46.js",
+      "sha256": "86c3ad22cce06ef7fe22d63f1c31e75e06cdb057415c018d6fe1d5d1360cf30d",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 445,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-47.js",
+      "sha256": "a95bd083f20c2feb84c16d9ad05ab9efe19da509704b877fb3acfe258e9340b4",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 272,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-48.js",
+      "sha256": "e759c7bf23ee31ec7cab420f24f28f0168dc1a1d679732f3a9bf69604a01f408",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 974,
+      "note": "live before the native-review gate; not an approval"
+    },
+    {
+      "file": "content/page-49.json",
+      "sha256": "3627c2937c137381b9351beb25e53ced98c689fd282e7605d91c5cca7db8a379",
+      "status": "baseline",
+      "at": "2026-10-06T20:55:13.250Z",
+      "segments": 183,
+      "note": "live before the native-review gate; not an approval"
+    }
+  ]
+}

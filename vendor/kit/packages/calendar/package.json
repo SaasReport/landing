@@ -1,0 +1,93 @@
+{
+  "name": "@saasreport/calendar",
+  "version": "1.4.0",
+  "description": "Financial calendar engine: Gregorian, Hijri (Umm al-Qura and civil) and Solar Hijri dates, market profiles (GCC, Malaysia, Indonesia, Pakistan, Türkiye, UK, US, euro area, India, China, Singapore, Australia, Iran) with official holidays and make-up working days, the Chinese lunisolar calendar, multi-market business days, T+n settlement, instalment schedules, ICS feeds (Iran and every market) and a date-picker web component.",
+  "type": "module",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./client": {
+      "types": "./src/client.d.ts",
+      "default": "./src/client.js"
+    },
+    "./picker": {
+      "types": "./src/picker.d.ts",
+      "default": "./src/picker.js"
+    },
+    "./picker-core": {
+      "types": "./src/picker-core.d.ts",
+      "default": "./src/picker-core.js"
+    },
+    "./hijri": {
+      "types": "./src/hijri.d.ts",
+      "default": "./src/hijri.js"
+    },
+    "./instant": {
+      "types": "./src/instant.d.ts",
+      "default": "./src/instant.js"
+    },
+    "./guard": {
+      "types": "./src/guard.d.ts",
+      "default": "./src/guard.js"
+    },
+    "./markets": {
+      "types": "./src/markets.d.ts",
+      "default": "./src/markets.js"
+    },
+    "./business": {
+      "types": "./src/business.d.ts",
+      "default": "./src/business.js"
+    },
+    "./locale": {
+      "types": "./src/locale.d.ts",
+      "default": "./src/locale.js"
+    },
+    "./config": {
+      "types": "./src/config.d.ts",
+      "default": "./src/config.js"
+    },
+    "./time": {
+      "types": "./src/time.d.ts",
+      "default": "./src/time.js"
+    },
+    "./parse": {
+      "types": "./src/parse.d.ts",
+      "default": "./src/parse.js"
+    },
+    "./relative": {
+      "types": "./src/relative.d.ts",
+      "default": "./src/relative.js"
+    },
+    "./chinese": {
+      "types": "./src/chinese.d.ts",
+      "default": "./src/chinese.js"
+    },
+    "./weekday": {
+      "types": "./src/weekday.d.ts",
+      "default": "./src/weekday.js"
+    },
+    "./ics": {
+      "types": "./src/ics.d.ts",
+      "default": "./src/ics.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "kit-cal": "./bin/kit-cal.js"
+  },
+  "files": [
+    "src",
+    "bin",
+    "README.md",
+    "NOTICE"
+  ],
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "license": "Apache-2.0",
+  "sideEffects": false
+}

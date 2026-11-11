@@ -1,0 +1,1436 @@
+{
+  "$schema": "../../schemas/widgets-spec.schema.json",
+  "project": {
+    "key": "example",
+    "name": "Example Library",
+    "url": "https://example.org",
+    "repo": "https://github.com/example/library"
+  },
+  "locales": [
+    {
+      "code": "en",
+      "dir": "ltr",
+      "intl": "en-GB"
+    },
+    {
+      "code": "fa",
+      "dir": "rtl"
+    }
+  ],
+  "tone": {
+    "register": "formal-plain"
+  },
+  "theme": {
+    "values": {}
+  },
+  "honesty": {
+    "default": "sample",
+    "labels": {
+      "live": {
+        "en": "Live",
+        "fa": "زنده"
+      },
+      "engine": {
+        "en": "Computed",
+        "fa": "محاسبه‌شده"
+      },
+      "sample": {
+        "en": "Sample",
+        "fa": "نمونه"
+      }
+    }
+  },
+  "sources": {
+    "api": {
+      "kind": "openapi",
+      "path": "openapi.json",
+      "describes": "the lending API"
+    },
+    "content": {
+      "kind": "content",
+      "path": "content.json",
+      "describes": "terms and rules"
+    },
+    "dates": {
+      "kind": "engine",
+      "path": "engine.mjs",
+      "describes": "due dates"
+    }
+  },
+  "vocabulary": {
+    "owned": [
+      "Example Library"
+    ],
+    "forbidden": [
+      "overdue fine"
+    ]
+  },
+  "audiences": [
+    {
+      "id": "members",
+      "label": {
+        "en": "Members",
+        "fa": "اعضا"
+      }
+    },
+    {
+      "id": "staff",
+      "label": {
+        "en": "Staff",
+        "fa": "کارکنان"
+      }
+    }
+  ],
+  "useCases": [
+    {
+      "id": "lending",
+      "label": {
+        "en": "Lending",
+        "fa": "امانت"
+      },
+      "audiences": [
+        "members",
+        "staff"
+      ],
+      "sources": [
+        "api"
+      ]
+    }
+  ],
+  "scenarios": [
+    {
+      "id": "borrow",
+      "useCase": "lending",
+      "audiences": [
+        "members",
+        "staff"
+      ],
+      "title": {
+        "en": "Borrow a book",
+        "fa": "امانت گرفتن کتاب"
+      },
+      "summary": {
+        "en": "From the desk to the reminder.",
+        "fa": "از میز امانت تا یادآوری."
+      },
+      "actors": [
+        {
+          "id": "member",
+          "label": {
+            "en": "Member",
+            "fa": "عضو"
+          },
+          "kind": "person",
+          "sees": [
+            {
+              "en": "Due date",
+              "fa": "تاریخ سررسید"
+            }
+          ]
+        },
+        {
+          "id": "desk",
+          "label": {
+            "en": "Lending desk",
+            "fa": "میز امانت"
+          },
+          "kind": "organisation"
+        }
+      ],
+      "inputs": [
+        {
+          "id": "days",
+          "label": {
+            "en": "Days",
+            "fa": "روز"
+          },
+          "type": "number",
+          "default": 14,
+          "min": 1,
+          "max": 60
+        }
+      ],
+      "steps": [
+        {
+          "id": "ask",
+          "actor": "member",
+          "to": "desk",
+          "action": {
+            "en": "Asks for a book",
+            "fa": "کتابی را می‌خواهد"
+          },
+          "status": "info",
+          "operation": "api#createLoan",
+          "event": "loan.requested",
+          "device": "desk",
+          "scene": {
+            "kind": "checklist",
+            "title": {
+              "en": "Checks",
+              "fa": "بررسی‌ها"
+            },
+            "items": [
+              {
+                "label": {
+                  "$ref": "content#/rules/0"
+                }
+              },
+              {
+                "label": {
+                  "$ref": "content#/rules/1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": "lend",
+          "actor": "desk",
+          "to": "member",
+          "action": {
+            "$ref": "content#/terms/loan"
+          },
+          "outcome": {
+            "$engine": {
+              "source": "dates",
+              "call": "due",
+              "args": {
+                "days": 14
+              },
+              "pick": "label"
+            }
+          },
+          "status": "ok",
+          "at": {
+            "$engine": {
+              "source": "dates",
+              "call": "due",
+              "args": {
+                "days": 14
+              },
+              "pick": "date"
+            }
+          },
+          "decision": "allow",
+          "rules": [
+            {
+              "$ref": "content#/rules/0"
+            }
+          ],
+          "channels": [
+            "email",
+            "push"
+          ],
+          "operation": "api#getLoan",
+          "actions": [
+            {
+              "label": {
+                "en": "Renew",
+                "fa": "تمدید"
+              },
+              "result": {
+                "en": "Renewed",
+                "fa": "تمدید شد"
+              },
+              "kind": "approve",
+              "by": "member"
+            },
+            {
+              "label": {
+                "en": "Verify",
+                "fa": "بررسی"
+              },
+              "result": {
+                "en": "Seal verified",
+                "fa": "مهر تأیید شد"
+              },
+              "kind": "verify",
+              "by": "desk"
+            }
+          ],
+          "device": "phone",
+          "initiator": "member",
+          "scene": {
+            "kind": "seal",
+            "items": [
+              {
+                "label": {
+                  "en": "Loan",
+                  "fa": "امانت"
+                },
+                "value": 14
+              }
+            ],
+            "hash": "9f2c41aa"
+          }
+        }
+      ],
+      "outcomes": [
+        {
+          "id": "renewals",
+          "label": {
+            "en": "Days with two renewals",
+            "fa": "روزها با دو تمدید"
+          },
+          "expr": "days * 3"
+        },
+        {
+          "id": "ok",
+          "label": {
+            "en": "Result",
+            "fa": "نتیجه"
+          },
+          "text": {
+            "en": "The member has the book.",
+            "fa": "کتاب دست عضو است."
+          }
+        }
+      ],
+      "widgets": [
+        {
+          "archetype": "feed",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown with every widget of the scenario.",
+                  "fa": "کنار همه‌ی ویجت‌های سناریو."
+                }
+              },
+              {
+                "path": "/terminal/",
+                "placement": "terminal",
+                "how": {
+                  "en": "The terminal's notify view.",
+                  "fa": "نمای اعلان ترمینال."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        },
+        {
+          "archetype": "chain",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown with every widget of the scenario.",
+                  "fa": "کنار همه‌ی ویجت‌های سناریو."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        },
+        {
+          "archetype": "timeline",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown with every widget of the scenario.",
+                  "fa": "کنار همه‌ی ویجت‌های سناریو."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        },
+        {
+          "archetype": "calculator",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown with every widget of the scenario.",
+                  "fa": "کنار همه‌ی ویجت‌های سناریو."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        },
+        {
+          "archetype": "playground",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown with every widget of the scenario.",
+                  "fa": "کنار همه‌ی ویجت‌های سناریو."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        },
+        {
+          "archetype": "roles",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown with every widget of the scenario.",
+                  "fa": "کنار همه‌ی ویجت‌های سناریو."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        },
+        {
+          "archetype": "tour",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown with every widget of the scenario.",
+                  "fa": "کنار همه‌ی ویجت‌های سناریو."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        },
+        {
+          "archetype": "notify",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "The notification centre.",
+                  "fa": "مرکز اعلان."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        }
+      ],
+      "screens": [
+        {
+          "id": "desk",
+          "actor": "desk",
+          "title": {
+            "en": "Loan desk",
+            "fa": "میز امانت"
+          },
+          "regions": [
+            {
+              "id": "queue",
+              "label": {
+                "en": "Queue",
+                "fa": "صف"
+              }
+            }
+          ],
+          "lines": [
+            {
+              "id": "member",
+              "label": {
+                "en": "Member",
+                "fa": "عضو"
+              },
+              "value": "m_7"
+            },
+            {
+              "id": "due",
+              "label": {
+                "en": "Due",
+                "fa": "سررسید"
+              },
+              "value": 14
+            }
+          ]
+        }
+      ],
+      "tour": {
+        "tasks": [
+          {
+            "id": "borrow",
+            "title": {
+              "en": "Borrow",
+              "fa": "امانت"
+            },
+            "benefit": {
+              "en": "From the desk to the reminder.",
+              "fa": "از میز تا یادآوری."
+            },
+            "steps": [
+              "ask",
+              "lend"
+            ]
+          }
+        ],
+        "callouts": [
+          {
+            "step": "ask",
+            "screen": "desk",
+            "anchor": "queue",
+            "beat": "toast"
+          },
+          {
+            "step": "lend",
+            "screen": "desk",
+            "anchor": "due",
+            "appearance": "modal",
+            "beat": "seal"
+          }
+        ],
+        "finish": {
+          "title": {
+            "en": "Done",
+            "fa": "پایان"
+          },
+          "text": {
+            "en": "The member has the book.",
+            "fa": "کتاب دست عضو است."
+          },
+          "cta": {
+            "label": {
+              "en": "Open the catalogue",
+              "fa": "باز کردن فهرست"
+            },
+            "href": "/catalogue/"
+          }
+        }
+      },
+      "devices": [
+        {
+          "id": "phone",
+          "kind": "phone",
+          "label": {
+            "en": "Member's phone",
+            "fa": "گوشی عضو"
+          },
+          "actor": "member"
+        },
+        {
+          "id": "desk",
+          "kind": "console",
+          "label": {
+            "en": "Desk console",
+            "fa": "کنسول میز"
+          },
+          "actor": "desk"
+        }
+      ]
+    },
+    {
+      "id": "extras",
+      "useCase": "lending",
+      "audiences": [
+        "members",
+        "staff"
+      ],
+      "title": {
+        "en": "Loan lifecycle",
+        "fa": "چرخهٔ امانت"
+      },
+      "summary": {
+        "en": "A loan from request to return.",
+        "fa": "امانت از درخواست تا بازگشت."
+      },
+      "actors": [
+        {
+          "id": "member",
+          "label": {
+            "en": "Member",
+            "fa": "عضو"
+          },
+          "kind": "person",
+          "sees": [
+            {
+              "en": "Due date",
+              "fa": "تاریخ سررسید"
+            }
+          ]
+        },
+        {
+          "id": "desk",
+          "label": {
+            "en": "Lending desk",
+            "fa": "میز امانت"
+          },
+          "kind": "organisation"
+        }
+      ],
+      "steps": [
+        {
+          "id": "ask",
+          "actor": "member",
+          "to": "desk",
+          "action": {
+            "en": "Asks for a book",
+            "fa": "کتابی می‌خواهد"
+          },
+          "detail": {
+            "en": "At the desk.",
+            "fa": "پشت میز."
+          },
+          "outcome": {
+            "en": "A loan opens.",
+            "fa": "امانت باز می‌شود."
+          },
+          "status": "info",
+          "decision": "allow",
+          "fields": [
+            {
+              "label": {
+                "en": "Days",
+                "fa": "روز"
+              },
+              "value": 14
+            }
+          ]
+        },
+        {
+          "id": "check",
+          "actor": "desk",
+          "action": {
+            "en": "Checks the card",
+            "fa": "کارت را بررسی می‌کند"
+          },
+          "status": "ok",
+          "rules": [
+            {
+              "en": "Two renewals at most",
+              "fa": "دو تمدید"
+            }
+          ]
+        },
+        {
+          "id": "hand",
+          "actor": "desk",
+          "to": "member",
+          "action": {
+            "en": "Hands over",
+            "fa": "تحویل می‌دهد"
+          },
+          "status": "ok",
+          "outcome": {
+            "en": "Done.",
+            "fa": "انجام شد."
+          }
+        }
+      ],
+      "inputs": [
+        {
+          "id": "days",
+          "label": {
+            "en": "Days",
+            "fa": "روز"
+          },
+          "type": "number",
+          "default": 14
+        }
+      ],
+      "compare": {
+        "columns": [
+          {
+            "id": "a",
+            "label": {
+              "en": "Desk",
+              "fa": "میز"
+            }
+          },
+          {
+            "id": "b",
+            "label": {
+              "en": "Online",
+              "fa": "آنلاین"
+            }
+          }
+        ],
+        "rows": [
+          {
+            "label": {
+              "en": "Renewals",
+              "fa": "تمدید"
+            },
+            "cells": {
+              "a": {
+                "en": "Two",
+                "fa": "دو"
+              },
+              "b": true
+            }
+          },
+          {
+            "label": {
+              "en": "Fine",
+              "fa": "جریمه"
+            },
+            "cells": {
+              "a": false,
+              "b": 3
+            }
+          }
+        ]
+      },
+      "screens": [
+        {
+          "id": "s1",
+          "actor": "member",
+          "title": {
+            "en": "My loans",
+            "fa": "امانت‌های من"
+          },
+          "lines": [
+            {
+              "label": {
+                "en": "Due",
+                "fa": "سررسید"
+              },
+              "value": {
+                "en": "Soon",
+                "fa": "به‌زودی"
+              },
+              "tone": "warn"
+            }
+          ],
+          "cta": {
+            "en": "Renew",
+            "fa": "تمدید"
+          }
+        }
+      ],
+      "machines": [
+        {
+          "id": "loan",
+          "group": {
+            "en": "Loans",
+            "fa": "امانت‌ها"
+          },
+          "title": {
+            "en": "Loan",
+            "fa": "امانت"
+          },
+          "summary": {
+            "en": "Lifecycle.",
+            "fa": "چرخه."
+          },
+          "meta": [
+            {
+              "en": "Lending",
+              "fa": "امانت"
+            }
+          ],
+          "states": [
+            {
+              "id": "open",
+              "label": {
+                "en": "Open",
+                "fa": "باز"
+              },
+              "kind": "initial",
+              "detail": {
+                "en": "Started.",
+                "fa": "آغاز."
+              }
+            },
+            {
+              "id": "out",
+              "label": {
+                "en": "Out",
+                "fa": "بیرون"
+              },
+              "rules": [
+                {
+                  "en": "Two renewals at most",
+                  "fa": "دو تمدید"
+                }
+              ]
+            },
+            {
+              "id": "back",
+              "label": {
+                "en": "Returned",
+                "fa": "بازگشته"
+              },
+              "kind": "final"
+            }
+          ],
+          "transitions": [
+            {
+              "from": "open",
+              "to": "out",
+              "label": {
+                "en": "hand over",
+                "fa": "تحویل"
+              }
+            },
+            {
+              "from": "out",
+              "to": "back",
+              "label": {
+                "en": "return",
+                "fa": "بازگشت"
+              }
+            }
+          ]
+        }
+      ],
+      "cases": [
+        {
+          "id": "ok",
+          "label": {
+            "en": "Fine",
+            "fa": "درست"
+          },
+          "decision": "allow",
+          "outcome": {
+            "en": "Passes.",
+            "fa": "می‌گذرد."
+          }
+        },
+        {
+          "id": "no",
+          "label": {
+            "en": "Stopped",
+            "fa": "متوقف"
+          },
+          "decision": "deny",
+          "stops": "check",
+          "reason": "card.expired",
+          "outcome": {
+            "en": "Held.",
+            "fa": "نگه داشته شد."
+          },
+          "detail": {
+            "en": "No card.",
+            "fa": "بدون کارت."
+          },
+          "inputs": [
+            {
+              "label": {
+                "en": "Card",
+                "fa": "کارت"
+              },
+              "value": {
+                "en": "none",
+                "fa": "ندارد"
+              }
+            }
+          ]
+        }
+      ],
+      "widgets": [
+        {
+          "archetype": "workflow",
+          "id": "extras-workflow",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown on the examples page.",
+                  "fa": "در صفحهٔ نمونه‌ها دیده می‌شود."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        },
+        {
+          "archetype": "pipeline",
+          "id": "extras-pipeline",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown on the examples page.",
+                  "fa": "در صفحهٔ نمونه‌ها دیده می‌شود."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        },
+        {
+          "archetype": "comparison",
+          "id": "extras-comparison",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown on the examples page.",
+                  "fa": "در صفحهٔ نمونه‌ها دیده می‌شود."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        },
+        {
+          "archetype": "screens",
+          "id": "extras-screens",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown on the examples page.",
+                  "fa": "در صفحهٔ نمونه‌ها دیده می‌شود."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        },
+        {
+          "archetype": "machine",
+          "id": "extras-machine",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown on the examples page.",
+                  "fa": "در صفحهٔ نمونه‌ها دیده می‌شود."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        },
+        {
+          "archetype": "runs",
+          "id": "extras-runs",
+          "usage": {
+            "surfaces": [
+              {
+                "path": "/examples/",
+                "placement": "page",
+                "how": {
+                  "en": "Shown on the examples page.",
+                  "fa": "در صفحهٔ نمونه‌ها دیده می‌شود."
+                }
+              }
+            ]
+          },
+          "application": {
+            "surface": {
+              "en": "Lending desk",
+              "fa": "میز امانت"
+            },
+            "href": "/lending/"
+          },
+          "architecture": {
+            "components": [
+              {
+                "en": "Lending API",
+                "fa": "API امانت"
+              },
+              {
+                "en": "Due-date engine",
+                "fa": "موتور سررسید"
+              }
+            ],
+            "flow": {
+              "en": "Request, loan, reminder.",
+              "fa": "درخواست، امانت، یادآوری."
+            },
+            "diagram": "docs/diagrams/lending.mmd"
+          },
+          "utility": {
+            "learns": {
+              "en": "How a loan moves from the desk to the reminder.",
+              "fa": "مسیر امانت از میز تا یادآوری."
+            },
+            "does": {
+              "en": "Renew a loan.",
+              "fa": "امانت را تمدید کنید."
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "archetypes": [
+    "feed",
+    "chain",
+    "timeline",
+    "calculator",
+    "playground",
+    "roles",
+    "tour",
+    "notify",
+    "workflow",
+    "pipeline",
+    "comparison",
+    "screens",
+    "machine",
+    "runs"
+  ],
+  "build": {
+    "asOf": "2026-10-01",
+    "out": "widgets.generated.json",
+    "page": {
+      "path": "/examples/",
+      "title": {
+        "en": "Examples",
+        "fa": "نمونه‌ها"
+      }
+    },
+    "exports": [
+      {
+        "as": "terminal-notify",
+        "widget": "borrow-feed"
+      }
+    ]
+  }
+}

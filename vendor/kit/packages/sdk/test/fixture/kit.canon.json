@@ -1,0 +1,6 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/canon.schema.json",
+  "project": "saasreport",
+  "contracts": [{ "name": "Fixture API", "type": "openapi", "contract": "contracts/openapi.json" }],
+  "hardcoding": { "paths": ["src"] }
+}

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/canon-allow.schema.json",
+  "title": "kit.canon-allow.v1",
+  "description": "The reviewed allow-list of the canon scans (canon.allow.json): every entry names ONE instance (the file, the category, the literal exactly as reported and a piece of the line it sits on) with the reason a reviewer accepted it. There is no wildcard, no glob and no expiry: an entry that no longer matches anything is itself a problem (stale), so the list only shrinks.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "entries"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "file",
+          "category",
+          "match",
+          "context",
+          "reason"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "file": {
+            "type": "string",
+            "pattern": "^[^*?{}\\[\\]]+$",
+            "description": "Path relative to the repo root: one file, never a glob."
+          },
+          "category": {
+            "anyOf": [
+              {
+                "enum": [
+                  "project-name",
+                  "hex-colour",
+                  "project-url",
+                  "copy-literal",
+                  "secret",
+                  "colour-literal",
+                  "contrast",
+                  "not-deployed",
+                  "project-prefix"
+                ]
+              },
+              {
+                "type": "string",
+                "pattern": "^finding:[a-z0-9]+(-[a-z0-9]+)*$",
+                "description": "A reviewed instance of a finding class (finding-classes.json) that its gate reports."
+              }
+            ]
+          },
+          "match": {
+            "type": "string",
+            "minLength": 1,
+            "not": {
+              "const": "*"
+            },
+            "description": "The literal exactly as the scan reports it. Never `*`: an allow entry is one instance."
+          },
+          "context": {
+            "type": "string",
+            "minLength": 4,
+            "description": "A piece (4 or more characters) of the source line the literal sits on, so the entry names the instance and not every occurrence of the same literal in the file."
+          },
+          "on": { "enum": ["bg", "surface", "sink", "ink", "inkRaised", "inkDeep", "accent"], "description": "Category contrast only: the surface role the selector is used on. The theme gate then measures the selector on that surface instead of the page background, and it must read there." },
+          "in": { "type": "string", "minLength": 1, "description": "Category contrast only: the container selector the selector is used in (its real ancestors, e.g. `.phone .phone__screen`). The theme gate builds the selector inside it and measures there." },
+          "reason": {
+            "type": "string",
+            "minLength": 10,
+            "description": "Why this instance is not hardcoding (a standard identifier, a published bin name, a protocol value, …). A follow-up that will remove it is not a reason: fix it instead."
+          }
+        }
+      }
+    }
+  }
+}

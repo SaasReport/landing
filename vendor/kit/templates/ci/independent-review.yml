@@ -1,0 +1,61 @@
+# The required check `independent-review` of a project whose governance.json declares `independent_review_marker` (docs/RELEASE.md,
+# kit.governance.v1). `kit agent-guard sync` writes this file (generated: the kit's template; the kit itself runs packages/cli and checks out no kit) and adds the
+# check to the ruleset's required status checks; `sync --check` fails when either is missing or edited.
+#
+# The check is a COMMIT STATUS with the context `independent-review`, posted on the pull request's head by `kit release review-marker
+# --post-status`. The STATUS is the check: it is success only when the repository's OWNER (the registry's owner.github of the project; the
+# comment author's login is checked, never the body alone) has posted on this pull request
+#     <!-- independent-review head=<40-hex head sha> verdict=clean -->
+# for the pull request's CURRENT head, and no later owner marker for that head (by last edit) says otherwise.
+#
+# It runs on every event that can change the answer: the pull request's own events (a push moves the head, so the check fails until the new
+# head is reviewed), and issue_comment / pull_request_review_comment created, edited or deleted (a marker edited to verdict=blocked or deleted
+# after a green run fails the check at once). A comment event runs on the DEFAULT branch and a check run would attach to the default branch's
+# commit, not the pull request's head, which is why the verdict is a status on the head itself. The merge gate posts the marker after an
+# independent review of exactly that head came back clean. The kit that runs is the base branch's (the pull request's base sha, or the
+# default branch for a comment event), never the pull request's own.
+#
+# The JOB succeeds whenever the status was posted, whatever the verdict: a red job for every "not reviewed yet" would be a failed-run
+# notification and billable minutes for something the status already says (and the ruleset reads the status, never the job). The job fails
+# only when the status could not be posted.
+name: independent-review
+on:
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+    # no path filter (ci-run-budget): a required check that a filter skips stays pending
+  issue_comment:
+    types: [created, edited, deleted]
+  pull_request_review_comment:
+    types: [created, edited, deleted]
+concurrency:
+  group: independent-review-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+permissions:
+  contents: read
+  pull-requests: read
+  issues: read
+  statuses: write
+jobs:
+  review-marker:
+    name: review-marker
+    # a draft pull request is not reviewed; a comment on an issue that is not a pull request is not ours; a comment by a bot (a review bot, Actions,
+    # Dependabot) is never the owner's marker (the author's login is checked against the owner's), so it cannot change the answer and costs no run
+    if: (github.event_name != 'pull_request' || github.event.pull_request.draft == false) && (github.event_name != 'issue_comment' || github.event.issue.pull_request) && (github.event_name == 'pull_request' || github.event.comment.user.type != 'Bot')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.base.sha || github.sha }}
+          persist-credentials: false
+      # the kit at its head (t=0, docs/FRESHNESS.md): scripts/kit.mjs fetches the published archive of the head with no credential, verifies it and runs it; nothing of the kit is checked out or committed
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: the owner's marker for this pull request's current head, posted as the status independent-review on that head
+        run: node scripts/kit.mjs release review-marker --pr "${PR}" --post-status
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number || github.event.issue.number }}

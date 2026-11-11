@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/handwritten-ledger.schema.json",
+  "title": "kit.handwritten-ledger.v1",
+  "description": "The canon checks' modules and what each is: the engine that runs declared contracts on canonical parsers, or a hand-written check frozen on the day hand-written checks stopped being permitted (2026-10-07), each with the work order that migrates it onto the engine. A module not listed fails; a hand-written entry frozen later fails; the ledger only shrinks.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["$schema", "v", "scope", "frozen_on", "modules"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "v": { "const": 1 },
+    "scope": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^packages/[a-z0-9/_-]+/$" }, "description": "Directories whose every .js module must be declared here." },
+    "frozen_on": { "type": "string", "format": "date", "description": "The day hand-written checks stopped being permitted: no hand-written entry may be frozen after it." },
+    "modules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["path", "role", "why"],
+        "properties": {
+          "path": { "type": "string", "pattern": "^packages/[a-z0-9/_.-]+\\.js$" },
+          "role": { "enum": ["engine", "handwritten"], "description": "engine: runs declared contracts or is its plumbing; handwritten: a rule or parser written in code, frozen until migrated" },
+          "why": { "type": "string", "minLength": 10 },
+          "parses": { "type": "string", "description": "handwritten: what it reads by hand" },
+          "migrate_to": { "type": "string", "description": "handwritten: the canonical parser and contract kind it moves to" },
+          "work_order": { "type": "string", "pattern": "^wo-[0-9]{4}-[a-z0-9-]+$" },
+          "frozen": { "type": "string", "format": "date" }
+        },
+        "if": { "properties": { "role": { "const": "handwritten" } } },
+        "then": { "required": ["parses", "migrate_to", "work_order", "frozen"] }
+      }
+    }
+  }
+}

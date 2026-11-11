@@ -1,0 +1,445 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/resilience.schema.json",
+  "title": "kit.resilience.v1",
+  "description": "resilience.json at a repository root: what watches every deployed Worker, how a person is told, how the absence of the watcher is reported, what is backed up, and the drills that prove it (docs/RESILIENCE.md). The input of the canon check `resilience`, whose rules are the class-resilience rules of the constitution registry. Facts the repository states elsewhere (bindings, database ids, vars, crons) are READ from the wrangler configs by the kit's one reader, never copied here. No recipient address and no secret value is ever written here or in a wrangler file: the secret NAMES are derived from the routes and verified at deploy time. No waiver, no baseline: a missing drill fails at t=0.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "project",
+    "routes",
+    "monitors"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "project": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "routes": {
+      "type": "array",
+      "minItems": 2,
+      "description": "How a person is told. At least two routes on two different channels; each route's failure domain is derived from its channel (channels CHANNEL_ROOTS), never declared, and the variables it reads are the runtime's own (channels alertVariables).",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "channel"
+        ],
+        "properties": {
+          "id": {
+            "$ref": "#/$defs/id"
+          },
+          "channel": {
+            "enum": [
+              "email",
+              "telegram",
+              "bale",
+              "webhook",
+              "github"
+            ],
+            "description": "github: the scheduled watcher's failed run, which GitHub notifies to the user who last changed the workflow's schedule (watcher monitors only)."
+          },
+          "deferred": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["reason", "decided_by", "decided_on"],
+            "description": "The owner's written decision to switch this declared channel on later. A deferred route stays in the design (the two failure domains are still counted) but is not active: its secrets are not required or provisioned, MONITOR_ROUTES omits it, the monitor sends nothing through it, the alert drill and the watcher do not expect it. Delete this object to activate the route: its secrets are then required again. A monitor keeps at least one active route.",
+            "properties": {
+              "reason": { "type": "string", "minLength": 20 },
+              "decided_by": { "type": "string", "minLength": 1 },
+              "decided_on": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" }
+            }
+          }
+        }
+      }
+    },
+    "monitors": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/monitor"
+      }
+    },
+    "backups": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/backup"
+      }
+    },
+    "drills": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/drill"
+      },
+      "description": "Written by `kit resilience record-drill`; each carries the sha256 of its proof file."
+    },
+    "accepted_risks": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/risk"
+      },
+      "description": "Risks the owner accepted in writing. Listed by `kit resilience report`; they waive no rule."
+    },
+    "not_deployed": {
+      "type": "array",
+      "description": "[env.*] sections of a deployed config that are never deployed (a declared staging env that has no Worker). Each says why; the check lists them in its report.",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "wrangler",
+          "env",
+          "reason"
+        ],
+        "properties": {
+          "wrangler": {
+            "type": "string"
+          },
+          "env": {
+            "type": "string"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 20
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "root": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9.-]*$",
+      "description": "A failure domain (cloudflare, github, healthchecks.io, telegram, ...)."
+    },
+    "minutes": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 43200
+    },
+    "target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "wrangler"
+      ],
+      "properties": {
+        "wrangler": {
+          "type": "string",
+          "minLength": 1
+        },
+        "env": {
+          "type": "string",
+          "default": "",
+          "description": "The [env.<name>] section that is deployed (\"\" for the top level)."
+        }
+      }
+    },
+    "watcher": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "workflow",
+        "url_env"
+      ],
+      "description": "The scheduled GitHub workflow that runs `kit resilience watch --monitor <id>`: another failure domain than Cloudflare. It keeps its own schedule alive (`kit resilience keepalive`, actions: write) so GitHub's auto-disable cannot silence it.",
+      "properties": {
+        "workflow": {
+          "type": "string",
+          "pattern": "^\\.github/workflows/[^/]+\\.ya?ml$"
+        },
+        "url_env": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "The repository variable that holds the status (worker monitor) or health (watcher monitor) URL."
+        }
+      }
+    },
+    "monitor": {
+      "type": "object",
+      "required": [
+        "id",
+        "kind",
+        "watches",
+        "root",
+        "routes",
+        "stale_after_min",
+        "watcher"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "worker",
+            "watcher"
+          ],
+          "description": "worker: an @saasreport/monitor Worker with its own D1; watcher: the scheduled GitHub workflow alone checks a health URL (a Worker without a database of its own to watch)."
+        },
+        "watches": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/target"
+          }
+        },
+        "root": {
+          "$ref": "#/$defs/root"
+        },
+        "routes": {
+          "type": "array",
+          "minItems": 2,
+          "uniqueItems": true,
+          "items": {
+            "$ref": "#/$defs/id"
+          },
+          "description": "The routes (ids) this monitor alerts through; every one is exercised by the daily canary."
+        },
+        "stale_after_min": {
+          "$ref": "#/$defs/minutes"
+        },
+        "fetch_timeout_ms": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "kind worker: the deadline of every outbound call of the monitor (dead-man ping, each alert route), in ms. Delivered as the wrangler var MONITOR_FETCH_TIMEOUT_MS, which `kit resilience check` proves equal; the monitor has no default."
+        },
+        "watcher": {
+          "$ref": "#/$defs/watcher"
+        },
+        "worker": {
+          "$ref": "#/$defs/target",
+          "description": "kind worker: the monitor Worker's own config."
+        },
+        "database_binding": {
+          "type": "string",
+          "pattern": "^[A-Z][A-Z0-9_]*$",
+          "description": "kind worker: the monitor's own D1 binding (MONITOR_DB)."
+        },
+        "dead_man": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider",
+            "root",
+            "interval_min",
+            "grace_min"
+          ],
+          "description": "kind worker: the service that alarms when the monitor stops pinging. github-actions: no ping, the watcher is the dead-man.",
+          "properties": {
+            "provider": {
+              "enum": [
+                "healthchecks.io",
+                "github-actions",
+                "other"
+              ]
+            },
+            "root": {
+              "$ref": "#/$defs/root"
+            },
+            "interval_min": {
+              "$ref": "#/$defs/minutes"
+            },
+            "grace_min": {
+              "$ref": "#/$defs/minutes"
+            }
+          }
+        },
+        "config": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "module"
+          ],
+          "description": "The project's monitor configuration (the module whose `monitor` block the monitor Worker uses), read so the secret names and the dead-man variable follow its overrides (alerts.<channel>.toEnv, deadMan.urlEnv).",
+          "properties": {
+            "module": {
+              "type": "string"
+            },
+            "export": {
+              "type": "string",
+              "default": "default"
+            }
+          }
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "worker"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "worker",
+              "database_binding",
+              "dead_man"
+            ]
+          },
+          "else": {
+            "not": {
+              "anyOf": [
+                {
+                  "required": [
+                    "worker"
+                  ]
+                },
+                {
+                  "required": [
+                    "database_binding"
+                  ]
+                },
+                {
+                  "required": [
+                    "dead_man"
+                  ]
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "backup": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "source",
+        "destination",
+        "config"
+      ],
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/id"
+        },
+        "source": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "name"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "d1",
+                "r2"
+              ]
+            },
+            "name": {
+              "type": "string",
+              "description": "d1: the database_id (or a database_name the wrangler configs resolve); r2: the bucket."
+            }
+          }
+        },
+        "destination": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "kind",
+            "name"
+          ],
+          "properties": {
+            "kind": {
+              "enum": [
+                "r2",
+                "git",
+                "s3"
+              ]
+            },
+            "name": {
+              "type": "string"
+            }
+          }
+        },
+        "config": {
+          "type": "string"
+        }
+      }
+    },
+    "drill": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "kind",
+        "subject",
+        "date",
+        "result",
+        "proof_path",
+        "proof_sha256"
+      ],
+      "properties": {
+        "kind": {
+          "enum": [
+            "alert",
+            "restore",
+            "tts-fallback",
+            "email-fallback",
+            "signing",
+            "publish"
+          ]
+        },
+        "subject": {
+          "type": "string"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        },
+        "result": {
+          "enum": [
+            "pass",
+            "fail"
+          ]
+        },
+        "proof_path": {
+          "type": "string"
+        },
+        "proof_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "text",
+        "accepted_by",
+        "date"
+      ],
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 20
+        },
+        "accepted_by": {
+          "const": "owner"
+        },
+        "date": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    }
+  }
+}

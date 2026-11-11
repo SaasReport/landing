@@ -1,0 +1,156 @@
+{
+  "$schema": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/forge-origin.schema.json",
+  "name": "@cloudflare/forge",
+  "license": "Apache-2.0",
+  "copyright": "Cloudflare, Inc.",
+  "origin": {
+    "repository": "cloudflare/forge",
+    "path": "packages/forge",
+    "commit": "86cb1ef3047abc7441d96c894e8cd35e826fa8e5",
+    "date": "2026-10-02T13:42:01+01:00"
+  },
+  "ported": [
+    {
+      "upstream": "forge.ts",
+      "sha256": "a2251ad1cbb4a7c0c385a7592e7ebb61bc4199236e10483bf25479ca63910942",
+      "port": "src/forge.js"
+    },
+    {
+      "upstream": "index.ts",
+      "sha256": "a8b881a3b2c950db3e63efb77ca92c5ea5d9d2535daf04c82ce1db066ef7776a",
+      "port": "src/index.js"
+    },
+    {
+      "upstream": "init-from-openapi.ts",
+      "sha256": "7e9864c55e05c9f7f3c528349ef5c637fce00e4dc2f6ed63f4230c91de6f04a8",
+      "port": "src/init-from-openapi.js"
+    },
+    {
+      "upstream": "openapi-resolver.test.ts",
+      "sha256": "7909fc4b542190b2510199a460ff1d8c8ff9704790248366026274fb674ab77a",
+      "port": "test/resolver.test.mjs"
+    },
+    {
+      "upstream": "openapi-resolver.ts",
+      "sha256": "127f3adff03a45ceadd384c68307693318d395b2b5fe0aa3f19598542896ba77",
+      "port": "src/openapi-resolver.js"
+    },
+    {
+      "upstream": "package.json",
+      "sha256": "03949d326623d875cd9f93def44f9edd03e43f64be798647ea73b503e1d45938",
+      "port": "package.json"
+    },
+    {
+      "upstream": "schema/schema.ts",
+      "sha256": "1d0ef95186009d41ffdd64bb9f4750c7a342437d15213e9359cbc91848009ba3",
+      "port": "src/schema.js"
+    },
+    {
+      "upstream": "shared/http.ts",
+      "sha256": "4bb69d64dad25a6d01de09d8dd392c6adf7c6050279b6d282fcc5d63099695e5",
+      "port": "src/http.js"
+    },
+    {
+      "upstream": "shared/naming.ts",
+      "sha256": "21ea23254e5678b12f6ac1db46b02248676ff396938bf8648780a7a3904bd7fe",
+      "port": "src/naming.js"
+    },
+    {
+      "upstream": "shared/schema-utils.ts",
+      "sha256": "79af79d87f9d54b90d9064948807c9ff7148770d4cecae970c8c0e952bfd10a0",
+      "port": "src/schema-utils.js"
+    },
+    {
+      "upstream": "shared/sdk-method-names.test.ts",
+      "sha256": "4914cdfb6e26211e07f680430be749a22b1dde28b3fe9f7c0f63816a70df518f",
+      "port": "test/method-names.test.mjs"
+    },
+    {
+      "upstream": "shared/sdk-method-names.ts",
+      "sha256": "ef1a3c7043a15c0313c6b18aa195fee2f146423aa6f64112c3b0fd38119d8bc6",
+      "port": "src/method-names.js"
+    },
+    {
+      "upstream": "shared/string-utils.ts",
+      "sha256": "2e22b4c3c519d4acf16fff3eb1488f569e23ddd5e2dedae8ee85e77a32e1f635",
+      "port": "src/strings.js"
+    }
+  ],
+  "not_ported": [
+    {
+      "upstream": "init.ts",
+      "sha256": "301e08730e9743424524d7e12be0dd250e972bcec3215169312fba3814a4aafc",
+      "reason": "Overlay entry point (init with JSONPath overlays). Contract first: the contract is the one source, so there are no overlays to apply; initFromOpenApi is the entry point."
+    },
+    {
+      "upstream": "overlay-source.test.ts",
+      "sha256": "4294455a3c91933800e6535ee07959ba853601ad0bedc5e78fa6aa2d38c03d3d",
+      "reason": "Tests of overlay-source.ts, not ported."
+    },
+    {
+      "upstream": "overlay-source.ts",
+      "sha256": "1488fcc05a2774ed0ec195bc147eb883f6d53827e279d58f0d5a4e88b4e79424",
+      "reason": "JSONPath overlays that patch Cloudflare's published OpenAPI with SDK and CLI metadata. A second source beside the contract, against the constitution (one source per fact)."
+    },
+    {
+      "upstream": "overlay-types.ts",
+      "sha256": "53709879d470efaed281da66f95dfd4700dd23c5b6955dc6c9ec437f1f8ef5fd",
+      "reason": "Types of overlay-source.ts, not ported."
+    },
+    {
+      "upstream": "public-openapi.ts",
+      "sha256": "c6b575633162570f565e2b13786461fd7ad5c5cb47d9dd9772e40cf23b68183a",
+      "reason": "The URL of Cloudflare's own published OpenAPI document (their org's API), read from FORGE_OPENAPI_RELEASE."
+    },
+    {
+      "upstream": "shared/arg-classification.ts",
+      "sha256": "2efbbb9c11351c9f1b7b9793a3818aa6dc4141a0a46630ee9f54036e153c3c29",
+      "reason": "Cloudflare zone arguments (zoneId, zone_id, zone) for Cloudflare's CLI."
+    },
+    {
+      "upstream": "shared/command-types.ts",
+      "sha256": "66fa73b91e151fe5b44a9b475abfaedf327578d187833940495b9f24a38de417",
+      "reason": "Help metadata types of Cloudflare's cf CLI (CF_HIDE_COMMANDS)."
+    },
+    {
+      "upstream": "shared/fern-openapi-compat.test.ts",
+      "sha256": "473e5e3591d854ab105f94ff61a3ee7f1aca074a8eedaeb8afd23d3545f73baa",
+      "reason": "Tests of fern-openapi-compat.ts, not ported."
+    },
+    {
+      "upstream": "shared/fern-openapi-compat.ts",
+      "sha256": "57a5391a964e280e9009b8548d2ba6f12d2e65bdc1e4bb3823a1812b08ceb245",
+      "reason": "Rewrites for Fern's OpenAPI importer, which upstream's Docker-based SDK generators run. The native targets read the contract directly."
+    },
+    {
+      "upstream": "shared/generated-cli-options.ts",
+      "sha256": "1e3029f896b5676a25e864e29bc7d8147cb5d3636dfe55d06e6b46ab0a1f2cb9",
+      "reason": "The cf CLI's injected flags, among them Cloudflare's --account-id and --zone and its hand-written commands (auth, context)."
+    },
+    {
+      "upstream": "shared/index.ts",
+      "sha256": "968921740c79c510f6942326d990079078921807d2749c3afc7a6c133ad17f4d",
+      "reason": "Barrel re-export; src/index.js exports the ported modules."
+    },
+    {
+      "upstream": "shared/interface-generator.ts",
+      "sha256": "cdcdf22928c9c799ef26fffb9f17c683d50052bbeb0e48e9a2254b915ad354b6",
+      "reason": "TypeScript option interfaces from hand-written CLI arg schemas (Cloudflare's overlays). The native targets type from the contract's schemas."
+    },
+    {
+      "upstream": "shared/method-classification.ts",
+      "sha256": "8a5c1d912b01011536cf9e603ca2ca24b968c376617fa078971b61541aeb76f7",
+      "reason": "Guesses the HTTP verb and category from a CLI method name (list, create …). The contract states the verb (http.js)."
+    },
+    {
+      "upstream": "shared/path-generator.ts",
+      "sha256": "ff4cf7bffc9e14ddda7a4b2e7273c8c8eb1847cf6c180bb9824da82bb0895ec9",
+      "reason": "Builds REST routes from CLI method names and resource-id heuristics. Routes come from the contract's paths."
+    },
+    {
+      "upstream": "tsconfig.json",
+      "sha256": "2239fed9a23518da182918cbdcb8e689af7c44a15689b26ad4ebe4329ece34be",
+      "reason": "TypeScript build configuration; the port is JavaScript."
+    }
+  ]
+}

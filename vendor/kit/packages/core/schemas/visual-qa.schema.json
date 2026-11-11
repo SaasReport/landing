@@ -1,0 +1,185 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/visual-qa.schema.json",
+  "title": "kit.visual-qa.v1",
+  "description": "The report of kit site visual-qa (docs/COLOUR.md): the rendered gate of the colour canon. One entry per finding, with the page, viewport and colour scheme it was found in.",
+  "type": "object",
+  "required": [
+    "schema",
+    "generated",
+    "outDir",
+    "viewports",
+    "schemes",
+    "pages",
+    "views",
+    "ok",
+    "counts",
+    "templates",
+    "failures",
+    "notes",
+    "screenshots"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "kit.visual-qa.v1"
+    },
+    "generated": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "outDir": {
+      "type": "string"
+    },
+    "viewports": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^\\d+x\\d+$"
+      }
+    },
+    "schemes": {
+      "type": "array",
+      "items": {
+        "enum": [
+          "light",
+          "dark"
+        ]
+      }
+    },
+    "pages": {
+      "type": "integer",
+      "minimum": 0
+    },
+  "checkedPages": { "type": "integer", "minimum": 0, "description": "Pages opened: pages of one template are sampled evenly (--per-template, 0 = all)." },
+    "views": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Page x viewport x scheme combinations opened."
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "description": "Findings per kind."
+    },
+    "templates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "pages",
+          "example",
+          "urls"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "pages": {
+            "type": "integer"
+          },
+          "example": {
+            "type": "string"
+          },
+          "urls": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "description": "Pages grouped by the stylesheets and scripts they load: one entry per template."
+    },
+    "failures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "url",
+          "viewport",
+          "scheme",
+          "kind",
+          "message"
+        ],
+        "properties": {
+          "url": {
+            "type": "string"
+          },
+          "viewport": {
+            "type": "string"
+          },
+          "scheme": {
+            "enum": [
+              "light",
+              "dark"
+            ]
+          },
+          "kind": {
+            "enum": [
+              "contrast",
+              "role",
+              "ui",
+              "link",
+              "placeholder",
+              "overflow",
+              "clipped",
+              "font",
+              "image",
+              "console",
+              "literal",
+              "theme"
+            ]
+          },
+          "message": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string"
+          },
+          "ratio": {
+            "type": "number"
+          },
+          "need": {
+            "type": "number"
+          },
+          "color": {
+            "type": "string"
+          },
+          "literal": {
+            "type": "string"
+          },
+          "other": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "theme": {
+      "type": "object",
+      "description": "The theme gate (every selector of every stylesheet, in every state and tone, measured in the browser on the site's pages).",
+      "required": ["selectors", "notBuilt", "noText"],
+      "additionalProperties": false,
+      "properties": { "selectors": { "type": "integer", "minimum": 0 }, "notBuilt": { "type": "integer", "minimum": 0 }, "noText": { "type": "integer", "minimum": 0 } }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "screenshots": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

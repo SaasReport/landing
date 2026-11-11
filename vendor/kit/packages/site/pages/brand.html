@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="{{locale.lang}}" dir="{{locale.dir}}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="{{colorHex.accent}}">
+{{chrome.icons}}
+{{chrome.preload}}
+<title>{{c.meta.title}}</title>
+<meta name="description" content="{{c.meta.description|attr}}">
+<link rel="canonical" href="{{page.url}}"><meta name="robots" content="index, follow">{{page.alternates}}
+<meta property="og:type" content="website"><meta property="og:locale" content="{{locale.og}}">{{page.ogAlternates}}<meta property="og:site_name" content="{{name|attr}}"><meta property="og:title" content="{{c.meta.ogTitle|attr}}"><meta property="og:url" content="{{page.url}}"><meta property="og:image" content="{{page.ogImage}}">
+<link rel="stylesheet" href="{{a.styles.css}}">
+<link rel="stylesheet" href="{{a.showcase.css}}">
+<link rel="stylesheet" href="{{a.notify.css}}">
+<link rel="stylesheet" href="{{a.terminal.css}}">
+</head>
+<body class="tpage">
+{{chrome.sprite}}
+{{chrome.bar}}
+<main>
+<section class="section section--paper" id="brand" style="padding-top:40px">
+  <div class="wrap">
+    <header class="sec-head">
+      <p class="eyebrow"><span class="dot"></span>{{c.head.eyebrow}}</p>
+      <h2>{{c.head.title}}</h2>
+      <p>{{c.head.lead}}</p>
+    </header>
+    <div class="tabs bg" data-tabs>
+      <div class="tabs__list" role="tablist">
+{{#each brand.tabRows}}        {{#each .}}<button role="tab" aria-selected="{{.selected}}">{{.label}}</button>{{/each}}
+{{/each}}      </div>
+
+      <div class="tabs__panel is-active" role="tabpanel">
+        <div class="bg__grid">
+{{#each c.logos.items}}          {{> figure}}
+{{/each}}        </div>
+        <p class="bg__note">{{c.logos.note}}</p>
+      </div>
+
+      <div class="tabs__panel" role="tabpanel">
+        <div class="sw">
+{{#each c.colors.items}}          <button class="sw__c" data-hex="{{.hex}}" style="--c:{{.hex|role}}"><i></i><b>{{.name}}</b><code>{{.hex}}</code><span>{{.text}}</span></button>
+{{/each}}        </div>
+        <div class="mix" aria-label="{{c.colors.mixLabel|attr}}">{{#each c.colors.mix}}<i style="--w:{{.share}};--c:{{.hex|role}}{{#if .light}};color:{{color.onInk}}{{/if}}">{{.label}}</i>{{/each}}</div>
+        <p class="bg__note">{{c.colors.note}}</p>
+      </div>
+
+      <div class="tabs__panel" role="tabpanel">
+        <div class="ty">
+{{#each c.type.items}}          <div class="ty__row"><small>{{.label}}</small><p {{.attrs}}>{{.sample}}</p></div>
+{{/each}}        </div>
+        <p class="bg__note">{{c.type.note}}</p>
+      </div>
+
+      <div class="tabs__panel" role="tabpanel">
+        <div class="bg__grid bg__grid--icons">
+{{#each c.icons.items}}          {{> figure}}
+{{/each}}        </div>
+      </div>
+
+      <div class="tabs__panel" role="tabpanel">
+        <div class="cs">
+          <div class="cs__demo"><div class="cs__box"><img width="{{c.space.img.width}}" height="{{c.space.img.height}}" src="{{c.space.img.src}}" alt="{{c.space.img.alt|attr}}"><em class="cs__t">{{c.space.unit}}</em><em class="cs__b">{{c.space.unit}}</em><em class="cs__l">{{c.space.unit}}</em><em class="cs__r">{{c.space.unit}}</em></div>
+            <p class="bg__note">{{c.space.note}}</p></div>
+          <ul class="cs__min">
+{{#each c.space.minimums}}            <li><b>{{.value}}</b><span>{{.text}}</span></li>
+{{/each}}          </ul>
+        </div>
+      </div>
+
+      <div class="tabs__panel" role="tabpanel">
+        <div class="use">
+{{#each c.usage.items}}          <figure class="use__c{{#if .ok}} use__c--ok{{/if}}"><div class="bg__stage"><img width="{{c.usage.img.width}}" height="{{c.usage.img.height}}" src="{{c.usage.img.src}}" alt=""{{#if .style}} style="{{.style}}"{{/if}}></div><figcaption><svg class="ico"><use href="#i-{{#if .ok}}check{{else}}x{{/if}}"/></svg>{{.text}}</figcaption></figure>
+{{/each}}        </div>
+        <div class="dd">
+{{#each c.usage.rules}}          <div><b>{{.title}}</b><ul>{{#each .items}}<li>{{.}}</li>{{/each}}</ul></div>
+{{/each}}        </div>
+      </div>
+
+      <div class="tabs__panel" role="tabpanel">
+        <div class="ntfg">
+          <div class="ntfg__copy">
+            <p class="bg__note" style="margin-top:0">{{c.notify.note}}</p>
+            <div class="ntfg__btns">
+{{#each c.notify.types}}              <button class="btn btn--sm ntfg__b" data-ntf-demo="{{.type}}" style="{{.color|tone}}">{{.label}}</button>
+{{/each}}            </div>
+          </div>
+          <pre class="ntfg__code" dir="ltr"><code>{{c.notify.code}}</code></pre>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+{{chrome.footer}}
+<div class="toast" role="status" aria-live="polite" hidden></div>
+<script src="{{a.notify.js}}" defer></script>
+<script src="{{a.brand-page.js}}" defer></script>
+<script src="{{a.totop.js}}" defer></script>
+</body>
+</html>

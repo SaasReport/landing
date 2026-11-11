@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/broker-evidence.schema.json",
+  "title": "kit.broker-evidence.v1",
+  "description": "One evidence record of the broker: every authenticated allow and deny, hash-chained (hash = sha256 of the canonical JSON of the record without `hash`; prev = the previous record's hash, or 64 zeros for the first). Never carries a token or key.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "seq",
+    "prev",
+    "at",
+    "project",
+    "agent",
+    "action",
+    "repo",
+    "decision",
+    "reason",
+    "hash"
+  ],
+  "properties": {
+    "seq": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "prev": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "at": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "project": {
+      "type": "string"
+    },
+    "agent": {
+      "type": "string"
+    },
+    "action": {
+      "type": "string"
+    },
+    "repo": {
+      "type": "string"
+    },
+    "pr": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "head": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "reviewer": {
+      "type": "string"
+    },
+    "permissions": {
+      "type": "object",
+      "additionalProperties": {
+        "enum": [
+          "read",
+          "write"
+        ]
+      }
+    },
+    "expiresAt": {
+      "type": "string"
+    },
+    "decision": {
+      "enum": [
+        "allow",
+        "deny"
+      ]
+    },
+    "reason": {
+      "type": "string",
+      "pattern": "^[a-z_]+$"
+    },
+    "request": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "sha256 of the canonical signed request."
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "base": {
+      "type": "string",
+      "description": "The base branch: the reviewed one, or, for merged_wrong_base, the one GitHub actually merged into."
+    },
+    "merged": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "The merge commit: from GitHub's merge reply, or from the merged pull request read back (reasons merged, merged_wrong_base, merged_unverified). Never an open pull request's test-merge commit."
+    },
+    "reviewedBase": {
+      "type": "string",
+      "description": "For merged_wrong_base: the base the review was signed for."
+    }
+  }
+}

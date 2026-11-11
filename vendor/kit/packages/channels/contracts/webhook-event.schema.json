@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/channels/contracts/webhook-event.schema.json",
+  "title": "kit.webhook-event.v1",
+  "description": "The envelope of every signed webhook (@saasreport/channels/webhooks): a normalised event (data = the project's model, upstream names the provider event without its payload) or a relayed one (type upstream.<provider>.<event_type>, data null, upstream carries the payload as received). The contract of webhookEvent and twoLayerEvents (test: packages/channels/test/webhooks.test.mjs).",
+  "type": "object",
+  "required": ["schema", "id", "type", "occurred_at", "source", "data", "upstream", "caused_by"],
+  "additionalProperties": false,
+  "properties": {
+    "schema": { "const": "kit.webhook-event.v1" },
+    "id": { "type": "string", "pattern": "^[a-z]+_[A-Za-z0-9]{8,}$" },
+    "type": { "type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$" },
+    "occurred_at": { "type": "string", "format": "date-time" },
+    "source": { "type": "string", "minLength": 1 },
+    "subject": { "type": "string" },
+    "data": true,
+    "upstream": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "object", "required": ["provider", "event_type", "event_id"], "additionalProperties": false,
+          "properties": { "provider": { "type": "string", "minLength": 1 }, "event_type": { "type": "string", "minLength": 1 }, "event_id": { "type": ["string", "null"] } } },
+        { "type": "object", "required": ["provider", "event_type", "event_id", "received_at", "verified", "payload"], "additionalProperties": false,
+          "properties": { "provider": { "type": "string", "minLength": 1 }, "event_type": { "type": "string", "minLength": 1 }, "event_id": { "type": ["string", "null"] },
+            "received_at": { "type": "string", "format": "date-time" }, "verified": { "type": "boolean" }, "payload": true } }
+      ]
+    },
+    "caused_by": { "type": ["string", "null"] }
+  },
+  "if": { "properties": { "type": { "pattern": "^upstream\\." } } },
+  "then": { "properties": { "data": { "type": "null" }, "upstream": { "type": "object", "required": ["payload", "verified", "received_at"] } } }
+}

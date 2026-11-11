@@ -1,0 +1,142 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/podcast-drill.schema.json",
+  "title": "kit.podcast-drill.v1",
+  "description": "The proof of a publish drill (`kit podcast drill`, docs/PODCASTS.md): today's episode of one declared series generated in dry mode (no provider call, fixture audio, no network) through the code path the daily cron uses (the project's own Worker module, its scheduled handler, its workflow class), on a fresh local D1 built from the project's own migrations under D1's limits, with the row, the feed item and the episode page asserted. Written to resilience/drills/ and recorded in resilience.json as a drill of kind publish; `kit check resilience` reads it back, so a drill whose proof is not this document, did not pass, or names another series does not count.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "v",
+    "kind",
+    "subject",
+    "series",
+    "show",
+    "day",
+    "scheduled_at",
+    "dry",
+    "engine",
+    "migrations",
+    "slug",
+    "ok",
+    "checks"
+  ],
+  "properties": {
+    "v": {
+      "const": 1
+    },
+    "kind": {
+      "const": "publish"
+    },
+    "subject": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "The series id; the drill subject in resilience.json."
+    },
+    "series": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$"
+    },
+    "show": {
+      "type": "string"
+    },
+    "day": {
+      "type": "integer",
+      "description": "The site-local day number the cron judged (the planner's)."
+    },
+    "scheduled_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The scheduled time handed to the cron's handler."
+    },
+    "dry": {
+      "const": true,
+      "description": "No provider was called: the TTS answer was a fixture and every other outbound request was refused."
+    },
+    "engine": {
+      "const": "node:sqlite+d1-limits",
+      "description": "The local D1: SQLite behind @saasreport/core/d1-limits."
+    },
+    "migrations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "description": "The project's migration files, in the order they were applied to the fresh database (empty only when the drill failed before applying any)."
+    },
+    "commit": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^[0-9a-f]{40}$",
+      "description": "The commit the drill ran at (GITHUB_SHA), when known."
+    },
+    "slug": {
+      "type": "string",
+      "description": "The episode the cron made (empty only when it made none, which is a failed drill)."
+    },
+    "ok": {
+      "type": "boolean",
+      "description": "Every check passed."
+    },
+    "checks": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "ok",
+          "detail"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "migrations",
+              "cron-ran",
+              "no-errors",
+              "row",
+              "provenance",
+              "audio",
+              "feed-item",
+              "page"
+            ]
+          },
+          "ok": {
+            "type": "boolean"
+          },
+          "detail": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "description": "migrations: the DB binding's migrations applied in order on the fresh database; cron-ran: the scheduled handler returned a report; no-errors: it reported no error; row: podcast_episodes holds the episode, published, with its audio key; provenance: the row's provenance record is valid and its origin is the cron's; audio: the audio object exists in the bucket; feed-item: the show's feed has an item for it; page: its episode page answers 200 and names it."
+    }
+  },
+  "if": {
+    "properties": {
+      "ok": {
+        "const": true
+      }
+    },
+    "required": [
+      "ok"
+    ]
+  },
+  "then": {
+    "properties": {
+      "slug": {
+        "minLength": 1
+      },
+      "migrations": {
+        "minItems": 1
+      },
+      "checks": {
+        "minItems": 7
+      }
+    }
+  }
+}

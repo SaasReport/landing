@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/ci-hold-verdict.schema.json",
+  "title": "kit.ci-hold-verdict.v1",
+  "description": "kit ci hold: whether a scheduled run is held because the newest decided run of the same workflow at the same head failed (an unchanged cause is not failed again every tick, and not mailed again), and why. Only a scheduled run is ever held; a held run is cancelled, never green, so it never decides a later tick. A push, a dispatch or a new commit on the branch runs the work again.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "head_sha", "event", "run_id", "held", "reason", "record"],
+  "properties": {
+    "schema": { "const": "kit.ci-hold-verdict.v1" },
+    "head_sha": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+    "event": { "type": "string", "minLength": 1 },
+    "run_id": { "type": "integer", "minimum": 1 },
+    "held": { "type": "boolean" },
+    "reason": { "enum": ["not_scheduled", "no_prior_run_at_head", "no_decided_run_at_head", "prior_succeeded", "prior_failed", "prior_inconclusive"] },
+    "record": {
+      "description": "the run that decided: the failure on record when held, the success that released the hold otherwise; null when none exists at this head",
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["id", "html_url", "conclusion", "run_attempt"],
+          "properties": {
+            "id": { "type": "integer", "minimum": 1 },
+            "html_url": { "type": "string" },
+            "conclusion": { "type": "string" },
+            "run_attempt": { "type": "integer", "minimum": 1 }
+          }
+        }
+      ]
+    }
+  }
+}

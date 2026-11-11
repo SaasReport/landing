@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/staleness-report.schema.json",
+  "title": "kit.staleness-report.v1",
+  "description": "The output of `kit check staleness --json` (docs/FRESHNESS.md): every finding of the declared classes for the repository it ran in, the head it derived from, and the classes that do not apply here and why. ok is true only when there is no finding; an unreadable source (no remote, an unreachable /api/build) is a finding, never a pass.",
+  "type": "object",
+  "required": [
+    "schema",
+    "mode",
+    "ok",
+    "generated_at",
+    "derived_from",
+    "checked",
+    "not_applicable",
+    "findings"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema": {
+      "const": "kit.staleness-report.v1"
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "derived_from": {
+      "type": "object",
+      "required": [
+        "main_head"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "main_head": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "description": "The live head of the remote's main (ls-remote) the report was judged against; null when it could not be read."
+        },
+        "local_head": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "heads": {
+          "type": "object",
+          "description": "--local: the live main head of each repository judged, by owner/repo.",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{40}$"
+          }
+        }
+      }
+    },
+    "checked": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "$ref": "#/$defs/class"
+      }
+    },
+    "not_applicable": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "class",
+          "reason"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "class": {
+            "$ref": "#/$defs/class"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 5
+          }
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "class",
+          "subject",
+          "problem"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "class": {
+            "$ref": "#/$defs/class"
+          },
+          "subject": {
+            "type": "string",
+            "minLength": 1,
+            "description": "What is stale: a branch, a worktree path, a registry fact, a tool, a Worker."
+          },
+          "observed": {
+            "type": [
+              "string",
+              "number",
+              "null"
+            ]
+          },
+          "expected": {
+            "type": [
+              "string",
+              "number",
+              "null"
+            ]
+          },
+          "age_days": {
+            "type": "number",
+            "minimum": 0
+          },
+          "unreadable": {
+            "type": "boolean",
+            "description": "True when the source could not be read: the finding is that freshness cannot be shown."
+          },
+          "problem": {
+            "type": "string",
+            "minLength": 10
+          }
+        }
+      }
+    },
+    "mode": {
+      "enum": [
+        "repo",
+        "local"
+      ],
+      "description": "repo: the repository it ran in; local: the machine's worktrees and scratch (--local)."
+    }
+  },
+  "$defs": {
+    "class": {
+      "enum": [
+        "branch-behind-main",
+        "vendor-behind-head",
+        "registry-fact-stale",
+        "toolchain-drift",
+        "deploy-behind-main",
+        "podcast-behind-schedule",
+        "scratch-aged"
+      ]
+    }
+  }
+}

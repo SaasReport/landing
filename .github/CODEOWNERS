@@ -1,0 +1,14 @@
+# The canon and every waiver in it change only with the owner's review (kit check canon: docs/CONSTITUTION.md, t=0).
+/kit.canon.json @007dude
+/canon.allow.json @007dude
+/.github/CODEOWNERS @007dude
+/constitution.rules.json @007dude
+/.claude/settings.json @007dude
+/.claude/hooks/ @007dude
+/.github/rulesets/default-branch.json @007dude
+/CLAUDE.md @007dude
+/.githooks/ @007dude
+/.github/workflows/ @007dude
+/agent-identities.json @007dude
+/guard-approvals.jsonl @007dude
+/vendor/kit/packages/cli/src/agent-guard/ @007dude

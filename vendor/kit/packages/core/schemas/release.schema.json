@@ -1,0 +1,358 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/SaasReport/kit/blob/main/packages/core/schemas/release.schema.json",
+  "title": "kit.release.v1",
+  "description": "release.json at a repository root: how this repository changes production, in ONE ordered job of ONE workflow (docs/RELEASE.md). The workflow itself is the kit's template (templates/ci/production.yml, byte for byte); every fact that differs between projects is here and only here: the build command and the artefact it produces, the D1 databases and the R2 buckets the Workers bind, the Workers in deploy order with the public build endpoint each serves its commit on, the owner-address secret, the drills and the bootstrap state. Facts the wrangler configs already state (names, bindings, database ids, migrations directories) are READ from them by the kit's one reader, never copied here. The input of the canon check `release` (rules of class release in the constitution registry) and of every `kit release` command.",
+  "type": "object",
+  "required": [
+    "$schema",
+    "project",
+    "state",
+    "build",
+    "databases",
+    "workers",
+    "owner",
+    "paths"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "project": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]*$",
+      "description": "The project's key in the kit registry (packages/core/registry/projects.json)."
+    },
+    "state": {
+      "enum": [
+        "bootstrap",
+        "ready"
+      ],
+      "description": "The production state of this repository (EMPTY → INITIALIZING → VALIDATING → READY, docs/RELEASE.md). `bootstrap`: no production run has deployed here yet (every Worker is absent from the account, or deployed from a shell and serving no commit on /api/build), so no drill can have run; the first production run proves it read-only from the Workers API (`kit release ship`, receipt release/bootstrap.json), deploys, then runs every drill in the same job and opens the records pull request, which sets `ready`. `ready`: production exists; the drill rules are strict, forever. Bootstrap is never re-entered while a deployment exists: a receipt that records a deployment, a recorded drill or a Worker serving a build refuses it."
+    },
+    "workflow": {
+      "type": "string",
+      "default": ".github/workflows/production.yml",
+      "description": "The one production workflow: the kit template templates/ci/production.yml, unchanged."
+    },
+    "drift": {
+      "type": "string",
+      "default": ".github/workflows/drift.yml",
+      "description": "The daily drift check: the kit template templates/ci/drift.yml, unchanged (no Cloudflare credential)."
+    },
+    "workers_dev": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$",
+      "description": "The account's workers.dev subdomain (<name>.<this>.workers.dev). One source of every workers.dev URL: the monitor's status URL the watcher reads and the build endpoint of a Worker with workers_dev true. `kit release ship` refuses to run when the account's subdomain (read-only API) differs."
+    },
+    "deployer": {
+      "type": "object",
+      "required": [
+        "repository",
+        "environment"
+      ],
+      "additionalProperties": false,
+      "description": "Central mode (docs/RELEASE.md): production is changed by another repository's workflow (a central deploy repository), which checks this repository out and runs `kit release ship` with its own environment's credentials. This repository then holds CI only: no production or drift workflow and no deploy-secret reference (one-production-workflow inverts); ship refuses to run anywhere but deployer.repository, deploys KIT_RELEASE_SOURCE_SHA only when it is the HEAD of the tested tree, and stamps that commit. It never reads the source repository through the GitHub API: that the commit is the source's main HEAD is the deployer's proof, a git ls-remote over SSH with its read-only deploy key immediately before ship (`kit release deployer-check` holds the deployer's workflow to it).",
+      "properties": {
+        "repository": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9-]+/[A-Za-z0-9._-]+$"
+        },
+        "environment": {
+          "type": "string",
+          "pattern": "^production-[a-z][a-z0-9-]*$"
+        }
+      }
+    },
+    "environment": {
+      "const": "production",
+      "default": "production",
+      "description": "The GitHub environment the job runs in (its policy: deployments from main only)."
+    },
+    "build": {
+      "type": "object",
+      "required": [
+        "run",
+        "artifact"
+      ],
+      "additionalProperties": false,
+      "description": "The ONE build. `kit release build` runs it exactly once, before the tests, and seals the artefact (sha256 of every file, .release/seal.json); `kit release ship` refuses to deploy when the artefact differs from the seal, so what is deployed is what was tested. A build after the tests is impossible: the workflow is the template and the seal is checked before each deploy.",
+      "properties": {
+        "run": {
+          "type": "string",
+          "minLength": 1,
+          "description": "The build command (an npm script, e.g. \"npm run build\"); run with no shell expansions other than the command itself."
+        },
+        "artifact": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/path"
+          },
+          "description": "The paths the build writes and the deploy uploads (the static assets directory of every Worker that has one)."
+        }
+      }
+    },
+    "owner": {
+      "type": "object",
+      "required": [
+        "secret"
+      ],
+      "additionalProperties": false,
+      "description": "The ONE owner address: info@<the project's domain in the kit project registry>, routed by Cloudflare Email Routing to the owners. Its value is a secret of the production environment (never in git); `kit release ship` refuses any other value (empty, malformed, a personal address) before any production change and writes it to every Worker secret named in `targets`. The comms engine's owner recipients (comms config forms.owner.secret, kit.forms-config.v1) and the monitor's email route (MONITOR_NOTIFY_TO) are both targets of this one secret, so they cannot diverge.",
+      "properties": {
+        "secret": {
+          "const": "OPS_NOTIFY_TO",
+          "description": "The environment secret holding the owner's address(es), comma separated: OPS_NOTIFY_TO, the comms config's forms.owner.secret (kit.forms-config.v1). Fixed, so the one production template passes it."
+        },
+        "targets": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "wrangler",
+              "name"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "wrangler": {
+                "$ref": "#/$defs/path"
+              },
+              "name": {
+                "type": "string",
+                "pattern": "^[A-Z][A-Z0-9_]*$",
+                "description": "The Worker secret the address is written to."
+              }
+            }
+          },
+          "description": "Every Worker secret that holds the owner's address. The release check requires the monitor's email recipient variable and the comms engine's owner secret to be listed here."
+        }
+      }
+    },
+    "secrets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name",
+          "wrangler"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Z][A-Z0-9_]*$",
+            "description": "A secret name that `kit resilience secrets` declares for a worker monitor (the one source of the names)."
+          },
+          "wrangler": {
+            "$ref": "#/$defs/path",
+            "description": "The exact deployed Worker that holds this runtime secret (for example the site Worker's FORMS_DRILL_KEY)."
+          },
+          "env": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          }
+        }
+      },
+      "description": "Exact deployed Worker destinations for additional runtime-specific secrets not covered by monitor requirements. `kit release ship` writes EVERY secret the monitors declare (requiredSecrets: the one source, minus the owner address, which owner.targets writes) from the environment to the monitor's own Worker and to these, refuses before any deploy when one is absent from the environment, and never prints a value. The workflow passes the environment's secrets (KIT_RELEASE_SECRETS); nobody sets a secret by hand."
+    },
+    "databases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$",
+            "description": "The D1 database name, as the wrangler configs bind it. Its migrations directory is the one the binding configs declare (exactly one)."
+          }
+        }
+      },
+      "description": "Every D1 a deployed Worker binds. `kit release ship` creates or finds each one, checks that every binding config carries its id (a placeholder id is wired at run time and recorded), and applies its migrations before the first Worker that binds it."
+    },
+    "rotate_legacy_admin_on_bootstrap": {
+      "type": "boolean",
+      "description": "Explicit T0 cutover authority: rotate only the administrative bearer of a bootstrap-eligible legacy Worker when that Worker had an unknown preexisting ADMIN_TOKEN, after read-only bootstrap proves it is unreleased and before any SQL/Worker mutation. Never rotate in ready state, never rotate pepper/salt, and hand the new admin only to this protected CI run."
+    },
+    "optional_secrets": {
+      "type": "array",
+      "description": "Optional caller-owned secret bindings: unlike daemon credentials they are never generated. A value in the protected release environment enables the binding, an existing complete binding is reused, and absence keeps the optional external API disabled without blocking T0 core release.",
+      "items": {
+        "type": "object",
+        "required": ["name", "wrangler"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "type": "string", "pattern": "^[A-Z][A-Z0-9_]*$" },
+          "wrangler": { "$ref": "#/$defs/path" },
+          "env": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" }
+        }
+      }
+    },
+    "generated_secrets": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": { "enum": ["ADMIN_TOKEN", "DEVELOPER_KEY_PEPPER", "IP_SALT", "MONITOR_TOKEN"] },
+      "description": "T0 explicit admission for project-owned daemon credentials, generated with CSPRNG only on initial Cloudflare deployment and stored as write-only Worker secrets. On subsequent releases existing secret bindings are reused, never rotated or regenerated. External provider keys (e.g. GEMINI_API_KEY) are not eligible."
+    },
+    "buckets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          }
+        }
+      },
+      "description": "R2 buckets the run creates or finds (the Workers' buckets and the backup destinations)."
+    },
+    "workers": {
+      "type": "array",
+      "minItems": 1,
+      "description": "Every Worker this repository deploys, IN DEPLOY ORDER (a Worker after every Worker it binds over a service binding). Each serves the commit it was deployed from on GET /api/build (kit.build.v1, `withBuild` from @saasreport/cloudflare/build): either on its own public URL (`build`), or under a role key of the Worker in front of it (`behind`).",
+      "items": {
+        "type": "object",
+        "required": [
+          "wrangler"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "wrangler": {
+            "$ref": "#/$defs/path"
+          },
+          "env": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]*$"
+          },
+          "build": {
+            "type": "string",
+            "pattern": "^https://[^\\s/]+/api/build$",
+            "description": "The public build endpoint of this Worker."
+          },
+          "behind": {
+            "type": "object",
+            "required": [
+              "worker",
+              "role"
+            ],
+            "additionalProperties": false,
+            "properties": {
+              "worker": {
+                "$ref": "#/$defs/path",
+                "description": "The wrangler config of the Worker whose /api/build answers this one's commit under services.<role>."
+              },
+              "role": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9-]*$"
+              }
+            }
+          },
+          "workers_dev": {
+            "const": true,
+            "description": "The Worker answers /api/build on its workers.dev URL (https://<name>.<workers_dev>.workers.dev/api/build): a monitor."
+          },
+          "purge": {
+            "type": "boolean",
+            "default": false,
+            "description": "Purge the zone's edge cache after this Worker is deployed (kit purge)."
+          }
+        },
+        "oneOf": [
+          {
+            "required": [
+              "build"
+            ]
+          },
+          {
+            "required": [
+              "behind"
+            ]
+          },
+          {
+            "required": [
+              "workers_dev"
+            ]
+          }
+        ]
+      }
+    },
+    "drills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "kind",
+          "subject",
+          "run"
+        ],
+        "additionalProperties": false,
+        "properties": {
+          "kind": { "enum": ["alert", "restore", "publish"] },
+          "subject": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$", "description": "A monitor id (alert), a backup id (restore) of resilience.json, or a podcast series id (publish: kit podcast drill)." },
+          "run": { "type": "string", "minLength": 1, "description": "The command that performs the drill and writes its proof file (it runs in the production job, after the served-commit check)." },
+          "proof": { "type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/{}-]+$", "description": "The proof file the command writes, recorded with kit resilience record-drill. {date} (the run's UTC day) and {run} (GITHUB_RUN_ID) are filled in; the command gets the resolved path as KIT_DRILL_PROOF and the day as KIT_DRILL_DATE." }
+        }
+      },
+      "description": "The drills of resilience.json, as commands. `kit release drills` runs the ones asked for (the workflow input), and every one of them in bootstrap."
+    },
+    "paths": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9._-]+(/[A-Za-z0-9._-]+)*$"
+      },
+      "description": "The paths whose change deploys a Worker of this repository that the Workers' configs cannot state: everything the build reads (content, site, source). Required, because every release.json declares a build. `kit check staleness` adds them to what it derives from the configs (each wrangler config's directory, entry file's directory, built-assets directory, D1 migrations directory) and to registry/staleness.json deploy_paths_always, and judges a Worker against the last commit on main that touched any of them, so a docs-only merge is not drift."
+    }
+  },
+  "$defs": {
+    "path": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+    },
+    "deployCredentials": {
+      "enum": [
+        "CLOUDFLARE_API_TOKEN",
+        "CLOUDFLARE_API_KEY",
+        "CLOUDFLARE_ACCOUNT_ID",
+        "CF_API_TOKEN",
+        "CF_ACCOUNT_ID",
+        "OPS_NOTIFY_TO",
+        "RECORDS_DEPLOY_KEY"
+      ],
+      "description": "The secret names only the production environment holds (the one source of `kit check release` central mode: a source repository's workflows reference none of them, in any spelling of the name or of the secrets accessor). RECORDS_DEPLOY_KEY is the private half of the repository's own write deploy key, with which the records step pushes the records branch (a push made with GITHUB_TOKEN starts no workflow, so the required check would never exist). Names are matched case-insensitively."
+    }
+  },
+  "if": {
+    "properties": {
+      "workers": {
+        "contains": {
+          "properties": {
+            "workers_dev": {
+              "const": true
+            }
+          },
+          "required": [
+            "workers_dev"
+          ]
+        }
+      }
+    }
+  },
+  "then": {
+    "required": [
+      "workers_dev"
+    ]
+  }
+}
