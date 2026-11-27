@@ -32,10 +32,11 @@
     "generate": "node scripts/generate.mjs",
     "build": "node scripts/generate.mjs && kit widgets build && kit site build && cp -r public/. dist/",
     "check": "node scripts/generate.mjs --check && kit widgets check && kit widgets build --check && kit site check && kit diagrams check && npm run comms:check",
-    "test": "kit check canon && kit comms check --config comms.config.js --forms src/forms.js && npm run check && npm run build && kit site shell --out dist && npm run test:forms",
+    "test": "kit check canon && kit comms check --config comms.config.js --forms src/forms.js && npm run check && npm run build && kit site shell --out dist && npm run test:forms && npm run test:workflows",
     "qa": "node test/interact.test.mjs",
     "qa:visual": "kit site visual-qa --out dist",
     "comms:check": "kit comms check --config comms.config.js --forms src/forms.js",
-    "test:forms": "node --test test/forms-endpoint.test.mjs test/forms-browser.test.mjs"
+    "test:forms": "node --test test/forms-endpoint.test.mjs test/forms-browser.test.mjs",
+    "test:workflows": "node --test test/workflow-scripts.test.mjs"
   }
 }

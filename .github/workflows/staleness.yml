@@ -16,10 +16,12 @@ on:
   schedule:
     - cron: '41 5 * * *'
   workflow_dispatch:
-# One constant group (ci-run-concurrency allows it only in a workflow never triggered by push or pull_request): the latest run supersedes the one before.
+# One constant group (ci-run-concurrency allows it only in a workflow never triggered by push or pull_request). A run waits for the one
+# before it rather than cancelling it: the job holds actions: write (the scheduled hold below), and a constant group may cancel only
+# when every permission is read-only.
 concurrency:
   group: staleness
-  cancel-in-progress: true
+  cancel-in-progress: false
 permissions:
   contents: read
 jobs:
@@ -27,23 +29,61 @@ jobs:
     name: staleness (ubuntu-24.04)
     runs-on: ubuntu-24.04
     timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: write   # the scheduled hold: reads this workflow's runs and cancels this run when held (docs/CI.md, templates/ci/scheduled-hold.yml)
     steps:
       - uses: actions/checkout@v6
         with:
           fetch-depth: 0
           # the report reads main's live head with `git ls-remote origin` (branch-behind-main): in a private repository that read needs the
-          # checkout's scoped token, so the credential stays configured for this job (read-only; the job holds no other credential)
+          # checkout's scoped token, so the credential stays configured for this job (the job's token also holds actions: write for the scheduled hold; no other credential)
           persist-credentials: true
-      # the kit at its head (t=0, docs/FRESHNESS.md): scripts/kit.mjs fetches the published archive of the head with no credential, verifies it and runs it; nothing of the kit is checked out or committed
+      # the kit as this repository holds it: the vendored snapshot under vendor/kit (kit.canon.json vendor.path), run as test.yml runs it.
+      # This repository has no scripts/kit.mjs (it does not run the kit in source mode): calling it failed every run with "Cannot find module".
       # the exact node of registry/toolchain.json (a test proves they agree)
       - uses: actions/setup-node@v6
         with:
           node-version: 22.22.2
-      # this repository's dependencies from its lockfile; the kit's own come from the kit's lockfile, installed by scripts/kit.mjs at first use
+      # this repository's dependencies from its lockfile, the vendored kit's packages included (package.json file: dependencies)
       - run: npm ci
+      # The scheduled hold (the steps of the kit's templates/ci/scheduled-hold.yml, inline so that the one job of this workflow still runs
+      # `kit check staleness`): a scheduled tick whose newest decided run at the same head failed is CANCELLED, not failed and mailed again
+      # every day (kit.ci-hold-verdict.v1). A dispatch or a new commit on main is never held: the first failure per head still mails once.
+      - name: the verdict from this workflow's runs on the branch (kit.ci-hold-verdict.v1)
+        id: verdict
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          WORKFLOW_REF: ${{ github.workflow_ref }}
+          BRANCH: ${{ github.ref_name }}
+          SHA: ${{ github.sha }}
+          EVENT: ${{ github.event_name }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          # github.workflow_ref is owner/repo/.github/workflows/<file>@<ref>: the file names the workflow to the runs API
+          wf="${WORKFLOW_REF#*/.github/workflows/}"; wf="${wf%@*}"
+          gh api "repos/$REPO/actions/workflows/$wf/runs?branch=$BRANCH&per_page=25" > runs.json
+          node vendor/kit/packages/cli/bin/kit.js ci hold --runs runs.json --sha "$SHA" --event "$EVENT" --run-id "$RUN_ID" --out verdict.json | tee -a "$GITHUB_STEP_SUMMARY"
+          echo "held=$(node -p 'require("./verdict.json").held')" >> "$GITHUB_OUTPUT"
+      - name: "held: cancel this run (never green, never a second failure), and refuse loudly if the cancel does not land"
+        if: steps.verdict.outputs.held == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          echo "::notice::held: the failure on record is unchanged at this head; this run is cancelled (see the summary)"
+          gh api -X POST "repos/$REPO/actions/runs/$RUN_ID/cancel"
+          # the cancellation kills this job within seconds; if it has not after two minutes, the run must not end green
+          sleep 120
+          echo "::error::the cancel request was accepted but the run is still running: a held run must never conclude on its own"
+          exit 1
       - name: staleness report
         id: report
-        run: node scripts/kit.mjs check staleness --json > staleness-report.json || echo "stale=true" >> "$GITHUB_OUTPUT"
+        run: node vendor/kit/packages/cli/bin/kit.js check staleness --json > staleness-report.json || echo "stale=true" >> "$GITHUB_OUTPUT"
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -51,7 +91,7 @@ jobs:
           path: staleness-report.json
       - name: alert on any finding from the saved report, then fail
         if: steps.report.outputs.stale == 'true'
-        run: node scripts/kit.mjs check staleness --alert --report staleness-report.json
+        run: node vendor/kit/packages/cli/bin/kit.js check staleness --alert --report staleness-report.json
         env:
           # generated:alert-env (node packages/cli/scripts/staleness-env.mjs; the secrets of every alert route a runner can reach)
           MONITOR_TELEGRAM_CHAT_ID: ${{ secrets.MONITOR_TELEGRAM_CHAT_ID }}
